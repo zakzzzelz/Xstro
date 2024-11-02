@@ -4,59 +4,58 @@ A small, simple, lightweight open-source WhatsApp bot.
 
 ### SETUP
 
-1. Fork the repo on GitHub: [![Fork](https://img.shields.io/badge/FORK-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ASTRO-X10/xstro-md/fork)
+1. Fork Your Copy <br> [![Fork](https://img.shields.io/badge/FORK-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ASTRO-X10/xstro-md/fork)
 
-2. Get auth keys: [![Session](https://img.shields.io/badge/SESSION-100000?style=for-the-badge&logo=scan&logoColor=white&labelColor=black&color=black)](https://your-qr-endpoint)
+2. Get Session ID <br> [![Session](https://img.shields.io/badge/SESSION-100000?style=for-the-badge&logo=scan&logoColor=white&labelColor=black&color=black)](https://your-qr-endpoint)
 
 ## Deployment Options
 
 ### Render Deployment
 
-1. Make a Render account: [![Create Render Account](https://img.shields.io/badge/CREATE-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
+1. Create A Render account<br> [![Create Render Account](https://img.shields.io/badge/CREATE-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
 
-2. Set environment variables:
+2. Config Environment
 
    - Set `DATABASE_URL`
-   - Add Render API keys
+   - Add Render API Key
 
-3. Start deployment: [![Deploy to Render](https://img.shields.io/badge/DEPLOY-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy)
+3. Run Deployment<br> [![Deploy to Render](https://img.shields.io/badge/DEPLOY-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy)
 
 ### Koyeb Deployment
 
-1. Make a Koyeb account: [![Create Koyeb Account](https://img.shields.io/badge/CREATE-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://koyeb.com)
+1. Create Your Koyeb Account<br> [![Create Koyeb Account](https://img.shields.io/badge/CREATE-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://koyeb.com)
 
-2. Set environment variables:
+2. Setup Enviroment
 
    - Set `DATABASE_URL`
-   - Add Koyeb API keys
+   - Add Koyeb API Key
 
-3. Start deployment: [![Deploy to Koyeb](https://img.shields.io/badge/DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://koyeb.com/deploy)
+3. Run Deployment <br>[![Deploy to Koyeb](https://img.shields.io/badge/DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://koyeb.com/deploy)
 
 ### Local PC
 
 ```bash
-# Install needed packages
-npm i -g pm2
 git clone https://github.com/ASTRO-X10/xstro-md.git
+```
+
+```bash
 cd xstro-md
 npm install
+```
 
-# Set up environment
+```bash
 cat << EOF > config.env
 VPS = true
-SESSION_ID = null
-AUTH_FILE = session
-SUDO = null
+SESSION_ID =
+SUDO =
 PREFIX = .
 MODE = private
 LOG_MSG = true
 EOF
+```
 
-# Start app
+```bash
 npm start
-
-# Stop process (if needed)
-pm2 delete xstro-md
 ```
 
 ### Configs
