@@ -14,10 +14,8 @@ bot(
 			return message.sendReply("_Alive Updated_");
 		}
 		const msg = await aliveMessage(message);
-		if (!BOT_INFO.split(";")[2]) {
-			message.sendReply(msg, { mentions: [message.participant] });
-		} else {
-			message.send(BOT_INFO.split(";")[2], { caption: msg, mentions: [message.participant] });
-		}
+		const botInfo = BOT_INFO.split(";")[2];
+
+		botInfo ? message.send(botInfo, { caption: msg, mentions: [message.participant] }) : message.sendReply(msg, { mentions: [message.participant] });
 	},
 );
