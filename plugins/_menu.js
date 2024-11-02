@@ -1,8 +1,8 @@
-import { commands, command } from "../lib/plugins.js";
+import { commands, bot } from "../lib/plugins.js";
 import { clockString } from "../lib/utils.js";
 import { hostname } from "os";
 
-command(
+bot(
 	{
 		pattern: "menu",
 		desc: "Show All Commands",
@@ -63,7 +63,7 @@ Description: ${i.desc}\`\`\``);
 	},
 );
 
-command(
+bot(
 	{
 		pattern: "list",
 		desc: "Show All Commands",
