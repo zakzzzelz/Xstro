@@ -10,8 +10,6 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message) => {
-		const { prefix } = message;
-		const [date, time] = new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }).split(",");
 		let menuText = `*╭─ ${BOT_INFO.split(";")[1]} ───*
 *│ Owner : ${BOT_INFO.split(";")[0]}*
 *│ User : ${message.pushName}*
