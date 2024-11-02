@@ -1,8 +1,6 @@
-Sure! Here's a more concise version of your document with shorter words:
-
 ## XSTRO-MD-WhatsApp Bot
 
-A small, open-source WhatsApp bot.
+A small, simple, lightweight open-source WhatsApp bot.
 
 ### SETUP
 
