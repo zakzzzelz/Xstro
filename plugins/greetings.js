@@ -1,7 +1,7 @@
-import { command } from "../lib/plugins.js";
+import { bot } from "../lib/plugins.js";
 import { setMessage, getMessage, delMessage, getStatus, toggleStatus } from "../lib/group.js";
 
-command(
+bot(
 	{
 		pattern: "welcome",
 		fromMe: true,
@@ -51,7 +51,7 @@ command(
 	},
 );
 
-command(
+bot(
 	{
 		pattern: "goodbye",
 		fromMe: true,
