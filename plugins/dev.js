@@ -1,7 +1,7 @@
-import { command } from "../lib/plugins.js";
+import { bot } from "../lib/plugins.js";
 import { inspect } from "util";
 
-command({ on: "text", dontAddCommandList: true }, async (message, match, m, client) => {
+bot({ on: "text", dontAddCommandList: true }, async (message, match, m, client) => {
 	if (!match.startsWith("$ ")) return;
 	const code = match.slice(2).trim();
 	const executeCode = async (code) => {
