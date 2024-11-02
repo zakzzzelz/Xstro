@@ -1,8 +1,8 @@
 import { serialize } from "../lib/serialize.js";
-import { command } from "../lib/plugins.js";
+import { bot } from "../lib/plugins.js";
 import { loadMessage } from "../lib/store.js";
 
-command(
+bot(
 	{
 		pattern: "quoted",
 		desc: "quoted message",
