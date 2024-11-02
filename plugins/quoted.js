@@ -6,6 +6,7 @@ bot(
 	{
 		pattern: "quoted",
 		desc: "quoted message",
+		type: "whatsapp",
 	},
 	async (message, match) => {
 		if (!message.reply_message) return await message.reply("*Reply to a message*");

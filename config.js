@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 
 dotenv.config();
 
@@ -12,8 +14,9 @@ export const SUDO = process.env.SUDO || "";
 export const STICKER_PACK = process.env.STICKER_PACK || "ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ";
 export const AUTO_READ = toBool(process.env.AUTO_READ) || false;
 export const AUTO_STATUS_READ = toBool(process.env.AUTO_STATUS_READ) || false;
-export const WORK_TYPE = process.env.WORK_TYPE || "private";
+export const MODE = process.env.MODE || "private";
 export const GITHUB_URL = process.env.GITHUB_URL || "https://github.com/ASTRO-X10/xstro-md";
+export const VERSION = require('./package.json').version
 export const DATABASE =
 	DATABASE_URL === "./database.db"
 		? new Sequelize({
