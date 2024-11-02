@@ -1,6 +1,6 @@
-import { command } from "../lib/plugins.js";
+import { bot } from "../lib/plugins.js";
 
-command(
+bot(
 	{
 		pattern: "button",
 		fromMe: true,
