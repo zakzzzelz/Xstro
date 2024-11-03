@@ -1,16 +1,24 @@
-import { bot } from "../lib/plugins.js";
+import { bot } from '../lib/plugins.js';
 
-bot({
-    pattern: 'clear ?(.*)',
-    desc: 'delete whatsapp chat',
-    type: 'whatsapp'
-}, async (message, match) => {
-    await message.client.chatModify({
-        delete: true,
-        lastMessages: [{
-            key: message.data.key,
-            messageTimestamp: message.timestamp
-        }]
-    }, message.jid)
-    await message.sendReply('_Cleared_')
-});
+bot(
+	{
+		pattern: 'clear ?(.*)',
+		desc: 'delete whatsapp chat',
+		type: 'whatsapp',
+	},
+	async (message, match) => {
+		await message.client.chatModify(
+			{
+				delete: true,
+				lastMessages: [
+					{
+						key: message.data.key,
+						messageTimestamp: message.timestamp,
+					},
+				],
+			},
+			message.jid,
+		);
+		await message.sendReply('_Cleared_');
+	},
+);
