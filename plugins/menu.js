@@ -2,6 +2,7 @@ import { BOT_INFO, MODE, VERSION } from "../config.js";
 import { commands, bot } from "../lib/plugins.js";
 import { formatBytes, runtime } from "../lib/utils.js";
 import { platform, totalmem, freemem } from "os";
+import { fancy } from "../lib/xstro.js";
 
 bot(
 	{
@@ -11,7 +12,6 @@ bot(
 	},
 	async (message) => {
 		let menuText = `*╭─ ${BOT_INFO.split(";")[1]} ───*
-*│ Owner : ${BOT_INFO.split(";")[0]}*
 *│ User : ${message.pushName}*
 *│ Plugins : ${commands.length}*
 *│ Runtime : ${runtime(process.uptime())}*
@@ -41,7 +41,7 @@ bot(
 			});
 			menuText += `╰──────────────\n`;
 		});
-		return await message.send(menuText);
+		return await message.send(fancy(menuText));
 	},
 );
 
