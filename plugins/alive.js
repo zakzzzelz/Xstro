@@ -16,6 +16,15 @@ bot(
 		const msg = await aliveMessage(message);
 		const botInfo = BOT_INFO.split(";")[2];
 
-		botInfo ? message.send(botInfo, { caption: msg, mentions: [message.participant] }) : message.sendReply(msg, { mentions: [message.participant] });
-	},
+		const mentionData = {
+			mentions: [message.participant],
+			contextInfo: {
+				mentionedJid: [message.participant]
+			}
+		};
+
+		return botInfo
+			? message.send(botInfo, { ...mentionData, caption: msg })
+			: message.sendReply(msg, mentionData);
+	}
 );
