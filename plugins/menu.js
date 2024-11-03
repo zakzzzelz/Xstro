@@ -25,7 +25,7 @@ bot(
 		const categorized = commands
 			.filter((cmd) => cmd.pattern && !cmd.dontAddCommandList)
 			.map((cmd) => ({
-				name: cmd.pattern.toString().split(/\W+/)[1],
+				name: cmd.pattern.toString().split(/\W+/)[2],
 				category: cmd.type?.toLowerCase() || "misc",
 			}))
 			.reduce((acc, { name, category }) => {
@@ -58,7 +58,7 @@ bot(
 		let cmd, desc;
 		commands.map((command) => {
 			if (command.pattern) {
-				cmd = command.pattern.toString().split(/\W+/)[1];
+				cmd = command.pattern.toString().split(/\W+/)[2];
 			}
 			desc = command.desc || false;
 
