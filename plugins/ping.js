@@ -12,6 +12,6 @@ bot(
         const start = performance.now();
         const msg = await message.sendReply('Testing Speed...');
         const end = performance.now();
-        await msg.edit(`*Response Speed:* ${(end - start).toFixed(2)}ms`);
+        await msg.edit(`*_Speed ${(end - start).toFixed(2)}ms_*`);
     }
 );
