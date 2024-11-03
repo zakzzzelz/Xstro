@@ -39,7 +39,7 @@ bot(
 	},
 	async m => {
 		let s = await getSudo();
-		if (s === '_No Sudo Numbers_') return m.sendReply('*_Sudo Users_*\n\n_No Sudo Numbers_');
+		if (s === '_No Sudo Numbers_') return m.sendReply('\n_No Sudo Numbers_');
 		let list =
 			'*_Sudo Users_*\n\n' +
 			s
