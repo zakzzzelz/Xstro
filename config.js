@@ -8,7 +8,7 @@ dotenv.config();
 const toBool = x => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
 export const SESSION_ID = process.env.SESSION_ID || '';
-export const BOT_INFO = process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ;https://raw.githubusercontent.com/ASTRO-X10/xstro-md/refs/heads/master/media/lite.jpg';
+export const BOT_INFO = process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ';
 export const LOGS = toBool(process.env.LOGS) || true;
 export const PREFIX = process.env.PREFIX || '.';
 export const SUDO = process.env.SUDO || '';
