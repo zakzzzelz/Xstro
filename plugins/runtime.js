@@ -1,6 +1,6 @@
 import { BOT_INFO, GITHUB_URL } from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { getBuffer, runtime } from '../lib/utils.js';
+import { getBuffer, runtime } from '../lib/core/utils.js';
 
 bot(
 	{
