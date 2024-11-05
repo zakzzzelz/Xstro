@@ -4,7 +4,7 @@ import { DATABASE } from './config.js';
 import connect from './lib/client.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { createSession } from './lib/session.js';
+import { createSession } from './lib/core/session.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -30,10 +30,10 @@ const readAndRequireFiles = async directory => {
 
 async function initialize() {
 	await createSession();
-	const libPath = join(__dirname, '/lib/');
+	const dbPath = join(__dirname, '/lib/models/');
 	const pluginsPath = join(__dirname, '/plugins/');
 
-	await readAndRequireFiles(libPath);
+	await readAndRequireFiles(dbPath);
 	console.log('Syncing Database');
 
 	await DATABASE.sync();
