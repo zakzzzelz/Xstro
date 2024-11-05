@@ -7,9 +7,10 @@ bot(
 		desc: 'Setup Antiword for Groups',
 		type: 'group',
 	},
-	async (message, match) => {
+	async (message, match, m) => {
 		if (!message.isGroup) return message.sendReply('_For Groups only!_');
-
+		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
+		
 		const groupId = message.jid;
 		const antiWordConfig = await AntiWord.findOrCreate({ where: { groupId } });
 
