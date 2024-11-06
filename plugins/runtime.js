@@ -10,17 +10,6 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		return await message.sendReply(`_ʙᴏᴛ ʀᴜɴɴɪɴɢ ${runtime(process.uptime())}_`, {
-			contextInfo: {
-				externalAdReply: {
-					title: BOT_INFO.split(';')[0],
-					body: BOT_INFO.split(';')[1],
-					thumbnail: await getBuffer(BOT_INFO.split(';')[2]),
-					mediaType: 2,
-					showAdAttribution: true,
-					sourceUrl: GITHUB_URL,
-				},
-			},
-		});
+		return await message.sendReply(`_ʙᴏᴛ ʀᴜɴɴɪɴɢ ${runtime(process.uptime())}_`);
 	},
 );
