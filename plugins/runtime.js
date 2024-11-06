@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { fancy } from '../lib/xstro.js';
+import { fancy } from '../lib/utils/font.js';
 import { runtime } from '../lib/utils/utils.js';
 
 bot(
