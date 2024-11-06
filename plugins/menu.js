@@ -1,6 +1,6 @@
 import { BOT_INFO, MODE, VERSION } from '../config.js';
-import { commands, bot } from '../lib/plugins.js';
-import { formatBytes, runtime } from '../lib/utils.js';
+import { commands, bot } from '../lib/client/plugins.js';
+import { formatBytes, runtime } from '../lib/utils/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from '../lib/xstro.js';
 

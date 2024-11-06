@@ -1,5 +1,5 @@
-import { bot } from '../lib/plugins.js';
-import { Antilink } from '../lib/antilink.js';
+import { bot } from '../lib/client/plugins.js';
+import { Antilink } from '../lib/db/antilink.js';
 
 bot(
 	{

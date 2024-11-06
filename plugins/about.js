@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'about',

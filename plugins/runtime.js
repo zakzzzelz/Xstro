@@ -1,6 +1,6 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/client/plugins.js';
 import { fancy } from '../lib/xstro.js';
-import { runtime } from '../lib/utils.js';
+import { runtime } from '../lib/utils/utils.js';
 
 bot(
 	{

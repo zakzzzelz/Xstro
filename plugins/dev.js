@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/client/plugins.js';
 import { inspect } from 'util';
 
 bot({ on: 'text', dontAddCommandList: true }, async (message, match, m, client) => {

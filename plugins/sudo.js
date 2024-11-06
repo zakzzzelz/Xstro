@@ -1,6 +1,6 @@
-import { bot } from '../lib/plugins.js';
-import { getSudo, delSudo, addSudo } from '../lib/sudo.js';
-import { numberToJID } from '../lib/utils.js';
+import { bot } from '../lib/client/plugins.js';
+import { getSudo, delSudo, addSudo } from '../lib/db/sudo.js';
+import { numberToJID } from '../lib/utils/utils.js';
 
 bot(
 	{
