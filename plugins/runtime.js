@@ -1,6 +1,6 @@
-import { BOT_INFO, GITHUB_URL } from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { getBuffer, runtime } from '../lib/utils.js';
+import { fancy } from '../lib/xstro.js';
+import { runtime } from '../lib/utils.js';
 
 bot(
 	{
@@ -10,6 +10,6 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		return await message.sendReply(`_ʙᴏᴛ ʀᴜɴɴɪɴɢ ${runtime(process.uptime())}_`);
+		return await message.sendReply(fancy(`bot running since\n${runtime(process.uptime())}`));
 	},
 );

@@ -17,7 +17,7 @@ bot(
 *│ Runtime : ${runtime(process.uptime())}*
 *│ Mode : ${MODE}*
 *│ Platform : ${platform()}*
-*│ Ram : ${formatBytes(totalmem() - freemem())} / ${formatBytes(totalmem())}*
+*│ Memory : ${formatBytes(totalmem() - freemem())}*
 *│ Version : ${VERSION}*
 *╰────────────────*\n`;
 
