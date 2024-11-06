@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import AntiWord from '../lib/models/antiword.js';
+import AntiWord from '../lib/antiword.js';
 
 bot(
 	{

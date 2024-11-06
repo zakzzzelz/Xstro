@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { manageVar } from '../lib/core/env.js';
+import { manageVar } from '../lib/env.js';
 import fs from 'fs';
 import path from 'path';
 
