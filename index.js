@@ -1,10 +1,10 @@
 import { promises as fs } from 'fs';
 import { extname, join } from 'path';
 import { DATABASE } from './config.js';
-import connect from './lib/client.js';
+import connect from './lib/bot.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { createSession } from './lib/core/session.js';
+import { createSession } from './lib/client/session.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,8 +29,8 @@ const readAndRequireFiles = async directory => {
 };
 
 async function initialize() {
-	await createSession();
-	const dbPath = join(__dirname, '/lib/models/');
+//	await createSession();
+	const dbPath = join(__dirname, '/lib/');
 	const pluginsPath = join(__dirname, '/plugins/');
 
 	await readAndRequireFiles(dbPath);
