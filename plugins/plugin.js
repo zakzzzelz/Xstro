@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js
+import { bot } from '../lib/client/plugins.js'
 
 bot(
   {
