@@ -2,16 +2,20 @@
 	"name": "xstro-md",
 	"version": "1.0.2",
 	"description": "Simple WhatsApp Bot",
-	"main": "index.js",
+	"main": "server.js",
 	"type": "module",
 	"scripts": {
-		"start": "node index.js"
+		"start": "node server.js"
 	},
 	"dependencies": {
 		"axios": "^1.7.7",
 		"baileys": "^6.7.9",
+		"boxen": "^8.0.1",
+		"chalk": "^5.3.0",
+		"chokidar": "^4.0.1",
 		"dotenv": "^16.4.5",
 		"express": "^4.21.1",
+		"figlet": "^1.8.0",
 		"file-type": "^19.6.0",
 		"pino": "^9.5.0",
 		"sequelize": "^6.37.5",
