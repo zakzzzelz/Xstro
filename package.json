@@ -17,6 +17,7 @@
 		"express": "^4.21.1",
 		"figlet": "^1.8.0",
 		"file-type": "^19.6.0",
+		"ora": "^8.1.1",
 		"pino": "^9.5.0",
 		"sequelize": "^6.37.5",
 		"simple-git": "^3.27.0",

@@ -3,6 +3,7 @@ import path from 'path';
 import os from 'os';
 import { EventEmitter } from 'events';
 import fs from 'fs/promises';
+import ora from 'ora';
 
 class ProcessManager extends EventEmitter {
 	constructor(config = {}) {
@@ -64,7 +65,15 @@ class ProcessManager extends EventEmitter {
 
 	async start() {
 		await fs.mkdir(this.config.logPath, { recursive: true }).catch(() => {});
-		this.startProcess();
+		const spinner = ora('Starting the process...').start();
+
+		try {
+			this.startProcess();
+			spinner.succeed('Process started successfully.');
+		} catch (err) {
+			spinner.fail('Failed to start process.');
+			console.error(err);
+		}
 	}
 
 	startProcess() {
