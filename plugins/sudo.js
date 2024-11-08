@@ -1,6 +1,6 @@
 import { bot } from '../lib/client/plugins.js';
 import { getSudo, delSudo, addSudo } from '../lib/db/sudo.js';
-import { numberToJID } from '../lib/utils/utils.js';
+import { numtoId } from '../lib/utils/utils.js';
 
 bot(
 	{
@@ -24,7 +24,7 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		if (match) return numberToJID(match);
+		if (match) return numtoId(match);
 		const User = match || message.quoted?.sender || message.mention[0];
 		const rsudo = await delSudo(User);
 		return message.sendReply(rsudo);
