@@ -16,6 +16,7 @@ export const STICKER_PACK = process.env.STICKER_PACK || 'ᴀsᴛʀᴏ;xsᴛʀᴏ
 export const AUTO_READ = toBool(process.env.AUTO_READ) || false;
 export const AUTO_STATUS_READ = toBool(process.env.AUTO_STATUS_READ) || false;
 export const MODE = process.env.MODE || 'private';
+export const CMD_REACT = process.env.CMD_REACT || true;
 export const AUTH_SERVER = process.env.AUTH_SERVER || 'https://server-oale.onrender.com';
 export const GITHUB_URL = process.env.GITHUB_URL || 'https://github.com/ASTRO-X10/xstro-md';
 export const VERSION = require('./package.json').version;
