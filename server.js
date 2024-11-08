@@ -78,6 +78,7 @@ class ProcessManager extends EventEmitter {
 					disk: [],
 				},
 			},
+			shutdownInProgress: false,
 		};
 	}
 
@@ -113,78 +114,150 @@ class ProcessManager extends EventEmitter {
 	}
 
 	async launchApplication() {
-		if (this.state.isRunning) return;
-
-		await this.displayStartupBanner();
-
-		if (this.settings.clustering.enabled) {
-			this.initializeCluster();
-		} else {
-			this.launchSingleProcess();
+		if (this.state.isRunning || this.state.shutdownInProgress) {
+			return;
 		}
 
-		this.monitor.startMonitoring();
-	}
+		try {
+			await this.displayStartupBanner();
+			await this.logger.logMessage('Starting application...');
 
-	initializeCluster() {
-		if (cluster.isPrimary) {
-			for (let i = 0; i < this.settings.clustering.workerCount; i++) {
-				this.createWorker();
+			if (this.settings.clustering.enabled && cluster.isPrimary) {
+				await this.initializeCluster();
+			} else {
+				await this.launchSingleProcess();
 			}
 
-			cluster.on('exit', (worker, code, signal) => {
-				this.handleWorkerExit(worker, code, signal);
-			});
-		} else {
-			this.launchSingleProcess();
+			this.monitor.startMonitoring();
+			await this.logger.logMessage('Application started successfully');
+		} catch (error) {
+			await this.logger.logError(`Launch failed: ${error.message}`);
+			throw error;
 		}
 	}
 
-	createWorker() {
+	async initializeCluster() {
+		await this.logger.logMessage(`Initializing cluster with ${this.settings.clustering.workerCount} workers`);
+
+		cluster.on('exit', async (worker, code, signal) => {
+			await this.handleWorkerExit(worker, code, signal);
+		});
+
+		for (let i = 0; i < this.settings.clustering.workerCount; i++) {
+			await this.createWorker();
+		}
+	}
+
+	async createWorker() {
+		if (this.state.shutdownInProgress) return;
+
 		const worker = cluster.fork();
 		this.state.workers.set(worker.id, {
 			startTime: Date.now(),
 			restarts: 0,
+			id: worker.id,
 		});
+
+		worker.on('message', async message => {
+			await this.logger.logMessage(`Worker ${worker.id}: ${JSON.stringify(message)}`);
+		});
+
+		await this.logger.logMessage(`Created worker ${worker.id}`);
 	}
 
-	launchSingleProcess() {
-		this.state.isRunning = true;
-		this.state.startTime = Date.now();
-		this.state.activeProcess = fork(this.settings.paths.app, [], {
-			stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
-			env: { ...process.env, RESTART_COUNT: this.state.restartCount },
-		});
+	async handleWorkerExit(worker, code, signal) {
+		if (this.state.shutdownInProgress) return;
 
-		this.attachProcessHandlers();
+		const workerInfo = this.state.workers.get(worker.id);
+		if (!workerInfo) return;
+
+		await this.logger.logError(`Worker ${worker.id} died with code ${code} and signal ${signal}`);
+		this.state.workers.delete(worker.id);
+
+		if (workerInfo.restarts < this.settings.limits.restartAttempts) {
+			workerInfo.restarts++;
+			setTimeout(async () => {
+				await this.createWorker();
+			}, this.settings.intervals.restart);
+		} else {
+			await this.handleMaxRestartsReached();
+		}
+	}
+
+	async launchSingleProcess() {
+		if (this.state.isRunning || this.state.shutdownInProgress) return;
+
+		try {
+			this.state.isRunning = true;
+			this.state.startTime = Date.now();
+
+			this.state.activeProcess = fork(this.settings.paths.app, [], {
+				stdio: ['pipe', 'pipe', 'pipe', 'ipc'],
+				env: {
+					...process.env,
+					RESTART_COUNT: this.state.restartCount,
+					PROCESS_ID: crypto.randomUUID(),
+				},
+			});
+
+			this.attachProcessHandlers();
+			await this.logger.logMessage('Process started successfully');
+		} catch (error) {
+			this.state.isRunning = false;
+			await this.logger.logError(`Process launch failed: ${error.message}`);
+			throw error;
+		}
 	}
 
 	attachProcessHandlers() {
 		const process = this.state.activeProcess;
 
-		process.stdout.on('data', data => {
-			this.logger.logOutput(data.toString());
+		process.stdout.on('data', async data => {
+			await this.logger.logOutput(data.toString());
 		});
 
-		process.stderr.on('data', data => {
-			this.logger.logError(data.toString());
+		process.stderr.on('data', async data => {
+			await this.logger.logError(data.toString());
 		});
 
-		process.on('message', message => {
-			this.logger.logMessage(message);
+		process.on('message', async message => {
+			await this.logger.logMessage(message);
 		});
 
-		process.on('exit', this.handleProcessExit.bind(this));
-		process.on('error', this.handleProcessError.bind(this));
+		process.on('exit', async (code, signal) => {
+			await this.handleProcessExit(code, signal);
+		});
+
+		process.on('error', async error => {
+			await this.handleProcessError(error);
+		});
 	}
 
 	async handleProcessExit(code, signal) {
+		if (!this.state.isRunning || this.state.shutdownInProgress) return;
+
 		const uptime = (Date.now() - this.state.startTime) / 1000;
 		this.state.metrics.uptime += uptime;
 		this.state.isRunning = false;
 
+		await this.logger.logMessage(`Process exited with code ${code} and signal ${signal}`);
+
 		if (code !== 0 && this.state.restartCount < this.settings.limits.restartAttempts) {
-			await this.restartApplication();
+			this.state.restartCount++;
+			this.state.metrics.restarts++;
+			this.state.lastRestart = Date.now();
+
+			await this.logger.logMessage(`Attempting restart ${this.state.restartCount} of ${this.settings.limits.restartAttempts}`);
+
+			setTimeout(async () => {
+				if (!this.state.shutdownInProgress) {
+					try {
+						await this.launchSingleProcess();
+					} catch (error) {
+						await this.logger.logError(`Restart failed: ${error.message}`);
+					}
+				}
+			}, this.settings.intervals.restart);
 		} else if (this.state.restartCount >= this.settings.limits.restartAttempts) {
 			await this.handleMaxRestartsReached();
 		}
@@ -195,46 +268,58 @@ class ProcessManager extends EventEmitter {
 		this.emit('processError', error);
 	}
 
-	async restartApplication() {
-		if (!this.state.isRunning) {
-			this.state.restartCount++;
-			this.state.metrics.restarts++;
-			this.state.lastRestart = Date.now();
-
-			setTimeout(() => this.launchApplication(), this.settings.intervals.restart);
-		}
-	}
-
 	async handleMaxRestartsReached() {
 		await this.logger.logError('Maximum restart attempts reached. Shutting down.');
-		this.shutDown('MAX_RESTARTS_REACHED');
+		await this.shutDown('MAX_RESTARTS_REACHED');
 	}
 
 	async shutDown(reason) {
-		if (this.state.activeProcess) {
-			this.state.activeProcess.kill();
-		}
+		if (this.state.shutdownInProgress) return;
 
-		if (this.settings.clustering.enabled && cluster.isPrimary) {
-			for (const worker of Object.values(cluster.workers)) {
-				worker.kill();
+		this.state.shutdownInProgress = true;
+		await this.logger.logMessage(`Initiating shutdown: ${reason}`);
+
+		try {
+			if (this.monitor) {
+				this.monitor.stopMonitoring();
 			}
-		}
 
-		await this.logger.logMessage(`Shutting down: ${reason}`);
-		process.exit(0);
+			if (this.state.activeProcess) {
+				this.state.activeProcess.kill();
+				this.state.activeProcess = null;
+			}
+
+			if (this.settings.clustering.enabled && cluster.isPrimary) {
+				for (const worker of Object.values(cluster.workers)) {
+					worker.kill();
+				}
+			}
+
+			this.state.isRunning = false;
+			await this.logger.logMessage(`Shutdown complete: ${reason}`);
+
+			// Give time for final logs to be written
+			setTimeout(() => {
+				process.exit(0);
+			}, 1000);
+		} catch (error) {
+			await this.logger.logError(`Error during shutdown: ${error.message}`);
+			process.exit(1);
+		}
 	}
 
 	setupEventHandlers() {
-		process.on('SIGTERM', () => this.shutDown('SIGTERM'));
-		process.on('SIGINT', () => this.shutDown('SIGINT'));
-		process.on('uncaughtException', error => {
-			this.handleProcessError(error);
-			this.shutDown('UNCAUGHT_EXCEPTION');
+		process.on('SIGTERM', async () => await this.shutDown('SIGTERM'));
+		process.on('SIGINT', async () => await this.shutDown('SIGINT'));
+
+		process.on('uncaughtException', async error => {
+			await this.handleProcessError(error);
+			await this.shutDown('UNCAUGHT_EXCEPTION');
 		});
-		process.on('unhandledRejection', error => {
-			this.handleProcessError(error);
-			this.shutDown('UNHANDLED_REJECTION');
+
+		process.on('unhandledRejection', async error => {
+			await this.handleProcessError(error);
+			await this.shutDown('UNHANDLED_REJECTION');
 		});
 	}
 }
@@ -284,16 +369,30 @@ class SystemMonitor {
 	constructor(manager) {
 		this.manager = manager;
 		this.intervalId = null;
+		this.isMonitoring = false;
 	}
 
 	startMonitoring() {
+		if (this.isMonitoring) return;
+
+		this.isMonitoring = true;
 		this.intervalId = setInterval(() => {
 			this.checkSystemHealth();
 			this.collectMetrics();
 		}, this.manager.settings.intervals.monitoring);
 	}
 
+	stopMonitoring() {
+		if (this.intervalId) {
+			clearInterval(this.intervalId);
+			this.intervalId = null;
+		}
+		this.isMonitoring = false;
+	}
+
 	async checkSystemHealth() {
+		if (!this.isMonitoring) return;
+
 		const memoryUsage = process.memoryUsage().heapUsed / os.totalmem();
 		const cpuUsage = process.cpuUsage();
 
@@ -307,6 +406,8 @@ class SystemMonitor {
 	}
 
 	async collectMetrics() {
+		if (!this.isMonitoring) return;
+
 		const metrics = {
 			timestamp: Date.now(),
 			memory: process.memoryUsage(),
@@ -326,17 +427,30 @@ class SystemMonitor {
 class SecurityGuard {
 	constructor(manager) {
 		this.manager = manager;
-		this.blockedAddresses = new Set();
+		this.blockedAddresses = new Map();
 		this.failedAttempts = new Map();
 	}
 
 	validateAccess(address) {
-		if (this.blockedAddresses.has(address)) {
+		if (this.isBlocked(address)) {
 			return false;
 		}
 
 		if (!this.manager.settings.security.trustedIPs.includes(address)) {
 			this.recordFailedAttempt(address);
+			return false;
+		}
+
+		return true;
+	}
+
+	isBlocked(address) {
+		const blockInfo = this.blockedAddresses.get(address);
+		if (!blockInfo) return false;
+
+		if (Date.now() >= blockInfo.expiresAt) {
+			this.blockedAddresses.delete(address);
+			this.failedAttempts.delete(address);
 			return false;
 		}
 
@@ -353,7 +467,13 @@ class SecurityGuard {
 	}
 
 	blockAddress(address) {
-		this.blockedAddresses.add(address);
+		const blockInfo = {
+			timestamp: Date.now(),
+			expiresAt: Date.now() + this.manager.settings.security.lockoutDuration,
+		};
+
+		this.blockedAddresses.set(address, blockInfo);
+
 		setTimeout(() => {
 			this.blockedAddresses.delete(address);
 			this.failedAttempts.delete(address);
@@ -362,4 +482,7 @@ class SecurityGuard {
 }
 
 const processManager = new ProcessManager();
-processManager.launchApplication().catch(console.error);
+processManager.launchApplication().catch(async error => {
+	console.error('Failed to start process manager:', error);
+	process.exit(1);
+});
