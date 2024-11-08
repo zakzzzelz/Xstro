@@ -4,6 +4,7 @@ import { DATABASE } from './config.js';
 import connect from './lib/bot.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import http from 'http';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -39,7 +40,20 @@ async function initialize() {
 	console.log('⬇  Installing Plugins...');
 	await readAndRequireFiles(pluginsPath);
 	console.log('✅ Plugins Installed!');
-	return await connect();
+
+	await connect();
+	console.log('Bot connected and running');
 }
 
-initialize().catch(console.error);
+const server = http.createServer((req, res) => {
+	res.writeHead(200, { 'Content-Type': 'text/plain' });
+	res.end('Bot is alive');
+});
+
+initialize()
+	.then(() => {
+		server.listen(8000, () => {
+			console.log('NODE SERVER:8000');
+		});
+	})
+	.catch(console.error);
