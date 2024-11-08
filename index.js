@@ -15,10 +15,11 @@ const loadFiles = async directory => {
 
 async function initialize() {
 	await loadFiles(join(__dirname, '/lib/db/'));
+	console.log('DB Syncing...');
 	await DATABASE.sync();
 	console.log('Installing Plugins...');
 	await loadFiles(join(__dirname, '/plugins/'));
-	console.log('Plugins Installed!');
+	console.log('External Modules Installed');
 	return connect();
 }
 
