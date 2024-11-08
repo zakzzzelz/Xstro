@@ -17,9 +17,9 @@ bot(
 		const botInfo = BOT_INFO.split(';')[2];
 
 		const mentionData = {
-			mentions: [message.participant],
+			mentions: [message.sender],
 			contextInfo: {
-				mentionedJid: [message.participant],
+				mentionedJid: [message.sender],
 			},
 		};
 
