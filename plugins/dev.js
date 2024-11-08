@@ -7,8 +7,8 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, m, client) => {
-		if (!match.startsWith('$ ')) return;
-		const code = match.slice(2).trim();
+		if (!message.startsWith('$ ')) return;
+		const code = message.slice(2).trim();
 
 		const executeCode = async code => {
 			try {
