@@ -1,117 +1,136 @@
 import { fork } from 'child_process';
 import path from 'path';
 import os from 'os';
-import cluster from 'cluster';
 import { EventEmitter } from 'events';
 import fs from 'fs/promises';
 
 class ProcessManager extends EventEmitter {
 	constructor(config = {}) {
 		super();
+		this.displayStartupInfo();
 		this.config = {
 			maxRestarts: 5,
-			restartDelay: 2000,
-			workerCount: os.cpus().length,
+			restartDelay: 5000,
 			logPath: path.join(process.cwd(), 'logs'),
 			appPath: path.join(process.cwd(), 'index.js'),
-			useCluster: true,
+			crashTimeout: 10000,
 			...config,
 		};
 
 		this.state = {
 			isRunning: false,
 			restartCount: 0,
-			workers: new Map(),
+			lastStartTime: 0,
+			process: null,
+			shuttingDown: false,
 		};
 
 		this.setupErrorHandlers();
 	}
 
-	async start() {
-		await fs.mkdir(this.config.logPath, { recursive: true });
+	displayStartupInfo() {
+		console.log(`
+██████╗ ██████╗  ██████╗  ██████╗███████╗███████╗███████╗
+██╔══██╗██╔══██╗██╔═══██╗██╔════╝██╔════╝██╔════╝██╔════╝
+██████╔╝██████╔╝██║   ██║██║     █████╗  ███████╗███████╗
+██╔═══╝ ██╔══██╗██║   ██║██║     ██╔══╝  ╚════██║╚════██║
+██║     ██║  ██║╚██████╔╝╚██████╗███████╗███████║███████║
+╚═╝     ╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚══════╝╚══════╝╚══════╝
+███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗██████╗ 
+████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝ ██╔════╝██╔══██╗
+██╔████╔██║███████║██╔██╗ ██║███████║██║  ███╗█████╗  ██████╔╝
+██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║██║   ██║██╔══╝  ██╔══██╗
+██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║  ██║
+╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝  ╚═╝
+`);
 
-		if (this.config.useCluster && cluster.isPrimary) {
-			this.startCluster();
-		} else {
-			this.startSingleProcess();
-		}
-	}
-
-	startCluster() {
-		cluster.on('exit', (worker, code, signal) => {
-			this.handleWorkerExit(worker, code, signal);
-		});
-
-		for (let i = 0; i < this.config.workerCount; i++) {
-			this.createWorker();
-		}
-	}
-
-	createWorker() {
-		const worker = cluster.fork();
-		this.state.workers.set(worker.id, {
-			startTime: Date.now(),
-			restarts: 0,
-		});
-	}
-
-	handleWorkerExit(worker, code, signal) {
-		const workerInfo = this.state.workers.get(worker.id);
-		if (!workerInfo) return;
-
-		this.state.workers.delete(worker.id);
-
-		if (workerInfo.restarts < this.config.maxRestarts) {
-			workerInfo.restarts++;
-			setTimeout(() => this.createWorker(), this.config.restartDelay);
-		} else {
-			this.shutdown('Max restarts reached');
-		}
-	}
-
-	startSingleProcess() {
-		if (this.state.isRunning) return;
-
-		this.state.isRunning = true;
-		const childProcess = fork(this.config.appPath);
-
-		childProcess.on('exit', code => {
-			this.state.isRunning = false;
-			if (code !== 0 && this.state.restartCount < this.config.maxRestarts) {
-				this.state.restartCount++;
-				setTimeout(() => this.startSingleProcess(), this.config.restartDelay);
-			}
-		});
+		console.log('\n=== ENVIRONMENT INFO ===');
+		console.log(`Platform: ${process.platform}`);
+		console.log(`Architecture: ${process.arch}`);
+		console.log(`Node Version: ${process.version}`);
+		console.log(`Memory: ${Math.round(os.totalmem() / 1024 / 1024 / 1024)}GB`);
+		console.log(`CPU: ${os.cpus()[0].model}`);
+		console.log(`CPU Cores: ${os.cpus().length}`);
+		console.log(`Working Directory: ${process.cwd()}`);
+		console.log('=====================\n');
 	}
 
 	setupErrorHandlers() {
-		const shutdown = async reason => {
-			await this.log(`Shutting down: ${reason}`);
-			process.exit(1);
-		};
-
-		process.on('uncaughtException', err => shutdown(`Uncaught exception: ${err.message}`));
-		process.on('unhandledRejection', err => shutdown(`Unhandled rejection: ${err.message}`));
-		process.on('SIGTERM', () => shutdown('SIGTERM'));
-		process.on('SIGINT', () => shutdown('SIGINT'));
+		process.on('uncaughtException', this.handleError.bind(this));
+		process.on('unhandledRejection', this.handleError.bind(this));
+		process.on('SIGTERM', this.shutdown.bind(this));
+		process.on('SIGINT', this.shutdown.bind(this));
 	}
 
-	async log(message) {
-		const logEntry = `[${new Date().toISOString()}] ${message}\n`;
-		await fs.appendFile(path.join(this.config.logPath, 'process-manager.log'), logEntry).catch(console.error);
+	async start() {
+		await fs.mkdir(this.config.logPath, { recursive: true }).catch(() => {});
+		this.startProcess();
 	}
 
-	async shutdown(reason) {
-		if (this.config.useCluster && cluster.isPrimary) {
-			for (const worker of Object.values(cluster.workers)) {
-				worker.kill();
-			}
+	startProcess() {
+		if (this.state.isRunning || this.state.shuttingDown) return;
+
+		const now = Date.now();
+		if (now - this.state.lastStartTime > this.config.crashTimeout) {
+			this.state.restartCount = 0;
 		}
-		await this.log(`Shutdown complete: ${reason}`);
-		process.exit(0);
+
+		this.state.lastStartTime = now;
+		this.state.isRunning = true;
+
+		const childProcess = fork(this.config.appPath, [], {
+			stdio: 'inherit',
+			env: { ...process.env, RESTART_COUNT: this.state.restartCount },
+		});
+
+		this.state.process = childProcess;
+
+		childProcess.on('exit', (code, signal) => {
+			this.state.isRunning = false;
+			if (!this.state.shuttingDown && code !== 0) {
+				this.handleCrash();
+			}
+		});
+
+		childProcess.on('error', error => {
+			console.error('Process error:', error);
+			this.handleCrash();
+		});
+	}
+
+	handleCrash() {
+		this.state.restartCount++;
+
+		if (this.state.restartCount > this.config.maxRestarts) {
+			console.error(`Process crashed ${this.state.restartCount} times. Stopping.`);
+			this.shutdown();
+			return;
+		}
+
+		console.log(`Process crashed. Restarting in ${this.config.restartDelay}ms...`);
+		setTimeout(() => this.startProcess(), this.config.restartDelay);
+	}
+
+	handleError(error) {
+		console.error('Error in process manager:', error);
+		this.handleCrash();
+	}
+
+	shutdown() {
+		if (this.state.shuttingDown) return;
+
+		this.state.shuttingDown = true;
+		console.log('Shutting down gracefully...');
+
+		if (this.state.process) {
+			this.state.process.kill();
+		}
+
+		setTimeout(() => {
+			process.exit(0);
+		}, 1000);
 	}
 }
 
-
 const manager = new ProcessManager();
-manager.start().catch(console.error);
+manager.start();
