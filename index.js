@@ -37,12 +37,11 @@ async function initialize() {
 
 	await DATABASE.sync();
 
-	console.log('⬇  Installing Plugins...');
+	console.log('Installing Plugins...');
 	await readAndRequireFiles(pluginsPath);
-	console.log('✅ Plugins Installed!');
+	console.log('Plugins Installed!');
 
-	await connect();
-	console.log('Bot connected and running');
+	return await connect();
 }
 
 const server = http.createServer((req, res) => {
@@ -52,8 +51,6 @@ const server = http.createServer((req, res) => {
 
 initialize()
 	.then(() => {
-		server.listen(8000, () => {
-			console.log('NODE SERVER:8000');
-		});
+		server.listen(8000, () => {});
 	})
 	.catch(console.error);
