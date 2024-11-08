@@ -1,56 +1,30 @@
 import { promises as fs } from 'fs';
-import { extname, join } from 'path';
+import { extname, join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+import http from 'http';
 import { DATABASE } from './config.js';
 import connect from './lib/bot.js';
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
-import http from 'http';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-global.__basedir = __dirname;
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const readAndRequireFiles = async directory => {
-	try {
-		const files = await fs.readdir(directory);
-		return Promise.all(
-			files
-				.filter(file => extname(file).toLowerCase() === '.js')
-				.map(async file => {
-					const modulePath = join(directory, file);
-					const moduleUrl = new URL(`file://${modulePath}`).href;
-					return import(moduleUrl);
-				}),
-		);
-	} catch (error) {
-		console.error('File Error:', error);
-		throw error;
-	}
+const loadFiles = async directory => {
+	const files = await fs.readdir(directory);
+	const jsFiles = files.filter(file => extname(file) === '.js');
+	return Promise.all(jsFiles.map(file => import(`file://${join(directory, file)}`)));
 };
 
 async function initialize() {
-	const dbPath = join(__dirname, '/lib/db/');
-	const pluginsPath = join(__dirname, '/plugins/');
-
-	await readAndRequireFiles(dbPath);
-	console.log('Syncing Database');
-
+	await loadFiles(join(__dirname, '/lib/db/'));
 	await DATABASE.sync();
-
 	console.log('Installing Plugins...');
-	await readAndRequireFiles(pluginsPath);
+	await loadFiles(join(__dirname, '/plugins/'));
 	console.log('Plugins Installed!');
-
-	return await connect();
+	return connect();
 }
 
-const server = http.createServer((req, res) => {
-	res.writeHead(200, { 'Content-Type': 'text/plain' });
-	res.end('Bot is alive');
-});
-
-initialize()
-	.then(() => {
-		server.listen(8000, () => {});
+http
+	.createServer((_, res) => {
+		res.writeHead(200, { 'Content-Type': 'text/plain' });
+		res.end('Bot is alive');
 	})
-	.catch(console.error);
+	.listen(8000, initialize().catch(console.error));
