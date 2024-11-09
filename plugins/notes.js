@@ -9,12 +9,12 @@ bot(
 	},
 	async (message, match) => {
 		const text = match.trim();
-		if (!text) return await message.reply('*Format*: _.addnote title|content_');
+		if (!text) return await message.sendReply('*Format*: _.addnote title|content_');
 		const [title, content] = text.split('|');
-		if (!title) return await message.reply('*Format*: _.addnote title|content_');
+		if (!title) return await message.sendReply('*Format*: _.addnote title|content_');
 		const newNote = await addNote(title, content || '').catch(() => null);
-		if (!newNote) return await message.reply('*Unable to perform action*');
-		return await message.reply(`*Note added*\n\n*ID*: ${newNote.id}`);
+		if (!newNote) return await message.sendReply('*Unable to perform action*');
+		return await message.sendReply(`*Note added*\n\n*ID*: ${newNote.id}`);
 	},
 );
 
@@ -26,10 +26,10 @@ bot(
 	},
 	async (message, match) => {
 		const noteId = parseInt(match.trim());
-		if (!noteId || isNaN(noteId)) return await message.reply('*Format*: _.delnote id_');
+		if (!noteId || isNaN(noteId)) return await message.sendReply('*Format*: _.delnote id_');
 		const deleted = await removeNote(noteId).catch(() => null);
-		if (!deleted) return await message.reply('*Unable to perform action*');
-		return await message.reply(`*Note deleted*`);
+		if (!deleted) return await message.sendReply('*Unable to perform action*');
+		return await message.sendReply(`*Note deleted*`);
 	},
 );
 
@@ -41,17 +41,17 @@ bot(
 	},
 	async (message, match) => {
 		const text = match.trim();
-		if (!text) return await message.reply('*Format*: _.editnote id; title|content_');
+		if (!text) return await message.sendReply('*Format*: _.editnote id; title|content_');
 		const [id, content] = text.split(';').map(item => item.trim());
-		if (!id || !content) return await message.reply('*Format*: _.editnote id; title|content_');
+		if (!id || !content) return await message.sendReply('*Format*: _.editnote id; title|content_');
 		const [title, newContent] = content.split('|');
 		const updates = {
 			title: title.trim(),
 			content: newContent?.trim() || '',
 		};
 		const updatedNote = await updateNote(parseInt(id), updates).catch(() => null);
-		if (!updatedNote) return await message.reply('*Unable to perform action*');
-		return await message.reply('*Note updated*');
+		if (!updatedNote) return await message.sendReply('*Unable to perform action*');
+		return await message.sendReply('*Note updated*');
 	},
 );
 
@@ -63,9 +63,9 @@ bot(
 	},
 	async (message, match) => {
 		const notes = await getNotes().catch(() => null);
-		if (!notes) return await message.reply('*Unable to perform action*');
-		if (notes.length === 0) return await message.reply('*No notes found*');
+		if (!notes) return await message.sendReply('*Unable to perform action*');
+		if (notes.length === 0) return await message.sendReply('*No notes found*');
 		const notesList = notes.map((note, index) => `${index + 1}. ${note.title}`).join('\n');
-		return await message.reply(`*_Notes:_*\n\n${notesList}`);
+		return await message.sendReply(`*_Notes:_*\n\n${notesList}`);
 	},
 );
