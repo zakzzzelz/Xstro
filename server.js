@@ -1,7 +1,6 @@
 import { fork } from 'child_process';
 import path from 'path';
 import os from 'os';
-import fs from 'fs/promises';
 import ora from 'ora';
 import chalk from 'chalk';
 
@@ -10,7 +9,6 @@ class ProcessManager {
 		this.config = {
 			maxRestarts: 5,
 			restartDelay: 5000,
-			logPath: path.join(process.cwd(), 'logs'),
 			appPath: path.join(process.cwd(), 'index.js'),
 			...config,
 		};
@@ -26,7 +24,6 @@ class ProcessManager {
 		this.printHeader();
 		const spinner = ora('Starting the process...').start();
 		try {
-			await fs.mkdir(this.config.logPath, { recursive: true });
 			this.startProcess();
 			spinner.succeed('Process started.');
 		} catch (err) {
