@@ -2,7 +2,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { bot } from '../lib/client/plugins.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/db/plugins.js';
-import { dirname, basename, resolve } from 'path';
+import { dirname, basename, resolve, extname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -17,7 +17,8 @@ bot(
 		const pluginUrl = match.trim();
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
 
-		const pluginName = basename(pluginUrl);
+		const baseName = basename(pluginUrl, extname(pluginUrl));
+		const pluginName = `${baseName}.js`;
 		const existingPlugins = await getPlugins();
 		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.sendReply('_Plugin already installed_');
 
@@ -36,12 +37,26 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		const pluginName = match.trim();
+		const baseName = match.trim();
+		const pluginName = `${baseName}.js`;
 		const deleted = await removePlugin(pluginName);
 		if (!deleted) return message.sendReply('_Plugin not found_');
 
 		const pluginPath = resolve(__dirname, '../plugins', pluginName);
 		if (fs.existsSync(pluginPath)) fs.unlinkSync(pluginPath);
 		message.sendReply(`_${pluginName} plugin uninstalled_`);
+	},
+);
+
+bot(
+	{
+		pattern: 'getplugins',
+		desc: 'Lists all installed plugins',
+		type: 'system',
+	},
+	async message => {
+		const plugins = await getPlugins();
+		const pluginList = plugins.map(plugin => plugin.name).join('\n') || '_No plugins installed_';
+		message.sendReply(`*Installed Plugins:*\n${pluginList}`);
 	},
 );
