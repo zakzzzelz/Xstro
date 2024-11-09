@@ -1,6 +1,6 @@
 import { bot } from '../lib/client/plugins.js';
-import { fancy } from '../lib/utils/font.js';
-import { runtime } from '../lib/utils/utils.js';
+import { fancy } from '../lib/extras/font.js';
+import { runtime } from '../lib/utils.js';
 
 bot(
 	{

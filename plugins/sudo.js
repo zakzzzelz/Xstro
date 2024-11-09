@@ -1,6 +1,6 @@
 import { bot } from '../lib/client/plugins.js';
 import { getSudo, delSudo, addSudo } from '../lib/sql/sudo.js';
-import { numtoId } from '../lib/utils/utils.js';
+import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
