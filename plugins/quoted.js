@@ -9,7 +9,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!message.reply_message) return await message.sendReply('_Reply A Message_');
+		if (!message.quoted) return await message.sendReply('_Reply A Message_');
 		let key = message.quoted.key.id;
 		let msg = await loadMessage(key);
 		if (!msg) return await message.sendReply('_Message not found maybe bot might not be running at that time_');
