@@ -4,7 +4,6 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'ping',
-		alias: 'speed',
 		desc: 'Get Performance',
 		type: 'system',
 	},
