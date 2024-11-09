@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { addBan, getBanned, removeBan } from '../lib/sql/ban';
+import { addBan, getBanned, removeBan } from '../lib/sql/ban.js';
 import { numtoId } from '../lib/utils.js';
 
 bot(
