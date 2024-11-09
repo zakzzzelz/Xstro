@@ -9,9 +9,18 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const jid = numtoId(match) || message.quoted?.sender || message.mention[0];
-		if (!jid) return message.sendReply('Please provide a user to ban.');
-		return message.sendReply(await addBan(jid), { mentions: [`${jid}@s.whatsapp.net`] });
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		}
+		if (!jid) return message.sendReply('Please mention, quote, or provide the number of a user to ban.');
+		const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
+		const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
+		return message.sendReply(await addBan(trimmedJid), { mentions: [fullJid] });
 	},
 );
 
@@ -22,9 +31,18 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const jid = numtoId(match) || message.quoted?.sender || message.mention[0];
-		if (!jid) return message.sendReply('Please provide a user to unban.');
-		return message.sendReply(await removeBan(jid), { mentions: [`${jid}@s.whatsapp.net`] });
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		}
+		if (!jid) return message.sendReply('Please mention, quote, or provide the number of a user to unban.');
+		const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
+		const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
+		return message.sendReply(await removeBan(trimmedJid), { mentions: [fullJid] });
 	},
 );
 
@@ -37,6 +55,7 @@ bot(
 	async message => {
 		const bannedUsers = await getBanned();
 		if (bannedUsers.length === 0) return message.sendReply('There are no banned users.');
-		return message.sendReply('Banned Users:\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions: bannedUsers.map(jid => `${jid}@s.whatsapp.net`) });
+		const mentions = bannedUsers.map(jid => `${jid}@s.whatsapp.net`);
+		return message.sendReply('Banned Users:\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions });
 	},
 );
