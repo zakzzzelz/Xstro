@@ -69,3 +69,20 @@ bot(
 		return await message.sendReply(`*_Notes:_*\n\n${notesList}`);
 	},
 );
+
+bot(
+	{
+		pattern: 'cnote',
+		desc: 'Get Note Content',
+		type: 'user',
+	},
+	async (message, match) => {
+		const noteId = parseInt(match.trim());
+		if (!noteId || isNaN(noteId)) return await message.sendReply('*Format*: _.cnote id_');
+		const notes = await getNotes().catch(() => null);
+		if (!notes) return await message.sendReply('*Unable to perform action*');
+		const note = notes.find(n => n.id === noteId);
+		if (!note) return await message.sendReply('*Note not found*');
+		return await message.sendReply(`*Title*: ${note.title}\n*Content*: ${note.content}`);
+	},
+);
