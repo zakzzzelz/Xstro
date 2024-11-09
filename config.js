@@ -8,6 +8,7 @@ dotenv.config();
 const toBool = x => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
 export const SESSION_ID = process.env.SESSION_ID || '';
+export const SESSION_DB = process.env.SESSION_DB || false; // Unstable
 export const BOT_INFO = process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ';
 export const LOGS = toBool(process.env.LOGS) || false;
 export const PREFIX = process.env.PREFIX || '.';
