@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { addNote, removeNote, updateNote, getNotes } from '../lib/db/notes.js';
+import { addNote, removeNote, updateNote, getNotes } from '../lib/sql/notes.js';
 
 bot(
 	{

@@ -1,5 +1,5 @@
 import { BOT_INFO } from '../config.js';
-import { aliveMessage, setAliveMsg } from '../lib/db/alive.js';
+import { aliveMessage, setAliveMsg } from '../lib/sql/alive.js';
 import { bot } from '../lib/client/plugins.js';
 
 bot(

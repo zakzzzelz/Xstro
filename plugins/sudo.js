@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { getSudo, delSudo, addSudo } from '../lib/db/sudo.js';
+import { getSudo, delSudo, addSudo } from '../lib/sql/sudo.js';
 import { numtoId } from '../lib/utils/utils.js';
 
 bot(

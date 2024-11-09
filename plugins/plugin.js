@@ -1,7 +1,7 @@
 import fs from 'fs';
 import axios from 'axios';
 import { bot } from '../lib/client/plugins.js';
-import { addPlugin, getPlugins, removePlugin } from '../lib/db/plugins.js';
+import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { dirname, basename, resolve, extname } from 'path';
 import { fileURLToPath } from 'url';
 

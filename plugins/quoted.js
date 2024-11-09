@@ -1,6 +1,6 @@
 import { serialize } from '../lib/serialize.js';
 import { bot } from '../lib/client/plugins.js';
-import { loadMessage } from '../lib/db/store.js';
+import { loadMessage } from '../lib/sql/store.js';
 
 bot(
 	{
