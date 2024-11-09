@@ -12,6 +12,8 @@ bot(
 		if (!text) return await message.sendReply('*Format*: _.addnote title|content_');
 		const [title, content] = text.split('|');
 		if (!title) return await message.sendReply('*Format*: _.addnote title|content_');
+		const words = content ? content.trim().split(/\s+/) : [];
+		if (words.length > 500) return await message.sendReply('*Content exceeds 500 words limit*');
 		const newNote = await addNote(title, content || '').catch(() => null);
 		if (!newNote) return await message.sendReply('*Unable to perform action*');
 		return await message.sendReply(`*Note added*\n\n*ID*: ${newNote.id}`);
