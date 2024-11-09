@@ -9,12 +9,12 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!message.reply_message) return await message.reply('_Reply A Message_');
+		if (!message.reply_message) return await message.sendReply('_Reply A Message_');
 		let key = message.quoted.key.id;
 		let msg = await loadMessage(key);
 		if (!msg) return await message.sendReply('_Message not found maybe bot might not be running at that time_');
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
-		if (!msg.quoted) return await message.reply('No quoted message found');
+		if (!msg.quoted) return await message.sendReply('_No quoted message found_');
 		await message.saveNForward(message.jid, msg.quoted);
 	},
 );
