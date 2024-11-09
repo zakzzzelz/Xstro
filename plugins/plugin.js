@@ -37,6 +37,7 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
+		if (!match) return message.sendReply('_Provide an installed plugin name_');
 		const baseName = match.trim();
 		const pluginName = `${baseName}.js`;
 		const deleted = await removePlugin(pluginName);
