@@ -14,7 +14,7 @@ const loadFiles = async directory => {
 };
 
 async function initialize() {
-	await loadFiles(join(__dirname, '/lib/db/'));
+	await loadFiles(join(__dirname, '/lib/sql/'));
 	console.log('DB Syncing...');
 	await DATABASE.sync();
 	console.log('Installing Plugins...');
