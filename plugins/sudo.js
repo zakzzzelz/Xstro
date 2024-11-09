@@ -39,7 +39,7 @@ bot(
 	},
 	async message => {
 		const sudoList = await getSudo();
-		if (sudoList === '_No Sudo Numbers_') return message.sendReply('*No Sudo Users*');
+		if (sudoList === '_No Sudo Numbers_') return message.sendReply('*_No Sudo Users_*');
 		const sudoNumbers = sudoList.split('\n').map(number => number.replace('@', '').replace('@s.whatsapp.net', '').trim());
 		const formattedSudoList = '*Sudo Users*\n\n' + sudoNumbers.map((number, index) => `${index + 1}. @${number}`).join('\n');
 		return message.sendReply(formattedSudoList, { mentions: sudoNumbers.map(number => `${number}@s.whatsapp.net`) });
