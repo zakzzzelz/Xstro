@@ -33,18 +33,14 @@ bot(
 		type: 'filter',
 	},
 	async (message, match) => {
-		if (!match) return await message.sendReply('❌ Provide filter type and message\nExample: .filter gc hello | .filter dm hi');
-
+		if (!match) return await message.sendReply('_Provide filter type and message_\n\n_Example: .filter gc hello | .filter dm hi_');
 		const type = match.split(' ')[0];
 		const filterText = match.split(' ').slice(1).join(' ');
-
-		if (!filterText) return await message.sendReply('❌ Please provide filter message');
-		if (!['gc', 'dm'].includes(type)) return await message.sendReply('❌ Invalid filter type. Use gc or dm');
-
+		if (!filterText) return await message.sendReply('_Provide filter message_');
+		if (!['gc', 'dm'].includes(type)) return await message.sendReply('_Invalid filter type. Use gc or dm_');
 		const isGroup = message.jid.includes('@g.us');
-		if (type === 'gc' && !isGroup) return await message.sendReply('❌ GC filters can only be set in groups');
-		if (type === 'dm' && isGroup) return await message.sendReply('❌ DM filters can only be set in DMs');
-
+		if (type === 'gc' && !isGroup) return await message.sendReply('_GC filters can only be set in groups_');
+		if (type === 'dm' && isGroup) return await message.sendReply('_DM filters can only be set in DMs_');
 		await addFilter(filterText);
 		return await message.sendReply(`✅ ${type.toUpperCase()} Filter *${filterText}* added successfully`);
 	},
@@ -58,19 +54,14 @@ bot(
 		type: 'filter',
 	},
 	async (message, match) => {
-		if (!match) return await message.sendReply('❌ Specify filter type to disable (gc/dm)');
-
-		if (!['gc', 'dm'].includes(match)) return await message.sendReply('❌ Invalid filter type. Use gc or dm');
-
+		if (!match) return await message.sendReply('_Specify filter type to disable (gc/dm)_');
+		if (!['gc', 'dm'].includes(match)) return await message.sendReply('_Invalid filter type. Use gc or dm_');
 		const isGroup = message.jid.includes('@g.us');
-		if (match === 'gc' && !isGroup) return await message.sendReply('❌ Can only disable GC filters in groups');
-		if (match === 'dm' && isGroup) return await message.sendReply('❌ Can only disable DM filters in DMs');
-
+		if (match === 'gc' && !isGroup) return await message.sendReply('_Can only disable GC filters in groups_');
+		if (match === 'dm' && isGroup) return await message.sendReply('_Can only disable DM filters in DMs_');
 		const deleted = await deleteFilters(match);
-		if (deleted.count === 0) {
-			return await message.sendReply(`❌ No ${match.toUpperCase()} filters found to disable`);
-		}
-		return await message.sendReply(`✅ All ${match.toUpperCase()} filters disabled successfully`);
+		if (deleted.count === 0) return await message.sendReply(`_No ${match.toUpperCase()} filters found to disable_`);
+		return await message.sendReply(`_All ${match.toUpperCase()} filters disabled_`);
 	},
 );
 
@@ -84,10 +75,8 @@ bot(
 	async (message, match) => {
 		if (!match) return await message.sendReply('❌ Please provide filter message');
 		const filter = await getSpecificFilter(message.jid, match);
-		if (!filter.data) {
-			return await message.sendReply(`❌ Filter *${match}* not found`);
-		}
-		return await message.sendReply(`🔍 Filter found: *${filter.data.filterMessage}*`);
+		if (!filter.data) return await message.sendReply(`_Filter *${match}* not found_`);
+		return await message.sendReply(`_Filter found: *${filter.data.filterMessage}*_`);
 	},
 );
 
@@ -100,10 +89,8 @@ bot(
 	},
 	async (message, match) => {
 		const filters = await getDMFilters();
-		if (!filters.data.length) {
-			return await message.sendReply('_No DM filters found_');
-		}
-		let text = '🔍 *DM Filter List*\n\n';
+		if (!filters.data.length) return await message.sendReply('_No DM filters found_');
+		let text = '*DM Filter List*\n\n';
 		filters.data.forEach((filter, i) => {
 			text += `${i + 1}. ${filter.filterMessage}\n`;
 		});
@@ -120,10 +107,8 @@ bot(
 	},
 	async (message, match) => {
 		const filters = await getGCFilters();
-		if (!filters.data.length) {
-			return await message.sendReply('_No group chat filters found_');
-		}
-		let text = '🔍 *Group Chat Filter List*\n\n';
+		if (!filters.data.length) return await message.sendReply('_No group chat filters found_');
+		let text = '*Group Chat Filter List*\n\n';
 		filters.data.forEach((filter, i) => {
 			text += `${i + 1}. ${filter.filterMessage}\n`;
 		});
