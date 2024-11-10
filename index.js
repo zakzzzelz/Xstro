@@ -1,10 +1,11 @@
 import { readdir } from 'fs/promises';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { DATABASE, PORT } from './config.js';
 import connect from './lib/bot.js';
+import config from './config.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const { DATABASE } = config;
 
 const loadFiles = async directory => {
 	const files = await readdir(directory);

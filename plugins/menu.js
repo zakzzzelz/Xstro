@@ -1,8 +1,9 @@
-import { BOT_INFO, MODE, VERSION } from '../config.js';
+import config from '../config.js';
 import { commands, bot } from '../lib/client/plugins.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from '../lib/extras/font.js';
+const { BOT_INFO, MODE, VERSION } = config;
 
 bot(
 	{
@@ -12,15 +13,15 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		let menuText = `*╭─ ${BOT_INFO.split(';')[1]} ───*
-*│ User : ${message.pushName}*
-*│ Plugins : ${commands.length}*
-*│ Runtime : ${runtime(process.uptime())}*
-*│ Mode : ${MODE}*
-*│ Platform : ${platform()}*
-*│ Memory : ${formatBytes(totalmem() - freemem())}*
-*│ Version : ${VERSION}*
-*╰────────────────*\n`;
+		let menuText = `\`\`\`╭─ ${BOT_INFO.split(';')[1]} ───
+│ User: ${message.pushName}
+│ Mode: ${MODE}
+│ Uptime: ${runtime(process.uptime())}
+│ Platform: ${platform()}
+│ Plugins: ${commands.length}
+│ Memory: ${formatBytes(totalmem() - freemem())}
+│ Version: ${VERSION}
+╰────────────────\`\`\`\n`;
 
 		let commandCounter = 1;
 		const categorized = commands
@@ -35,14 +36,14 @@ bot(
 			}, {});
 
 		Object.keys(categorized).forEach(category => {
-			menuText += `\n╭──〈 *${category}* 〉────\n`;
+			menuText += fancy(`\n╭──〈 *${category}* 〉────\n`);
 			categorized[category].forEach(cmd => {
-				menuText += `│▸ ${commandCounter}. ${cmd}\n`;
+				menuText += fancy(`│▸ ${commandCounter}. ${cmd}\n`);
 				commandCounter++;
 			});
-			menuText += `╰──────────────\n`;
+			menuText += fancy(`╰──────────────\n`);
 		});
-		return await message.send(fancy(menuText), { quoted: null });
+		return await message.send(menuText, { quoted: null });
 	},
 );
 

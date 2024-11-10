@@ -1,6 +1,7 @@
-import { BOT_INFO } from '../config.js';
+import config from '../config.js';
 import { aliveMessage, setAliveMsg } from '../lib/sql/alive.js';
 import { bot } from '../lib/client/plugins.js';
+const { BOT_INFO } = config;
 
 bot(
 	{
