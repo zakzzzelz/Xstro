@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { readdir } from 'fs/promises';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import http from 'http';
@@ -9,7 +9,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const server = http.createServer();
 
 const loadFiles = async directory => {
-	const files = await fs.readdir(directory);
+	const files = await readdir(directory);
 	const jsFiles = files.filter(file => extname(file) === '.js');
 	return Promise.all(jsFiles.map(file => import(`file://${join(directory, file)}`)));
 };
