@@ -2,6 +2,7 @@ import fs from 'fs';
 import axios from 'axios';
 import { bot } from '../lib/client/plugins.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
+import { fancy } from '../lib/extras/font.js';
 import { dirname, basename, resolve, extname } from 'path';
 import { fileURLToPath } from 'url';
 
@@ -57,7 +58,7 @@ bot(
 	},
 	async message => {
 		const plugins = await getPlugins();
-		const pluginList = plugins.map(plugin => plugin.name).join('\n') || '_No plugins installed_';
-		message.sendReply(`*Installed Plugins:*\n${pluginList}`);
+		const pluginList = plugins.length > 0 ? `Plugins Installed:\n${plugins.map(plugin => plugin.name).join('\n')}` : '_No plugins installed_';
+		message.sendReply(fancy(pluginList));
 	},
 );

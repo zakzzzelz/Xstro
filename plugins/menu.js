@@ -34,14 +34,14 @@ bot(
 			}, {});
 
 		Object.keys(categorized).forEach(category => {
-			menuText += `\n╭── ${category} ────\n`;
+			menuText += `\n╭──〈 ${category} 〉────\n`;
 			categorized[category].forEach(cmd => {
-				menuText += `│ ${commandCounter}. ${cmd}\n`;
+				menuText += `│▸ ${commandCounter}. ${cmd}\n`;
 				commandCounter++;
 			});
 			menuText += `╰──────────────\n`;
 		});
-		return await message.send(fancy(menuText));
+		return await message.send(fancy(menuText), { quoted: null });
 	},
 );
 
@@ -52,26 +52,20 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, { prefix }) => {
-		let menu = '\t\t```Command List```\n';
-
-		let cmnd = [];
+		let menu = '*_xstro commands list_*\n\n';
+		let cmdList = [];
 		let cmd, desc;
 		commands.map(command => {
-			if (command.pattern) {
-				cmd = command.pattern.toString().split(/\W+/)[2]
-			}
+			if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[2];
 			desc = command.desc || false;
-
-			if (!command.dontAddCommandList && cmd !== undefined) {
-				cmnd.push({ cmd, desc });
-			}
+			if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
 		});
-		cmnd.sort();
-		cmnd.forEach(({ cmd, desc }, num) => {
-			menu += `\`\`\`${(num += 1)} ${cmd.trim()}\`\`\`\n`;
-			if (desc) menu += `Use: \`\`\`${desc}\`\`\`\n\n`;
+		cmdList.sort();
+		cmdList.forEach(({ cmd, desc }, num) => {
+			menu += `${(num += 1)} ${cmd.trim()}\n`;
+			if (desc) menu += `${desc}\n\n`;
 		});
 		menu += ``;
-		return await message.sendReply(menu);
+		return await message.sendReply(fancy(menu), { contextInfo: { isForwarded: true, forwardingscore: 999 } });
 	},
 );
