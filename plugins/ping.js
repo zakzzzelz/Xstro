@@ -4,6 +4,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'ping',
+		isPublic: true,
 		desc: 'Get Performance',
 		type: 'system',
 	},

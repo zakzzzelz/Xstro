@@ -3,6 +3,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'vv',
+		isPublic: false,
 		desc: 'Download ViewOnce Messages',
 		type: 'whatsapp',
 	},

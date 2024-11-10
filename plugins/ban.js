@@ -5,6 +5,7 @@ import { numtoId } from '../lib/utils.js';
 bot(
 	{
 		pattern: 'ban ?(.*)',
+		isPublic: false,
 		desc: 'Ban a user from the bot',
 		type: 'user',
 	},
@@ -27,6 +28,7 @@ bot(
 bot(
 	{
 		pattern: 'unban ?(.*)',
+		isPublic: false,
 		desc: 'Unban a user from the bot',
 		type: 'user',
 	},
@@ -49,6 +51,7 @@ bot(
 bot(
 	{
 		pattern: 'getban',
+		isPublic: false,
 		desc: 'Get a list of all banned users',
 		type: 'user',
 	},

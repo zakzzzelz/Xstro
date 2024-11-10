@@ -4,6 +4,7 @@ import { Antilink } from '../lib/sql/antilink.js';
 bot(
 	{
 		pattern: 'antilink ?(.*)',
+		isPublic: true,
 		desc: 'Setup Antilink For Groups',
 		type: 'Group',
 	},
@@ -12,7 +13,7 @@ bot(
 
 		const [settings] = await Antilink.findOrCreate({
 			where: { groupId: message.jid },
-			defaults: { groupId: message.jid, warnings: {} }, // Initialize warnings here
+			defaults: { groupId: message.jid, warnings: {} },
 		});
 
 		const cmd = match.trim().toLowerCase();
@@ -20,26 +21,19 @@ bot(
 
 		if (['on', 'off'].includes(cmd)) {
 			const newState = cmd === 'on';
-			if (settings.enabled === newState) {
-				return message.sendReply(`_Antilink is already ${cmd}_`);
-			}
+			if (settings.enabled === newState) return message.sendReply(`_Antilink is already ${cmd}_`);
 			settings.enabled = newState;
 			await settings.save();
 			return message.sendReply(`_Antilink ${cmd === 'on' ? 'enabled' : 'disabled'}!_`);
 		}
 
 		if (validActions.includes(cmd)) {
-			if (!settings.enabled) {
-				return message.sendReply('_Please enable antilink first using antilink on_');
-			}
-			if (settings.action === cmd) {
-				return message.sendReply(`_Antilink action is already set to ${cmd}_`);
-			}
+			if (!settings.enabled) return message.sendReply('_Enable antilink first using antilink on_');
+			if (settings.action === cmd) return message.sendReply(`_Antilink action is already set to ${cmd}_`);
 			settings.action = cmd;
 			await settings.save();
 			return message.sendReply(`_Antilink action set to ${cmd}_`);
 		}
-
 		return message.sendReply('_' + message.prefix + 'antilink on/off/delete/kick/warn_');
 	},
 );

@@ -3,6 +3,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'clear ?(.*)',
+		isPublic: false,
 		desc: 'delete whatsapp chat',
 		type: 'whatsapp',
 	},

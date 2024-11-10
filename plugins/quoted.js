@@ -5,6 +5,7 @@ import { loadMessage } from '../lib/sql/store.js';
 bot(
 	{
 		pattern: 'quoted',
+		isPublic: false,
 		desc: 'quoted message',
 		type: 'whatsapp',
 	},

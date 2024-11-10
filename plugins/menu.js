@@ -7,6 +7,7 @@ import { fancy } from '../lib/extras/font.js';
 bot(
 	{
 		pattern: 'menu',
+		isPublic: true,
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},
@@ -48,6 +49,7 @@ bot(
 bot(
 	{
 		pattern: 'list',
+		isPublic: true,
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},

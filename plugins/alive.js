@@ -5,6 +5,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'alive',
+		isPublic: true,
 		desc: 'Is Bot Alive?',
 		type: 'user',
 	},

@@ -5,7 +5,7 @@ import { runtime } from '../lib/utils.js';
 bot(
 	{
 		pattern: 'runtime',
-		alias: 'uptime',
+		isPublic: true,
 		desc: 'Get Runtime of bot',
 		type: 'system',
 	},

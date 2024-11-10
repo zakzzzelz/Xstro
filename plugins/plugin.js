@@ -11,6 +11,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 bot(
 	{
 		pattern: 'install ?(.*)',
+		isPublic: false,
 		desc: 'Installs a Plugin',
 		type: 'system',
 	},
@@ -34,6 +35,7 @@ bot(
 bot(
 	{
 		pattern: 'delplugin ?(.*)',
+		isPublic: false,
 		desc: 'Deletes a Plugin',
 		type: 'system',
 	},
@@ -53,6 +55,7 @@ bot(
 bot(
 	{
 		pattern: 'getplugins',
+		isPublic: false,
 		desc: 'Lists all installed plugins',
 		type: 'system',
 	},

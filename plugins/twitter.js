@@ -5,6 +5,7 @@ import { extractUrlFromMessage } from '../lib/utils.js';
 bot(
 	{
 		pattern: 'twitter ?(.*)',
+		isPublic: true,
 		desc: 'downloads x videos',
 		type: 'download',
 	},

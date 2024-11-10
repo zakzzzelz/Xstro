@@ -3,6 +3,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'archive ?(.*)',
+		isPublic: false,
 		desc: 'archive whatsapp chat',
 		type: 'whatsapp',
 	},
@@ -26,6 +27,7 @@ bot(
 bot(
 	{
 		pattern: 'unarchive ?(.*)',
+		isPublic: false,
 		desc: 'unarchive whatsapp chat',
 		type: 'whatsapp',
 	},

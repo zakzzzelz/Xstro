@@ -5,7 +5,7 @@ import { numtoId } from '../lib/utils.js';
 bot(
 	{
 		pattern: 'setsudo',
-		alias: 'addsudo',
+		isPublic: false,
 		desc: 'Add User to Sudo list',
 		type: 'user',
 	},
@@ -19,7 +19,7 @@ bot(
 bot(
 	{
 		pattern: 'delsudo',
-		alias: 'removesudo',
+		isPublic: false,
 		desc: 'Remove User from Sudo',
 		type: 'user',
 	},
@@ -34,7 +34,8 @@ bot(
 bot(
 	{
 		pattern: 'getsudo',
-		alias: 'listsudo',
+		isPublic: false,
+		desc: 'Get Sudo Users',
 		type: 'user',
 	},
 	async message => {

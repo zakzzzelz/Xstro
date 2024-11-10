@@ -4,6 +4,7 @@ import { addNote, removeNote, updateNote, getNotes } from '../lib/sql/notes.js';
 bot(
 	{
 		pattern: 'addnote',
+		isPublic: true,
 		desc: 'Create Notes',
 		type: 'user',
 	},
@@ -23,6 +24,7 @@ bot(
 bot(
 	{
 		pattern: 'delnote',
+		isPublic: true,
 		desc: 'Delete a Note',
 		type: 'user',
 	},
@@ -38,6 +40,7 @@ bot(
 bot(
 	{
 		pattern: 'editnote',
+		isPublic: true,
 		desc: 'Update an Existing Note',
 		type: 'user',
 	},
@@ -60,6 +63,7 @@ bot(
 bot(
 	{
 		pattern: 'getnotes',
+		isPublic: true,
 		desc: 'List all Notes',
 		type: 'user',
 	},
@@ -75,6 +79,7 @@ bot(
 bot(
 	{
 		pattern: 'cnote',
+		isPublic: true,
 		desc: 'Get Note Content',
 		type: 'user',
 	},

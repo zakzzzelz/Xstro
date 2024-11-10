@@ -13,6 +13,7 @@ ensureEnvFileExists();
 bot(
 	{
 		pattern: 'setvar',
+		isPublic: false,
 		desc: 'Set system var',
 		type: 'system',
 	},
@@ -29,6 +30,7 @@ bot(
 bot(
 	{
 		pattern: 'delvar',
+		isPublic: false,
 		desc: 'Delete system var',
 		type: 'system',
 	},
@@ -43,6 +45,7 @@ bot(
 bot(
 	{
 		pattern: 'getvar',
+		isPublic: false,
 		desc: 'Get system vars',
 		type: 'system',
 	},
