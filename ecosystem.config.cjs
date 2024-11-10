@@ -6,7 +6,6 @@ module.exports = {
 			instances: 'max',
 			exec_mode: 'cluster',
 			watch: false,
-			node_args: '--loader esm',
 			env: {
 				NODE_ENV: 'development',
 				PORT: 8000,
