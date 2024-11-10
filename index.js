@@ -6,6 +6,7 @@ import { DATABASE, PORT } from './config.js';
 import connect from './lib/bot.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const server = http.createServer();
 
 const loadFiles = async directory => {
 	const files = await fs.readdir(directory);
@@ -23,4 +24,6 @@ async function startBot() {
 	return await connect();
 }
 
-http.listen(PORT, startBot().catch(console.error));
+server.listen(PORT, async () => {
+	await startBot().catch(console.error);
+});
