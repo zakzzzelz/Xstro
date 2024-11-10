@@ -1,12 +1,10 @@
 import { readdir } from 'fs/promises';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import http from 'http';
 import { DATABASE, PORT } from './config.js';
 import connect from './lib/bot.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const server = http.createServer();
 
 const loadFiles = async directory => {
 	const files = await readdir(directory);
@@ -23,7 +21,4 @@ async function startBot() {
 	console.log('External Modules Installed');
 	return await connect();
 }
-
-server.listen(PORT, async () => {
-	await startBot().catch(console.error);
-});
+startBot();
