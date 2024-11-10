@@ -17,7 +17,7 @@ bot(
 		} else if (match) {
 			jid = numtoId(match);
 		}
-		if (!jid) return message.sendReply('Please mention, quote, or provide the number of a user to ban.');
+		if (!jid) return message.sendReply('_Tag, Reply, or provide the number of a user to ban._');
 		const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
 		const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
 		return message.sendReply(await addBan(trimmedJid), { mentions: [fullJid] });
@@ -39,7 +39,7 @@ bot(
 		} else if (match) {
 			jid = numtoId(match);
 		}
-		if (!jid) return message.sendReply('Please mention, quote, or provide the number of a user to unban.');
+		if (!jid) return message.sendReply('_Tag, Reply, or provide the number of a user to unban._');
 		const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
 		const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
 		return message.sendReply(await removeBan(trimmedJid), { mentions: [fullJid] });
@@ -56,6 +56,6 @@ bot(
 		const bannedUsers = await getBanned();
 		if (bannedUsers.length === 0) return message.sendReply('There are no banned users.');
 		const mentions = bannedUsers.map(jid => `${jid}@s.whatsapp.net`);
-		return message.sendReply('Banned Users:\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions });
+		return message.sendReply('*_Banned Users:_*\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions });
 	},
 );
