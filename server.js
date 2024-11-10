@@ -1,8 +1,6 @@
 import { fork } from 'child_process';
 import path from 'path';
 import os from 'os';
-import ora from 'ora';
-import chalk from 'chalk';
 
 class ProcessManager {
 	constructor(config = {}) {
@@ -15,32 +13,21 @@ class ProcessManager {
 		this.state = { isRunning: false, restartCount: 0, process: null };
 	}
 
-	log(message, type = 'blue') {
-		const colors = { blue: chalk.blue, green: chalk.green, red: chalk.red, yellow: chalk.yellow };
-		console.log(colors[type](`| xstro | ${message}`));
+	log(message, color = '\x1b[34m') {
+		console.log(`${color}| xstro | ${message}\x1b[0m`);
 	}
 
-	async start() {
+	start() {
 		this.printHeader();
-		const spinner = ora('Starting the process...').start();
-		try {
-			this.startProcess();
-			spinner.succeed('Process started.');
-		} catch (err) {
-			spinner.fail('Failed to start process.');
-			this.log(err, 'red');
-		}
+		this.log('Starting the process...', '\x1b[36m');
+		this.startProcess();
 	}
 
 	printHeader() {
-		console.log(chalk.bold.green('\nPROCESS MANAGER\n'));
-		console.log(chalk.blue(`Platform: ${process.platform} | Arch: ${process.arch}`));
-		console.log(chalk.blue(`Memory: ${Math.round(os.totalmem() / 1024 / 1024 / 1024)}GB`));
-		console.log(chalk.blue(`CPU: ${os.cpus()[0].model} | Cores: ${os.cpus().length}\n`));
-		console.log(chalk.yellow('-----------------------------------'));
-		console.log(chalk.yellow('| xstro | events                  |'));
-		console.log(chalk.yellow('| xstro | starting the process...   |'));
-		console.log(chalk.yellow('-----------------------------------\n'));
+		console.log('\x1b[1m\x1b[32m\nPROCESS MANAGER\n\x1b[0m');
+		console.log(`Platform: ${process.platform} | Arch: ${process.arch}`);
+		console.log(`Memory: ${Math.round(os.totalmem() / 1024 / 1024 / 1024)}GB`);
+		console.log(`CPU: ${os.cpus()[0].model} | Cores: ${os.cpus().length}\n`);
 	}
 
 	startProcess() {
@@ -48,33 +35,26 @@ class ProcessManager {
 
 		this.state.isRunning = true;
 		const childProcess = fork(this.config.appPath, [], { stdio: 'pipe' });
-
 		this.state.process = childProcess;
 
-		childProcess.stdout.on('data', data => this.handleChildLog(data, 'blue'));
-		childProcess.stderr.on('data', data => this.handleChildLog(data, 'red'));
+		childProcess.stdout.on('data', data => this.handleChildLog(data, '\x1b[34m'));
+		childProcess.stderr.on('data', data => this.handleChildLog(data, '\x1b[31m'));
 		childProcess.on('exit', code => this.handleExit(code));
-		childProcess.on('error', error => this.log(error, 'red'));
 	}
 
-	handleChildLog(data, type) {
+	handleChildLog(data, color) {
 		const message = data.toString().trim();
-		if (message) {
-			this.log(message, type);
-		}
+		if (message) this.log(message, color);
 	}
 
 	handleExit(code) {
-		if (code !== 0) {
-			this.state.restartCount++;
-			if (this.state.restartCount <= this.config.maxRestarts) {
-				this.log(`Restarting in ${this.config.restartDelay}ms...`, 'green');
-				setTimeout(() => this.startProcess(), this.config.restartDelay);
-			} else {
-				this.log('Max restarts reached. Stopping.', 'red');
-			}
-		}
 		this.state.isRunning = false;
+		if (code !== 0 && this.state.restartCount++ < this.config.maxRestarts) {
+			this.log(`Restarting in ${this.config.restartDelay}ms...`, '\x1b[32m');
+			setTimeout(() => this.startProcess(), this.config.restartDelay);
+		} else {
+			this.log('Max restarts reached. Stopping.', '\x1b[31m');
+		}
 	}
 }
 
