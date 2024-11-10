@@ -1,5 +1,6 @@
 import { bot } from '../lib/client/plugins.js';
 import { addFilter, getDMFilters, getGCFilters, getSpecificFilter, deleteFilters } from '../lib/sql/filters.js';
+import { fancy } from '../lib/extras/font.js';
 
 bot(
 	{
@@ -9,7 +10,7 @@ bot(
 		type: 'filter',
 	},
 	async (message, match) => {
-		let text = `🔍 *Filter Commands Menu*\n\n`;
+		let text = `*Filter Configurations*\n\n`;
 		text += `1. *Filter Configuration*\n`;
 		text += `   ├ .filter gc <text> : Add group filter\n`;
 		text += `   └ .filter dm <text> : Add DM filter\n\n`;
@@ -20,7 +21,7 @@ bot(
 		text += `   ├ .getfilters : Get specific filters\n`;
 		text += `   ├ .dmfilters : List all DM filters\n`;
 		text += `   └ .gcfilters : List all group filters\n`;
-		return await message.sendReply(text);
+		return await message.sendReply(fancy(text));
 	},
 );
 
