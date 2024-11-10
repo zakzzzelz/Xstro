@@ -35,7 +35,7 @@ bot(
 			}, {});
 
 		Object.keys(categorized).forEach(category => {
-			menuText += `\n╭──〈 ${category} 〉────\n`;
+			menuText += `\n╭──〈 *${category}* 〉────\n`;
 			categorized[category].forEach(cmd => {
 				menuText += `│▸ ${commandCounter}. ${cmd}\n`;
 				commandCounter++;
