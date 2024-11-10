@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import http from 'http';
-import { DATABASE } from './config.js';
+import { DATABASE, PORT } from './config.js';
 import connect from './lib/bot.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -13,19 +13,14 @@ const loadFiles = async directory => {
 	return Promise.all(jsFiles.map(file => import(`file://${join(directory, file)}`)));
 };
 
-async function initialize() {
+async function startBot() {
 	await loadFiles(join(__dirname, '/lib/sql/'));
 	console.log('DB Syncing...');
 	await DATABASE.sync();
 	console.log('Installing Plugins...');
 	await loadFiles(join(__dirname, '/plugins/'));
 	console.log('External Modules Installed');
-	return connect();
+	return await connect();
 }
 
-http
-	.createServer((_, res) => {
-		res.writeHead(200, { 'Content-Type': 'text/plain' });
-		res.end('Bot is alive');
-	})
-	.listen(8000, initialize().catch(console.error));
+http.listen(PORT, startBot().catch(console.error));
