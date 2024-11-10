@@ -9,7 +9,7 @@ bot(
 	},
 	async (message, match, m, client) => {
 		await client.chatModify({ pin: true }, message.jid);
-		return message.reply('_Pined.._');
+		return message.sendReply('_Pined.._');
 	},
 );
 
@@ -22,6 +22,6 @@ bot(
 	},
 	async (message, match, m, client) => {
 		await client.chatModify({ pin: false }, message.jid);
-		return message.reply('_Unpined.._');
+		return message.sendReply('_Unpined.._');
 	},
 );
