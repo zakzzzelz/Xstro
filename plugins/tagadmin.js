@@ -13,7 +13,7 @@ bot(
 		const groupAdmins = groupMetadata.participants.filter(p => p.admin !== null).map(p => p.id);
 		if (groupAdmins.length > 0) {
 			const adminTags = groupAdmins.map(admin => `@${admin.split('@')[0]}`);
-			const replyText = `Group Admins: ${adminTags.join('\n')}`;
+			const replyText = `*_Group Admins:_*\n _${adminTags.join('\n')}_`;
 			await message.sendReply(replyText, { mentions: groupAdmins });
 		} else {
 			await message.sendReply('_No admins found._');
