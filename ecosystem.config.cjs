@@ -1,18 +1,11 @@
 module.exports = {
-	apps: [
-		{
-			name: 'xstro-md',
-			script: './index.js',
-			instances: 1,
-			exec_mode: 'cluster',
-			env: {
-				NODE_ENV: 'development',
-				PORT: 8000,
-			},
-			env_production: {
-				NODE_ENV: 'production',
-				PORT: 8000,
-			},
-		},
-	],
+  apps: [{
+    name: 'xstro-md',
+    script: './index.js',
+    instances: 1,
+    exec_mode: 'cluster',
+    autorestart: true,
+    max_memory_restart: '450M',
+    port: 8000
+  }]
 };
