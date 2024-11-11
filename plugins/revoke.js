@@ -3,7 +3,7 @@ import { bot } from '../lib/client/plugins.js';
 bot(
 	{
 		pattern: 'revoke',
-		isPublic: false,
+		isPublic: true,
 		desc: 'Revoke Invite link',
 		type: 'group',
 	},
