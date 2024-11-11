@@ -30,10 +30,10 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		const participants = await client.groupMetadata(message.jid);
-		const participantJids = participants.participants.map(p => p.id);
 		const msg = match || message.quoted?.text;
 		if (!msg) return message.sendReply('_You Must Provide A Reason for tagging everyone_');
+		const participants = await client.groupMetadata(message.jid);
+		const participantJids = participants.participants.map(p => p.id);
 		await client.sendMessage(message.jid, {
 			text: msg,
 			mentions: participantJids,
