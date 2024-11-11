@@ -21,11 +21,9 @@ bot(
 		}
 		if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await client.groupMetadata(message.jid);
-		const adminIds = groupMetadata.participants.filter(participant => participant.isAdmin).map(participant => participant.id);
-		if (!adminIds.includes(jid)) {
-			return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is not an admin._`, { mentions: [jid] });
-		}
+		const participant = groupMetadata.participants.find(p => p.id === jid);
+		if (!participant.admin) return message.sendReply(`@${jid.replace('@s.whatsapp.net', '')} is not an admin.`, { mentions: [jid] });
 		await client.groupParticipantsUpdate(message.jid, [jid], 'demote');
-		await message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is no longer an admin_`, { mentions: [jid] });
+		return message.sendReply(`@${jid.replace('@s.whatsapp.net', '')} is no longer an admin`, { mentions: [jid] });
 	},
 );

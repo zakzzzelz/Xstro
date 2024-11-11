@@ -21,11 +21,9 @@ bot(
 		}
 		if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await client.groupMetadata(message.jid);
-		const adminIds = groupMetadata.participants.filter(participant => participant.isAdmin).map(participant => participant.id);
-		if (adminIds.includes(jid)) {
-			return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is already an admin._`, { mentions: [jid] });
-		}
+		const participant = groupMetadata.participants.find(p => p.id === jid);
+		if (participant.admin) return message.sendReply(`@${jid.replace('@s.whatsapp.net', '')} is already an admin.`, { mentions: [jid] });
 		await client.groupParticipantsUpdate(message.jid, [jid], 'promote');
-		await message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is now an admin_`, { mentions: [jid] });
+		return message.sendReply(`@${jid.replace('@s.whatsapp.net', '')} is now an admin`, { mentions: [jid] });
 	},
 );
