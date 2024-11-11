@@ -3,9 +3,9 @@ import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
-		pattern: 'promote',
+		pattern: 'demote',
 		isPublic: true,
-		desc: 'Promotes Someone to Admin',
+		desc: 'Demotes Someone from Admin',
 		type: 'group',
 	},
 	async (message, match, m, client) => {
@@ -22,10 +22,10 @@ bot(
 		if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await client.groupMetadata(message.jid);
 		const adminIds = groupMetadata.participants.filter(participant => participant.isAdmin).map(participant => participant.id);
-		if (adminIds.includes(jid)) {
-			return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is already an admin._`, { mentions: [jid] });
+		if (!adminIds.includes(jid)) {
+			return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is not an admin._`, { mentions: [jid] });
 		}
-		await client.groupParticipantsUpdate(message.jid, [jid], 'promote');
-		await message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is now an admin_`, { mentions: [jid] });
+		await client.groupParticipantsUpdate(message.jid, [jid], 'demote');
+		await message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is no longer an admin_`, { mentions: [jid] });
 	},
 );
