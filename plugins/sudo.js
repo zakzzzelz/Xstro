@@ -9,7 +9,7 @@ bot(
 		desc: 'Add User to Sudo list',
 		type: 'user',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		const User = match || message.quoted?.sender || message.mention[0];
 		const sudolist = await addSudo(User);
 		return message.sendReply(sudolist);
@@ -23,7 +23,7 @@ bot(
 		desc: 'Remove User from Sudo',
 		type: 'user',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		if (match) return numtoId(match);
 		const User = match || message.quoted?.sender || message.mention[0];
 		const rsudo = await delSudo(User);

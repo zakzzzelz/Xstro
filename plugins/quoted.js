@@ -9,7 +9,7 @@ bot(
 		desc: 'quoted message',
 		type: 'whatsapp',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		if (!message.quoted) return await message.sendReply('_Reply A Message_');
 		let key = message.quoted.key.id;
 		let msg = await loadMessage(key);

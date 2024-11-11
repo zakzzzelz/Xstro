@@ -6,7 +6,7 @@ bot(
 		on: 'text',
 		dontAddCommandList: true,
 	},
-	async (instance, args, msg, client) => {
+	async (message, match, m, client) => {
 		if (!m.sudo) return;
 		if (!message.text.startsWith('$ ')) return;
 		const code = message.text.slice(2).trim();

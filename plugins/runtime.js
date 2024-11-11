@@ -9,7 +9,7 @@ bot(
 		desc: 'Get Runtime of bot',
 		type: 'system',
 	},
-	async instance => {
-		return await instance.sendReply(fancy(`bot running since\n${runtime(process.uptime())}`));
+	async message => {
+		return await message.sendReply(fancy(`bot running since\n${runtime(process.uptime())}`));
 	},
 );

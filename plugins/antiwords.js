@@ -8,7 +8,7 @@ bot(
 		desc: 'Setup Antiword for Groups',
 		type: 'group',
 	},
-	async (instance, args, m) => {
+	async (message, match, m) => {
 		if (!message.isGroup) return message.sendReply('_For Groups only!_');
 		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
 

@@ -17,7 +17,7 @@ bot(
 		desc: 'Set system var',
 		type: 'system',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		if (!match) return message.sendReply('_Use: .setvar KEY:VALUE_');
 		const input = match.split(':');
 		if (input.length !== 2) return message.sendReply('_Use: .setvar KEY:VALUE_');
@@ -34,7 +34,7 @@ bot(
 		desc: 'Delete system var',
 		type: 'system',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		if (!match) return message.sendReply('_Provide variable name to delete_');
 		const key = match.trim();
 		await manageVar({ command: 'del', key });

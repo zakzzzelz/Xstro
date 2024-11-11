@@ -9,7 +9,7 @@ bot(
 		desc: 'Ban a user from the bot',
 		type: 'user',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		let jid;
 		if (message.quoted) {
 			jid = message.quoted.sender;
@@ -32,7 +32,7 @@ bot(
 		desc: 'Unban a user from the bot',
 		type: 'user',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		let jid;
 		if (message.quoted) {
 			jid = message.quoted.sender;

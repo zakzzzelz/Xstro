@@ -7,7 +7,7 @@ bot(
 		desc: 'delete whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		await message.client.chatModify(
 			{
 				delete: true,

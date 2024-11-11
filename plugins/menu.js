@@ -54,7 +54,7 @@ bot(
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},
-	async (instance, args, { prefix }) => {
+	async (message, match, { prefix }) => {
 		let menu = '*_xstro commands list_*\n\n';
 		let cmdList = [];
 		let cmd, desc;

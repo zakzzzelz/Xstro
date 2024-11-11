@@ -15,7 +15,7 @@ bot(
 		desc: 'Installs a Plugin',
 		type: 'system',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		const pluginUrl = match.trim();
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
 
@@ -39,7 +39,7 @@ bot(
 		desc: 'Deletes a Plugin',
 		type: 'system',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		if (!match) return message.sendReply('_Provide an installed plugin name_');
 		const baseName = match.trim();
 		const pluginName = `${baseName}.js`;

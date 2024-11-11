@@ -7,7 +7,7 @@ bot(
 		desc: 'pin a chat',
 		type: 'whatsapp',
 	},
-	async (instance, args, msg, client) => {
+	async (message, match, m, client) => {
 		await client.chatModify({ pin: true }, message.jid);
 		return message.sendReply('_Pined.._');
 	},
@@ -20,7 +20,7 @@ bot(
 		desc: 'unpin a msg',
 		type: 'whatsapp',
 	},
-	async (instance, args, msg, client) => {
+	async (message, match, m, client) => {
 		await client.chatModify({ pin: false }, message.jid);
 		return message.sendReply('_Unpined.._');
 	},

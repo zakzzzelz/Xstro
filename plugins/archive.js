@@ -7,7 +7,7 @@ bot(
 		desc: 'archive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		const lstMsg = {
 			message: message.data.message,
 			key: message.data.key,
@@ -31,7 +31,7 @@ bot(
 		desc: 'unarchive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (instance, args) => {
+	async (message, args) => {
 		const lstMsg = {
 			message: message.data.message,
 			key: message.data.key,
