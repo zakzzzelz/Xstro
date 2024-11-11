@@ -1,5 +1,5 @@
 import config from '../config.js';
-import { commands, bot } from '../lib/client/plugins.js';
+import { patternLengths, bot } from '../lib/client/plugins.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from '../lib/extras/font.js';
@@ -18,13 +18,13 @@ bot(
 │ Mode: ${MODE}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
-│ Plugins: ${commands.length}
+│ Plugins: ${patternLengths.length}
 │ Memory: ${formatBytes(totalmem() - freemem())}
 │ Version: ${VERSION}
 ╰────────────────\`\`\`\n`;
 
 		let commandCounter = 1;
-		const categorized = commands
+		const categorized = patternLengths
 			.filter(cmd => cmd.pattern && !cmd.dontAddCommandList)
 			.map(cmd => ({
 				name: cmd.pattern.toString().split(/\W+/)[2],
@@ -58,7 +58,7 @@ bot(
 		let menu = '*_xstro commands list_*\n\n';
 		let cmdList = [];
 		let cmd, desc;
-		commands.map(command => {
+		patternLengths.map(command => {
 			if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[2];
 			desc = command.desc || false;
 			if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
