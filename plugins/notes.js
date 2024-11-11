@@ -8,7 +8,7 @@ bot(
 		desc: 'Create Notes',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		const text = match.trim();
 		if (!text) return await message.sendReply('*Format*: _.addnote title|content_');
 		const [title, content] = text.split('|');
@@ -28,7 +28,7 @@ bot(
 		desc: 'Delete a Note',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		const noteId = parseInt(match.trim());
 		if (!noteId || isNaN(noteId)) return await message.sendReply('*Format*: _.delnote id_');
 		const deleted = await removeNote(noteId).catch(() => null);
@@ -44,7 +44,7 @@ bot(
 		desc: 'Update an Existing Note',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		const text = match.trim();
 		if (!text) return await message.sendReply('*Format*: _.editnote id; title|content_');
 		const [id, content] = text.split(';').map(item => item.trim());
@@ -67,7 +67,7 @@ bot(
 		desc: 'List all Notes',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		const notes = await getNotes().catch(() => null);
 		if (!notes) return await message.sendReply('*Unable to perform action*');
 		if (notes.length === 0) return await message.sendReply('*No notes found*');
@@ -83,7 +83,7 @@ bot(
 		desc: 'Get Note Content',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		const noteId = parseInt(match.trim());
 		if (!noteId || isNaN(noteId)) return await message.sendReply('*Format*: _.cnote id_');
 		const notes = await getNotes().catch(() => null);

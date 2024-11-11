@@ -10,7 +10,7 @@ bot(
 		desc: 'Is Bot Alive?',
 		type: 'user',
 	},
-	async (message, match) => {
+	async (instance, args) => {
 		if (match) {
 			await setAliveMsg(match);
 			return message.sendReply('_Alive Updated_');

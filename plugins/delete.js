@@ -7,9 +7,9 @@ bot(
 		desc: 'Deletes Message',
 		type: 'whatsapp',
 	},
-	async message => {
-		if (!message.quoted) return message.sendReply('_Reply A Message_');
-		const msg = message?.quoted;
-		return await message.delete(msg);
+	async instance => {
+		if (!instance.quoted) return instance.sendReply('_Reply A Message_');
+		const msg = instance?.quoted;
+		return await instance.delete(msg);
 	},
 );

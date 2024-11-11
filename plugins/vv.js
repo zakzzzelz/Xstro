@@ -7,9 +7,9 @@ bot(
 		desc: 'Download ViewOnce Messages',
 		type: 'whatsapp',
 	},
-	async message => {
-		if (!message.quoted.viewonce) return message.sendReply('_Reply A ViewOnce_');
-		const media = await message.download();
-		return await message.send(media);
+	async instance => {
+		if (!instance.quoted.viewonce) return instance.sendReply('_Reply A ViewOnce_');
+		const media = await instance.download();
+		return await instance.send(media);
 	},
 );

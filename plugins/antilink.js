@@ -8,7 +8,7 @@ bot(
 		desc: 'Setup Antilink For Groups',
 		type: 'Group',
 	},
-	async (message, match, m) => {
+	async (instance, args, m) => {
 		if (!message.isGroup || (!m.isAdmin && !m.isBotAdmin)) return message.sendReply(message.isGroup ? '_For Admin Only!_' : '_For Groups Only!_');
 
 		const [settings] = await Antilink.findOrCreate({
