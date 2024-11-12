@@ -10,7 +10,7 @@ bot(
 	async message => {
 		if (!message.quoted?.image) return message.sendReply('_Reply An Image_');
 		const img = await message.download();
-		await message.client.updateProfilePicture(message.jid, img);
+		await message.client.updateProfilePicture(message.user, img);
 		return await message.sendReply('_Profile Picture Updated_');
 	},
 );
