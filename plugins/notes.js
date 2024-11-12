@@ -9,7 +9,7 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const text = match.trim();
+		const text = match.trim() || message.quoted?.text;
 		if (!text) return await message.sendReply('*Format*: _.addnote title|content_');
 		const [title, content] = text.split('|');
 		if (!title) return await message.sendReply('*Format*: _.addnote title|content_');
@@ -45,7 +45,7 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const text = match.trim();
+		const text = match.trim() || message.quoted?.text;
 		if (!text) return await message.sendReply('*Format*: _.editnote id; title|content_');
 		const [id, content] = text.split(';').map(item => item.trim());
 		if (!id || !content) return await message.sendReply('*Format*: _.editnote id; title|content_');

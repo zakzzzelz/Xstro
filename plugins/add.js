@@ -3,7 +3,7 @@ import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
-		pattern: 'add ?(.*)',
+		pattern: 'add',
 		isPublic: false,
 		desc: 'Adds A User to Group',
 		type: 'group',
