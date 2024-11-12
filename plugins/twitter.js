@@ -9,7 +9,7 @@ bot(
 		desc: 'downloads x videos',
 		type: 'download',
 	},
-	async (message, args) => {
+	async (message, match) => {
 		const id = match || message.quoted?.text;
 		const url = extractUrlFromMessage(id);
 		if (!url) return message.sendReply('_Provide X Url_');
