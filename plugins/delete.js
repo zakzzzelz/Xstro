@@ -9,7 +9,6 @@ bot(
 	},
 	async message => {
 		if (!message.quoted) return message.sendReply('_Reply A Message_');
-		const msg = message?.quoted;
-		return await message.delete(msg);
+		return await message.delete();
 	},
 );
