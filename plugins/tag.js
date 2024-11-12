@@ -2,7 +2,7 @@ import { bot } from '../lib/client/plugins.js';
 
 bot(
 	{
-		pattern: 'tag ?(.*)',
+		pattern: 'tag',
 		isPublic: true,
 		desc: 'Tag all participants in the group with an optional message',
 		type: 'group',
@@ -34,7 +34,7 @@ bot(
     if (!msg) return message.sendReply('_You must provide a reason for tagging everyone._');
     const participants = await client.groupMetadata(message.jid);
     const participantJids = participants.participants.map(p => p.id);
-    const tagMsg = `${msg}\n\n` + participantJids.map(jid => `@${jid.split('@')[0]}`).join('\n');
+    const tagMsg = `*Reason:* ${msg}\n\n` + participantJids.map(jid => `@${jid.split('@')[0]}`).join('\n');
     await client.sendMessage(message.jid, {
       text: tagMsg,
       mentions: participantJids,
