@@ -5,5 +5,5 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/ASTRO-X10/xstro-md.git .
 RUN npm install
-EXPOSE 3000
+EXPOSE 8000
 CMD ["npm", "start"]
