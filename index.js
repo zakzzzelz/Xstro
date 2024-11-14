@@ -7,19 +7,16 @@ import config from './config.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const { DATABASE } = config;
 
-const loadFiles = async directory => {
-	const files = await readdir(directory);
-	const jsFiles = files.filter(file => extname(file) === '.js');
-	return Promise.all(jsFiles.map(file => import(`file://${join(directory, file)}`)));
-};
+const loadFiles = async dir => Promise.all((await readdir(dir)).filter(file => extname(file) === '.js').map(file => import(`file://${join(dir, file)}`)));
 
-async function startBot() {
-	await loadFiles(join(__dirname, '/lib/sql/'));
-	console.log('DB Syncing...');
-	await DATABASE.sync();
-	console.log('Installing Plugins...');
-	await loadFiles(join(__dirname, '/plugins/'));
-	console.log('External Modules Installed');
-	return await connect();
-}
-startBot();
+(async function startBot() {
+	console.log('Xstro Multi Device');
+	try {
+		await loadFiles(join(__dirname, 'lib/sql'));
+		await DATABASE.sync();
+		await loadFiles(join(__dirname, 'plugins'));
+		return await connect();
+	} catch (error) {
+		throw new Error(`Boot Error: ${error.message}`);
+	}
+})();
