@@ -8,9 +8,9 @@ bot(
 		desc: 'Chat with Gemini Ai',
 		type: 'ai',
 	},
-	async (message, match) => {
+	async (message, match, { pushName }) => {
 		const prompt = match || message.quoted?.text;
-		if (!prompt) return await message.sendReply(`_@${message.sender.split('@')[0]} hello how can i help you?_`, { mentions: [message.sender] });
+		if (!prompt) return await message.sendReply(`*_${pushName} hello how can i help you today_*`);
 		const msg = await message.sendReply('🤔 _Thinking_');
 		const res = await Gemini(prompt);
 		return await msg.edit(res);
