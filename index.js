@@ -11,7 +11,7 @@ const { DATABASE } = config;
 const loadFiles = async dir => Promise.all((await readdir(dir)).filter(file => extname(file) === '.js').map(file => import(`file://${join(dir, file)}`)));
 
 (async function startBot() {
-	console.log('Xstro Multi Device');
+	console.log('XSTRO MD');
 	try {
 		await createSession();
 		await loadFiles(join(__dirname, 'lib/sql'));
