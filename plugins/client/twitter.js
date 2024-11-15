@@ -1,4 +1,4 @@
-import { getBuffer, getJson } from '../utils.js';
+import { getBuffer, getJson } from '../../lib/utils.js';
 
 export async function twitter(url) {
 	if (!url || !url.includes('x.com')) throw new Error('_Invaild Url_');

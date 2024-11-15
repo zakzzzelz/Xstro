@@ -2,48 +2,48 @@ import { bot } from '../lib/client/plugins.js';
 
 bot(
 	{
-		pattern: 'archive ?(.*)',
+		pattern: 'archive',
 		isPublic: false,
 		desc: 'archive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (message, match) => {
+	async (message, match, m, client) => {
 		const lstMsg = {
-			message: message.data.message,
-			key: message.data.key,
+			message: m.message,
+			key: m.key,
 			messageTimestamp: message.timestamp,
 		};
-		await message.client.chatModify(
+		await client.chatModify(
 			{
 				archive: true,
 				lastMessages: [lstMsg],
 			},
 			message.jid,
 		);
-		await message.sendReply('_Archived.._');
+		await message.sendReply('_Archived_');
 	},
 );
 
 bot(
 	{
-		pattern: 'unarchive ?(.*)',
+		pattern: 'unarchive',
 		isPublic: false,
 		desc: 'unarchive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (message, match) => {
+	async (message, match, m, client) => {
 		const lstMsg = {
-			message: message.data.message,
-			key: message.data.key,
+			message: m.message,
+			key: m.key,
 			messageTimestamp: message.timestamp,
 		};
-		await message.client.chatModify(
+		await client.chatModify(
 			{
 				archive: false,
 				lastMessages: [lstMsg],
 			},
 			message.jid,
 		);
-		await message.sendReply('_Unarchived.._');
+		await message.sendReply('_Unarchived_');
 	},
 );

@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { Gemini } from '../lib/extras/ai.js';
+import { Gemini } from './client/ai.js';
 
 bot(
 	{

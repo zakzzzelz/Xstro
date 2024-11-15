@@ -1,6 +1,6 @@
 import { delay } from 'baileys';
 import { bot } from '../lib/client/plugins.js';
-import { fancy } from '../lib/extras/font.js';
+import { fancy } from './client/font.js';
 
 bot(
 	{
