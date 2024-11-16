@@ -13,11 +13,11 @@
 		"baileys": "github:ASTRO-X10/baileys",
 		"dotenv": "^16.4.5",
 		"file-type": "^19.6.0",
-		"pm2": "5.4.2",
+		"pm2": "5.4.3",
+		"qrcode-terminal": "^0.12.0",
 		"sequelize": "^6.37.5",
 		"sharp": "^0.33.5",
 		"simple-git": "^3.27.0",
-		"sqlite3": "^5.1.7",
-		"unzipper": "^0.12.3"
+		"sqlite3": "^5.1.7"
 	}
 }
