@@ -1,6 +1,7 @@
 import { bot } from '../lib/client/plugins.js';
 import { serialize } from '../lib/serialize.js';
 import { loadMessage } from '../lib/sql/store.js';
+import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
@@ -205,5 +206,41 @@ bot(
 	async (message, match, m, client) => {
 		await client.chatModify({ pin: false }, message.jid);
 		return message.sendReply('_Unpined.._');
+	},
+);
+
+bot(
+	{
+		pattern: 'save',
+		isPublic: false,
+		desc: 'Saves Status',
+		type: 'whatsapp',
+	},
+	async message => {
+		if (!message.quoted) return message.sendReply('_Reply A Status_');
+		const msg = await message.quoted;
+		await message.copyNForward(message.user, msg, { quoted: msg });
+	},
+);
+
+bot(
+	{
+		pattern: 'forward',
+		isPublic: false,
+		desc: 'Forwards A Replied Message',
+		type: 'whatsapp',
+	},
+	async (message, match) => {
+		if (!message.quoted) return message.sendReply('_Reply A Message!_');
+		let jid;
+		if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		}
+		if (!jid) return message.sendReply('_You have to provide a number/tag someone_');
+		const msg = message.quoted;
+		await message.forward(jid, msg, { quoted: msg });
+		return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, { mentions: [jid] });
 	},
 );
