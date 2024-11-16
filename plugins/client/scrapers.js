@@ -1,4 +1,7 @@
+import axios from 'axios';
+import FormData from 'form-data';
 import { getBuffer, getJson } from '../../lib/utils.js';
+import config from '../../config.js';
 
 export async function twitter(url) {
 	if (!url || !url.includes('x.com')) throw new Error('_Invaild Url_');
@@ -22,5 +25,33 @@ export async function shortUrl(url) {
 
 export async function TTS(text) {
 	const res = await getBuffer(`https://bk9.fun/tools/tts?q=${text}&lang=en`);
+	return res;
+}
+
+export async function upload(buffer) {
+	return new Promise(async (resolve, reject) => {
+		try {
+			const form = new FormData();
+			form.append('files[]', buffer, { filename: 'file' });
+			const response = await axios({
+				url: 'https://uguu.se/upload.php',
+				method: 'POST',
+				headers: {
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+					...form.getHeaders(),
+				},
+				data: form,
+			});
+
+			resolve(response.data.files[0]);
+		} catch (error) {
+			reject(error);
+		}
+	});
+}
+
+export async function toSticker(buffer) {
+	const media = await upload(buffer);
+	const res = await getBuffer(`https://bk9.fun/maker/sticker?url=${media.url}&packName=${config.STICKER_PACK.split(';')[0]}&authorName=${config.STICKER_PACK.split(';')[1]}`);
 	return res;
 }
