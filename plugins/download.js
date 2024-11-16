@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { twitter } from './client/twitter.js';
+import { twitter } from './client/scrapers.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
 
 bot(

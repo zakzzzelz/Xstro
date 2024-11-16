@@ -89,7 +89,7 @@ bot(
 	},
 	async message => {
 		const bannedUsers = await getBanned();
-		if (bannedUsers.length === 0) return message.sendReply('There are no banned users.');
+		if (bannedUsers.length === 0) return message.sendReply('_No banned users._');
 		const mentions = bannedUsers.map(jid => `${jid}@s.whatsapp.net`);
 		return message.sendReply('*_Banned Users:_*\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions });
 	},
