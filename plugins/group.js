@@ -507,3 +507,76 @@ bot(
 		return message.sendReply('_Group is now unlocked for participants._');
 	}
 );
+
+bot(
+	{
+		pattern: 'requests',
+		isPublic: true,
+		desc: 'Shows the pending requests of the group',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		const joinRequests = await client.groupRequestParticipantsList(m.from);
+		if (!joinRequests || !joinRequests[0]) 	return await message.reply("_No Join Requests_");
+		let requestList = "*_Group Join Requets List_*\n\n";
+		let requestJids = [];
+		for (let request of joinRequests) {
+			requestList += `@${request.jid.split("@")[0]}\n`;
+			requestJids.push(request.jid);
+		}
+		await message.sendReply(requestList, { mentions: requestJids });
+	}
+)
+
+bot(
+	{
+		pattern: 'acceptall',
+		isPublic: true,
+		desc: 'Accept all join requests',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+			if (!m.isGroup) return message.sendReply('_For groups only!_');
+			if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		
+			const joinRequests = await client.groupRequestParticipantsList(m.from);
+			if (!joinRequests || !joinRequests[0]) 	return await message.sendReply("_No Requests Found!_");
+			let acceptedUsers = [];
+			let acceptanceList = "*_Accepted Users_*\n\n";
+			for (let request of joinRequests) {
+				try {
+					await client.groupRequestParticipantsUpdate(m.from, [request.jid], "approve");
+					acceptanceList += `@${request.jid.split("@")[0]}\n`;
+					acceptedUsers.push(request.jid);
+				} catch {}
+			}
+			await message.sendReply(acceptanceList, { mentions: acceptedUsers });
+	}
+);
+
+bot(
+	{
+		pattern: 'rejectall',
+		isPublic: true,
+		desc: 'Reject all join requests',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		const joinRequests = await client.groupRequestParticipantsList(m.from);
+		if (!joinRequests || !joinRequests[0]) return await message.sendReply("_No Requests Found!_");
+		let rejectedUsers = [];
+		let rejectionList = "*_Rejected Users_*\n\n";
+		for (let request of joinRequests) {
+			try {
+				await client.groupRequestParticipantsUpdate(m.from, [request.jid], "reject");
+				rejectionList += `@${request.jid.split("@")[0]}\n`;
+				rejectedUsers.push(request.jid);
+			} catch {}
+		}
+		await message.sendReply(rejectionList, { mentions: rejectedUsers });
+	}
+);
