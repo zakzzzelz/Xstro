@@ -59,7 +59,7 @@ bot(
 				if (!number) return await message.sendReply('_provide number!_');
 				const jid = numtoId(number);
 				await ChatBot.upsert({ chat: jid, type: 'dm', enabled: true });
-				return await message.sendReply(`ChatBot enabled for ${number}`);
+				return await message.sendReply(`_Lydia Set For @${number}_`, { mentions: [numtoId(number)] });
 			}
 		}
 		return await message.sendReply(`_${pushName} bro you are not getting it right_`);
