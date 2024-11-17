@@ -580,3 +580,18 @@ bot(
 		await message.sendReply(rejectionList, { mentions: rejectedUsers });
 	},
 );
+
+bot(
+	{
+		pattern: 'rgpp',
+		isPublic: false,
+		desc: 'Removes Group Profile Photo',
+		type: 'group',
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		await client.removeProfilePicture(m.from);
+		return await message.sendReply('_Group Profile Photo Removed!_');
+	},
+);
