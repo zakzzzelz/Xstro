@@ -462,50 +462,50 @@ bot(
 		pattern: 'gpp',
 		isPublic: false,
 		desc: 'Changes Group Profile Picture',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
-		if(!message.quoted?.image) return message.sendReply('_Reply An Image!_')
+		if (!message.quoted?.image) return message.sendReply('_Reply An Image!_');
 		const img = await message.download();
 		await client.updateProfilePicture(m.from, img);
 		return await message.sendReply('_Group Image Updated_');
-	}
-)
+	},
+);
 
 bot(
 	{
 		pattern: 'lock',
 		isPublic: true,
 		desc: 'Lock groups settings',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-			if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
-		const meta = await client.groupMetadata(m.from)
-		if(meta.restrict) return message.sendReply('_Group is already locked to Admins._')
-		await client.groupSettingUpdate(m.from, "locked")
-		return message.sendReply('_Group has been locked to Admins_')
-	}
-)
+		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		const meta = await client.groupMetadata(m.from);
+		if (meta.restrict) return message.sendReply('_Group is already locked to Admins._');
+		await client.groupSettingUpdate(m.from, 'locked');
+		return message.sendReply('_Group has been locked to Admins_');
+	},
+);
 
 bot(
 	{
 		pattern: 'unlock',
 		isPublic: true,
 		desc: 'Unlock groups settings',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
 		const meta = await client.groupMetadata(m.from);
 		if (!meta.restrict) return message.sendReply('_Group is already unlocked for participants._');
-		await client.groupSettingUpdate(m.from, "unlocked");
+		await client.groupSettingUpdate(m.from, 'unlocked');
 		return message.sendReply('_Group is now unlocked for participants._');
-	}
+	},
 );
 
 bot(
@@ -513,47 +513,47 @@ bot(
 		pattern: 'requests',
 		isPublic: true,
 		desc: 'Shows the pending requests of the group',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
 		const joinRequests = await client.groupRequestParticipantsList(m.from);
-		if (!joinRequests || !joinRequests[0]) 	return await message.reply("_No Join Requests_");
-		let requestList = "*_Group Join Requets List_*\n\n";
+		if (!joinRequests || !joinRequests[0]) return await message.reply('_No Join Requests_');
+		let requestList = '*_Group Join Requets List_*\n\n';
 		let requestJids = [];
 		for (let request of joinRequests) {
-			requestList += `@${request.jid.split("@")[0]}\n`;
+			requestList += `@${request.jid.split('@')[0]}\n`;
 			requestJids.push(request.jid);
 		}
 		await message.sendReply(requestList, { mentions: requestJids });
-	}
-)
+	},
+);
 
 bot(
 	{
 		pattern: 'acceptall',
 		isPublic: true,
 		desc: 'Accept all join requests',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
-			if (!m.isGroup) return message.sendReply('_For groups only!_');
-			if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
-		
-			const joinRequests = await client.groupRequestParticipantsList(m.from);
-			if (!joinRequests || !joinRequests[0]) 	return await message.sendReply("_No Requests Found!_");
-			let acceptedUsers = [];
-			let acceptanceList = "*_Accepted Users_*\n\n";
-			for (let request of joinRequests) {
-				try {
-					await client.groupRequestParticipantsUpdate(m.from, [request.jid], "approve");
-					acceptanceList += `@${request.jid.split("@")[0]}\n`;
-					acceptedUsers.push(request.jid);
-				} catch {}
-			}
-			await message.sendReply(acceptanceList, { mentions: acceptedUsers });
-	}
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+
+		const joinRequests = await client.groupRequestParticipantsList(m.from);
+		if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
+		let acceptedUsers = [];
+		let acceptanceList = '*_Accepted Users_*\n\n';
+		for (let request of joinRequests) {
+			try {
+				await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'approve');
+				acceptanceList += `@${request.jid.split('@')[0]}\n`;
+				acceptedUsers.push(request.jid);
+			} catch {}
+		}
+		await message.sendReply(acceptanceList, { mentions: acceptedUsers });
+	},
 );
 
 bot(
@@ -561,22 +561,22 @@ bot(
 		pattern: 'rejectall',
 		isPublic: true,
 		desc: 'Reject all join requests',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
 		const joinRequests = await client.groupRequestParticipantsList(m.from);
-		if (!joinRequests || !joinRequests[0]) return await message.sendReply("_No Requests Found!_");
+		if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
 		let rejectedUsers = [];
-		let rejectionList = "*_Rejected Users_*\n\n";
+		let rejectionList = '*_Rejected Users_*\n\n';
 		for (let request of joinRequests) {
 			try {
-				await client.groupRequestParticipantsUpdate(m.from, [request.jid], "reject");
-				rejectionList += `@${request.jid.split("@")[0]}\n`;
+				await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'reject');
+				rejectionList += `@${request.jid.split('@')[0]}\n`;
 				rejectedUsers.push(request.jid);
 			} catch {}
 		}
 		await message.sendReply(rejectionList, { mentions: rejectedUsers });
-	}
+	},
 );
