@@ -27,7 +27,7 @@ bot(
 		if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 		try {
 			await client.groupParticipantsUpdate(message.jid, [jid], 'add');
-			return message.sendReply(`@${jid.split('@')[0]} added`, { mentions: [jid] });
+			return message.sendReply(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
 		} catch (error) {
 			const inviteLink = await client.groupInviteCode(message.jid);
 			const userMessage = {
@@ -455,4 +455,55 @@ bot(
 		await client.groupRevokeInvite(message.jid);
 		return message.sendReply('_Group Link Revoked!_');
 	},
+);
+
+bot(
+	{
+		pattern: 'gpp',
+		isPublic: false,
+		desc: 'Changes Group Profile Picture',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if(!message.quoted?.image) return message.sendReply('_Reply An Image!_')
+		const img = await message.download();
+		await client.updateProfilePicture(m.from, img);
+		return await message.sendReply('_Group Image Updated_');
+	}
+)
+
+bot(
+	{
+		pattern: 'lock',
+		isPublic: true,
+		desc: 'Lock groups settings',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+			if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		const meta = await client.groupMetadata(m.from)
+		if(meta.restrict) return message.sendReply('_Group is already locked to Admins._')
+		await client.groupSettingUpdate(m.from, "locked")
+		return message.sendReply('_Group has been locked to Admins_')
+	}
+)
+
+bot(
+	{
+		pattern: 'unlock',
+		isPublic: true,
+		desc: 'Unlock groups settings',
+		type: 'group'
+	},
+	async (message, match, m, client) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		const meta = await client.groupMetadata(m.from);
+		if (!meta.restrict) return message.sendReply('_Group is already unlocked for participants._');
+		await client.groupSettingUpdate(m.from, "unlocked");
+		return message.sendReply('_Group is now unlocked for participants._');
+	}
 );
