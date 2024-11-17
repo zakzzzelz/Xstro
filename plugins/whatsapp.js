@@ -1,7 +1,7 @@
 import { bot } from '../lib/client/plugins.js';
 import { serialize } from '../lib/serialize.js';
 import { loadMessage } from '../lib/sql/store.js';
-import { numtoId, updateProfilePicture } from '../lib/utils.js';
+import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
@@ -242,20 +242,5 @@ bot(
 		const msg = message.quoted;
 		await message.forward(jid, msg, { quoted: msg });
 		return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, { mentions: [jid] });
-	},
-);
-
-bot(
-	{
-		pattern: 'fullpp$',
-		isPublic: false,
-		desc: 'Set full screen profile picture',
-		type: 'whatsapp',
-	},
-	async (message, match, m) => {
-		if (!message.quoted.image) return await message.sendReply('_Reply to a photo_');
-		let media = await message.download();
-		await updateProfilePicture(message.user, media, message);
-		return await message.sendReply('_Profile Picture Updated_');
 	},
 );
