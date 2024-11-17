@@ -1,10 +1,10 @@
 import { bot } from '../lib/client/plugins.js';
-import { twitter } from './client/scrapers.js';
+import { InstaDL, Tiktok, twitter } from './client/scrapers.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
 
 bot(
 	{
-		pattern: 'twitter ?(.*)',
+		pattern: 'twitter',
 		isPublic: true,
 		desc: 'downloads x videos',
 		type: 'download',
@@ -16,5 +16,37 @@ bot(
 		const media = await twitter(url);
 		const { buffer, caption } = media;
 		return await message.send(buffer, { caption: caption });
+	},
+);
+
+bot(
+	{
+		pattern: 'tiktok',
+		isPublic: true,
+		desc: 'downloads tiktok videos',
+		type: 'download',
+	},
+	async (message, match) => {
+		const tiktokUrl = match || message.quoted?.text;
+		const url = extractUrlFromMessage(tiktokUrl);
+		if (!url || !url.includes('vm.tiktok.com')) return message.sendReply('_Provide Tiktok Url!_');
+		const data = await Tiktok(url);
+		return await message.send(data.buffer, { caption: data.desc });
+	},
+);
+
+bot(
+	{
+		pattern: 'instagram',
+		isPublic: true,
+		desc: 'downloads instagram videos',
+		type: 'download',
+	},
+	async (message, match) => {
+		const insta = match || message.quoted?.text;
+		const url = extractUrlFromMessage(insta);
+		if (!url) return message.sendReply('_Need Insta Link!_');
+		const data = await InstaDL(url);
+		return await message.send(data);
 	},
 );

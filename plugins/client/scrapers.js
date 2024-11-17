@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { getBuffer, getJson } from '../../lib/utils.js';
+import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
 import config from '../../config.js';
 
 export async function twitter(url) {
@@ -54,4 +54,18 @@ export async function toSticker(buffer) {
 	const media = await upload(buffer);
 	const res = await getBuffer(`https://bk9.fun/maker/sticker?url=${media.url}&packName=${config.STICKER_PACK.split(';')[0]}&authorName=${config.STICKER_PACK.split(';')[1]}`);
 	return res;
+}
+
+export async function Tiktok(url) {
+	const res = await getJson(`https://bk9.fun/download/tiktok?url=${encodeURIComponent(url)}`);
+	const { BK9, desc } = res.BK9;
+	const buffer = await getBuffer(BK9);
+	return { buffer, desc };
+}
+
+export async function InstaDL(url) {
+	const res = await getJson(`https://bk9.fun/download/instagram2?url=${encodeURIComponent(url)}`);
+	const data = getRandom(res.BK9);
+	const buffer = await getBuffer(data.url);
+	return buffer;
 }
