@@ -31,10 +31,10 @@ bot(
 			return await message.sendReply(
 				`*_ChatBot Usage_*
 											
-• $${prefix}lydia on - Enable chatbot for everyone
-• $${prefix}lydia off - Disable chatbot
-• $${prefix}lydia set dm;2348030000005 - Enable for specific DM
-• $${prefix}lydia set gc - Enable only in groups`,
+• ${prefix}lydia on - Enable chatbot for everyone
+• ${prefix}lydia off - Disable chatbot
+• ${prefix}lydia set dm;2348030000005 - Enable for specific DM
+• ${prefix}lydia set gc - Enable only in groups`,
 			);
 		}
 
