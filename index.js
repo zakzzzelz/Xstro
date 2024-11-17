@@ -35,7 +35,7 @@ async function loadFiles(dir) {
 }
 
 async function startBot() {
-	log('Starting XSTRO MD');
+	console.log('Starting XSTRO MD');
 
 	try {
 		await DATABASE.sync().catch(err => log('ERROR', `Database: ${err.message}`));
@@ -44,7 +44,7 @@ async function startBot() {
 		await loadFiles(join(__dirname, 'plugins'));
 		await connect();
 
-		log('Application Running');
+		console.log('Application Running');
 	} catch (err) {
 		log('ERROR', `Boot: ${err.message}`);
 	}
