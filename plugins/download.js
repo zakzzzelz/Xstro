@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { InstaDL, Tiktok, twitter } from './client/scrapers.js';
+import { InstaDL, Tiktok, twitter, YTV } from './client/scrapers.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
 
 bot(
@@ -50,3 +50,20 @@ bot(
 		return await message.send(data);
 	},
 );
+
+bot(
+	{
+		pattern: 'ytv',
+		isPublic: true,
+		desc: 'downloads youtube videos',
+		type: 'download',
+	},
+	async (message, match) => {
+		const yturl = match || message.quoted?.text;
+		const url = extractUrlFromMessage(yturl);
+		if (!url) return message.sendReply('_I need youtube url_');
+		const video = await YTV(url);
+		return await message.send(video.buffer, { caption: video.title });
+	},
+);
+

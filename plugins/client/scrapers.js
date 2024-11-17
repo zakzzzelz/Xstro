@@ -69,3 +69,10 @@ export async function InstaDL(url) {
 	const buffer = await getBuffer(data.url);
 	return buffer;
 }
+
+export async function YTV(url) {
+	const res = await getJson(`https://bk9.fun/download/youtube?url=${encodeURIComponent(url)}`);
+	const { title, mediaLink } = res.BK9[0];
+	const buffer = await getBuffer(mediaLink);
+	return { buffer, title };
+}
