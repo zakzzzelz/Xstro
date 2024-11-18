@@ -1,6 +1,6 @@
 import fs from 'fs';
-import axios from 'axios'
-import FormData from 'form-data';;
+import axios from 'axios';
+import FormData from 'form-data';
 import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
 import config from '../../config.js';
 import { fileTypeFromBuffer } from 'file-type';
@@ -66,7 +66,7 @@ export async function toBlackVideo(buffer, color = 'black') {
 	form.append('color', color);
 
 	try {
-		const response = await axios.post('http://localhost:3000/api/blackvideo', form, {
+		const response = await axios.post(`${config.BASE_API_URL}/api/blackvideo`, form, {
 			headers: {
 				...form.getHeaders(),
 			},
