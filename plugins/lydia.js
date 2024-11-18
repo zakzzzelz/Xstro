@@ -1,23 +1,17 @@
 import { bot } from '../lib/client/plugins.js';
 import { ChatBot } from '../lib/sql/lydia.js';
 import { numtoId } from '../lib/utils.js';
+import axios from 'axios';
 
 export const upsertChatBot = async (chat, type, enabled) => {
-	try {
-		await ChatBot.upsert({ chat, type, enabled });
-	} catch (error) {
-		console.error('Error while updating chatbot config:', error);
-	}
+	await ChatBot.upsert({ chat, type, enabled });
 };
 
 export const isChatBotEnabled = async chat => {
-	try {
-		const chatbot = await ChatBot.findOne({ where: { chat } });
-		return chatbot ? chatbot.enabled : false;
-	} catch (error) {
-		console.error('Error while checking if chatbot is enabled:', error);
-		return false;
-	}
+	const chatbot = await ChatBot.findOne({ where: { chat } });
+	if (chatbot) return chatbot.enabled;
+	const globalChatbot = await ChatBot.findOne({ where: { chat: 'all' } });
+	return globalChatbot ? globalChatbot.enabled : false;
 };
 
 bot(
@@ -56,7 +50,7 @@ bot(
 			}
 			if (setting.startsWith('dm;')) {
 				const number = setting.split(';')[1];
-				if (!number) return await message.sendReply('_provide number!_');
+				if (!number) return await message.sendReply('_Provide number!_');
 				const jid = numtoId(number);
 				await upsertChatBot(jid, 'dm', true);
 				return await message.sendReply(`_Lydia Set For @${number}_`, { mentions: [numtoId(number)] });
@@ -84,11 +78,6 @@ bot(
 );
 
 export async function chatAi(userID, question) {
-	try {
-		const res = await axios.get(`http://api.brainshop.ai/get?bid=175685&key=Pg8Wu8mrDQjfr0uv&uid=${userID}&msg=${question}`);
-		return res.data.cnt;
-	} catch (error) {
-		console.error('Error fetching response from Brainshop API:', error);
-		return 'Sorry, something went wrong. Please try again later.';
-	}
+	const res = await axios.get(`http://api.brainshop.ai/get?bid=175685&key=Pg8Wu8mrDQjfr0uv&uid=${userID}&msg=${question}`);
+	return res.data.cnt;
 }
