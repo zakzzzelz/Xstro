@@ -1,12 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import axios from 'axios';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/client/plugins.js';
 import { fancy } from './client/font.js';
-import { runtime } from '../lib/utils.js';
+import { getBuffer, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { dirname, basename, resolve, extname } from 'path';
 import { manageVar } from './client/env.js';
@@ -65,7 +64,7 @@ bot(
 		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.sendReply('_Plugin already installed_');
 
 		const pluginPath = resolve(__dirname, '../plugins', pluginName);
-		const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
+		const response = await getBuffer(pluginUrl);
 		fs.writeFileSync(pluginPath, response.data);
 		await addPlugin(pluginName);
 		message.sendReply(`_${pluginName} plugin installed_`);

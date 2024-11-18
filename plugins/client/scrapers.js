@@ -1,6 +1,4 @@
-import axios from 'axios';
-import FormData from 'form-data';
-import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
+import { getBuffer, getJson, postJson, getRandom } from '../../lib/utils.js';
 import config from '../../config.js';
 
 export async function twitter(url) {
@@ -31,19 +29,24 @@ export async function TTS(text) {
 export async function upload(buffer) {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const form = new FormData();
-			form.append('files[]', buffer, { filename: 'file' });
-			const response = await axios({
-				url: 'https://uguu.se/upload.php',
-				method: 'POST',
+			const base64Data = buffer.toString('base64');
+			const data = {
+				files: [
+					{
+						filename: 'file',
+						content: base64Data,
+					},
+				],
+			};
+
+			const response = await postJson('https://uguu.se/upload.php', {
+				data,
 				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-					...form.getHeaders(),
+					'Content-Type': 'application/json',
 				},
-				data: form,
 			});
 
-			resolve(response.data.files[0]);
+			resolve(response.files[0]);
 		} catch (error) {
 			reject(error);
 		}
