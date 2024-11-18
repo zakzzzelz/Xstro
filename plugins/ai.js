@@ -1,7 +1,7 @@
 import { bot } from '../lib/client/plugins.js';
 import { ChatBot } from '../lib/sql/lydia.js';
 import { numtoId } from '../lib/utils.js';
-import { Gemini } from './client/ai.js';
+import { chatAi, Gemini } from './client/ai.js';
 
 bot(
 	{
@@ -30,7 +30,6 @@ bot(
 		if (!match) {
 			return await message.sendReply(
 				`*_ChatBot Usage_*
-											
 • ${prefix}lydia on - Enable chatbot for everyone
 • ${prefix}lydia off - Disable chatbot
 • ${prefix}lydia set dm;2348030000005 - Enable for specific DM
@@ -63,5 +62,22 @@ bot(
 			}
 		}
 		return await message.sendReply(`_${pushName} bro you are not getting it right_`);
+	},
+);
+
+bot(
+	{
+		on: 'text',
+		dontAddCommandList: true,
+		isPublic: true,
+	},
+	async message => {
+		const chatEnabled = await ChatBot.isEnabled(message.jid);
+		if (chatEnabled) {
+			const userID = message.sender;
+			const question = message.text;
+			const aiResponse = await chatAi(userID, question);
+			await message.sendReply(aiResponse);
+		}
 	},
 );
