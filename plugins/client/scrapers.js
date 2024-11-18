@@ -64,20 +64,14 @@ export async function toBlackVideo(buffer, color = 'black') {
 		contentType: 'audio/mpeg',
 	});
 	form.append('color', color);
+	const response = await axios.post(`${config.BASE_API_URL}/api/blackvideo`, form, {
+		headers: {
+			...form.getHeaders(),
+		},
+		responseType: 'arraybuffer',
+	});
 
-	try {
-		const response = await axios.post(`${config.BASE_API_URL}/api/blackvideo`, form, {
-			headers: {
-				...form.getHeaders(),
-			},
-			responseType: 'arraybuffer',
-		});
-
-		fs.writeFileSync('output-video.mp4', response.data);
-		console.log('Video saved as output-video.mp4');
-	} catch (error) {
-		console.error('Error:', error.message);
-	}
+	return Buffer.from(response.data);
 }
 
 export async function toSticker(buffer) {

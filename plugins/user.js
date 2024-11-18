@@ -6,8 +6,6 @@ import { addBan, getBanned, removeBan } from '../lib/sql/ban.js';
 import { getSudo, delSudo, addSudo } from '../lib/sql/sudo.js';
 import { addNote, removeNote, updateNote, getNotes } from '../lib/sql/notes.js';
 
-const { BOT_INFO } = config;
-
 bot(
 	{
 		pattern: 'alive',
@@ -21,7 +19,7 @@ bot(
 			return message.sendReply('_Alive Updated_');
 		}
 		const msg = await aliveMessage(message);
-		const botInfo = BOT_INFO.split(';')[2];
+		const botInfo = config.BOT_INFO.split(';')[2];
 
 		const mentionData = {
 			mentions: [message.sender],
@@ -103,8 +101,16 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const User = match || message.quoted?.sender || message.mention[0];
-		const sudolist = await addSudo(User);
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		}
+		if (!jid) return message.sendReply('_Tag, Reply, or provide the number to set as sudo_');
+		const sudolist = await addSudo(jid);
 		return message.sendReply(sudolist);
 	},
 );
@@ -117,9 +123,16 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		if (match) return numtoId(match);
-		const User = match || message.quoted?.sender || message.mention[0];
-		const rsudo = await delSudo(User);
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		}
+		if (!jid) return message.sendReply('_Tag, Reply, or provide the number of a user to delete from sudo._');
+		const rsudo = await delSudo(jid);
 		return message.sendReply(rsudo);
 	},
 );
@@ -134,13 +147,12 @@ bot(
 	async message => {
 		const sudoList = await getSudo();
 		if (sudoList === '_No Sudo Numbers_') return message.sendReply('*_No Sudo Users_*');
-		const sudoNumbers = sudoList.split('\n').map(number => number.replace('@s.whatsapp.net', '').trim());
-		const formattedSudoList = '*Sudo Users*\n\n' + sudoNumbers.map((number, index) => `${index + 1}. @${number}`).join('\n');
+		const sudoNumbers = sudoList.split('\n').map(number => number.split('@')[0]);
+		const formattedSudoList = '*_Sudo Users_*\n\n' + sudoNumbers.map((number, index) => `${index + 1}. @${number}`).join('\n');
 		const mentions = sudoNumbers.map(number => `${number}@s.whatsapp.net`);
-		return message.sendReply(formattedSudoList, { mentions });
+		return message.sendReply(formattedSudoList, { mentions: mentions });
 	},
 );
-
 bot(
 	{
 		pattern: 'addnote',
