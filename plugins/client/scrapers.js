@@ -1,4 +1,6 @@
-import axios from 'axios';
+import fs from 'fs';
+import axios from 'axios'
+import FormData from 'form-data';;
 import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
 import config from '../../config.js';
 import { fileTypeFromBuffer } from 'file-type';
@@ -52,6 +54,29 @@ export async function uploadMedia(buffer) {
 	} catch (error) {
 		console.error('Error:', error.message);
 		return null;
+	}
+}
+
+export async function toBlackVideo(buffer, color = 'black') {
+	const form = new FormData();
+	form.append('audio', buffer, {
+		filename: 'input-audio.mp3',
+		contentType: 'audio/mpeg',
+	});
+	form.append('color', color);
+
+	try {
+		const response = await axios.post('http://localhost:3000/api/blackvideo', form, {
+			headers: {
+				...form.getHeaders(),
+			},
+			responseType: 'arraybuffer',
+		});
+
+		fs.writeFileSync('output-video.mp4', response.data);
+		console.log('Video saved as output-video.mp4');
+	} catch (error) {
+		console.error('Error:', error.message);
 	}
 }
 
