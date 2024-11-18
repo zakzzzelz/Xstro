@@ -1,14 +1,13 @@
 import fs from 'fs';
-import path, { join } from 'path';
+import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { performance } from 'perf_hooks';
-import { basename, extname } from 'path';
 import { bot } from '../lib/client/plugins.js';
 import { endProcess, restartProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
-const envFilePath = path.join(process.cwd(), '.env');
 
+const envFilePath = path.join(process.cwd(), '.env');
 const envfile = () => {
 	if (!fs.existsSync(envFilePath)) fs.writeFileSync(envFilePath, '', 'utf-8');
 };
@@ -51,8 +50,7 @@ bot(
 		const pluginUrl = match.trim();
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
 
-		const baseName = basename(pluginUrl, extname(pluginUrl));
-		const pluginName = `${baseName}.js`;
+		const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
 		const existingPlugins = await getPlugins();
 		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.sendReply('_Plugin already installed_');
 
@@ -75,6 +73,7 @@ bot(
 		if (!match) return message.sendReply('_Provide an installed plugin name_');
 		const baseName = match.trim();
 		const pluginName = `${baseName}.js`;
+
 		const deleted = await removePlugin(pluginName);
 		if (!deleted) return message.sendReply('_Plugin not found_');
 
@@ -124,7 +123,7 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		envFilePath();
+		envfile();
 		if (!match) return message.sendReply('_Provide variable name to delete_');
 		const key = match.trim();
 		await manageVar({ command: 'del', key });
@@ -140,7 +139,7 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		envFilePath();
+		envfile();
 		const vars = await manageVar({ command: 'get' });
 		return message.sendReply(vars || '_No Vars Found_');
 	},
