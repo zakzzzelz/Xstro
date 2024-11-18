@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createRequire } from 'module';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/client/plugins.js';
 import { fancy } from './client/font.js';
@@ -9,9 +8,6 @@ import { endProcess, getBuffer, restartProcess, runtime } from '../lib/utils.js'
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { dirname, basename, resolve, extname } from 'path';
 import { manageVar } from './client/env.js';
-import { exec } from 'child_process';
-
-const require = createRequire(import.meta.url);
 const envFilePath = path.join(process.cwd(), '.env');
 
 const envfile = () => {
