@@ -1,8 +1,9 @@
 import config from '../config.js';
 import { commands, bot } from '../lib/client/plugins.js';
-import { formatBytes, runtime } from '../lib/utils.js';
+import { formatBytes, getLocalBuffer, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';
+import { join } from 'path';
 const { BOT_INFO, MODE, VERSION } = config;
 
 bot(
@@ -43,7 +44,8 @@ bot(
 			});
 			menuText += fancy(`╰──────────────\n`);
 		});
-		return await message.send(menuText, { quoted: null });
+		const image = await getLocalBuffer(join(process.cwd(), './media/thumb.jpg'));
+		return await message.send(image, { caption: menuText });
 	},
 );
 

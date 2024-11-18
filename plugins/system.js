@@ -5,7 +5,7 @@ import { createRequire } from 'module';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/client/plugins.js';
 import { fancy } from './client/font.js';
-import { getBuffer, runtime } from '../lib/utils.js';
+import { endProcess, getBuffer, restartProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { dirname, basename, resolve, extname } from 'path';
 import { manageVar } from './client/env.js';
@@ -162,6 +162,19 @@ bot(
 	},
 	async message => {
 		await message.sendReply('_Restarting application..._');
-		await exec(require('../package.json').scripts.start);
+		await restartProcess();
+	},
+);
+
+bot(
+	{
+		pattern: 'shutdown',
+		isPublic: false,
+		desc: 'Off Bot',
+		type: 'system',
+	},
+	async message => {
+		await message.sendReply('_Shutting Down application..._');
+		await endProcess();
 	},
 );
