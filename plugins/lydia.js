@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { ChatBot, isChatBotEnabled, upsertChatBot } from '../lib/sql/lydia.js';
+import { ChatBot } from '../lib/sql/lydia.js';
 import { numtoId } from '../lib/utils.js';
 
 export const upsertChatBot = async (chat, type, enabled) => {
