@@ -1,5 +1,7 @@
-import { getBuffer, getJson, postJson, getRandom } from '../../lib/utils.js';
+import axios from 'axios';
+import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
 import config from '../../config.js';
+import { fileTypeFromBuffer } from 'file-type';
 
 export async function twitter(url) {
 	if (!url || !url.includes('x.com')) throw new Error('_Invaild Url_');
@@ -26,31 +28,16 @@ export async function TTS(text) {
 	return res;
 }
 
-export async function upload(buffer) {
-	return new Promise(async (resolve, reject) => {
-		try {
-			const base64Data = buffer.toString('base64');
-			const data = {
-				files: [
-					{
-						filename: 'file',
-						content: base64Data,
-					},
-				],
-			};
-
-			const response = await postJson('https://uguu.se/upload.php', {
-				data,
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
-
-			resolve(response.files[0]);
-		} catch (error) {
-			reject(error);
-		}
+export async function FilpMedia(buffer, direction) {
+	const { ext, mime } = await fileTypeFromBuffer(buffer);
+	if (!ext) return;
+	const form = new FormData();
+	form.append('media', buffer, { filename: `media.${ext}`, contentType: mime });
+	const res = await axios.post(`https://server-di1w.onrender.com/api/flip?direction=${direction}`, form, {
+		headers: form.getHeaders(),
+		responseType: 'arraybuffer',
 	});
+	return res.data;
 }
 
 export async function toSticker(buffer) {
