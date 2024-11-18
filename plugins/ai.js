@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { ChatBot } from '../lib/sql/lydia.js';
+import { ChatBot, isChatBotEnabled } from '../lib/sql/lydia.js';
 import { numtoId } from '../lib/utils.js';
 import { chatAi, Gemini } from './client/ai.js';
 
@@ -30,34 +30,34 @@ bot(
 		if (!match) {
 			return await message.sendReply(
 				`*_ChatBot Usage_*
-• ${prefix}lydia on - Enable chatbot for everyone
-• ${prefix}lydia off - Disable chatbot
-• ${prefix}lydia set dm;2348030000005 - Enable for specific DM
-• ${prefix}lydia set gc - Enable only in groups`,
+  • ${prefix}lydia on - Enable chatbot for everyone
+  • ${prefix}lydia off - Disable chatbot
+  • ${prefix}lydia set dm;2348030000005 - Enable for specific DM
+  • ${prefix}lydia set gc - Enable only in groups`,
 			);
 		}
 
 		const command = match.toLowerCase().trim();
 		if (command === 'on') {
-			await ChatBot.upsert({ chat: 'all', type: 'all', enabled: true });
+			await upsertChatBot('all', 'all', true); // Enables chatbot for everyone
 			return await message.sendReply('_Lydia Activated for all Chats!_');
 		}
 		if (command === 'off') {
-			await ChatBot.upsert({ chat: 'all', type: 'all', enabled: false });
+			await upsertChatBot('all', 'all', false); // Disables chatbot for everyone
 			return await message.sendReply('_Lydia Disabled!_');
 		}
 		if (command.startsWith('set')) {
 			const [, setting] = command.split(' ');
 			if (!setting) return await message.sendReply('_Wrong Configuration!_');
 			if (setting === 'gc') {
-				await ChatBot.upsert({ chat: 'groups', type: 'gc', enabled: true });
+				await upsertChatBot('groups', 'gc', true);
 				return await message.sendReply('_Lydia Enabled For Groups Only!_');
 			}
 			if (setting.startsWith('dm;')) {
 				const number = setting.split(';')[1];
 				if (!number) return await message.sendReply('_provide number!_');
 				const jid = numtoId(number);
-				await ChatBot.upsert({ chat: jid, type: 'dm', enabled: true });
+				await upsertChatBot(jid, 'dm', true);
 				return await message.sendReply(`_Lydia Set For @${number}_`, { mentions: [numtoId(number)] });
 			}
 		}
@@ -72,7 +72,7 @@ bot(
 		isPublic: true,
 	},
 	async message => {
-		const chatEnabled = await ChatBot.isEnabled(message.jid);
+		const chatEnabled = await isChatBotEnabled(message.jid);
 		if (chatEnabled) {
 			const userID = message.sender;
 			const question = message.text;
