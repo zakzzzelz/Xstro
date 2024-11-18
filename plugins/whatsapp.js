@@ -244,3 +244,59 @@ bot(
 		return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, { mentions: [jid] });
 	},
 );
+
+bot(
+	{
+		pattern: 'block',
+		isPublic: false,
+		desc: 'Blocks A Person',
+		type: 'whatsapp',
+	},
+	async (message, match, m) => {
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		} else if (!m.isGroup) {
+			jid = message.jid;
+		}
+		if (!jid) return message.sendReply('_Reply/Tag or give me the person number_');
+		try {
+			await message.sendReply(`_@${jid.split('@')[0]} Blocked_`, { mentions: [jid] });
+			await message.client.updateBlockStatus(jid, 'block');
+		} catch {
+			return message.sendReply(`_@${jid.split('@')[0]} is already blocked_`, { mentions: [jid] });
+		}
+	},
+);
+
+bot(
+	{
+		pattern: 'unblock',
+		isPublic: false,
+		desc: 'Unblocks A Person',
+		type: 'whatsapp',
+	},
+	async (message, match, m) => {
+		let jid;
+		if (message.quoted) {
+			jid = message.quoted.sender;
+		} else if (message.mention && message.mention[0]) {
+			jid = message.mention[0];
+		} else if (match) {
+			jid = numtoId(match);
+		} else if (!m.isGroup) {
+			jid = message.jid;
+		}
+		if (!jid) return message.sendReply('_Reply/Tag or give me the person number_');
+		try {
+			await message.client.updateBlockStatus(jid, 'unblock');
+			await message.sendReply(`_@${jid.split('@')[0]} Unblocked_`, { mentions: [jid] });
+		} catch {
+			return message.sendReply(`_@${jid.split('@')[0]} wasn't blocked_`, { mentions: [jid] });
+		}
+	},
+);
