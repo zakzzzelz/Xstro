@@ -4,6 +4,7 @@ import { fancy } from './client/font.js';
 import { numtoId } from '../lib/utils.js';
 import { Antilink } from '../lib/sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';
+import { setAnti } from '../lib/sql/antidel.js';
 
 bot(
 	{
@@ -593,5 +594,28 @@ bot(
 		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
 		await client.removeProfilePicture(m.from);
 		return await message.sendReply('_Group Profile Photo Removed!_');
+	},
+);
+
+bot(
+	{
+		pattern: 'antidelete',
+		isPublic: false,
+		desc: 'Configure AntiDelete',
+		type: 'group',
+	},
+	async (message, match, m, { prefix, pushName }) => {
+		if (!m.isGroup) return message.sendReply('_For groups only!_');
+		if (!match) return message.sendReply(`_${pushName} Wrong Usage!_\n${prefix}antidel on | off`);
+
+		const chatId = m.from;
+		const status = match.toLowerCase() === 'on';
+
+		const setStatus = await setAnti(chatId, status);
+		if (setStatus) {
+			return message.sendReply(`_Anti-delete has been turned ${status ? 'on' : 'off'}._`);
+		} else {
+			return message.sendReply('_Failed to update anti-delete status. Please try again._');
+		}
 	},
 );
