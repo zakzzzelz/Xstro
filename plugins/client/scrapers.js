@@ -33,7 +33,7 @@ export async function FilpMedia(buffer, direction) {
 	if (!ext) return;
 	const form = new FormData();
 	form.append('media', buffer, { filename: `media.${ext}`, contentType: mime });
-	const res = await axios.post(`https://server-di1w.onrender.com/api/flip?direction=${direction}`, form, {
+	const res = await axios.post(`${config.BASE_API_URL}/api/flip?direction=${direction}`, form, {
 		headers: form.getHeaders(),
 		responseType: 'arraybuffer',
 	});

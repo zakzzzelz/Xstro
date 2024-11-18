@@ -8,6 +8,7 @@ dotenv.config();
 const toBool = x => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
 export default config = {
+	BASE_API_URL: process.env.BASE_API_URL || 'https://server-di1w.onrender.com',
 	SESSION_ID: process.env.SESSION_ID || '',
 	BOT_INFO: process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ',
 	LOGS: toBool(process.env.LOGS) || false,
