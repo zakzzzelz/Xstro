@@ -1,20 +1,17 @@
 import fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import path, { join } from 'path';
+import axios from 'axios';
 import { performance } from 'perf_hooks';
+import { basename, extname } from 'path';
 import { bot } from '../lib/client/plugins.js';
-import { fancy } from './client/font.js';
-import { endProcess, getBuffer, restartProcess, runtime } from '../lib/utils.js';
+import { endProcess, restartProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
-import { dirname, basename, resolve, extname } from 'path';
 import { manageVar } from './client/env.js';
 const envFilePath = path.join(process.cwd(), '.env');
 
 const envfile = () => {
 	if (!fs.existsSync(envFilePath)) fs.writeFileSync(envFilePath, '', 'utf-8');
 };
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 bot(
 	{
@@ -39,7 +36,7 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		return await message.sendReply(fancy(`bot running since\n${runtime(process.uptime())}`));
+		return await message.sendReply(`_Bot Running Since_\n_${runtime(process.uptime())}_`);
 	},
 );
 
@@ -59,8 +56,8 @@ bot(
 		const existingPlugins = await getPlugins();
 		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.sendReply('_Plugin already installed_');
 
-		const pluginPath = resolve(__dirname, '../plugins', pluginName);
-		const response = await getBuffer(pluginUrl);
+		const pluginPath = join('plugins', pluginName);
+		const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
 		fs.writeFileSync(pluginPath, response.data);
 		await addPlugin(pluginName);
 		message.sendReply(`_${pluginName} plugin installed_`);
@@ -81,7 +78,7 @@ bot(
 		const deleted = await removePlugin(pluginName);
 		if (!deleted) return message.sendReply('_Plugin not found_');
 
-		const pluginPath = resolve(__dirname, '../plugins', pluginName);
+		const pluginPath = join('plugins', pluginName);
 		if (fs.existsSync(pluginPath)) fs.unlinkSync(pluginPath);
 		message.sendReply(`_${pluginName} plugin uninstalled_`);
 	},
@@ -96,8 +93,8 @@ bot(
 	},
 	async message => {
 		const plugins = await getPlugins();
-		const pluginList = plugins.length > 0 ? `Plugins Installed:\n${plugins.map(plugin => plugin.name).join('\n')}` : '_No plugins installed_';
-		message.sendReply(fancy(pluginList));
+		const pluginList = plugins.length > 0 ? `_Plugins Installed:_\n${plugins.map(plugin => plugin.name).join('\n')}` : '_No plugins installed_';
+		message.sendReply(pluginList);
 	},
 );
 
