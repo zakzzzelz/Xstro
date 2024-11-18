@@ -5,29 +5,15 @@ import connect from './lib/bot.js';
 import config from './config.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const { DATABASE } = config;
-
 const log = (type, msg) => console.log(`[${type}] ${msg}`);
 
 async function loadFiles(dir) {
 	try {
 		const files = await readdir(dir, { withFileTypes: true });
-
 		for (const file of files) {
 			const fullPath = join(dir, file.name);
-
-			if (file.isDirectory()) {
-				await loadFiles(fullPath);
-				continue;
-			}
-
-			if (file.isFile() && extname(file.name) === '.js') {
-				try {
-					await import(`file://${fullPath}`);
-				} catch (err) {
-					log('ERROR', `File: ${file.name} | Line: ${err.line || 'unknown'} | ${err.message}`);
-				}
-			}
+			if (file.isDirectory()) await loadFiles(fullPath);
+			else if (extname(file.name) === '.js') await import(`file://${fullPath}`).catch(err => log('ERROR', `File: ${file.name} | ${err.message}`));
 		}
 	} catch (err) {
 		log('ERROR', `Dir ${dir}: ${err.message}`);
@@ -35,16 +21,13 @@ async function loadFiles(dir) {
 }
 
 async function startBot() {
-	console.log('Starting XSTRO MD');
-
 	try {
-		await DATABASE.sync().catch(err => log('ERROR', `Database: ${err.message}`));
-
+		console.log('XSTRO MD');
+		await config.DATABASE.sync();
 		await loadFiles(join(__dirname, 'lib/sql'));
 		await loadFiles(join(__dirname, 'plugins'));
 		await connect();
-
-		console.log('Application Running');
+		await config.DATABASE.sync();
 	} catch (err) {
 		log('ERROR', `Boot: ${err.message}`);
 	}
@@ -53,6 +36,6 @@ async function startBot() {
 startBot();
 
 process.on('SIGINT', () => {
-	DATABASE.close();
+	config.DATABASE.close();
 	process.exit();
 });

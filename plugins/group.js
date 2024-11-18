@@ -619,3 +619,32 @@ bot(
 		}
 	},
 );
+
+bot(
+	{
+		pattern: 'newgc',
+		isPublic: false,
+		desc: 'Creates A New Group',
+		type: 'group',
+	},
+	async (message, match, m, client) => {
+		if (!match) return await message.sendReply(`*Provide group name: .newgc GroupName*`);
+
+		let groupName = match.split(';')[0];
+		let members = [message.sender];
+
+		if (message.quoted?.sender) members.push(message.quoted.sender);
+		if (message.mention && message.mention[0]) members.push(message.mention[0]);
+		if (match.split(';')[1]) {
+			let additionalMembers = match
+				.split(';')[1]
+				.split(',')
+				.map(member => member.trim());
+			const ids = additionalMembers.map(member => numtoId(member));
+			members = [...members, ...ids];
+		}
+		members = [...new Set(members)];
+		await client.groupCreate(groupName, members);
+		return await message.sendReply(`_Group Created_`);
+	},
+);
