@@ -4,7 +4,6 @@ import { formatBytes, getLocalBuffer, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';
 import { join } from 'path';
-const { BOT_INFO, MODE, VERSION } = config;
 
 bot(
 	{
@@ -14,14 +13,14 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		let menuText = `\`\`\`╭─ ${BOT_INFO.split(';')[1]} ───
+		let menuText = `\`\`\`╭─ ${config.BOT_INFO.split(';')[1]} ───
 │ User: ${message.pushName}
-│ Mode: ${MODE}
+│ Mode: ${config.MODE}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
 │ Plugins: ${commands.length}
 │ Memory: ${formatBytes(totalmem() - freemem())}
-│ Version: ${VERSION}
+│ Version: ${config.VERSION}
 ╰────────────────\`\`\`\n`;
 
 		let commandCounter = 1;
@@ -44,6 +43,7 @@ bot(
 			});
 			menuText += fancy(`╰──────────────\n`);
 		});
+
 		const image = await getLocalBuffer(join(process.cwd(), './media/thumb.jpg'));
 		return await message.send(image, { caption: menuText });
 	},
@@ -65,12 +65,12 @@ bot(
 			desc = command.desc || false;
 			if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
 		});
-		cmdList.sort();
+		cmdList.sort((a, b) => a.cmd.localeCompare(b.cmd));
 		cmdList.forEach(({ cmd, desc }, num) => {
 			menu += `${(num += 1)} ${cmd.trim()}\n`;
 			if (desc) menu += `${desc}\n\n`;
 		});
-		menu += ``;
+
 		return await message.sendReply(fancy(menu), { contextInfo: { isForwarded: true, forwardingscore: 999 } });
 	},
 );
