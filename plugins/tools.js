@@ -1,6 +1,6 @@
 import { bot } from '../lib/client/plugins.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
-import { shortUrl, textToPDF, TTS, upload } from './client/scrapers.js';
+import { shortUrl, textToPDF, TTS, uploadMedia } from './client/scrapers.js';
 
 bot(
 	{
@@ -60,7 +60,7 @@ bot(
 		const media = await message.download();
 		if (!media) return message.sendReply('_No media found. Please reply to an image or video!_');
 		const msg = await message.sendReply('_Processing..._');
-		const res = await upload(media);
-		return await msg.edit(res.url);
+		const res = await uploadMedia(media);
+		return await msg.edit(res);
 	},
 );

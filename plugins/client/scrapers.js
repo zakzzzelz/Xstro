@@ -40,8 +40,23 @@ export async function FilpMedia(buffer, direction) {
 	return res.data;
 }
 
+export async function uploadMedia(buffer) {
+	const form = new FormData();
+	form.append('media', buffer, { filename: 'media' });
+
+	try {
+		const response = await axios.post(`${config.BASE_API_URL}/api/upload`, form, {
+			headers: form.getHeaders(),
+		});
+		return response.data.url;
+	} catch (error) {
+		console.error('Error:', error.message);
+		return null;
+	}
+}
+
 export async function toSticker(buffer) {
-	const media = await upload(buffer);
+	const media = await uploadMedia(buffer);
 	const res = await getBuffer(`https://bk9.fun/maker/sticker?url=${media.url}&packName=${config.STICKER_PACK.split(';')[0]}&authorName=${config.STICKER_PACK.split(';')[1]}`);
 	return res;
 }
