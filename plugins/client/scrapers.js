@@ -30,9 +30,10 @@ export async function TTS(text) {
 	return res;
 }
 
-export async function FilpMedia(buffer, direction) {
-	const { ext, mime } = await fileTypeFromBuffer(buffer);
-	if (!ext) return;
+export async function flipMedia(buffer, direction) {
+	const fileType = await fileTypeFromBuffer(buffer);
+	if (!fileType) throw new Error('Unsupported file type.');
+	const { ext, mime } = fileType;
 	const form = new FormData();
 	form.append('media', buffer, { filename: `media.${ext}`, contentType: mime });
 	const res = await axios.post(`${config.BASE_API_URL}/api/flip?direction=${direction}`, form, {

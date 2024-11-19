@@ -1,5 +1,5 @@
 import { bot } from '../lib/client/plugins.js';
-import { FilpMedia, toBlackVideo, toSticker } from './client/scrapers.js';
+import { flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
 
 bot(
 	{
@@ -40,13 +40,12 @@ bot(
 		type: 'converter',
 	},
 	async (message, match) => {
-		if (!message.quoted?.image && !message.quoted?.video) return message.sendReply('_Reply An Image Or Video_');
+		if (!message.quoted?.image && !message.quoted?.video) return message.sendReply('_Reply to an Image or Video_');
 		const options = ['left', 'right', 'vertical', 'horizontal'];
-		if (!options.includes(match)) return message.sendReply('_Choose a valid option: ' + message.prefix + 'flip left, right, vertical, or horizontal_');
-		console.log('Chosen direction:', match);
+		if (!options.includes(match)) return message.sendReply('_Choose a valid option:_ ' + message.prefix + 'flip left, right, vertical, or horizontal');
 		const buff = await message.download();
-		const res = await FilpMedia(buff, options);
-		return await message.send(res);
+		const flippedMedia = await flipMedia(buff, match);
+		return await message.send(flippedMedia, { caption: '_Flipped successfully_' });
 	},
 );
 
