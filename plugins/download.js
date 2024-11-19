@@ -66,4 +66,3 @@ bot(
 		return await message.send(video.buffer, { caption: video.title });
 	},
 );
-

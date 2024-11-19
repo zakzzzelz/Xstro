@@ -5,15 +5,15 @@ bot(
 	{
 		pattern: 'sticker',
 		isPublic: true,
-		desc: 'Converts Images/Video',
+		desc: 'Converts Images/Video to Sticker',
 		type: 'converter',
 	},
 	async message => {
 		const media = message.quoted?.video || message.quoted?.image;
-		if (!media) return message.sendReply('_Reply Image or Video!_');
+		if (!media) return message.sendReply('_Reply with an Image or Video!_');
 		const msg = await message.download();
-		const buff = await toSticker(msg);
-		return await message.send(buff, { type: 'sticker' });
+		const stickerBuffer = await toSticker(msg);
+		await message.send(stickerBuffer, { type: 'sticker' });
 	},
 );
 

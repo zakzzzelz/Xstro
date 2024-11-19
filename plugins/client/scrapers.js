@@ -1,4 +1,3 @@
-import fs from 'fs';
 import axios from 'axios';
 import FormData from 'form-data';
 import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
@@ -75,11 +74,21 @@ export async function toBlackVideo(buffer, color = 'black') {
 	return Buffer.from(response.data);
 }
 
-export async function toSticker(buffer) {
-	const media = await uploadMedia(buffer);
-	const res = await getBuffer(`https://bk9.fun/maker/sticker?url=${media.url}&packName=${config.STICKER_PACK.split(';')[0]}&authorName=${config.STICKER_PACK.split(';')[1]}`);
-	return res;
-}
+export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';')[1], author = config.STICKER_PACK.split(';')[0]) => {
+	const fileType = await fileTypeFromBuffer(buffer);
+	if (!fileType) throw new Error('Unsupported or unknown file type');
+	const { mime, ext } = fileType;
+	const form = new FormData();
+	form.append('media', buffer, { filename: `media.${ext}`, contentType: mime });
+	form.append('packname', packname);
+	form.append('author', author);
+
+	const res = await axios.post(`${config.BASE_API_URL}/api/sticker`, form, {
+		headers: form.getHeaders(),
+		responseType: 'arraybuffer',
+	});
+	return res.data;
+};
 
 export async function Tiktok(url) {
 	const res = await getJson(`https://bk9.fun/download/tiktok?url=${encodeURIComponent(url)}`);
@@ -98,6 +107,7 @@ export async function InstaDL(url) {
 export async function YTV(url) {
 	const res = await getJson(`https://bk9.fun/download/youtube?url=${encodeURIComponent(url)}`);
 	const { title, mediaLink } = res.BK9[0];
-	const buffer = await getBuffer(mediaLink);
+	const arrayBuffer = await getBuffer(mediaLink);
+	const buffer = Buffer.from(arrayBuffer);
 	return { buffer, title };
 }
