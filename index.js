@@ -3,6 +3,7 @@ import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connect from './lib/bot.js';
 import config from './config.js';
+import net from 'net';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const log = (type, msg) => console.log(`[${type}] ${msg}`);
@@ -28,6 +29,8 @@ async function startBot() {
 		await loadFiles(join(__dirname, 'plugins'));
 		await connect();
 		await config.DATABASE.sync();
+		const server = net.createServer(() => {}).listen(8000);
+		server.on('error', err => {});
 	} catch (err) {
 		log('ERROR', `Boot: ${err.message}`);
 	}
