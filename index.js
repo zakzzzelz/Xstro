@@ -1,7 +1,7 @@
 import { readdir } from 'fs/promises';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import connect from './lib/bot.js';
+import connect from './lib/client.js';
 import config from './config.js';
 import http from 'http';
 
