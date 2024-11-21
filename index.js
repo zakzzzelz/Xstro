@@ -29,15 +29,20 @@ async function startBot() {
 		await loadFiles(join(__dirname, 'plugins'));
 		await connect();
 		await config.DATABASE.sync();
-		const server = net.createServer(socket => {
-			socket.destroy();
-		});
-		server.listen(8000);
-		server.on('error', () => {});
 	} catch (err) {
 		log('ERROR', `Boot: ${err.message}`);
 	}
 }
+(async () => {
+	const server = net.createServer(socket => {
+		socket.write('HTTP/1.1 200 OK\r\n');
+		socket.write('Content-Length: 0\r\n');
+		socket.write('\r\n');
+		socket.end();
+	});
+	server.listen(8000, () => {});
+	server.on('error', err => {});
+})();
 
 startBot();
 

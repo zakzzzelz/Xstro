@@ -9,6 +9,7 @@ const toBool = x => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
 export default config = {
 	BASE_API_URL: process.env.BASE_API_URL || 'https://server-di1w.onrender.com',
+	API_KEY: process.env.API_KEY || 'astro_fx-k56DdhdS7@gifted_api',
 	SESSION_ID: process.env.SESSION_ID || '',
 	BOT_INFO: process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ',
 	LOGS: toBool(process.env.LOGS) || false,
