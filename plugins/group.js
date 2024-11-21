@@ -65,7 +65,7 @@ bot(
 				showAdAttribution: true,
 				title: config.BOT_INFO.split(';')[0],
 				body: config.BOT_INFO.split(';')[1],
-				thumbnail: await thumb(),
+				thumbnail: thumb,
 			},
 		};
 		for (const groupId of groupIds) {
