@@ -59,14 +59,8 @@ bot(
 		await message.sendReply(`_Broadcasting to ${groupIds.length} groups. Estimated completion in ${groupIds.length * 1.5} seconds_`);
 		const broadcastMessage = fancy(`*Broadcast*\n\n*Message:* `) + adMsg;
 		const messageOptions = {
-			forwardingScore: 999,
+			forwardingScore: 9999999,
 			isForwarded: true,
-			externalAdReply: {
-				showAdAttribution: true,
-				title: config.BOT_INFO.split(';')[0],
-				body: config.BOT_INFO.split(';')[1],
-				thumbnail: thumb,
-			},
 		};
 		for (const groupId of groupIds) {
 			await delay(1500);
