@@ -30,6 +30,7 @@ async function startBot() {
       await loadFiles(join(__dirname, 'lib/sql'));
       await loadFiles(join(__dirname, 'plugins'));
       await connect();
+      await config.DATABASE.sync();
    } catch (err) {
       log('ERROR', `Boot: ${err.message}`);
    }
