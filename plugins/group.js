@@ -5,6 +5,8 @@ import { numtoId } from '../lib/utils.js';
 import { Antilink } from '../lib/sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';
 import { setAnti } from '../lib/sql/antidel.js';
+import config from '../config.js';
+import { thumb } from './menu.js';
 
 bot(
 	{
@@ -61,6 +63,9 @@ bot(
 			isForwarded: true,
 			externalAdReply: {
 				showAdAttribution: true,
+				title: config.BOT_INFO.split(';')[0],
+				body: config.BOT_INFO.split(';')[1],
+				thumbnail: await thumb(),
 			},
 		};
 		for (const groupId of groupIds) {

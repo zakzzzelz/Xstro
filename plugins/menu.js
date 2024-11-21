@@ -5,6 +5,8 @@ import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';
 import { join } from 'path';
 
+export const thumb = await getLocalBuffer(join(process.cwd(), './media/thumb.jpg'));
+
 bot(
 	{
 		pattern: 'menu',
@@ -44,8 +46,7 @@ bot(
 			menuText += fancy(`╰──────────────\n`);
 		});
 
-		const image = await getLocalBuffer(join(process.cwd(), './media/thumb.jpg'));
-		return await message.send(image, { caption: menuText });
+		return await message.send(thumb, { caption: menuText });
 	},
 );
 
