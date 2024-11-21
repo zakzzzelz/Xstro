@@ -12,7 +12,6 @@ export default config = {
 	API_KEY: process.env.API_KEY || 'astro_fx-k56DdhdS7@gifted_api',
 	SESSION_ID: process.env.SESSION_ID || '',
 	BOT_INFO: process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ',
-	LOGS: toBool(process.env.LOGS) || false,
 	PREFIX: process.env.PREFIX || '.',
 	SUDO: process.env.SUDO || '',
 	STICKER_PACK: process.env.STICKER_PACK || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ',
