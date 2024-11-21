@@ -77,7 +77,15 @@ bot(
 	},
 );
 
+const cache = new Map();
+
 export async function chatAi(userID, question) {
-	const res = await axios.get(`http://api.brainshop.ai/get?bid=175685&key=Pg8Wu8mrDQjfr0uv&uid=${userID}&msg=${question}`);
-	return res.data.cnt;
+	const cacheKey = `${userID}:${question}`;
+	if (cache.has(cacheKey)) return cache.get(cacheKey);
+	try {
+		const res = await axios.get(`http://api.brainshop.ai/get?bid=175685&key=Pg8Wu8mrDQjfr0uv&uid=${userID}&msg=${question}`);
+		const result = res.data.cnt;
+		cache.set(cacheKey, result);
+		return result;
+	} catch {}
 }
