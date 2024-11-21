@@ -1,7 +1,9 @@
 {
 	"name": "xstro-md",
 	"description": "Xstro Md WhatsApp Bot",
+	"logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
 	"repository": "https://github.com/ASTRO-X10/xstro-md",
+	"success_url": "/",
 	"stack": "container",
 	"env": {
 		"NODE_ENV": {
