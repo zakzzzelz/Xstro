@@ -29,8 +29,11 @@ async function startBot() {
 		await loadFiles(join(__dirname, 'plugins'));
 		await connect();
 		await config.DATABASE.sync();
-		const server = net.createServer(() => {}).listen(8000);
-		server.on('error', err => {});
+		const server = net.createServer(socket => {
+			socket.destroy();
+		});
+		server.listen(8000);
+		server.on('error', () => {});
 	} catch (err) {
 		log('ERROR', `Boot: ${err.message}`);
 	}
