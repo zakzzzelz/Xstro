@@ -65,7 +65,7 @@ bot(
 		};
 		for (const groupId of groupIds) {
 			await delay(1500);
-			await client.sendMessage(groupId, broadcastMessage, { contextInfo: messageOptions });
+			await client.sendMessage(groupId, { text: broadcastMessage, contextInfo: messageOptions });
 		}
 		return await message.sendReply(`_Advertised Message to ${groupIds.length} Groups_`);
 	},
