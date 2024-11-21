@@ -48,9 +48,7 @@
    <br>
    <a href='https://app.koyeb.com/services/deploy/?type=git&repository=https%3A%2F%2Fgithub.com%2FAstroX11%2FXstro&branch=main&name=xstro-bot&builder=dockerfile&dockerfile=.%2Flib%2FDockerfile&ports=3000%3Bhttp%3B%2F&env%5BNODE_ENV%5D=production&env%5BSESSION_ID%5D=&env%5BSUDO%5D=2348039607375&env%5BCMD_REACT%5D=true&env%5BBOT_INFO%5D=Astro%3BXstro-Md%3B&env%5BMODE%5D=private&env%5BAUTO_STATUS_READ%5D=false&env%5BAUTO_READ%5D=false&env%5BSTICKER_PACK%5D=Astro%3BXstro&env%5BPREFIX%5D=.&env%5BLOGS%5D=false&env%5BPORT%5D=3000
    ' target="_blank"><img alt='DEPLOY' src='https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white'/></a>
-
-Here’s the updated guide with the new Git repository and updated environment variables:
-
+   
 ---
 
 ### RUN ON VPS && LOCAL
