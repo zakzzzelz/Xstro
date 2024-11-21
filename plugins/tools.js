@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
 import { shortUrl, textToPDF, TTS, uploadMedia } from './client/scrapers.js';
 

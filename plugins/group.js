@@ -1,12 +1,10 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { delay } from 'baileys';
 import { fancy } from './client/font.js';
 import { numtoId } from '../lib/utils.js';
 import { Antilink } from '../lib/sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';
 import { setAnti } from '../lib/sql/antidel.js';
-import config from '../config.js';
-import { thumb } from './menu.js';
 
 bot(
 	{

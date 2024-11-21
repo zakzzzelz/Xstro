@@ -1,5 +1,5 @@
 import config from '../config.js';
-import { commands, bot } from '../lib/client/plugins.js';
+import { commands, bot } from '../lib/handler.js';
 import { formatBytes, getLocalBuffer, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';

@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { ChatBot } from '../lib/sql/lydia.js';
 import { numtoId } from '../lib/utils.js';
 import axios from 'axios';

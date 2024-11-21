@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { InstaDL, Tiktok, twitter, YTV } from './client/scrapers.js';
 import { extractUrlFromMessage } from '../lib/utils.js';
 

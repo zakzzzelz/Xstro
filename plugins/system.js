@@ -2,7 +2,7 @@ import fs from 'fs';
 import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { performance } from 'perf_hooks';
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { endProcess, restartProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';

@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
 
 bot(

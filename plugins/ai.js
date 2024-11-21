@@ -1,4 +1,4 @@
-import { bot } from '../lib/client/plugins.js';
+import { bot } from '../lib/handler.js';
 import { DiffuseAI, Gemini, GPT4, Llama, Text2Img } from './client/ai.js';
 
 bot(
