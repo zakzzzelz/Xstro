@@ -3,7 +3,7 @@ import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/handler.js';
-import { endProcess, restartProcess, runtime } from '../lib/utils.js';
+import { endProcess, extractUrlFromMessage, restartProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
 
@@ -47,7 +47,7 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		const pluginUrl = match.trim();
+		const pluginUrl = extractUrlFromMessage(match.trim() || message.quoted?.text);
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
 
 		const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
