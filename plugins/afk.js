@@ -41,6 +41,7 @@ bot(
 bot(
 	{
 		on: 'text',
+		dontAddCommandList: true,
 	},
 	async (message, match, m) => {
 		const afkData = await getAfkMessage();
