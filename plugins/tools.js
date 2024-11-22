@@ -1,5 +1,5 @@
 import { bot } from '../lib/handler.js';
-import { extractUrlFromMessage } from '../lib/utils.js';
+import { extractUrlFromMessage, getBuffer } from '../lib/utils.js';
 import { shortUrl, textToPDF, TTS, uploadMedia } from './client/scrapers.js';
 
 bot(
@@ -62,5 +62,35 @@ bot(
 		const msg = await message.sendReply('_Processing..._');
 		const res = await uploadMedia(media);
 		return await msg.edit(res);
+	},
+);
+
+bot(
+	{
+		pattern: 'getpp',
+		isPublic: true,
+		desc: 'Get Another Person Profile Image',
+		type: 'tools',
+	},
+	async message => {
+		if (message.isGroup) {
+			const user = message.quoted?.sender || message.mention[0];
+			if (!user) return message.sendReply('_Reply Or Tag Someone_');
+			try {
+				const pp = await message.client.profilePictureUrl(user, 'image');
+				const res = await getBuffer(pp);
+				await message.send(res);
+			} catch {
+				message.sendReply('_No Profile Photo_');
+			}
+		} else {
+			try {
+				const pp = await message.client.profilePictureUrl(message.jid, 'image');
+				const res = await getBuffer(pp);
+				await message.send(res);
+			} catch {
+				message.sendReply('_No Profile Photo_');
+			}
+		}
 	},
 );

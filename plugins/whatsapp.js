@@ -300,3 +300,17 @@ bot(
 		}
 	},
 );
+
+bot(
+	{
+		pattern: 'edit',
+		isPublic: false,
+		desc: 'Edits A Sent Message',
+		type: 'whatsapp',
+	},
+	async (message, match, { prefix }) => {
+		if (!message.quoted) return message.sendReply('_Reply Your Own Message_');
+		if (!match) return await message.sendReply('```' + prefix + 'edit hello```');
+		await message.edit(match);
+	},
+);
