@@ -15,7 +15,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 
 		let jid;
 		if (message.quoted) {
@@ -76,7 +77,9 @@ bot(
 		type: 'Group',
 	},
 	async (message, match, m) => {
-		if (!message.isGroup || (!m.isAdmin && !m.isBotAdmin)) return message.sendReply(message.isGroup ? '_For Admin Only!_' : '_For Groups Only!_');
+		if (!message.isGroup) return message.sendReply('_For Groups only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 
 		const [settings] = await Antilink.findOrCreate({
 			where: { groupId: message.jid },
@@ -114,7 +117,8 @@ bot(
 	},
 	async (message, match, m) => {
 		if (!message.isGroup) return message.sendReply('_For Groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 
 		const groupId = message.jid;
 		const antiWordConfig = await AntiWord.findOrCreate({ where: { groupId } });
@@ -159,7 +163,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const countryCode = match?.trim().replace('+', '');
 		if (!countryCode || isNaN(countryCode)) return message.sendReply('_Please provide a valid country code._');
 		const metadata = await client.groupMetadata(m.from);
@@ -184,7 +189,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!message.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const subject = match || message.quoted?.text;
 		if (!subject) return message.sendReply('_Provide A New Name for the Group!_');
 		await client.groupUpdateSubject(message.jid, subject);
@@ -201,7 +207,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!message.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const desciption = match || message.quoted?.text;
 		await client.groupUpdateDescription(message.jid, desciption);
 		return message.sendReply('_Group Description Updated_');
@@ -217,7 +224,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
 		if (message.quoted) {
 			jid = message.quoted.sender;
@@ -244,7 +252,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
 		if (message.quoted) {
 			jid = message.quoted.sender;
@@ -271,7 +280,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
 		if (message.quoted) {
 			jid = message.quoted.sender;
@@ -295,7 +305,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const code = await client.groupInviteCode(message.jid);
 		return message.sendReply(`*_Invite Link: https://chat.whatsapp.com/${code}_*`);
 	},
@@ -323,19 +334,10 @@ bot(
 	},
 	async (message, match, m, client) => {
 		let [pollName, pollOptions] = match.split(';');
-
-		if (!pollOptions) {
-			return await message.sendReply(message.prefix + 'poll question;option1,option2,option3.....');
-		}
-
+		if (!pollOptions) return await message.sendReply(message.prefix + 'poll question;option1,option2,option3.....');
 		let options = [];
-		for (let option of pollOptions.split(',')) {
-			if (option && option.trim() !== '') {
-				options.push(option.trim());
-			}
-		}
-
-		await client.sendMessage(message.jid, {
+		for (let option of pollOptions.split(',')) if (option && option.trim() !== '') options.push(option.trim());
+		await client.sendMessage(m.from, {
 			poll: {
 				name: pollName,
 				values: options,
@@ -395,7 +397,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const metadata = await client.groupMetadata(m.from);
 		if (metadata.announce) return message.sendReply('_Group is already muted. Only admins can send messages._');
 		await client.groupSettingUpdate(m.from, 'announcement');
@@ -412,7 +415,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const metadata = await client.groupMetadata(m.from);
 		if (!metadata.announce) return message.sendReply('_Group is already unmuted. All members can send messages._');
 		await client.groupSettingUpdate(m.from, 'not_announcement');
@@ -450,7 +454,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		await client.groupRevokeInvite(message.jid);
 		return message.sendReply('_Group Link Revoked!_');
 	},
@@ -465,7 +470,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		if (!message.quoted?.image) return message.sendReply('_Reply An Image!_');
 		const img = await message.download();
 		await client.updateProfilePicture(m.from, img);
@@ -482,7 +488,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const meta = await client.groupMetadata(m.from);
 		if (meta.restrict) return message.sendReply('_Group is already locked to Admins._');
 		await client.groupSettingUpdate(m.from, 'locked');
@@ -499,7 +506,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const meta = await client.groupMetadata(m.from);
 		if (!meta.restrict) return message.sendReply('_Group is already unlocked for participants._');
 		await client.groupSettingUpdate(m.from, 'unlocked');
@@ -516,7 +524,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const joinRequests = await client.groupRequestParticipantsList(m.from);
 		if (!joinRequests || !joinRequests[0]) return await message.reply('_No Join Requests_');
 		let requestList = '*_Group Join Requets List_*\n\n';
@@ -538,7 +547,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 
 		const joinRequests = await client.groupRequestParticipantsList(m.from);
 		if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
@@ -564,7 +574,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		const joinRequests = await client.groupRequestParticipantsList(m.from);
 		if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
 		let rejectedUsers = [];
@@ -589,7 +600,8 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin && !m.isBotAdmin) return await message.sendReply('_For Admins Only!_');
+		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		await client.removeProfilePicture(m.from);
 		return await message.sendReply('_Group Profile Photo Removed!_');
 	},
