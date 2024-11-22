@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {string} text - Converts text to fancy fonts
+ * @returns string
+ */
 export function fancy(text) {
 	const alphabetMap = {
 		0: '𝟶',
@@ -68,4 +73,13 @@ export function fancy(text) {
 		.split('')
 		.map(char => alphabetMap[char] || char)
 		.join('');
+}
+
+/**
+ *
+ * @param {string} text - flips text to a reverse direction
+ * @returns string
+ */
+export function flipText(text) {
+	return text.split('').reverse().join('');
 }

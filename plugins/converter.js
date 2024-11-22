@@ -1,4 +1,5 @@
 import { bot } from '../lib/handler.js';
+import { flipText } from './client/font.js';
 import { flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
 
 bot(
@@ -61,5 +62,20 @@ bot(
 		const buff = await message.download();
 		const res = await toBlackVideo(buff);
 		return await message.send(res);
+	},
+);
+
+bot(
+	{
+		pattern: 'fliptext',
+		isPublic: true,
+		desc: 'Revserse text order',
+		type: 'converter',
+	},
+	async (message, match) => {
+		const text = match || message.quoted?.text;
+		if (!text) return message.sendReply('_I need text_');
+		const flipedtext = flipText(text);
+		return message.sendReply(flipedtext);
 	},
 );
