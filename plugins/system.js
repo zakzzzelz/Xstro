@@ -3,7 +3,7 @@ import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/handler.js';
-import { extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
+import { clearCache, extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
 
@@ -168,5 +168,18 @@ bot(
 	async message => {
 		await message.sendReply('_Shutting Down application..._');
 		await manageProcess('stop');
+	},
+);
+
+bot(
+	{
+		pattern: 'cache',
+		isPublic: true,
+		desc: 'Clear Cache',
+		type: 'system',
+	},
+	async message => {
+		const clearedSize = await clearCache();
+		await message.sendReply(`\`\`\`Cache cleared. ${clearedSize} MB Cleaned\`\`\``);
 	},
 );
