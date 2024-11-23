@@ -12,6 +12,7 @@
 	"dependencies": {
 		"axios": "^1.7.7",
 		"baileys": "github:ASTRO-X10/baileys",
+		"date-fns": "^4.1.0",
 		"dotenv": "^16.4.5",
 		"file-type": "^19.6.0",
 		"pg": "^8.13.1",

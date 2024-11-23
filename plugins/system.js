@@ -3,7 +3,7 @@ import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/handler.js';
-import { endProcess, extractUrlFromMessage, restartProcess, runtime } from '../lib/utils.js';
+import { extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
 
@@ -154,7 +154,7 @@ bot(
 	},
 	async message => {
 		await message.sendReply('_Restarting application..._');
-		await restartProcess();
+		await manageProcess('restart');
 	},
 );
 
@@ -167,6 +167,6 @@ bot(
 	},
 	async message => {
 		await message.sendReply('_Shutting Down application..._');
-		await endProcess();
+		await manageProcess('stop');
 	},
 );

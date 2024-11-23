@@ -1,7 +1,7 @@
 import { bot } from '../lib/handler.js';
 import { exec } from 'child_process';
 import simplegit from 'simple-git';
-import { restartProcess } from '../lib/utils.js';
+import { manageProcess } from '../lib/utils.js';
 
 const git = simplegit();
 bot(
@@ -20,7 +20,7 @@ bot(
 			exec('git stash && git pull origin master', async (err, stderr) => {
 				if (err) return await message.sendReply('```' + stderr + '```');
 				await message.sendReply('_Rebooting Bot_');
-				restartProcess();
+				await manageProcess('restart');
 				message.sendReply('_Restart Complete_');
 			});
 		} else {
