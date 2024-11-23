@@ -8,4 +8,4 @@ RUN apt-get update && \
 RUN git clone https://github.com/AstroX11/Xstro.git .
 RUN yarn install --network-timeout 1000000
 EXPOSE 8000
-CMD ["pm2-runtime", "start", "npm", "--", "start"]
+CMD ["npm", "start"]
