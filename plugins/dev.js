@@ -29,7 +29,7 @@ bot(
 							maxStringLength: null,
 					  });
 
-			await message.sendReply(`*Result:*\n\`\`\`${output}\`\`\``);
+			return await message.sendReply(`*Result:*\n\`\`\`${output}\`\`\``);
 		} catch (error) {
 			const errorMessage = error.stack || error.message || String(error);
 			await message.sendReply(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
