@@ -1,6 +1,6 @@
-### XSTRO MD BOT
+### Xstro MD WhatsApp Bot
 
-<p>This is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used **fetch** or **axios** to keep it lightweight and fast. All you need is a decent internet connection from your server.</p>
+<p>This is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used Axios to keep it lightweight and fast. All you need is a decent internet connection from your server.</p>
 
 ### SETUP
 
@@ -16,15 +16,11 @@ Grab a session to start using the bot.
 
 [![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://xstro-pair-ajbz.onrender.com)
 
----
-
-## IMPORTANT TO NOTE
+## Warning
 
 I’m not responsible for you messing around and getting your account banned. As long as you don’t modify the source code to fit your idiotic needs, you’re fine. But seriously, don’t go spamming others. I’m tired of repeating this.
 
----
-
-## DEPLOY TO DIFFERENT PLATFORMS
+## DEPLOYMENT TO PLATFORMS
 
 ### Deploy to Render
 
@@ -38,8 +34,6 @@ I’m not responsible for you messing around and getting your account banned. As
 
 [![Deploy to Render](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
 
----
-
 ### Deploy to Heroku
 
 1. Create an account on Heroku if you don’t have one.
@@ -49,8 +43,6 @@ I’m not responsible for you messing around and getting your account banned. As
 2. Deploy the bot.
 
 [![Deploy to Heroku](https://img.shields.io/badge/-Deploy-black?style=for-the-badge&logo=heroku&logoColor=white)](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
-
----
 
 ### Deploy to Koyeb
 
@@ -64,8 +56,6 @@ I’m not responsible for you messing around and getting your account banned. As
 
 [![Deploy to Koyeb](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://app.koyeb.com/services/deploy/?type=git&repository=https%3A%2F%2Fgithub.com%2FAstroX11%2FXstro&branch=main&name=xstro-bot&builder=dockerfile&dockerfile=.%2Flib%2FDockerfile&ports=3000%3Bhttp%3B%2F&env%5BNODE_ENV%5D=production&env%5BSESSION_ID%5D=&env%5BSUDO%5D=2348039607375&env%5BCMD_REACT%5D=true&env%5BBOT_INFO%5D=Astro%3BXstro-Md%3B&env%5BMODE%5D=private&env%5BAUTO_STATUS_READ%5D=false&env%5BAUTO_READ%5D=false&env%5BSTICKER_PACK%5D=Astro%3BXstro&env%5BPREFIX%5D=.&env%5BLOGS%5D=false&env%5BPORT%5D=3000)
 
----
-
 ### Deploy to Replit
 
 1. Create an account on Replit if you don’t have one.
@@ -76,7 +66,12 @@ I’m not responsible for you messing around and getting your account banned. As
 
 [![Deploy to Replit](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=replit&logoColor=white)](https://replit.com/github/AstroX11/Xstro)
 
----
+### Deploy to Codespaces
+
+1. Click Below to run on codespaces
+
+[![Run on Codespaces](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/codespaces/new?skip_quickstart=true&machine=standardLinux32gb&repo=882210451&ref=master&geo=EuropeWest)
+
 
 ## RUN ON VPS OR LOCALLY
 
@@ -124,14 +119,10 @@ npm start
 npm stop
 ```
 
----
-
 ## CONTRIBUTING
 
 If you want to help out or contribute to the project, feel free to fork the repo and create a pull request. Just don’t break anything.
 
 [![Contribute](https://img.shields.io/badge/CONTRIBUTE-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AstroX11/Xstro/blob/master/.github/contributing.md)
-
----
 
 [![Join WhatsApp Group](https://img.shields.io/badge/Join_WhatsApp-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/KxwEnQlmjWdAAQCfUaKgu4)
