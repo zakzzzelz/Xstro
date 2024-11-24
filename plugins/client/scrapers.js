@@ -74,6 +74,23 @@ export async function toBlackVideo(buffer, color = 'black') {
 	return Buffer.from(response.data);
 }
 
+export async function convertToOpus(buffer) {
+	const formData = new FormData();
+	formData.append('audio', buffer, {
+		filename: 'audio.mp3',
+		contentType: 'audio/mpeg',
+	});
+
+	const response = await fetch(config.BASE_API_URL, {
+		method: 'POST',
+		body: formData,
+		headers: formData.getHeaders(),
+	});
+
+	if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+	return Buffer.from(await response.arrayBuffer());
+}
+
 export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';')[1], author = config.STICKER_PACK.split(';')[0]) => {
 	const fileType = await fileTypeFromBuffer(buffer);
 	if (!fileType) throw new Error('Unsupported or unknown file type');

@@ -1,6 +1,6 @@
 import { bot } from '../lib/handler.js';
 import { flipText } from './client/font.js';
-import { flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
+import { convertToOpus, flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
 
 bot(
 	{
@@ -77,5 +77,20 @@ bot(
 		if (!text) return message.sendReply('_I need text_');
 		const flipedtext = flipText(text);
 		return message.sendReply(flipedtext);
+	},
+);
+
+bot(
+	{
+		pattern: 'ppt',
+		isPublic: true,
+		desc: 'Converts Audio to PPT',
+		type: 'converter',
+	},
+	async message => {
+		if (!message.quoted?.audio) return message.sendReply('_Reply An Audio_');
+		const media = await message.download();
+		const buff = await convertToOpus(media);
+		return await message.send(buff);
 	},
 );

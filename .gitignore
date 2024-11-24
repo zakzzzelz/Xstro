@@ -2,8 +2,5 @@ node_modules
 database.db
 test.js
 package-lock.json
-index.js
-logs
-help.js
 session
-yarn.lock
+temp
