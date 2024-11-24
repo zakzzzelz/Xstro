@@ -180,6 +180,6 @@ bot(
 	},
 	async message => {
 		const clearedSize = await clearCache();
-		await message.sendReply(`\`\`\`Cache cleared. ${clearedSize} MB Cleaned\`\`\``);
+		await message.sendReply(`\`\`\`${clearedSize} MB Cache Cleared.\`\`\``);
 	},
 );

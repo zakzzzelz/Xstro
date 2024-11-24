@@ -10,10 +10,10 @@ bot(
 		desc: 'Download ViewOnce Messages',
 		type: 'whatsapp',
 	},
-	async instance => {
-		if (!instance.quoted.viewonce) return instance.sendReply('_Reply A ViewOnce_');
-		const media = await instance.download();
-		return await instance.send(media);
+	async message => {
+		if (!message.quoted.viewonce) return message.sendReply('_Reply A ViewOnce_');
+		const media = await message.download();
+		return await message.send(media);
 	},
 );
 
@@ -55,7 +55,7 @@ bot(
 		desc: 'quoted message',
 		type: 'whatsapp',
 	},
-	async (message, match) => {
+	async message => {
 		if (!message.quoted) return await message.sendReply('_Reply A Message_');
 		let key = message.quoted.key.id;
 		let msg = await loadMessage(key);
@@ -86,19 +86,8 @@ bot(
 		desc: 'archive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (message, match, m, client) => {
-		const lstMsg = {
-			message: m.message,
-			key: m.key,
-			messageTimestamp: message.timestamp,
-		};
-		await client.chatModify(
-			{
-				archive: true,
-				lastMessages: [lstMsg],
-			},
-			message.jid,
-		);
+	async message => {
+		await message.archiveChat(true);
 		await message.sendReply('_Archived_');
 	},
 );
@@ -110,19 +99,8 @@ bot(
 		desc: 'unarchive whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (message, match, m, client) => {
-		const lstMsg = {
-			message: m.message,
-			key: m.key,
-			messageTimestamp: message.timestamp,
-		};
-		await client.chatModify(
-			{
-				archive: false,
-				lastMessages: [lstMsg],
-			},
-			message.jid,
-		);
+	async message => {
+		await message.archiveChat(false);
 		await message.sendReply('_Unarchived_');
 	},
 );
@@ -153,19 +131,8 @@ bot(
 		desc: 'delete whatsapp chat',
 		type: 'whatsapp',
 	},
-	async (message, match) => {
-		await message.client.chatModify(
-			{
-				delete: true,
-				lastMessages: [
-					{
-						key: message.data.key,
-						messageTimestamp: message.timestamp,
-					},
-				],
-			},
-			message.jid,
-		);
+	async message => {
+		await message.clearChat();
 		await message.sendReply('_Cleared_');
 	},
 );
