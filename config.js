@@ -18,7 +18,7 @@ export default config = {
 	AUTO_READ: toBool(process.env.AUTO_READ) || false,
 	AUTO_STATUS_READ: toBool(process.env.AUTO_STATUS_READ) || false,
 	MODE: process.env.MODE || 'private',
-	CMD_REACT: process.env.CMD_REACT || true,
+	CMD_REACT: process.env.CMD_REACT || false,
 	LOGGER: process.env.LOGGER || false,
 	VERSION: require('./package.json').version,
 	DATABASE:
