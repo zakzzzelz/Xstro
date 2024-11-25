@@ -1,6 +1,6 @@
 import { bot } from '../lib/handler.js';
 import { ChatBot } from '../lib/sql/lydia.js';
-import { numtoId } from '../lib/utils.js';
+import { getJson, numtoId } from '../lib/utils.js';
 import axios from 'axios';
 
 export const upsertChatBot = async (chat, type, enabled) => {
@@ -67,25 +67,16 @@ bot(
 		isPublic: true,
 	},
 	async message => {
+		if (!message.text) return
 		const chatEnabled = await isChatBotEnabled(message.jid);
 		if (chatEnabled) {
-			const userID = message.sender;
-			const question = message.text;
-			const aiResponse = await chatAi(userID, question);
+			const aiResponse = await chatAi(message.text);
 			await message.sendReply(aiResponse);
 		}
 	},
 );
 
-const cache = new Map();
-
-export async function chatAi(userID, question) {
-	const cacheKey = `${userID}:${question}`;
-	if (cache.has(cacheKey)) return cache.get(cacheKey);
-	try {
-		const res = await axios.get(`http://api.brainshop.ai/get?bid=175685&key=Pg8Wu8mrDQjfr0uv&uid=${userID}&msg=${question}`);
-		const result = res.data.cnt;
-		cache.set(cacheKey, result);
-		return result;
-	} catch {}
+export async function chatAi(query) {
+	const res = await getJson(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${query}`)
+	return res.cnt
 }
