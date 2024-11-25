@@ -6,10 +6,6 @@
 	"success_url": "/",
 	"stack": "container",
 	"env": {
-		"NODE_ENV": {
-			"description": "Set the Node environment to production.",
-			"value": "production"
-		},
 		"SESSION_ID": {
 			"description": "Session ID for authentication or tracking.",
 			"required": true
@@ -17,11 +13,6 @@
 		"SUDO": {
 			"description": "User ID with sudo permissions for the bot.",
 			"value": "2348039607375",
-			"required": false
-		},
-		"CMD_REACT": {
-			"description": "Command or reaction for bot responses.",
-			"value": "true",
 			"required": false
 		},
 		"BOT_INFO": {
@@ -54,7 +45,7 @@
 			"value": ".",
 			"required": false
 		},
-		"LOGS": {
+		"LOGGER": {
 			"description": "Logs every activity from the bot, for nerds",
 			"value": "false",
 			"required": false
@@ -66,5 +57,7 @@
 			"size": "standard-1x"
 		}
 	},
-	"addons": ["heroku-postgresql"]
+	"addons": [
+		"heroku-postgresql"
+	]
 }
