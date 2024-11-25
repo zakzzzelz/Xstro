@@ -1,7 +1,6 @@
 import { bot } from '../lib/handler.js';
 import { ChatBot } from '../lib/sql/lydia.js';
 import { getJson, numtoId } from '../lib/utils.js';
-import axios from 'axios';
 
 export const upsertChatBot = async (chat, type, enabled) => {
 	await ChatBot.upsert({ chat, type, enabled });
