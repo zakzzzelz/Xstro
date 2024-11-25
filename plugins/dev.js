@@ -1,5 +1,6 @@
 import { bot } from '../lib/handler.js';
 import { inspect } from 'util';
+import { isSudo } from '../lib/sql/sudo.js';
 
 bot(
 	{
@@ -7,7 +8,8 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, m, client) => {
-		if (!m.sudo) return;
+		const owner = isSudo(message.sender)
+		if (!owner) return
 		if (!message.text.startsWith('$ ')) return;
 
 		const code = message.text.slice(2).trim().replace(/\$\s*/g, '');
@@ -19,15 +21,15 @@ bot(
 				result === undefined
 					? 'undefined'
 					: result === null
-					? 'null'
-					: typeof result === 'function'
-					? result.toString()
-					: inspect(result, {
-							depth: null,
-							colors: false,
-							maxArrayLength: null,
-							maxStringLength: null,
-					  });
+						? 'null'
+						: typeof result === 'function'
+							? result.toString()
+							: inspect(result, {
+								depth: null,
+								colors: false,
+								maxArrayLength: null,
+								maxStringLength: null,
+							});
 
 			return await message.sendReply(`*Result:*\n\`\`\`${output}\`\`\``);
 		} catch (error) {
