@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FormData from 'form-data';
-import { getBuffer, getJson, getRandom } from '../../lib/utils.js';
+import { getBuffer, getJson } from '../../lib/utils.js';
 import config from '../../config.js';
 import { fileTypeFromBuffer } from 'file-type';
 
@@ -106,24 +106,3 @@ export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';'
 	});
 	return res.data;
 };
-
-export async function Tiktok(url) {
-	const res = await getJson(`https://bk9.fun/download/tiktok?url=${encodeURIComponent(url)}`);
-	const { BK9, desc } = res.BK9;
-	const buffer = await getBuffer(BK9);
-	return { buffer, desc };
-}
-
-export async function InstaDL(url) {
-	const res = await getJson(`https://bk9.fun/download/instagram2?url=${encodeURIComponent(url)}`);
-	const data = getRandom(res.BK9);
-	const buffer = await getBuffer(data.url);
-	return buffer;
-}
-
-export async function YTV(url) {
-	const res = await getJson(`https://bk9.fun/download/youtube?url=${encodeURIComponent(url)}`);
-	const { title, mediaLink } = res.BK9[0];
-	const buffer = await getBuffer(mediaLink);
-	return { buffer, title };
-}
