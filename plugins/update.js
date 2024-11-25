@@ -2,6 +2,7 @@ import { bot } from '../lib/handler.js';
 import { exec } from 'child_process';
 import simplegit from 'simple-git';
 import { manageProcess } from '../lib/utils.js';
+import { updateHerokuApp } from './client/heroku.js';
 
 const git = simplegit();
 bot(
@@ -29,3 +30,16 @@ bot(
 		}
 	},
 );
+
+bot(
+	{
+		pattern: 'redeploy',
+		isPublic: false,
+		desc: 'Fully Updates & Redeploy Heroku App',
+		type: 'system'
+	},
+	async (message) => {
+		if (!process.env.HEROKU_APP_NAME && !process.env.HEROKU_API_KEY) return message.sendReply('```HEROKU API KEY OR APP NAME NOT FOUND | INVAILD REQUEST```')
+		await updateHerokuApp()
+	}
+)

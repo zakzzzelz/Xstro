@@ -6,6 +6,14 @@
 	"success_url": "/",
 	"stack": "container",
 	"env": {
+		"HEROKU_API_KEY": {
+			"description": "Heroku Account Api Key",
+			"required": true
+		},
+		"HEROKU_APP_NAME": {
+			"description": "Heroku App Name, Must Be the same above else you can't upgrade",
+			"required": true
+		},
 		"SESSION_ID": {
 			"description": "Session ID for authentication or tracking.",
 			"required": true
