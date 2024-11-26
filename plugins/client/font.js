@@ -1,3 +1,4 @@
+import axios from 'axios'
 /**
  *
  * @param {string} text - Converts text to fancy fonts
@@ -82,4 +83,18 @@ export function fancy(text) {
  */
 export function flipText(text) {
 	return text.split('').reverse().join('');
+}
+
+
+export async function fancyText(inputText, option = null) {
+	const apiUrl = `https://api.giftedtech.my.id/api/tools/fancy?apikey=gifted&text=${encodeURIComponent(inputText)}`;
+
+	const response = await axios.get(apiUrl);
+	if (response.data.status === 200 && response.data.success) {
+		const results = response.data.results;
+		if (option !== null && !isNaN(option) && option >= 0 && option < results.length) {
+			return results[option].result || "Invalid style selected.";
+		}
+		return results.map(r => r.result).filter(r => r).join("\n");
+	}
 }

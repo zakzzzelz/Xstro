@@ -1,5 +1,5 @@
 import { bot } from '../lib/handler.js';
-import { flipText } from './client/font.js';
+import { fancyText, flipText } from './client/font.js';
 import { convertToOpus, flipMedia, toBlackVideo, toSticker } from './client/scrapers.js';
 
 bot(
@@ -93,4 +93,25 @@ bot(
 		const buff = await convertToOpus(media);
 		return await message.send(buff);
 	},
+);
+
+
+bot(
+	{
+		pattern: 'fancy',
+		isPublic: true,
+		desc: 'Converts text to Fancy Text',
+		type: 'converter'
+	},
+	async (message, match, { prefix }) => {
+		const input = match.split(";");
+		const text = input[0]?.trim();
+		const styleOption = input[1] ? parseInt(input[1].trim(), 10) : null;
+
+		if (!text) return await message.sendReply(`\`\`\`FANCY TEXT MAKER\n\n${prefix}fancy astro\n\n${prefix}fancy astro;8\`\`\``);
+
+		const fancyOutput = await fancyText(text, styleOption);
+		await message.sendReply(fancyOutput);
+
+	}
 );

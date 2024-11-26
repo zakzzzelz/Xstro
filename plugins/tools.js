@@ -1,6 +1,10 @@
+import config from '../config.js';
 import { bot } from '../lib/handler.js';
-import { extractUrlFromMessage, getBuffer } from '../lib/utils.js';
+import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
 import { shortUrl, textToPDF, TTS, uploadMedia } from './client/scrapers.js';
+
+const { API_KEY } = config
+const base_url = `https://api.giftedtech.my.id/api/tools/`
 
 bot(
 	{
@@ -94,3 +98,18 @@ bot(
 		}
 	},
 );
+
+bot(
+	{
+		pattern: 'obfuscate',
+		isPublic: true,
+		desc: 'Obfuscates A Js code',
+		type: 'tools'
+	},
+	async (message, match) => {
+		const code = match || message.quoted?.text
+		if (!code) return message.sendReply('```Provide JS Code```')
+		const res = await getJson(`${base_url}encrypt?apikey=${API_KEY}&code=${code}`)
+		return await message.sendReply(res.encrypted_code)
+	}
+)
