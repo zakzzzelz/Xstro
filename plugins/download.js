@@ -28,7 +28,7 @@ bot(
 		desc: 'Downloads Instagram Videos',
 		type: 'download'
 	},
-	async (message) => {
+	async (message, match) => {
 		const req = extractUrlFromMessage(match || message.reply_message?.text)
 		if (!req) return message.sendReply('```I need Instagram Url!````')
 		const res = await getJson(`${base_url}instadl?apikey=${API_KEY}&url=${req}`)
