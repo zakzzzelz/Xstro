@@ -2,7 +2,7 @@ import config from '../config.js'
 import { bot } from '../lib/handler.js'
 import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js'
 
-const base_url = 'https://api.giftedtech.my.id/api/download/'
+export const base_url = 'https://api.giftedtech.my.id/api/download/'
 const { API_KEY } = config
 
 bot(
@@ -100,7 +100,7 @@ bot(
 		const res = await getJson(`${base_url}tgs?apikey=${API_KEY}&url=${req}`);
 		for (const sticker of res.results) {
 			const buff = await getBuffer(sticker)
-			await message.send(buff)
+			await message.send(buff, { type: 'sticker' })
 		}
 	}
 )
