@@ -1,6 +1,7 @@
 import { bot } from '../lib/handler.js';
 import { setAnti } from '../lib/sql/antidel.js';
 import { disableAntiVV, enableAntiVV, getStatus } from '../lib/sql/antivv.js';
+import { remini } from './client/scrapers.js';
 
 bot(
 	{
@@ -50,3 +51,49 @@ bot(
 		return await message.sendReply('_Use:\n- `antivv all` to enable for all chats\n- `antivv dm` to enable for direct messages\n- `antivv gc` to enable for group chats\n- `antivv disable` to disable Anti-ViewOnce._');
 	},
 );
+
+bot(
+	{
+		pattern: 'upscale',
+		isPublic: true,
+		desc: 'Upscale an Image',
+		type: 'misc'
+	},
+	async (message) => {
+		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		const media = await message.download()
+		const buff = await remini(media, 'enhance')
+		return await message.send(buff)
+
+	}
+)
+
+bot(
+	{
+		pattern: 'recolor',
+		isPublic: true,
+		desc: 'Recolors dead Image',
+		type: 'misc'
+	},
+	async (message) => {
+		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		const media = await message.download()
+		const buff = await remini(media, 'recolor')
+		return await message.send(buff)
+	}
+)
+
+bot(
+	{
+		pattern: 'dehaze',
+		isPublic: true,
+		desc: 'Dehazes an Image',
+		type: 'misc'
+	},
+	async (message) => {
+		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		const media = await message.download()
+		const buff = await remini(media, 'dehaze')
+		return await message.send(buff)
+	}
+)

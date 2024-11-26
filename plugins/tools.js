@@ -19,17 +19,17 @@ bot(
 
 bot(
 	{
-		pattern: 'surl',
+		pattern: 'short',
 		isPublic: true,
 		desc: 'Shortens Provide Url',
 		type: 'tools',
 	},
 	async (message, match) => {
 		const url = extractUrlFromMessage(match || message.quoted?.text);
-		if (!url) return message.sendReply('_No Url Found!_\n_Provide a vaild url, ex. https://google.com_');
-		const msg = await message.sendReply('_Wait_');
+		if (!url) return message.sendReply('```I NEED A VAILD URL```');
+		const msg = await message.sendReply('```SHORTING LINK```');
 		const link = await shortUrl(url);
-		return msg.edit(link);
+		return msg.edit(`${link}`);
 	},
 );
 

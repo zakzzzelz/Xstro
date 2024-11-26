@@ -1,3 +1,4 @@
+import fs from 'fs'
 import axios from 'axios';
 import FormData from 'form-data';
 import { getBuffer, getJson } from '../../lib/utils.js';
@@ -20,8 +21,8 @@ export async function textToPDF(text) {
 }
 
 export async function shortUrl(url) {
-	const res = await getJson(`https://bk9.fun/tools/shortlink?url=${encodeURIComponent(url)}`);
-	return res.BK9;
+	const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`)
+	return res.link
 }
 
 export async function TTS(text) {
@@ -105,4 +106,35 @@ export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';'
 		responseType: 'arraybuffer',
 	});
 	return res.data;
+};
+
+export const remini = async (image, filterType) => {
+	const availableFilters = ['enhance', 'recolor', 'dehaze'];
+	const selectedFilter = availableFilters.includes(filterType) ? filterType : availableFilters[0];
+
+	const form = new FormData();
+	const apiUrl = `https://inferenceengine.vyro.ai/${selectedFilter}`;
+
+	form.append('model_version', 1);
+
+	const imageBuffer = Buffer.isBuffer(image) ? image : fs.readFileSync(image);
+	form.append('image', imageBuffer, {
+		filename: 'enhance_image_body.jpg',
+		contentType: 'image/jpeg',
+	});
+
+	try {
+		const response = await axios.post(apiUrl, form, {
+			headers: {
+				...form.getHeaders(),
+				'User-Agent': 'okhttp/4.9.3',
+				Connection: 'Keep-Alive',
+				'Accept-Encoding': 'gzip',
+			},
+			responseType: 'arraybuffer',
+		});
+		return Buffer.from(response.data);
+	} catch (error) {
+		throw new Error(`Error enhancing image: ${error.message}`);
+	}
 };
