@@ -5,7 +5,6 @@ import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';
 import { join } from 'path';
 
-export const thumb = await getLocalBuffer(join(process.cwd(), './media/thumb.jpg'));
 
 bot(
 	{
@@ -46,7 +45,7 @@ bot(
 			menuText += fancy(`╰──────────────\n`);
 		});
 
-		return await message.send(thumb, { caption: menuText });
+		return await message.send(menuText);
 	},
 );
 
@@ -57,7 +56,7 @@ bot(
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},
-	async (message, match, { prefix }) => {
+	async (message) => {
 		let menu = '*_xstro commands list_*\n\n';
 		let cmdList = [];
 		let cmd, desc;
