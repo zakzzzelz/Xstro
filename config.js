@@ -1,9 +1,9 @@
-import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
+dotenv.config();
+import { Sequelize } from 'sequelize';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
 let config;
-dotenv.config();
 
 const toBool = x => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
@@ -20,22 +20,24 @@ export default config = {
 	MODE: process.env.MODE || 'private',
 	CMD_REACT: process.env.CMD_REACT || false,
 	LOGGER: process.env.LOGGER || false,
+	HEROKU_API_KEY: process.env.HEROKU_API_KEY || '',
+	HEROKU_APP_NAME: process.env.HEROKU_APP_NAME || '',
 	VERSION: require('./package.json').version,
 	DATABASE:
 		DATABASE_URL === './database.db'
 			? new Sequelize({
-					dialect: 'sqlite',
-					storage: DATABASE_URL,
-					logging: false,
-			  })
+				dialect: 'sqlite',
+				storage: DATABASE_URL,
+				logging: false,
+			})
 			: new Sequelize(DATABASE_URL, {
-					dialect: 'postgres',
-					ssl: true,
-					protocol: 'postgres',
-					dialectOptions: {
-						native: true,
-						ssl: { require: true, rejectUnauthorized: false },
-					},
-					logging: false,
-			  }),
+				dialect: 'postgres',
+				ssl: true,
+				protocol: 'postgres',
+				dialectOptions: {
+					native: true,
+					ssl: { require: true, rejectUnauthorized: false },
+				},
+				logging: false,
+			}),
 };
