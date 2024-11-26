@@ -11,7 +11,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.quoted.viewonce) return message.sendReply('_Reply A ViewOnce_');
+		if (!message.reply_message.viewonce) return message.sendReply('_Reply A ViewOnce_');
 		const media = await message.download();
 		return await message.send(media);
 	},
@@ -25,7 +25,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		const newName = match || message.quoted?.text;
+		const newName = match || message.reply_message?.text;
 		if (!newName) return message.sendReply('_Provide A New Name_');
 		if (newName > 25) return message.sendReply('_Only 25 letters allowed bro_');
 		await message.client.updateProfileName(newName);
@@ -41,7 +41,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.quoted?.image) return message.sendReply('_Reply An Image_');
+		if (!message.reply_message?.image) return message.sendReply('_Reply An Image_');
 		const img = await message.download();
 		await message.client.updateProfilePicture(message.user, img);
 		return await message.sendReply('_Profile Picture Updated_');
@@ -56,8 +56,8 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.quoted) return await message.sendReply('_Reply A Message_');
-		let key = message.quoted.key.id;
+		if (!message.reply_message) return await message.sendReply('_Reply A Message_');
+		let key = message.reply_message.key.id;
 		let msg = await loadMessage(key);
 		if (!msg) return await message.sendReply('_Message not found maybe bot might not be running at that time_');
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
@@ -74,7 +74,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.quoted) return message.sendReply('_Reply A Message_');
+		if (!message.reply_message) return message.sendReply('_Reply A Message_');
 		return await message.delete();
 	},
 );
@@ -184,8 +184,8 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.quoted) return message.sendReply('_Reply A Status_');
-		const msg = await message.quoted;
+		if (!message.reply_message) return message.sendReply('_Reply A Status_');
+		const msg = await message.reply_message;
 		await message.copyNForward(message.user, msg, { quoted: msg });
 	},
 );
@@ -198,7 +198,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!message.quoted) return message.sendReply('_Reply A Message!_');
+		if (!message.reply_message) return message.sendReply('_Reply A Message!_');
 		let jid;
 		if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
@@ -206,7 +206,7 @@ bot(
 			jid = numtoId(match);
 		}
 		if (!jid) return message.sendReply('_You have to provide a number/tag someone_');
-		const msg = message.quoted;
+		const msg = message.reply_message;
 		await message.forward(jid, msg, { quoted: msg });
 		return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, { mentions: [jid] });
 	},
@@ -221,8 +221,8 @@ bot(
 	},
 	async (message, match, m) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -249,8 +249,8 @@ bot(
 	},
 	async (message, match, m) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -276,7 +276,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match, { prefix }) => {
-		if (!message.quoted) return message.sendReply('_Reply Your Own Message_');
+		if (!message.reply_message) return message.sendReply('_Reply Your Own Message_');
 		if (!match) return await message.sendReply('```' + prefix + 'edit hello```');
 		await message.edit(match);
 	},

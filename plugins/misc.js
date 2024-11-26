@@ -65,7 +65,7 @@ bot(
 		type: 'misc'
 	},
 	async (message) => {
-		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_')
 		const media = await message.download()
 		const buff = await remini(media, 'enhance')
 		return await message.send(buff)
@@ -81,7 +81,7 @@ bot(
 		type: 'misc'
 	},
 	async (message) => {
-		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_')
 		const media = await message.download()
 		const buff = await remini(media, 'recolor')
 		return await message.send(buff)
@@ -96,7 +96,7 @@ bot(
 		type: 'misc'
 	},
 	async (message) => {
-		if (!message.quoted?.image) return message.sendReply('_Reply An Image Only!_')
+		if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_')
 		const media = await message.download()
 		const buff = await remini(media, 'dehaze')
 		return await message.send(buff)
@@ -132,7 +132,7 @@ bot(
 		type: 'misc'
 	},
 	async (message, match) => {
-		const query = match || message.quoted?.text
+		const query = match || message.reply_message?.text
 		if (!query) return await message.sendReply("Please provide a query term for ebase.");
 		const apiUrl = `${base_url}ebase?apikey=${API_KEY}&query=${encodeURIComponent(query)}`;
 		const data = await getJson(apiUrl);
@@ -149,7 +149,7 @@ bot(
 		type: 'misc'
 	},
 	async (message, match) => {
-		const query = match || message.quoted?.text;
+		const query = match || message.reply_message?.text;
 		if (!query) return await message.sendReply("Please provide a query term for dbase.");
 		const apiUrl = `${base_url}dbase?apikey=${API_KEY}&query=${encodeURIComponent(query)}`;
 		const data = await getJson(apiUrl);
@@ -165,7 +165,7 @@ bot(
 		type: 'misc'
 	},
 	async (message, match) => {
-		const query = match || message.quoted?.text;
+		const query = match || message.reply_message?.text;
 		const url = extractUrlFromMessage(query)
 		if (!url) return message.sendReply('```I need url```')
 		const apiUrl = `${base_url}sspc?apikey=${API_KEY}&url=${encodeURIComponent(query)}`;

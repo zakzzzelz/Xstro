@@ -14,7 +14,7 @@ bot(
 		type: 'search',
 	},
 	async (message, match) => {
-		const req = match || message.quoted?.text;
+		const req = match || message.reply_message?.text;
 		if (!req) return message.sendReply('_Give me song Name_');
 		const res = await getJson(`https://itzpire.com/search/lyrics?query=${req}`);
 		const { title, album, thumb, lyrics } = res.data;

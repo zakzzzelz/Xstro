@@ -15,8 +15,8 @@ bot(
 		let reason;
 
 		if (message.isGroup) {
-			if (message.quoted) {
-				jid = message.quoted.sender;
+			if (message.reply_message) {
+				jid = message.reply_message.sender;
 			} else if (message.mention && message.mention[0]) {
 				jid = message.mention[0];
 			} else if (match) {
@@ -71,8 +71,8 @@ bot(
 	},
 	async (message, match, m) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -96,8 +96,8 @@ bot(
 	},
 	async (message, match, m) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {

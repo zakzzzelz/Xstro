@@ -47,7 +47,7 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		const pluginUrl = extractUrlFromMessage(match.trim() || message.quoted?.text);
+		const pluginUrl = extractUrlFromMessage(match.trim() || message.reply_message?.text);
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
 
 		const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;

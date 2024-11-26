@@ -14,7 +14,7 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		const textMsg = match || message.quoted?.text;
+		const textMsg = match || message.reply_message?.text;
 		if (!textMsg) return message.sendReply('_Reply/Provide Text Message_');
 		const doc = await textToPDF(textMsg);
 		return await message.send(doc);
@@ -29,7 +29,7 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		const url = extractUrlFromMessage(match || message.quoted?.text);
+		const url = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!url) return message.sendReply('```I NEED A VAILD URL```');
 		const msg = await message.sendReply('```SHORTING LINK```');
 		const link = await shortUrl(url);
@@ -45,7 +45,7 @@ bot(
 		type: 'tools',
 	},
 	async (message, match, { pushName }) => {
-		const text = match || message.quoted?.text;
+		const text = match || message.reply_message?.text;
 		if (!text) return message.sendReply(`_${pushName} you didn't provide me text_`);
 		const data = await TTS(text);
 		return await message.send(data);
@@ -60,7 +60,7 @@ bot(
 		type: 'tools',
 	},
 	async message => {
-		if (!message.quoted?.image && !message.quoted?.video) return message.sendReply('_Reply Image/Video_');
+		if (!message.reply_message?.image && !message.reply_message?.video) return message.sendReply('_Reply Image/Video_');
 		const media = await message.download();
 		if (!media) return message.sendReply('_No media found. Please reply to an image or video!_');
 		const msg = await message.sendReply('_Processing..._');
@@ -78,7 +78,7 @@ bot(
 	},
 	async message => {
 		if (message.isGroup) {
-			const user = message.quoted?.sender || message.mention[0];
+			const user = message.reply_message?.sender || message.mention[0];
 			if (!user) return message.sendReply('_Reply Or Tag Someone_');
 			try {
 				const pp = await message.client.profilePictureUrl(user, 'image');
@@ -107,7 +107,7 @@ bot(
 		type: 'tools'
 	},
 	async (message, match) => {
-		const code = match || message.quoted?.text
+		const code = match || message.reply_message?.text
 		if (!code) return message.sendReply('```Provide JS Code```')
 		const res = await getJson(`${base_url}encrypt?apikey=${API_KEY}&code=${code}`)
 		return await message.sendReply(res.encrypted_code)

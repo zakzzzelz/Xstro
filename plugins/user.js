@@ -41,8 +41,8 @@ bot(
 	},
 	async (message, match) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -64,8 +64,8 @@ bot(
 	},
 	async (message, match) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -102,8 +102,8 @@ bot(
 	},
 	async (message, match) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -124,8 +124,8 @@ bot(
 	},
 	async (message, match) => {
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -161,7 +161,7 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const text = match.trim() || message.quoted?.text;
+		const text = match.trim() || message.reply_message?.text;
 		if (!text) return await message.sendReply('*Format*: _.addnote title|content_');
 		const [title, content] = text.split('|');
 		if (!title) return await message.sendReply('*Format*: _.addnote title|content_');
@@ -197,7 +197,7 @@ bot(
 		type: 'user',
 	},
 	async (message, match) => {
-		const text = match.trim() || message.quoted?.text;
+		const text = match.trim() || message.reply_message?.text;
 		if (!text) return await message.sendReply('*Format*: _.editnote id; title|content_');
 		const [id, content] = text.split(';').map(item => item.trim());
 		if (!id || !content) return await message.sendReply('*Format*: _.editnote id; title|content_');

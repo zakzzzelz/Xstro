@@ -10,7 +10,7 @@ bot(
 	},
 	async (message, match) => {
 		const msg = await message.sendReply('🤔 _Thinking_');
-		const res = await Gemini(match || message.quoted?.text);
+		const res = await Gemini(match || message.reply_message?.text);
 		return await msg.edit(res);
 	},
 );
@@ -24,7 +24,7 @@ bot(
 	},
 	async (message, match) => {
 		const msg = await message.sendReply('🤖 _Deep thought_');
-		const res = await GPT4(match || message.quoted?.text);
+		const res = await GPT4(match || message.reply_message?.text);
 		return await msg.edit(res);
 	},
 );
@@ -38,7 +38,7 @@ bot(
 	},
 	async (message, match) => {
 		const msg = await message.sendReply('⏳ _Processing Request_');
-		const request = await Llama(match || message.quoted?.text);
+		const request = await Llama(match || message.reply_message?.text);
 		return await msg.edit(request);
 	},
 );
@@ -51,7 +51,7 @@ bot(
 		type: 'ai',
 	},
 	async (message, match) => {
-		const img = await DiffuseAI(match || message.quoted?.text);
+		const img = await DiffuseAI(match || message.reply_message?.text);
 		return await message.send(img);
 	},
 );
@@ -64,7 +64,7 @@ bot(
 		type: 'ai',
 	},
 	async (message, match) => {
-		const img = await Text2Img(match || message.quoted?.text);
+		const img = await Text2Img(match || message.reply_message?.text);
 		return await message.send(img);
 	},
 );

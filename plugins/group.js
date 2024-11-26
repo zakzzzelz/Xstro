@@ -18,8 +18,8 @@ bot(
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -49,7 +49,7 @@ bot(
 		type: 'group',
 	},
 	async (message, match, m, client) => {
-		const adMsg = match || message.quoted?.text;
+		const adMsg = match || message.reply_message?.text;
 		if (!adMsg) return message.sendReply('_I need text to advertise!_');
 		const groups = await client.groupFetchAllParticipating();
 		const groupDetails = Object.values(groups);
@@ -190,7 +190,7 @@ bot(
 		if (!message.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-		const subject = match || message.quoted?.text;
+		const subject = match || message.reply_message?.text;
 		if (!subject) return message.sendReply('_Provide A New Name for the Group!_');
 		await client.groupUpdateSubject(message.jid, subject);
 		return message.sendReply('_Group Name Updated_');
@@ -208,7 +208,7 @@ bot(
 		if (!message.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-		const desciption = match || message.quoted?.text;
+		const desciption = match || message.reply_message?.text;
 		await client.groupUpdateDescription(message.jid, desciption);
 		return message.sendReply('_Group Description Updated_');
 	},
@@ -226,8 +226,8 @@ bot(
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -254,8 +254,8 @@ bot(
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -282,8 +282,8 @@ bot(
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
 		let jid;
-		if (message.quoted) {
-			jid = message.quoted.sender;
+		if (message.reply_message) {
+			jid = message.reply_message.sender;
 		} else if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
@@ -354,7 +354,7 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		const msg = match || message.quoted?.text;
+		const msg = match || message.reply_message?.text;
 		const text = msg || '';
 		const participants = await client.groupMetadata(message.jid);
 		const participantJids = participants.participants.map(p => p.id);
@@ -375,7 +375,7 @@ bot(
 	},
 	async (message, match, m, client) => {
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
-		const msg = match || message.quoted?.text;
+		const msg = match || message.reply_message?.text;
 		if (!msg) return message.sendReply('_You must provide a reason for tagging everyone._');
 		const participants = await client.groupMetadata(message.jid);
 		const participantJids = participants.participants.map(p => p.id);
@@ -471,7 +471,7 @@ bot(
 		if (!m.isGroup) return message.sendReply('_For groups only!_');
 		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
 		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-		if (!message.quoted?.image) return message.sendReply('_Reply An Image!_');
+		if (!message.reply_message?.image) return message.sendReply('_Reply An Image!_');
 		const img = await message.download();
 		await client.updateProfilePicture(m.from, img);
 		return await message.sendReply('_Group Image Updated_');
@@ -619,7 +619,7 @@ bot(
 		let groupName = match.split(';')[0];
 		let members = [message.sender];
 
-		if (message.quoted?.sender) members.push(message.quoted.sender);
+		if (message.reply_message?.sender) members.push(message.reply_message.sender);
 		if (message.mention && message.mention[0]) members.push(message.mention[0]);
 		if (match.split(';')[1]) {
 			let additionalMembers = match

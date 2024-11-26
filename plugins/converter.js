@@ -10,7 +10,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		const media = message.quoted?.video || message.quoted?.image;
+		const media = message.reply_message?.video || message.reply_message?.image;
 		if (!media) return message.sendReply('_Reply with an Image or Video!_');
 		const msg = await message.download();
 		const stickerBuffer = await toSticker(msg);
@@ -26,7 +26,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		if (!message.quoted?.sticker) return message.sendReply('_Reply Sticker_');
+		if (!message.reply_message?.sticker) return message.sendReply('_Reply Sticker_');
 		const msg = await message.download();
 		const buff = await toSticker(msg);
 		return await message.send(buff, { type: 'sticker' });
@@ -41,7 +41,7 @@ bot(
 		type: 'converter',
 	},
 	async (message, match) => {
-		if (!message.quoted?.image && !message.quoted?.video) return message.sendReply('_Reply to an Image or Video_');
+		if (!message.reply_message?.image && !message.reply_message?.video) return message.sendReply('_Reply to an Image or Video_');
 		const options = ['left', 'right', 'vertical', 'horizontal'];
 		if (!options.includes(match)) return message.sendReply('_Choose a valid option:_ ' + message.prefix + 'flip left, right, vertical, or horizontal');
 		const buff = await message.download();
@@ -58,7 +58,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		if (!message.quoted?.audio) return message.sendReply('_Reply An Audio_');
+		if (!message.reply_message?.audio) return message.sendReply('_Reply An Audio_');
 		const buff = await message.download();
 		const res = await toBlackVideo(buff);
 		return await message.send(res);
@@ -73,7 +73,7 @@ bot(
 		type: 'converter',
 	},
 	async (message, match) => {
-		const text = match || message.quoted?.text;
+		const text = match || message.reply_message?.text;
 		if (!text) return message.sendReply('_I need text_');
 		const flipedtext = flipText(text);
 		return message.sendReply(flipedtext);
@@ -88,7 +88,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		if (!message.quoted?.audio) return message.sendReply('_Reply An Audio_');
+		if (!message.reply_message?.audio) return message.sendReply('_Reply An Audio_');
 		const media = await message.download();
 		const buff = await convertToOpus(media);
 		return await message.send(buff);

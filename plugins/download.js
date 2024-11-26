@@ -13,7 +13,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text)
+		const req = extractUrlFromMessage(match || message.reply_message?.text)
 		if (!req) return message.sendReply('```I need Facebook Url!````')
 		const res = await getJson(`${base_url}facebook?apikey=${API_KEY}&url=${req}`)
 		const buff = await getBuffer(res.result.hd_video)
@@ -29,7 +29,7 @@ bot(
 		type: 'download'
 	},
 	async (message) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text)
+		const req = extractUrlFromMessage(match || message.reply_message?.text)
 		if (!req) return message.sendReply('```I need Instagram Url!````')
 		const res = await getJson(`${base_url}instadl?apikey=${API_KEY}&url=${req}`)
 		const buff = await getBuffer(res.result.download_url)
@@ -45,7 +45,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text)
+		const req = extractUrlFromMessage(match || message.reply_message?.text)
 		if (!req) return message.sendReply('```I need Twitter Url!````')
 		const res = await getJson(`${base_url}twitter?apikey=${API_KEY}&url=${req}`)
 		const buff = await getBuffer(res.result.downloads[0].url)
@@ -61,7 +61,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text)
+		const req = extractUrlFromMessage(match || message.reply_message?.text)
 		if (!req) return message.sendReply('```I need Tiktok Url!````')
 		const res = await getJson(`${base_url}tiktokdlv1?apikey=${API_KEY}&url=${req}`)
 		const buff = await getBuffer(res.result.video.noWatermark)
@@ -77,7 +77,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text);
+		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a TikTok URL!```');
 		const res = await getJson(`${base_url}tiktokslide?apikey=${API_KEY}&url=${req}`);
 		for (const slideUrl of res.results) {
@@ -95,7 +95,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text);
+		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a Telegram Stickers Pack URL!```');
 		const res = await getJson(`${base_url}tgs?apikey=${API_KEY}&url=${req}`);
 		for (const sticker of res.results) {
@@ -113,7 +113,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text);
+		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a Mediafire URL!```');
 		const res = await getJson(`${base_url}mediafiredl?apikey=${API_KEY}&url=${req}`);
 		const buff = await getBuffer(res.result.downloadLink)
@@ -129,7 +129,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text);
+		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
 		const res = await getJson(`${base_url}ytvideo?apikey=${API_KEY}&url=${req}`);
 		const buff = await getBuffer(res.result.download_url)
@@ -145,7 +145,7 @@ bot(
 		type: 'download'
 	},
 	async (message, match) => {
-		const req = extractUrlFromMessage(match || message.quoted?.text);
+		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
 		const res = await getJson(`${base_url}ytvideo?apikey=${API_KEY}&url=${req}`);
 		const buff = await getBuffer(res.result.download_url)
