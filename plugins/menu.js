@@ -1,9 +1,8 @@
 import config from '../config.js';
 import { commands, bot } from '../lib/handler.js';
-import { formatBytes, getLocalBuffer, runtime } from '../lib/utils.js';
+import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from './client/font.js';
-import { join } from 'path';
 
 
 bot(
@@ -45,7 +44,7 @@ bot(
 			menuText += fancy(`╰──────────────\n`);
 		});
 
-		return await message.send(menuText);
+		return await message.send(menuText, { quoted: false });
 	},
 );
 
