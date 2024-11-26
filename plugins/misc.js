@@ -1,7 +1,12 @@
+import config from '../config.js';
 import { bot } from '../lib/handler.js';
 import { setAnti } from '../lib/sql/antidel.js';
 import { disableAntiVV, enableAntiVV, getStatus } from '../lib/sql/antivv.js';
+import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
 import { remini } from './client/scrapers.js';
+
+const { API_KEY } = config
+const base_url = `https://api.giftedtech.my.id/api/tools/`
 
 bot(
 	{
@@ -97,3 +102,74 @@ bot(
 		return await message.send(buff)
 	}
 )
+
+bot(
+	{
+		pattern: 'define',
+		isPublic: true,
+		desc: 'Get definitions for a given term',
+		type: 'misc'
+	},
+	async (message, match) => {
+		const term = match.trim();
+		if (!term) return await message.sendReply("Please provide a term to define.");
+
+		const apiUrl = `${base_url}define?apikey=${API_KEY}&term=${encodeURIComponent(term)}`;
+		const res = await getJson(apiUrl);
+
+		const definitions = res.results.slice(0, 3).map((def, index) =>
+			`*Definition ${index + 1}:*\n${def.definition}\n\n*Example:* ${def.example || "N/A"}\n*Author:* ${def.author}\n*Thumbs Up:* ${def.thumbs_up}, *Thumbs Down:* ${def.thumbs_down}\n[Permalink](${def.permalink})`
+		);
+		return await message.sendReply(definitions.join("\n\n"));
+	}
+);
+
+bot(
+	{
+		pattern: 'ebase',
+		isPublic: true,
+		desc: 'Fetches ebase details for a query term',
+		type: 'misc'
+	},
+	async (message, match) => {
+		const query = match || message.quoted?.text
+		if (!query) return await message.sendReply("Please provide a query term for ebase.");
+		const apiUrl = `${base_url}ebase?apikey=${API_KEY}&query=${encodeURIComponent(query)}`;
+		const data = await getJson(apiUrl);
+		return await message.sendReply(`*Result for Ebase:*\n${data.result}`);
+
+	}
+);
+
+bot(
+	{
+		pattern: 'dbase',
+		isPublic: true,
+		desc: 'Fetches dbase details for a query term',
+		type: 'misc'
+	},
+	async (message, match) => {
+		const query = match || message.quoted?.text;
+		if (!query) return await message.sendReply("Please provide a query term for dbase.");
+		const apiUrl = `${base_url}dbase?apikey=${API_KEY}&query=${encodeURIComponent(query)}`;
+		const data = await getJson(apiUrl);
+		return await message.sendReply(`*Result for Dbase:*\n${data.result}`);
+	}
+);
+
+bot(
+	{
+		pattern: 'ssweb',
+		isPublic: true,
+		desc: 'Screenshot website',
+		type: 'misc'
+	},
+	async (message, match) => {
+		const query = match || message.quoted?.text;
+		const url = extractUrlFromMessage(query)
+		if (!url) return message.sendReply('```I need url```')
+		const apiUrl = `${base_url}sspc?apikey=${API_KEY}&url=${encodeURIComponent(query)}`;
+		const data = await getBuffer(apiUrl);
+		return await message.send(data);
+	}
+);
