@@ -1,9 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import { readdir } from 'fs/promises';
 import { extname, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import connect from './lib/client.js';
 import config from './config.js';
 import http from 'http';
+import { getSession } from './lib/session.js';
 
 http.createServer((req, res) => res.writeHead(200, { 'Content-Type': 'text/html' }).end('<html><body style="background-color:black;"></body></html>')).listen(8000);
 
@@ -26,6 +29,7 @@ async function loadFiles(dir) {
 async function startBot() {
 	try {
 		console.log('XSTRO MD');
+		await getSession()
 		await config.DATABASE.sync();
 		await loadFiles(join(__dirname, 'lib/sql'));
 		await loadFiles(join(__dirname, 'plugins'));
