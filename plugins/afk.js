@@ -1,7 +1,7 @@
 import { bot } from '../lib/handler.js';
 import { getAfkMessage, setAfkMessage, delAfkMessage } from '../lib/sql/afk.js';
 
-const afkTrack = {}; // To track the last message timestamp for each user
+const afkTrack = {}; // To track the last message timestamp for each user (by sender)
 
 bot(
 	{
@@ -57,8 +57,9 @@ bot(
 		} else {
 			if (message.sender.includes(message.user)) return;
 			const now = Date.now();
-			const lastMessageTime = afkTrack[message.user] || 0;
-			if (now - lastMessageTime < 15000) return; 
+			const lastMessageTime = afkTrack[message.sender] || 0;
+			if (now - lastMessageTime < 15000) return;
+
 			afkTrack[message.sender] = now;
 
 			const lastSeen = afkData.timestamp ? formatDuration(now - afkData.timestamp) : 'N/A';
