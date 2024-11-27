@@ -147,8 +147,8 @@ bot(
 	async (message, match) => {
 		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
-		const res = await getJson(`${base_url}ytplay?apikey=${API_KEY}&url=${req}`);
-		const buff = await getBuffer(res.result.audio[0].download_url)
+		const res = await getJson(`${base_url}ytdl2?apikey=${API_KEY}&url=${req}`);
+		const buff = await getBuffer(res.result.audio_url)
 		return await message.send(buff)
 	}
 )
