@@ -7,7 +7,7 @@ bot(
     on: 'text',
     dontAddCommandList: true,
   },
-  async (message) => {
+  async (message, match, m, client) => {
     const owner = isSudo(message.sender);
     if (!owner) return;
     if (!message.text.startsWith('$ ')) return;
