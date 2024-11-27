@@ -20,7 +20,7 @@ bot(
 		if (commits.total === 0) return await message.sendReply(fancy(`you are on version ${config.VERSION}`));
 		if (match === 'now') {
 			message.sendReply(fancy('restarting bot'))
-			exec('git stash && git pull origin master', async (err, stderr) => {
+			exec('git stash && git pull origin master && yarn install', async (err, stderr) => {
 				if (err) return await message.sendReply('```' + stderr + '```');
 				await manageProcess('restart');
 			});
