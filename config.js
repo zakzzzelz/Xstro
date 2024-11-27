@@ -3,11 +3,10 @@ dotenv.config();
 import { Sequelize } from 'sequelize';
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
-let config;
 
 const toBool = (x) => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
-export default config = {
+const config = {
   BASE_API_URL: process.env.BASE_API_URL || 'https://server-di1w.onrender.com',
   API_KEY: process.env.API_KEY || 'astro_fx-k56DdhdS7@gifted_api',
   SESSION_ID: process.env.SESSION_ID || '',
@@ -42,3 +41,5 @@ export default config = {
           logging: false,
         }),
 };
+
+export default config;

@@ -1,5 +1,5 @@
 import { bot } from '../lib/handler.js';
-import { getWarn, resetWarn, addWarn, isWarned } from '../lib/sql/warn.js';
+import { getWarn, resetWarn, addWarn } from '../lib/sql/warn.js';
 import { numtoId } from '../lib/utils.js';
 
 bot(

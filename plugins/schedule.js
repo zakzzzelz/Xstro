@@ -31,10 +31,10 @@ bot(
     desc: 'Set a time to automatically mute a group',
     type: 'group',
   },
-  async (message, match, m, client) => {
+  async (message, match, m) => {
     if (!message.isGroup) return message.sendReply('_This command is only for groups_');
-    if (!m.isAdmin || !m.isBotAdmin)
-      return message.sendReply('*I need to be admin to perform this action*');
+    if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+    if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
     if (!match)
       return message.sendReply(
         `*Please provide time in 12hr format*\n\n_Example: .automute 3:15pm_`
@@ -67,9 +67,10 @@ bot(
     desc: 'Set a time to automatically unmute a group',
     type: 'group',
   },
-  async (message, match, m, client) => {
-    if (!message.isGroup) return message.sendReply(group);
-    if (!m.isAdmin || !m.isBotAdmin) return message.sendReply(admin);
+  async (message, match, m) => {
+    if (!message.isGroup) return message.sendReply('_For Groups Only!_');
+    if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+    if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
     if (!match)
       return message.sendReply(`*Inavaild time in 12hr format*\n\n_Example: .autounmute 2:00am_`);
     const time24 = convertTo24Hour(match.trim());
@@ -100,7 +101,7 @@ bot(
     desc: 'Get muting time for a group',
     type: 'group',
   },
-  async (message, match, m, client) => {
+  async (message) => {
     if (!message.isGroup) return message.sendReply('_This command is only for groups_');
     const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
     if (!schedule || !schedule.isScheduled)
@@ -120,9 +121,10 @@ bot(
     desc: 'Cancel mute schedule for the group',
     type: 'group',
   },
-  async (message, match, m, client) => {
-    if (!message.isGroup) return message.sendReply(group);
-    if (!m.isAdmin || !m.isBotAdmin) return message.sendReply(admin);
+  async (message, match, m) => {
+    if (!message.isGroup) return message.sendReply('_For Groups Only!_');
+    if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+    if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
     const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
     if (!schedule || !schedule.isScheduled) return message.sendReply('_No Jobs Where Online_');
     schedule.isScheduled = false;

@@ -229,7 +229,7 @@ bot(
     desc: 'List all Notes',
     type: 'user',
   },
-  async (message, match) => {
+  async (message) => {
     const notes = await getNotes().catch(() => null);
     if (!notes) return await message.sendReply('*Unable to perform action*');
     if (notes.length === 0) return await message.sendReply('*No notes found*');

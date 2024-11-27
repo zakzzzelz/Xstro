@@ -3,7 +3,6 @@ import { bot } from '../lib/handler.js';
 import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
 
 export const base_url = 'https://api.giftedtech.my.id/api/download/';
-const other_url = 'https://ironman.koyeb.app/ironman/dl/spotify?link=';
 const { API_KEY } = config;
 
 bot(

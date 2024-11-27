@@ -57,7 +57,7 @@ bot(
       return message.sendReply('```No results found for your query.```');
 
     let resultsMessage = '';
-    req.results.forEach((result, index) => {
+    req.results.forEach((result) => {
       resultsMessage += `\n\n*Title:* ${fancy(result.title)}\n*Description:* ${fancy(result.description)}\n*URL:* ${result.url}\n\n`;
     });
 

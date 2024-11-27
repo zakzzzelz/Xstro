@@ -29,7 +29,7 @@ bot(
     try {
       await client.groupParticipantsUpdate(message.jid, [jid], 'add');
       return message.sendReply(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
-    } catch (error) {
+    } catch {
       const inviteLink = await client.groupInviteCode(message.jid);
       const userMessage = {
         text: `_@${message.sender.split('@')[0]} wants to add you to the group._\n\n*_Join here: https://chat.whatsapp.com/${inviteLink}_*\n`,
@@ -587,11 +587,9 @@ bot(
     let acceptedUsers = [];
     let acceptanceList = '*_Accepted Users_*\n\n';
     for (let request of joinRequests) {
-      try {
-        await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'approve');
-        acceptanceList += `@${request.jid.split('@')[0]}\n`;
-        acceptedUsers.push(request.jid);
-      } catch {}
+      await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'approve');
+      acceptanceList += `@${request.jid.split('@')[0]}\n`;
+      acceptedUsers.push(request.jid);
     }
     await message.sendReply(acceptanceList, { mentions: acceptedUsers });
   }
@@ -613,11 +611,9 @@ bot(
     let rejectedUsers = [];
     let rejectionList = '*_Rejected Users_*\n\n';
     for (let request of joinRequests) {
-      try {
-        await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'reject');
-        rejectionList += `@${request.jid.split('@')[0]}\n`;
-        rejectedUsers.push(request.jid);
-      } catch {}
+      await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'reject');
+      rejectionList += `@${request.jid.split('@')[0]}\n`;
+      rejectedUsers.push(request.jid);
     }
     await message.sendReply(rejectionList, { mentions: rejectedUsers });
   }
