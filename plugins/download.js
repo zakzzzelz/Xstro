@@ -147,8 +147,8 @@ bot(
 	async (message, match) => {
 		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
-		const res = await getJson(`${base_url}y2mate?apikey=${API_KEY}&url=${req}`);
-		const buff = await getBuffer(res.result.medias.mp3[".m4a"].download_url)
-		return await message.send(buff, { mimetype: 'audio/mpeg' })
+		const res = await getJson(`${base_url}ytplay?apikey=${API_KEY}&url=${req}`);
+		const buff = await getBuffer(res.result.audio[0].download_url)
+		return await message.send(buff)
 	}
 )
