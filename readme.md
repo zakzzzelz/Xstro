@@ -72,7 +72,6 @@ I’m not responsible for you messing around and getting your account banned. As
 
 [![Run on Codespaces](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/codespaces/new?skip_quickstart=true&machine=standardLinux32gb&repo=882210451&ref=master&geo=EuropeWest)
 
-
 ## RUN ON VPS OR LOCALLY
 
 ### 1. Install Node.js
