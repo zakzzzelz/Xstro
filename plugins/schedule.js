@@ -12,10 +12,10 @@ bot(
         desc: 'SetUp Muting Schedule for Group',
         type: 'group'
     },
-    async (message, match) => {
+    async (message, match, m) => {
         if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+        if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+        if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
         const groupJid = message.jid;
         const timeString = match[1];
 
@@ -37,10 +37,10 @@ bot(
         desc: 'Set Unmuting Schedule for Group',
         type: 'group'
     },
-    async (message, match) => {
+    async (message, match, m) => {
         if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+        if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
+        if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
         const groupJid = message.jid;
 
         try {
@@ -61,9 +61,6 @@ bot(
         type: 'group'
     },
     async (message, match) => {
-        if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
         const groupJid = message.jid;
         await delMute(groupJid);
         return message.sendReply(message, 'Mute schedule has been removed for this group.');
@@ -78,9 +75,6 @@ bot(
         type: 'group'
     },
     async (message, match) => {
-        if (!m.isGroup) return message.sendReply('_For groups only!_');
-		if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-		if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
         const groupJid = message.jid;
         const muteData = await getMuteStatus(groupJid);
 
