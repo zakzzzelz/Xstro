@@ -48,24 +48,6 @@ bot(
 		type: 'search'
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('```Give me a search query```')
-		const req = await getJson(`https://api.giftedtech.my.id/api/search/google?apikey=gifted&query=${match}`);
-		for (const result of req.results) {
-			await message.sendReply(
-				`*Title:* ${result.title}\n*Description:* ${result.description}\n*URL:* ${result.url}`
-			);
-		}
-	}
-);
-
-bot(
-	{
-		pattern: 'google',
-		isPublic: true,
-		desc: 'Search and Get Google Results',
-		type: 'search'
-	},
-	async (message, match) => {
 		if (!match) return message.sendReply('```Give me a search query```');
 		const req = await getJson(`https://api.giftedtech.my.id/api/search/google?apikey=${API_KEY}&query=${match}`);
 
@@ -76,6 +58,6 @@ bot(
 			resultsMessage += `\n\n*Title:* ${fancy(result.title)}\n*Description:* ${fancy(result.description)}\n*URL:* ${result.url}\n\n`;
 		});
 
-		await message.sendReply(`Google Search\n\n${resultsMessage}`);
+		await message.sendReply(`*Google Search*\n\n${resultsMessage}`);
 	}
 );
