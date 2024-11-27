@@ -23,8 +23,17 @@ bot(
 			exec('git stash && git pull origin master', async (err, stderr) => {
 				if (err) return await message.sendReply('```' + stderr + '```');
 			});
-			exec('yarn', async (err, stderr) => {
-				if (err) return await message.sendReply('```' + stderr + '```');
+			exec('git stash && git pull origin master', async (err, stdout, stderr) => {
+				if (err) {
+					return await message.sendReply('Git error: ```' + stderr + '```');
+				}
+				if (stdout) {
+					console.log('Git output:', stdout);
+				}
+			});
+			exec('yarn', async (err, stdout, stderr) => {
+				if (err) return await message.sendReply('Yarn error: ```' + stderr + '```');
+				if (stdout) console.log('Yarn output:', stdout);
 				await manageProcess('restart');
 			});
 		} else {
