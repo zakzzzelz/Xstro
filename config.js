@@ -22,6 +22,7 @@ export default config = {
 	LOGGER: process.env.LOGGER || false,
 	HEROKU_API_KEY: process.env.HEROKU_API_KEY || '',
 	HEROKU_APP_NAME: process.env.HEROKU_APP_NAME || '',
+	TIME_ZONE: process.env.TZ || process.env.TIME_ZONE || 'Africa/Lagos',
 	VERSION: require('./package.json').version,
 	DATABASE:
 		DATABASE_URL === './database.db'
