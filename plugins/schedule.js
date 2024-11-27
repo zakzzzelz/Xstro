@@ -5,12 +5,13 @@ const convertTo24Hour = (timeStr) => {
   const timeRegex = /^(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)$/i;
   const match = timeStr.toLowerCase().match(timeRegex);
   if (!match) return null;
-  let [_, hours, minutes, period] = match;
+  let [, hours, minutes, period] = match;
   hours = parseInt(hours);
   if (period === 'pm' && hours !== 12) hours += 12;
   else if (period === 'am' && hours === 12) hours = 0;
   return `${String(hours).padStart(2, '0')}:${minutes}`;
 };
+
 
 const convertTo12Hour = (timeStr) => {
   const [hours, minutes] = timeStr.split(':');
