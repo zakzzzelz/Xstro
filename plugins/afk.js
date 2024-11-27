@@ -58,11 +58,8 @@ bot(
 			if (message.sender.includes(message.user)) return;
 			const now = Date.now();
 			const lastMessageTime = afkTrack[message.user] || 0;
-			// Check if the last AFK message was sent within the last 15 seconds
-			if (now - lastMessageTime < 15000) return; // Skip if less than 15 seconds
-
-			// Update the last message time for this user
-			afkTrack[message.user] = now;
+			if (now - lastMessageTime < 15000) return; 
+			afkTrack[message.sender] = now;
 
 			const lastSeen = afkData.timestamp ? formatDuration(now - afkData.timestamp) : 'N/A';
 			return message.sendReply(`\`\`\`${afkData.message}\n\nLast Seen: ${lastSeen}\`\`\``);
