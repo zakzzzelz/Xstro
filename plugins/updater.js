@@ -47,7 +47,7 @@ bot(
       return message.sendReply(
         fancy('invaild heroku app, make sure you are running on heroku with the correct variables')
       );
-    message.sendReply(fancy('Redeploying Heroku Dyno\n5mins'))
+    message.sendReply(fancy('Redeploying Heroku Dyno\n5mins'));
     await updateHerokuApp();
   }
 );

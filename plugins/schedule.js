@@ -12,7 +12,6 @@ const convertTo24Hour = (timeStr) => {
   return `${String(hours).padStart(2, '0')}:${minutes}`;
 };
 
-
 const convertTo12Hour = (timeStr) => {
   const [hours, minutes] = timeStr.split(':');
   let period = 'AM';
