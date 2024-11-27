@@ -46,7 +46,6 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, m) => {
-		if (message.user) return;
 		const afkData = await getAfkMessage();
 		if (!afkData || m.sudo) return;
 		if (m.from.endsWith('@g.us')) {
