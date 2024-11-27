@@ -131,8 +131,8 @@ bot(
 	async (message, match) => {
 		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
-		const res = await getJson(`${base_url}ytvideo?apikey=${API_KEY}&url=${req}`);
-		const buff = await getBuffer(res.result.download_url)
+		const res = await getJson(`${base_url}y2mate?apikey=${API_KEY}&url=${req}`);
+		const buff = await getBuffer(res.result.medias.mp4["1080p"].download_url)
 		return await message.send(buff, { caption: res.result.title })
 	}
 )
@@ -147,7 +147,7 @@ bot(
 	async (message, match) => {
 		const req = extractUrlFromMessage(match || message.reply_message?.text);
 		if (!req) return message.sendReply('```I need a YOUTUBE URL!```');
-		const res = await getJson(`${base_url}ytvideo?apikey=${API_KEY}&url=${req}`);
+		const res = await getJson(`${base_url}y2mate?apikey=${API_KEY}&url=${req}`);
 		const buff = await getBuffer(res.result.download_url)
 		return await message.send(buff)
 	}
