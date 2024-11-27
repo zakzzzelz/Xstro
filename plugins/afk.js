@@ -1,6 +1,8 @@
 import { bot } from '../lib/handler.js';
 import { getAfkMessage, setAfkMessage, delAfkMessage } from '../lib/sql/afk.js';
 
+const afkTrack = {}; // To track the last message timestamp for each user
+
 bot(
 	{
 		pattern: 'afk',
@@ -44,7 +46,7 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, m) => {
-		if (message.user) return
+		if (message.user) return;
 		const afkData = await getAfkMessage();
 		if (!afkData || m.sudo) return;
 		if (m.from.endsWith('@g.us')) {
@@ -53,7 +55,16 @@ bot(
 				return message.sendReply(`\`\`\`${afkData.message}\n\nLast Seen: ${lastSeen}\`\`\``);
 			}
 		} else {
-			const lastSeen = afkData.timestamp ? formatDuration(Date.now() - afkData.timestamp) : 'N/A';
+			if (message.sender.includes(message.user)) return;
+			const now = Date.now();
+			const lastMessageTime = afkTrack[message.user] || 0;
+			// Check if the last AFK message was sent within the last 15 seconds
+			if (now - lastMessageTime < 15000) return; // Skip if less than 15 seconds
+
+			// Update the last message time for this user
+			afkTrack[message.user] = now;
+
+			const lastSeen = afkData.timestamp ? formatDuration(now - afkData.timestamp) : 'N/A';
 			return message.sendReply(`\`\`\`${afkData.message}\n\nLast Seen: ${lastSeen}\`\`\``);
 		}
 	},
