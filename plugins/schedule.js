@@ -1,69 +1,88 @@
 import { bot } from '../lib/handler.js';
-import { getMuteStatus, setMute, setUnMute, delMute } from '../lib/sql/scheduler.js';
-import { parseTime } from '../lib/utils.js';
-import config from '../config.js';
+import Scheduler from '../lib/sql/scheduler.js';
 
-const { TIME_ZONE } = config;
+const convertTo24Hour = (timeStr) => {
+    const timeRegex = /^(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)$/i;
+    const match = timeStr.toLowerCase().match(timeRegex);
+    if (!match) return null;
+    let [_, hours, minutes, period] = match;
+    hours = parseInt(hours);
+    if (period === 'pm' && hours !== 12) hours += 12;
+    else if (period === 'am' && hours === 12) hours = 0;
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+};
 
-bot(
-    {
-        pattern: 'amute',
-        isPublic: true,
-        desc: 'SetUp Muting Schedule for Group',
-        type: 'group'
-    },
-    async (message, match, m) => {
-        if (!m.isGroup) return message.sendReply('_For groups only!_');
-        if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-        if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-        const groupJid = message.jid;
-        const timeString = match[1];
-
-        if (!timeString) return message.sendReply(message, 'Please provide a valid time to mute the group.');
-
-        const muteDurationInSeconds = parseTime(timeString);
-
-        if (!muteDurationInSeconds) return message.sendReply(message, 'Invalid time format. Please use a valid time like "2:30pm" or "3:09am".');
-
-        await setMute(groupJid, muteDurationInSeconds);
-        return message.sendReply(message, `Group will be muted until ${new Date(Date.now() + muteDurationInSeconds * 1000).toLocaleString('en-US', { timeZone: TIME_ZONE })}.`);
+const convertTo12Hour = (timeStr) => {
+    const [hours, minutes] = timeStr.split(':');
+    let period = 'AM';
+    let hour = parseInt(hours);
+    if (hour >= 12) {
+        period = 'PM';
+        if (hour > 12) hour -= 12;
     }
-);
+    if (hour === 0) hour = 12;
+    return `${hour}:${minutes}${period}`;
+};
 
 bot(
     {
-        pattern: 'aunmute',
+        pattern: 'automute',
         isPublic: true,
-        desc: 'Set Unmuting Schedule for Group',
-        type: 'group'
+        desc: 'Set a time to automatically mute a group',
+        type: 'group',
     },
-    async (message, match, m) => {
-        if (!m.isGroup) return message.sendReply('_For groups only!_');
-        if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-        if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-        const groupJid = message.jid;
-
-        try {
-            await setUnMute(groupJid);
-            return message.sendReply(message, 'Group has been unmuted.');
-        } catch (error) {
-            console.error('Error unmuting group:', error);
-            return message.sendReply(message, 'There was an error unmuting the group. Please try again later.');
+    async (message, match, m, client) => {
+        if (!message.isGroup) return message.sendReply('_This command is only for groups_');
+        if (!m.isAdmin || !m.isBotAdmin) return message.sendReply('*I need to be admin to perform this action*');
+        if (!match) return message.sendReply(`*Please provide time in 12hr format*\n\n_Example: .automute 3:15pm_`);
+        const time24 = convertTo24Hour(match.trim());
+        if (!time24) return message.sendReply(`*Invalid time format*\n\n_Please use format like: 3:15pm_`);
+        const [schedule, created] = await Scheduler.findOrCreate({
+            where: { groupId: message.jid },
+            defaults: {
+                muteTime: time24,
+                isScheduled: true,
+            },
+        });
+        if (!created) {
+            schedule.muteTime = time24;
+            schedule.isScheduled = true;
+            await schedule.save();
+            return message.sendReply(`_Group will now be muted at ${match.trim()}_`);
+        } else {
+            return message.sendReply(`_Group will be muted at ${match.trim()}_`);
         }
     }
 );
 
 bot(
     {
-        pattern: 'delmute',
+        pattern: 'autounmute',
         isPublic: true,
-        desc: 'Remove Muting Schedule for Group',
-        type: 'group'
+        desc: 'Set a time to automatically unmute a group',
+        type: 'group',
     },
-    async (message, match) => {
-        const groupJid = message.jid;
-        await delMute(groupJid);
-        return message.sendReply(message, 'Mute schedule has been removed for this group.');
+    async (message, match, m, client) => {
+        if (!message.isGroup) return message.sendReply(group);
+        if (!m.isAdmin || !m.isBotAdmin) return message.sendReply(admin);
+        if (!match) return message.sendReply(`*Inavaild time in 12hr format*\n\n_Example: .autounmute 2:00am_`);
+        const time24 = convertTo24Hour(match.trim());
+        if (!time24) return message.sendReply(`*Invalid time format*\n\n_Please use format like: 2:00am_`);
+        const [schedule, created] = await Scheduler.findOrCreate({
+            where: { groupId: message.jid },
+            defaults: {
+                unmuteTime: time24,
+                isScheduled: true,
+            },
+        });
+        if (!created) {
+            schedule.unmuteTime = time24;
+            schedule.isScheduled = true;
+            await schedule.save();
+            return message.sendReply(`_Group will now be unmuted at ${match.trim()}_`);
+        } else {
+            return message.sendReply(`_Group will be unmuted at ${match.trim()}_`);
+        }
     }
 );
 
@@ -71,19 +90,36 @@ bot(
     {
         pattern: 'getmute',
         isPublic: true,
-        desc: 'Get Muting Schedule for Group',
-        type: 'group'
+        desc: 'Get muting time for a group',
+        type: 'group',
     },
-    async (message, match) => {
-        const groupJid = message.jid;
-        const muteData = await getMuteStatus(groupJid);
+    async (message, match, m, client) => {
+        if (!message.isGroup) return message.sendReply('_This command is only for groups_');
+        const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
+        if (!schedule || !schedule.isScheduled) return message.sendReply('No active mute schedule for this group');
+        let response = '*📅 Mute Schedules*\n\n';
+        if (schedule.muteTime) response += `*🔇 Mute:* _${convertTo12Hour(schedule.muteTime)}_\n`;
+        if (schedule.unmuteTime) response += `*🔊 Unmute:* _${convertTo12Hour(schedule.unmuteTime)}_\n`;
+        response += `*Status:* _${schedule.isMuted ? '🔇 Muted' : '🔊 Unmuted'}_`;
+        return message.sendReply(response);
+    }
+);
 
-        if (!muteData) return message.sendReply(message, 'This group is not currently muted or has no mute schedule.');
-
-        const { muteStart, muteEnd } = muteData;
-        const muteStartTimeFormatted = new Date(muteStart).toLocaleString('en-US', { timeZone: TIME_ZONE });
-        const muteEndTimeFormatted = new Date(muteEnd).toLocaleString('en-US', { timeZone: TIME_ZONE });
-
-        return message.sendReply(message, `This group is muted from ${muteStartTimeFormatted} to ${muteEndTimeFormatted}.`);
+bot(
+    {
+        pattern: 'delmute',
+        isPublic: true,
+        desc: 'Cancel mute schedule for the group',
+        type: 'group',
+    },
+    async (message, match, m, client) => {
+        if (!message.isGroup) return message.sendReply(group);
+        if (!m.isAdmin || !m.isBotAdmin) return message.sendReply(admin);
+        const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
+        if (!schedule || !schedule.isScheduled) return message.sendReply('_No Jobs Where Online_');
+        schedule.isScheduled = false;
+        schedule.isMuted = false;
+        await schedule.save();
+        return message.sendReply('_Mute Settings Removed_');
     }
 );

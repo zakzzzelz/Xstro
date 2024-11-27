@@ -16,6 +16,8 @@
 		"dotenv": "^16.4.5",
 		"file-type": "^19.6.0",
 		"heroku-client": "^3.1.0",
+		"moment-timezone": "^0.5.46",
+		"node-cron": "^3.0.3",
 		"pg": "^8.13.1",
 		"pm2": "5.4.3",
 		"sequelize": "^6.37.5",
