@@ -286,3 +286,23 @@ bot(
     await message.edit(match);
   }
 );
+
+bot(
+  {
+    pattern: 'jid',
+    isPublic: true,
+    desc: 'Get Jid of Current Chat',
+    type: 'whatsapp',
+  },
+  async (message, match) => {
+    if (!message.isGroup) {
+      if (match) {
+        return message.sendReply(numtoId(match || message.mention[0]));
+      } else {
+        return message.sendReply(message.jid);
+      }
+    } else {
+      return message.sendReply(message.jid);
+    }
+  }
+);
