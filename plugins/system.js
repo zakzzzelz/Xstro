@@ -1,9 +1,10 @@
 import fs from 'fs';
 import path, { join, basename, extname } from 'path';
 import axios from 'axios';
+import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/handler.js';
-import { clearCache, extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
+import { extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
 import { fancy } from './client/font.js';
@@ -179,13 +180,36 @@ bot(
 
 bot(
   {
-    pattern: 'cache',
-    isPublic: true,
-    desc: 'Clear Cache',
+    pattern: 'eval ?(.*)',
+    isPublic: false,
+    desc: 'Evaluate code',
     type: 'system',
   },
-  async (message) => {
-    const clearedSize = await clearCache();
-    await message.sendReply(`\`\`\`${clearedSize} MB Cache Cleared.\`\`\``);
+  async (message, match) => {
+    if (!match) return message.sendReply('_Provide code to evaluate_');
+    try {
+      const result = eval(match);
+      message.sendReply(`Result: \`${result}\``);
+    } catch (error) {
+      message.sendReply(`Error: ${error.message}`);
+    }
+  }
+);
+
+bot(
+  {
+    pattern: 'shell ?(.*)',
+    isPublic: false,
+    desc: 'Run shell commands',
+    type: 'system',
+  },
+  async (message, match) => {
+    if (!match) return message.sendReply('_Provide a shell command to run_');
+    const command = match.trim();
+    exec(command, (error, stdout, stderr) => {
+      if (error) return message.sendReply(`*Error:*\n \`\`\`${error.message}\`\`\``);
+      if (stderr) return message.sendReply(`*Stderr:*\n \`\`\`${stderr}\`\`\``);
+      message.sendReply(`*Output:*\n\`\`\`${stdout}\`\`\``);
+    });
   }
 );
