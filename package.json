@@ -1,6 +1,6 @@
 {
   "name": "xstro-md",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Simple WhatsApp Bot",
   "main": "server.js",
   "type": "module",
