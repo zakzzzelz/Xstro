@@ -6,6 +6,7 @@ import { bot } from '../lib/handler.js';
 import { clearCache, extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from './client/env.js';
+import { fancy } from './client/font.js';
 
 const envFilePath = path.join(process.cwd(), '.env');
 const envfile = () => {
@@ -35,7 +36,7 @@ bot(
     type: 'system',
   },
   async (message) => {
-    return await message.sendReply(`_Bot Running Since_\n_${runtime(process.uptime())}_`);
+    return await message.sendReply(fancy(`*Uptime: ${runtime(process.uptime())}*`));
   }
 );
 

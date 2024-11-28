@@ -12,15 +12,15 @@ bot(
     dontAddCommandList: true,
   },
   async (message) => {
-    let menuText = `\`\`\`╭─ ${config.BOT_INFO.split(';')[1]} ───
-│ User: ${message.pushName}
-│ Mode: ${config.MODE}
-│ Uptime: ${runtime(process.uptime())}
-│ Platform: ${platform()}
-│ Plugins: ${commands.length}
-│ Memory: ${formatBytes(totalmem() - freemem())}
-│ Version: ${config.VERSION}
-╰────────────────\`\`\`\n`;
+    let menuText = `╭─ *${config.BOT_INFO.split(';')[1]}* ───
+│ User ${message.pushName}
+│ Mode ${config.MODE}
+│ Uptime ${runtime(process.uptime())}
+│ Platform ${platform()}
+│ Plugins ${commands.length}
+│ Memory ${formatBytes(totalmem() - freemem())}
+│ Version ${config.VERSION}
+╰────────────────\n`;
 
     let commandCounter = 1;
     const categorized = commands
@@ -35,15 +35,15 @@ bot(
       }, {});
 
     Object.keys(categorized).forEach((category) => {
-      menuText += fancy(`\n╭──〈 *${category}* 〉────\n`);
+      menuText += `\n╭──〈 *${category}* 〉────\n`;
       categorized[category].forEach((cmd) => {
-        menuText += fancy(`│▸ ${commandCounter}. ${cmd}\n`);
+        menuText += `│▸ ${commandCounter}. ${cmd}\n`;
         commandCounter++;
       });
-      menuText += fancy(`╰──────────────\n`);
+      menuText += `╰──────────────\n`;
     });
 
-    return await message.send(menuText, { quoted: false });
+    return await message.send(fancy(menuText), { quoted: false });
   }
 );
 
