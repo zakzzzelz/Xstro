@@ -294,15 +294,5 @@ bot(
     desc: 'Get Jid of Current Chat',
     type: 'whatsapp',
   },
-  async (message, match) => {
-    if (!message.isGroup) {
-      if (match) {
-        return message.sendReply(numtoId(match || message.mention[0]));
-      } else {
-        return message.sendReply(message.jid);
-      }
-    } else {
-      return message.sendReply(message.jid);
-    }
-  }
+  async (message) => message.sendReply(message.reply_message?.sender || message.jid)
 );
