@@ -57,7 +57,7 @@ bot(
          if (message.sender.includes(message.user)) return;
          const now = Date.now();
          const lastMessageTime = afkTrack[message.sender] || 0;
-         if (now - lastMessageTime < 15000) return;
+         if (now - lastMessageTime < 30000) return;
 
          afkTrack[message.sender] = now;
 
