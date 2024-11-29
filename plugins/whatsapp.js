@@ -293,3 +293,17 @@ bot(
    },
    async (message) => message.sendReply(message.reply_message?.sender || message.jid)
 );
+
+bot(
+   {
+      pattern: 'bio',
+      isPublic: true,
+      desc: 'Change your whatsapp bio',
+      type: 'whatsapp',
+   },
+   async (message, match, { prefix }) => {
+      if (!match) return message.sendReply(`_Usage:_\n_${prefix}bio Hello World_`);
+      await message.client.updateProfileStatus(match);
+      return await message.sendReply('```WhatsApp bio Updated to "' + match + '"```');
+   }
+);
