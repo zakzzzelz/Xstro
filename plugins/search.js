@@ -61,3 +61,21 @@ bot(
       await message.sendReply(`*Google Search*\n\n${resultsMessage}`);
    }
 );
+
+bot(
+   {
+      pattern: 'imdb',
+      isPublic: true,
+      desc: 'Sends info of a movie or series.',
+      type: 'search',
+   },
+   async (message, match) => {
+      if (!match) return message.sendReply('_Name a Series or movie._');
+      const data = await getJson(`http://www.omdbapi.com/?apikey=742b2d09&t=${encodeURIComponent(match)}&plot=full`);
+
+      let imdbInfo = [`*Title:* ${data.Title}`, `*Year:* ${data.Year}`, `*Rated:* ${data.Rated}`, `*Released:* ${data.Released}`, `*Runtime:* ${data.Runtime}`, `*Genre:* ${data.Genre}`, `*Director:* ${data.Director}`, `*Writer:* ${data.Writer}`, `*Actors:* ${data.Actors}`, `*Plot:* ${data.Plot}`, `*Language:* ${data.Language}`, `*Country:* ${data.Country}`, `*Awards:* ${data.Awards}`, `*BoxOffice:* ${data.BoxOffice}`, `*Production:* ${data.Production}`, `*IMDb Rating:* ${data.imdbRating}`, `*IMDb Votes:* ${data.imdbVotes}`].join('\n\n');
+
+      const buff = await getBuffer(data.Poster);
+      await message.send(buff, { caption: imdbInfo });
+   }
+);
