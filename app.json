@@ -1,69 +1,69 @@
 {
-  "name": "xstro-md",
-  "description": "Xstro Md WhatsApp Bot",
-  "logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
-  "repository": "https://github.com/ASTRO-X10/xstro-md",
-  "success_url": "/",
-  "stack": "container",
-  "env": {
-    "HEROKU_API_KEY": {
-      "description": "Heroku Account Api Key",
-      "required": true
-    },
-    "HEROKU_APP_NAME": {
-      "description": "Heroku App Name, Must Be the same above else you can't upgrade",
-      "required": true
-    },
-    "SESSION_ID": {
-      "description": "Session ID for authentication or tracking.",
-      "required": true
-    },
-    "SUDO": {
-      "description": "User ID with sudo permissions for the bot.",
-      "value": "2348039607375",
-      "required": false
-    },
-    "BOT_INFO": {
-      "description": "Information about the bot, such as version or ID.",
-      "value": "Astro;Xstro-Md;",
-      "required": false
-    },
-    "MODE": {
-      "description": "Set the bot public | private",
-      "value": "private",
-      "required": false
-    },
-    "AUTO_STATUS_READ": {
-      "description": "Automaically Read Status",
-      "value": "false",
-      "required": false
-    },
-    "AUTO_READ": {
-      "description": "Automaically Read Messages",
-      "value": "false",
-      "required": false
-    },
-    "STICKER_PACK": {
-      "description": "Set the bot sticker meta data",
-      "value": "Astro;Xstro",
-      "required": false
-    },
-    "PREFIX": {
-      "description": "Set the bot handler, you must choose one, multi prefix not supported",
-      "value": ".",
-      "required": false
-    },
-    "LOGGER": {
-      "description": "Logs every activity from the bot, for nerds",
-      "value": "false",
-      "required": false
-    }
-  },
-  "formation": {
-    "worker": {
-      "quantity": 1,
-      "size": "standard-1x"
-    }
-  },
-  "addons": ["heroku-postgresql"]
+   "name": "xstro-md",
+   "description": "Xstro Md WhatsApp Bot",
+   "logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
+   "repository": "https://github.com/ASTRO-X10/xstro-md",
+   "success_url": "/",
+   "stack": "container",
+   "env": {
+      "HEROKU_API_KEY": {
+         "description": "Heroku Account Api Key",
+         "required": true
+      },
+      "HEROKU_APP_NAME": {
+         "description": "Heroku App Name, Must Be the same above else you can't upgrade",
+         "required": true
+      },
+      "SESSION_ID": {
+         "description": "Session ID for authentication or tracking.",
+         "required": true
+      },
+      "SUDO": {
+         "description": "User ID with sudo permissions for the bot.",
+         "value": "2348039607375",
+         "required": false
+      },
+      "BOT_INFO": {
+         "description": "Information about the bot, such as version or ID.",
+         "value": "Astro;Xstro-Md;",
+         "required": false
+      },
+      "MODE": {
+         "description": "Set the bot public | private",
+         "value": "private",
+         "required": false
+      },
+      "AUTO_STATUS_READ": {
+         "description": "Automaically Read Status",
+         "value": "false",
+         "required": false
+      },
+      "AUTO_READ": {
+         "description": "Automaically Read Messages",
+         "value": "false",
+         "required": false
+      },
+      "STICKER_PACK": {
+         "description": "Set the bot sticker meta data",
+         "value": "Astro;Xstro",
+         "required": false
+      },
+      "PREFIX": {
+         "description": "Set the bot handler, you must choose one, multi prefix not supported",
+         "value": ".",
+         "required": false
+      },
+      "LOGGER": {
+         "description": "Logs every activity from the bot, for nerds",
+         "value": "false",
+         "required": false
+      }
+   },
+   "formation": {
+      "worker": {
+         "quantity": 1,
+         "size": "standard-1x"
+      }
+   },
+   "addons": ["heroku-postgresql"]
 }
