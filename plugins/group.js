@@ -1,6 +1,6 @@
 import { bot } from '../lib/handler.js';
 import { delay } from 'baileys';
-import { fancy } from '../lib/tools/font.js';
+import { fancy } from '../lib/font.js';
 import { numtoId } from '../lib/utils.js';
 import { Antilink } from '../lib/sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';

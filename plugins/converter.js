@@ -1,6 +1,6 @@
 import { bot } from '../lib/handler.js';
-import { fancyText, flipText } from '../lib/tools/font.js';
-import { convertToOpus, flipMedia, toBlackVideo, toSticker } from '../lib/tools/scrapers.js';
+import { fancyText, flipText } from '../lib/font.js';
+import { convertToOpus, flipMedia, toBlackVideo, toSticker } from '../lib/tools.js';
 
 bot(
    {
@@ -35,9 +35,9 @@ bot(
 
 bot(
    {
-      pattern: 'flip',
+      pattern: 'rotate',
       isPublic: true,
-      desc: 'Flips Media to a particular direction',
+      desc: 'Rotates Media to a particular direction',
       type: 'converter',
    },
    async (message, match) => {
