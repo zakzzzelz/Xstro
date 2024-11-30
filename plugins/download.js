@@ -1,5 +1,5 @@
 import config from '../config.js';
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
 
 export const base_url = 'https://api.giftedtech.my.id/api/download/';

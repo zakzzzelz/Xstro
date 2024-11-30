@@ -1,5 +1,5 @@
 import config from '../config.js';
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { setAnti } from '../lib/sql/antidel.js';
 import { disableAntiVV, enableAntiVV, getStatus } from '../lib/sql/antivv.js';
 import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
@@ -66,7 +66,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_');
-      const media = await message.download();
+      const media = await message.downloadAndSaveMedia();
       const buff = await remini(media, 'enhance');
       return await message.send(buff);
    }
@@ -81,7 +81,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_');
-      const media = await message.download();
+      const media = await message.downloadAndSaveMedia();
       const buff = await remini(media, 'recolor');
       return await message.send(buff);
    }
@@ -96,7 +96,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image Only!_');
-      const media = await message.download();
+      const media = await message.downloadAndSaveMedia();
       const buff = await remini(media, 'dehaze');
       return await message.send(buff);
    }

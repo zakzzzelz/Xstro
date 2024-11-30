@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import config from '../config.js';
 import { numtoId } from '../lib/utils.js';
 import { aliveMessage, setAliveMsg } from '../lib/sql/alive.js';

@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { inspect } from 'util';
 import { isSudo } from '../lib/sql/sudo.js';
 

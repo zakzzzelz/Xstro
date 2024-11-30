@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { delay } from 'baileys';
 import { fancy } from '../lib/font.js';
 import { numtoId } from '../lib/utils.js';
@@ -482,7 +482,7 @@ bot(
       if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
       if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image!_');
-      const img = await message.download();
+      const img = await message.downloadAndSaveMedia();
       await client.updateProfilePicture(m.from, img);
       return await message.sendReply('_Group Image Updated_');
    }

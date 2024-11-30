@@ -1,6 +1,6 @@
 import moment from 'moment-timezone';
 import config from '../config.js';
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { fancy } from '../lib/font.js';
 import { getBuffer, getJson, getFloor } from '../lib/utils.js';
 

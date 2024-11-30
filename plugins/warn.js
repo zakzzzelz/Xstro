@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { getWarn, resetWarn, addWarn } from '../lib/sql/warn.js';
 import { numtoId } from '../lib/utils.js';
 

@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { fancy } from '../lib/font.js';
 import { exec } from 'child_process';
 import simplegit from 'simple-git';

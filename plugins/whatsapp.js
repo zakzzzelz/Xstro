@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { serialize } from '../lib/serialize.js';
 import { loadMessage } from '../lib/sql/store.js';
 import { numtoId } from '../lib/utils.js';
@@ -12,7 +12,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message.viewonce) return message.sendReply('_Reply A ViewOnce_');
-      const media = await message.download();
+      const media = await message.downloadAndSaveMedia();
       return await message.send(media);
    }
 );
@@ -42,7 +42,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image_');
-      const img = await message.download();
+      const img = await message.downloadAndSaveMedia();
       await message.client.updateProfilePicture(message.user, img);
       return await message.sendReply('_Profile Picture Updated_');
    }
@@ -62,7 +62,7 @@ bot(
       if (!msg) return await message.sendReply('_Message not found maybe bot might not be running at that time_');
       msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
       if (!msg.quoted) return await message.sendReply('_No quoted message found_');
-      await message.copyNForward(message.jid, msg.quoted);
+      await message.forward(message.jid, msg.quoted, { force: false, quoted: msg.quoted });
    }
 );
 
@@ -157,8 +157,8 @@ bot(
       desc: 'pin a chat',
       type: 'whatsapp',
    },
-   async (message, match, m, client) => {
-      await client.chatModify({ pin: true }, message.jid);
+   async (message) => {
+      await message.client.chatModify({ pin: true }, message.jid);
       return message.sendReply('_Pined.._');
    }
 );
@@ -170,8 +170,8 @@ bot(
       desc: 'unpin a msg',
       type: 'whatsapp',
    },
-   async (message, match, m, client) => {
-      await client.chatModify({ pin: false }, message.jid);
+   async (message) => {
+      await message.client.chatModify({ pin: false }, message.jid);
       return message.sendReply('_Unpined.._');
    }
 );
@@ -186,7 +186,7 @@ bot(
    async (message) => {
       if (!message.reply_message) return message.sendReply('_Reply A Status_');
       const msg = await message.quoted;
-      await message.copyNForward(message.user, msg, { quoted: msg });
+      await message.forward(message.user, msg, { force: false, quoted: msg });
    }
 );
 

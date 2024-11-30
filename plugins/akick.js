@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { numtoId } from '../lib/utils.js';
 import { addAKick, delKick, getKicks } from '../lib/sql/akick.js';
 

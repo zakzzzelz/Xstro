@@ -3,7 +3,7 @@ import path, { join, basename, extname } from 'path';
 import axios from 'axios';
 import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
 import { manageVar } from '../lib/tools.js';

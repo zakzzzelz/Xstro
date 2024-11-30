@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import Greetings, { isEnabled, setWelcomeMessage, setGoodByeMessage, getWelcomeMessage, getGoodByeMessage } from '../lib/sql/greetings.js';
 
 bot(

@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { ChatBot } from '../lib/sql/lydia.js';
 
 bot(

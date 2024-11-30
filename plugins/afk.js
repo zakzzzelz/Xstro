@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { getAfkMessage, setAfkMessage, delAfkMessage } from '../lib/sql/afk.js';
 
 const afkTrack = {}; // To track the last message timestamp for each user (by sender)

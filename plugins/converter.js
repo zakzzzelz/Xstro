@@ -1,4 +1,4 @@
-import { bot } from '../lib/handler.js';
+import { bot } from '../lib/plugins.js';
 import { fancyText, flipText } from '../lib/font.js';
 import { convertToOpus, flipMedia, toBlackVideo, toSticker } from '../lib/tools.js';
 
@@ -12,7 +12,7 @@ bot(
    async (message) => {
       const media = message.reply_message?.video || message.reply_message?.image;
       if (!media) return message.sendReply('_Reply with an Image or Video!_');
-      const msg = await message.download();
+      const msg = await message.downloadAndSaveMedia();
       const stickerBuffer = await toSticker(msg);
       await message.send(stickerBuffer, { type: 'sticker' });
    }
@@ -27,7 +27,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.sticker) return message.sendReply('_Reply Sticker_');
-      const msg = await message.download();
+      const msg = await message.downloadAndSaveMedia();
       const buff = await toSticker(msg);
       return await message.send(buff, { type: 'sticker' });
    }
@@ -44,7 +44,7 @@ bot(
       if (!message.reply_message?.image && !message.reply_message?.video) return message.sendReply('_Reply to an Image or Video_');
       const options = ['left', 'right', 'vertical', 'horizontal'];
       if (!options.includes(match)) return message.sendReply('_Choose a valid option:_ ' + message.prefix + 'flip left, right, vertical, or horizontal');
-      const buff = await message.download();
+      const buff = await message.downloadAndSaveMedia();
       const flippedMedia = await flipMedia(buff, match);
       return await message.send(flippedMedia, { caption: '_Flipped successfully_' });
    }
@@ -59,7 +59,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.audio) return message.sendReply('_Reply An Audio_');
-      const buff = await message.download();
+      const buff = await message.downloadAndSaveMedia();
       const res = await toBlackVideo(buff);
       return await message.send(res);
    }
@@ -89,7 +89,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message?.audio) return message.sendReply('_Reply An Audio_');
-      const media = await message.download();
+      const media = await message.downloadAndSaveMedia();
       const buff = await convertToOpus(media);
       return await message.send(buff);
    }
