@@ -317,6 +317,7 @@ bot(
    },
    async (message, match) => {
       if (!message.reply_message) return message.sendReply('```Reply A Message```');
+      if (message.reply_message?.fromMe) return message.sendReply('```Cannot React to yourself Bro```');
       if (!match) return message.sendReply('```react 😊```');
       return await message.react(match, { key: message.reply_message?.key });
    }
