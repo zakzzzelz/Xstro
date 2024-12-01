@@ -307,3 +307,17 @@ bot(
       return await message.sendReply('```WhatsApp bio Updated to "' + match + '"```');
    }
 );
+
+bot(
+   {
+      pattern: 'react',
+      isPublic: false,
+      desc: 'React to A Message',
+      type: 'whatsapp',
+   },
+   async (message, match) => {
+      if (!message.reply_message) return message.sendReply('```Reply A Message```');
+      if (!match) return message.sendReply('```react 😊```');
+      return await message.react(match, { key: message.reply_message?.key });
+   }
+);
