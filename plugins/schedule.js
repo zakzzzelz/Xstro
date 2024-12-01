@@ -1,5 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import Scheduler from '../lib/sql/scheduler.js';
+import { isAdmin } from '../lib/utils.js';
 
 const convertTo24Hour = (timeStr) => {
    const timeRegex = /^(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)$/i;
@@ -33,8 +34,7 @@ bot(
    },
    async (message, match, m) => {
       if (!message.isGroup) return message.sendReply('_This command is only for groups_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       if (!match) return message.sendReply(`*Please provide time in 12hr format*\n\n_Example: .automute 3:15pm_`);
       const time24 = convertTo24Hour(match.trim());
       if (!time24) return message.sendReply(`*Invalid time format*\n\n_Please use format like: 3:15pm_`);
@@ -65,8 +65,7 @@ bot(
    },
    async (message, match, m) => {
       if (!message.isGroup) return message.sendReply('_For Groups Only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       if (!match) return message.sendReply(`*Inavaild time in 12hr format*\n\n_Example: .autounmute 2:00am_`);
       const time24 = convertTo24Hour(match.trim());
       if (!time24) return message.sendReply(`*Invalid time format*\n\n_Please use format like: 2:00am_`);
@@ -116,8 +115,7 @@ bot(
    },
    async (message, match, m) => {
       if (!message.isGroup) return message.sendReply('_For Groups Only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
       if (!schedule || !schedule.isScheduled) return message.sendReply('_No Jobs Where Online_');
       schedule.isScheduled = false;

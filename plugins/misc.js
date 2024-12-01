@@ -16,10 +16,10 @@ bot(
       type: 'misc',
    },
    async (message, match, m, { prefix, pushName }) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
       if (!match) return message.sendReply(`_${pushName} Wrong Usage!_\n${prefix}antidel on | off`);
 
-      const chatId = m.from;
+      const chatId = message.jid;
       const status = match.toLowerCase() === 'on';
 
       const setStatus = await setAnti(chatId, status);

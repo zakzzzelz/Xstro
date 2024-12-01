@@ -1,5 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import { getAfkMessage, setAfkMessage, delAfkMessage } from '../lib/sql/afk.js';
+import { isSudo } from '../lib/sql/sudo.js';
 
 const afkTrack = {}; // To track the last message timestamp for each user (by sender)
 
@@ -45,10 +46,11 @@ bot(
       on: 'text',
       dontAddCommandList: true,
    },
-   async (message, match, m) => {
+   async (message) => {
       const afkData = await getAfkMessage();
-      if (!afkData || m.sudo) return;
-      if (m.from.endsWith('@g.us')) {
+      const sudo = await isSudo(message.sender, message.user);
+      if (!afkData || sudo) return;
+      if (message.jid.endsWith('@g.us')) {
          if (message.mention && message.mention.includes(message.user)) {
             const lastSeen = afkData.timestamp ? formatDuration(Date.now() - afkData.timestamp) : 'N/A';
             return message.sendReply(`\`\`\`${afkData.message}\n\nLast Seen: ${lastSeen}\`\`\``);

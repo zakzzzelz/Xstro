@@ -221,7 +221,7 @@ bot(
       desc: 'Blocks A Person',
       type: 'whatsapp',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -229,7 +229,7 @@ bot(
          jid = message.mention[0];
       } else if (match) {
          jid = numtoId(match);
-      } else if (!m.isGroup) {
+      } else if (!message.isGroup) {
          jid = message.jid;
       }
       if (!jid) return message.sendReply('_Reply/Tag or give me the person number_');
@@ -249,7 +249,7 @@ bot(
       desc: 'Unblocks A Person',
       type: 'whatsapp',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -257,7 +257,7 @@ bot(
          jid = message.mention[0];
       } else if (match) {
          jid = numtoId(match);
-      } else if (!m.isGroup) {
+      } else if (!message.isGroup) {
          jid = message.jid;
       }
       if (!jid) return message.sendReply('_Reply/Tag or give me the person number_');

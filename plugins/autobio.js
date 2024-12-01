@@ -1,7 +1,5 @@
+import { fancy } from '../lib/font.js';
 import { bot } from '../lib/plugins.js';
-import { serialize } from '../lib/serialize.js';
-import { loadMessage } from '../lib/sql/store.js';
-import { numtoId } from '../lib/utils.js';
 
 let autobioActive = false;
 let autobioInterval;
@@ -17,7 +15,7 @@ bot(
       const action = match?.toLowerCase();
       const updateBio = async () => {
          const timestamp = new Date().toLocaleString();
-         const newBio = `This is auto bio updated by Wasi - ${timestamp}`; // Custom bio
+         const newBio = `${fancy('xstro md auto bio bot')} ${timestamp}`; // Custom bio
          try {
             await message.client.updateProfileStatus(newBio);
             console.log(`[Autobio] Bio updated: ${newBio}`);

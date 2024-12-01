@@ -8,9 +8,9 @@ bot(
       desc: 'Setup Welcome Messages for new Group Members',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_for groups only!_');
-      const groupJid = m.from;
+      const groupJid = message.jid;
       const args = match.trim().split(' ');
 
       if (args[0] === 'on' || args[0] === 'off') {
@@ -46,9 +46,9 @@ bot(
       desc: 'Setup Goodbye Messages for left Group Members',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_for groups only!_');
-      const groupJid = m.from;
+      const groupJid = message.jid;
       const args = match.trim().split(' ');
 
       if (args[0] === 'on' || args[0] === 'off') {

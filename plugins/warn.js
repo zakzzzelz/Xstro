@@ -1,6 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import { getWarn, resetWarn, addWarn } from '../lib/sql/warn.js';
-import { numtoId } from '../lib/utils.js';
+import { isAdmin, numtoId } from '../lib/utils.js';
 
 bot(
    {
@@ -9,7 +9,7 @@ bot(
       desc: 'Warns a user',
       type: 'user',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       let jid;
       let reason;
 
@@ -23,7 +23,7 @@ bot(
             reason = match.split(';')[1]?.trim() || 'No reason provided';
          }
       } else {
-         jid = m.from;
+         jid = message.jid;
          reason = match || 'No reason provided';
       }
 
@@ -37,10 +37,10 @@ bot(
 
          if (response.warnings > 3) {
             if (message.isGroup) {
-               if (m.isAdmin || m.isBotAdmin) {
+               if (isAdmin(message.jid, message.user, message.client)) {
                   try {
-                     await client.groupParticipantsUpdate(message.from, [jid], 'remove');
-                     await client.updateBlockStatus(jid, 'block');
+                     await message.client.groupParticipantsUpdate(message.from, [jid], 'remove');
+                     await message.client.updateBlockStatus(jid, 'block');
                      await resetWarn(jid);
                      await message.sendReply(`@${jid.split('@')[0]} *was removed from the group and blocked for exceeding the warning limit.*`, { mentions: [jid] });
                   } catch (error) {
@@ -50,7 +50,7 @@ bot(
                   await message.sendReply('_Cannot take action as I am not an admin or the command issuer is not an admin._');
                }
             } else {
-               await client.updateBlockStatus(m.from, 'block');
+               await message.client.updateBlockStatus(message.jid, 'block');
                await resetWarn(jid);
                await message.sendReply(`*User @${jid.split('@')[0]} was blocked for exceeding the warning limit.*`, { mentions: [jid] });
             }
@@ -68,7 +68,7 @@ bot(
       desc: 'Resets a user’s warnings',
       type: 'user',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -77,7 +77,7 @@ bot(
       } else if (match) {
          jid = numtoId(match);
       } else if (!message.isGroup) {
-         jid = m.from;
+         jid = message.jid;
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 
@@ -95,7 +95,7 @@ bot(
       desc: 'Checks a user’s warnings',
       type: 'user',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -104,7 +104,7 @@ bot(
       } else if (match) {
          jid = numtoId(match);
       } else if (!message.isGroup) {
-         jid = m.from;
+         jid = message.jid;
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
 

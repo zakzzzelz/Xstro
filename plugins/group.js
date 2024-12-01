@@ -1,7 +1,7 @@
 import { bot } from '../lib/plugins.js';
 import { delay } from 'baileys';
 import { fancy } from '../lib/font.js';
-import { numtoId } from '../lib/utils.js';
+import { numtoId, isAdmin } from '../lib/utils.js';
 import { Antilink } from '../lib/sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';
 
@@ -12,10 +12,9 @@ bot(
       desc: 'Adds A User to Group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 
       let jid;
       if (message.reply_message) {
@@ -27,10 +26,10 @@ bot(
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
       try {
-         await client.groupParticipantsUpdate(message.jid, [jid], 'add');
+         await message.client.groupParticipantsUpdate(message.jid, [jid], 'add');
          return message.sendReply(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
       } catch {
-         const inviteLink = await client.groupInviteCode(message.jid);
+         const inviteLink = await message.client.groupInviteCode(message.jid);
          const userMessage = {
             text: `_@${message.sender.split('@')[0]} wants to add you to the group._\n\n*_Join here: https://chat.whatsapp.com/${inviteLink}_*\n`,
             mentions: [message.sender],
@@ -48,10 +47,10 @@ bot(
       desc: 'Create and Share Advertisement Messages to all Your Groups',
       type: 'group',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       const adMsg = match || message.reply_message?.text;
       if (!adMsg) return message.sendReply('_I need text to advertise!_');
-      const groups = await client.groupFetchAllParticipating();
+      const groups = await message.client.groupFetchAllParticipating();
       const groupDetails = Object.values(groups);
       const groupIds = groupDetails.map((group) => group.id);
       await message.sendReply(`_Broadcasting to ${groupIds.length} groups. Estimated completion in ${groupIds.length * 1.5} seconds_`);
@@ -62,7 +61,7 @@ bot(
       };
       for (const groupId of groupIds) {
          await delay(1500);
-         await client.sendMessage(groupId, { text: broadcastMessage, contextInfo: messageOptions });
+         await message.client.sendMessage(groupId, { text: broadcastMessage, contextInfo: messageOptions });
       }
       return await message.sendReply(`_Advertised Message to ${groupIds.length} Groups_`);
    }
@@ -75,10 +74,9 @@ bot(
       desc: 'Setup Antilink For Groups',
       type: 'Group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For Groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 
       const [settings] = await Antilink.findOrCreate({
          where: { groupId: message.jid },
@@ -114,10 +112,9 @@ bot(
       desc: 'Setup Antiword for Groups',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For Groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 
       const groupId = message.jid;
       const antiWordConfig = await AntiWord.findOrCreate({ where: { groupId } });
@@ -160,18 +157,17 @@ bot(
       desc: 'Kick a certain country code from a group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       const countryCode = match?.trim().replace('+', '');
       if (!countryCode || isNaN(countryCode)) return message.sendReply('_Please provide a valid country code._');
-      const metadata = await client.groupMetadata(m.from);
+      const metadata = await message.client.groupMetadata(message.jid);
       const participants = metadata.participants;
       const toKick = participants.filter((participant) => participant.id.startsWith(`${countryCode}`) && !participant.admin).map((participant) => participant.id);
       if (!toKick.length) return message.sendReply(`_No members found with the country code ${countryCode}._`);
       for (const jid of toKick) {
-         await client.groupParticipantsUpdate(m.from, [jid], 'remove');
+         await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
          await message.sendReply(`_Kicked member:_ @${jid.split('@')[0]}`, { mentions: [jid] });
          await delay(2000);
       }
@@ -186,13 +182,12 @@ bot(
       desc: 'Change Group Name',
       type: 'group',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       const subject = match || message.reply_message?.text;
       if (!subject) return message.sendReply('_Provide A New Name for the Group!_');
-      await client.groupUpdateSubject(message.jid, subject);
+      await message.client.groupUpdateSubject(message.jid, subject);
       return message.sendReply('_Group Name Updated_');
    }
 );
@@ -204,12 +199,11 @@ bot(
       desc: 'Changes Group Description',
       type: 'group',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       const desciption = match || message.reply_message?.text;
-      await client.groupUpdateDescription(message.jid, desciption);
+      await message.client.groupUpdateDescription(message.jid, desciption);
       return message.sendReply('_Group Description Updated_');
    }
 );
@@ -221,10 +215,9 @@ bot(
       desc: 'Promotes Someone to Admin',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -234,13 +227,13 @@ bot(
          jid = numtoId(match);
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
-      const groupMetadata = await client.groupMetadata(message.jid);
+      const groupMetadata = await message.client.groupMetadata(message.jid);
       const participant = groupMetadata.participants.find((p) => p.id === jid);
       if (participant.admin)
          return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is already an admin._`, {
             mentions: [jid],
          });
-      await client.groupParticipantsUpdate(message.jid, [jid], 'promote');
+      await message.client.groupParticipantsUpdate(message.jid, [jid], 'promote');
       return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is now an admin_`, {
          mentions: [jid],
       });
@@ -254,10 +247,9 @@ bot(
       desc: 'Demotes Someone from Admin',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -267,13 +259,13 @@ bot(
          jid = numtoId(match);
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
-      const groupMetadata = await client.groupMetadata(message.jid);
+      const groupMetadata = await message.client.groupMetadata(message.jid);
       const participant = groupMetadata.participants.find((p) => p.id === jid);
       if (!participant.admin)
          return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is not an admin._`, {
             mentions: [jid],
          });
-      await client.groupParticipantsUpdate(message.jid, [jid], 'demote');
+      await message.client.groupParticipantsUpdate(message.jid, [jid], 'demote');
       return message.sendReply(`_@${jid.replace('@s.whatsapp.net', '')} is no longer an admin_`, {
          mentions: [jid],
       });
@@ -287,10 +279,9 @@ bot(
       desc: 'Kicks A Participant from Group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       let jid;
       if (message.reply_message) {
          jid = message.reply_message.sender;
@@ -300,7 +291,7 @@ bot(
          jid = numtoId(match);
       }
       if (!jid) return message.sendReply('_Reply, tag, or give me the participant number_');
-      await client.groupParticipantsUpdate(message.jid, [jid], 'remove');
+      await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
       return message.sendReply(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });
    }
 );
@@ -312,12 +303,12 @@ bot(
       desc: 'Get Group Invite link',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const code = await client.groupInviteCode(message.jid);
-      return message.sendReply(`*_Invite Link: https://chat.whatsapp.com/${code}_*`);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const msg = await message.sendReply('*wait*');
+      const code = await message.client.groupInviteCode(message.jid);
+      return msg.edit(`https://chat.whatsapp.com/${code}`);
    }
 );
 
@@ -341,12 +332,12 @@ bot(
       desc: 'Creates a poll in the group.',
       type: 'group',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       let [pollName, pollOptions] = match.split(';');
       if (!pollOptions) return await message.sendReply(message.prefix + 'poll question;option1,option2,option3.....');
       let options = [];
       for (let option of pollOptions.split(',')) if (option && option.trim() !== '') options.push(option.trim());
-      await client.sendMessage(m.from, {
+      await message.client.sendMessage(message.jid, {
          poll: {
             name: pollName,
             values: options,
@@ -362,14 +353,14 @@ bot(
       desc: 'Tag all participants in the group with an optional message',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
       const msg = match || message.reply_message?.text;
       const text = msg || '';
-      const participants = await client.groupMetadata(message.jid);
+      const participants = await message.client.groupMetadata(message.jid);
       const participantJids = participants.participants.map((p) => p.id);
       let taggedMessage = text ? `*${text}*` : '';
-      await client.sendMessage(message.jid, {
+      await message.client.sendMessage(message.jid, {
          text: taggedMessage,
          mentions: participantJids,
       });
@@ -383,14 +374,14 @@ bot(
       desc: 'Tag all participants in the group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
+   async (message, match) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
       const msg = match || message.reply_message?.text;
       if (!msg) return message.sendReply('_You must provide a reason for tagging everyone._');
-      const participants = await client.groupMetadata(message.jid);
+      const participants = await message.client.groupMetadata(message.jid);
       const participantJids = participants.participants.map((p) => p.id);
       const tagMsg = `*Reason:* ${msg}\n\n` + participantJids.map((jid) => `@${jid.split('@')[0]}`).join('\n');
-      await client.sendMessage(message.jid, {
+      await message.client.sendMessage(message.jid, {
          text: tagMsg,
          mentions: participantJids,
       });
@@ -404,13 +395,12 @@ bot(
       desc: 'Mute a group (admins only)',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const metadata = await client.groupMetadata(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const metadata = await message.client.groupMetadata(message.jid);
       if (metadata.announce) return message.sendReply('_Group is already muted. Only admins can send messages._');
-      await client.groupSettingUpdate(m.from, 'announcement');
+      await message.client.groupSettingUpdate(message.jid, 'announcement');
       await message.sendReply('_Group has been muted. Only admins can send messages now._');
    }
 );
@@ -422,13 +412,12 @@ bot(
       desc: 'Unmute a group (admins only)',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const metadata = await client.groupMetadata(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const metadata = await message.client.groupMetadata(message.jid);
       if (!metadata.announce) return message.sendReply('_Group is already unmuted. All members can send messages._');
-      await client.groupSettingUpdate(m.from, 'not_announcement');
+      await message.client.groupSettingUpdate(message.jid, 'not_announcement');
       await message.sendReply('_Group has been unmuted. All members can send messages now._');
    }
 );
@@ -440,9 +429,9 @@ bot(
       desc: 'Tags Admins of A Group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      const groupMetadata = await client.groupMetadata(message.jid);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      const groupMetadata = await message.client.groupMetadata(message.jid);
       const groupAdmins = groupMetadata.participants.filter((p) => p.admin !== null).map((p) => p.id);
       if (groupAdmins.length > 0) {
          const adminTags = groupAdmins.map((admin) => `@${admin.split('@')[0]}`);
@@ -461,11 +450,10 @@ bot(
       desc: 'Revoke Invite link',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      await client.groupRevokeInvite(message.jid);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      await message.client.groupRevokeInvite(message.jid);
       return message.sendReply('_Group Link Revoked!_');
    }
 );
@@ -477,13 +465,12 @@ bot(
       desc: 'Changes Group Profile Picture',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       if (!message.reply_message?.image) return message.sendReply('_Reply An Image!_');
       const img = await message.downloadAndSaveMedia();
-      await client.updateProfilePicture(m.from, img);
+      await message.client.updateProfilePicture(message.jid, img);
       return await message.sendReply('_Group Image Updated_');
    }
 );
@@ -495,13 +482,12 @@ bot(
       desc: 'Lock groups settings',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const meta = await client.groupMetadata(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const meta = await message.client.groupMetadata(message.jid);
       if (meta.restrict) return message.sendReply('_Group is already locked to Admins._');
-      await client.groupSettingUpdate(m.from, 'locked');
+      await message.client.groupSettingUpdate(message.jid, 'locked');
       return message.sendReply('_Group has been locked to Admins_');
    }
 );
@@ -513,13 +499,12 @@ bot(
       desc: 'Unlock groups settings',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const meta = await client.groupMetadata(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const meta = await message.client.groupMetadata(message.jid);
       if (!meta.restrict) return message.sendReply('_Group is already unlocked for participants._');
-      await client.groupSettingUpdate(m.from, 'unlocked');
+      await message.client.groupSettingUpdate(message.jid, 'unlocked');
       return message.sendReply('_Group is now unlocked for participants._');
    }
 );
@@ -531,12 +516,11 @@ bot(
       desc: 'Shows the pending requests of the group',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const joinRequests = await client.groupRequestParticipantsList(m.from);
-      if (!joinRequests || !joinRequests[0]) return await message.reply('_No Join Requests_');
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
+      if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Join Requests_');
       let requestList = '*_Group Join Requets List_*\n\n';
       let requestJids = [];
       for (let request of joinRequests) {
@@ -554,17 +538,16 @@ bot(
       desc: 'Accept all join requests',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 
-      const joinRequests = await client.groupRequestParticipantsList(m.from);
+      const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
       if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
       let acceptedUsers = [];
       let acceptanceList = '*_Accepted Users_*\n\n';
       for (let request of joinRequests) {
-         await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'approve');
+         await message.client.groupRequestParticipantsUpdate(message.jid, [request.jid], 'approve');
          acceptanceList += `@${request.jid.split('@')[0]}\n`;
          acceptedUsers.push(request.jid);
       }
@@ -579,16 +562,15 @@ bot(
       desc: 'Reject all join requests',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      const joinRequests = await client.groupRequestParticipantsList(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
       if (!joinRequests || !joinRequests[0]) return await message.sendReply('_No Requests Found!_');
       let rejectedUsers = [];
       let rejectionList = '*_Rejected Users_*\n\n';
       for (let request of joinRequests) {
-         await client.groupRequestParticipantsUpdate(m.from, [request.jid], 'reject');
+         await message.client.groupRequestParticipantsUpdate(message.jid, [request.jid], 'reject');
          rejectionList += `@${request.jid.split('@')[0]}\n`;
          rejectedUsers.push(request.jid);
       }
@@ -603,11 +585,10 @@ bot(
       desc: 'Removes Group Profile Photo',
       type: 'group',
    },
-   async (message, match, m, client) => {
-      if (!m.isGroup) return message.sendReply('_For groups only!_');
-      if (!m.isAdmin) return message.sendReply('_For Admins Only!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need to be Admin_');
-      await client.removeProfilePicture(m.from);
+   async (message) => {
+      if (!message.isGroup) return message.sendReply('_For groups only!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
+      await message.client.removeProfilePicture(message.jid);
       return await message.sendReply('_Group Profile Photo Removed!_');
    }
 );
@@ -619,7 +600,7 @@ bot(
       desc: 'Creates A New Group',
       type: 'group',
    },
-   async (message, match, m, client) => {
+   async (message, match) => {
       if (!match) return await message.sendReply(`*Provide group name: .newgc GroupName*`);
 
       let groupName = match.split(';')[0];
@@ -636,7 +617,7 @@ bot(
          members = [...members, ...ids];
       }
       members = [...new Set(members)];
-      await client.groupCreate(groupName, members);
+      await message.client.groupCreate(groupName, members);
       return await message.sendReply(`_Group Created_`);
    }
 );

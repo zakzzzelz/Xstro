@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { numtoId } from '../lib/utils.js';
+import { isAdmin, numtoId } from '../lib/utils.js';
 import { addAKick, delKick, getKicks } from '../lib/sql/akick.js';
 
 bot(
@@ -10,11 +10,10 @@ bot(
       type: 'group',
    },
    async (message, match, m) => {
-      if (!m.isGroup) return message.sendReply('_This command can only be used in groups!_');
-      if (!m.isAdmin) return message.sendReply('_Only admins can use this command!_');
-      if (!m.isBotAdmin) return message.sendReply('_I need admin privileges to perform this action!_');
+      if (!message.isGroup) return message.sendReply('_This command can only be used in groups!_');
+      if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 
-      const groupId = m.from;
+      const groupId = message.jid;
 
       let jid;
       if (message.reply_message) {
