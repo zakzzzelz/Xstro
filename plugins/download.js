@@ -1,6 +1,6 @@
 import config from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
+import { extractUrlFromMessage, getBuffer, getJson, mods } from '../lib/utils.js';
 
 export const base_url = 'https://api.giftedtech.my.id/api/download/';
 const { API_KEY } = config;
@@ -16,7 +16,7 @@ bot(
       const req = extractUrlFromMessage(match || message.reply_message?.text);
       if (!req) return message.sendReply('```I need Facebook Url!````');
       const res = await getJson(`${base_url}facebook?apikey=${API_KEY}&url=${req}`);
-      const buff = await getBuffer(res.result.hd_video);
+      const buff = await mods.getBufferFromUrl(res.result.hd_video);
       return await message.send(buff);
    }
 );
