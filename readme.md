@@ -1,6 +1,6 @@
-### Xstro MD WhatsApp Bot
+## Full Featured Javascript Baileys Web API
 
-<p>This is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used Axios to keep it lightweight and fast. All you need is a decent internet connection from your server.</p>
+<p>Xstro is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used Axios to keep it lightweight and fast. All you need is a decent internet connection from your server.</p>
 
 ### SETUP
 
