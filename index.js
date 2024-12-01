@@ -31,7 +31,7 @@ async function startBot() {
       console.log('XSTRO MD');
       await getSession();
       await config.DATABASE.sync();
-      await loadFiles(join(__dirname, 'lib/sql'));
+      await loadFiles(join(__dirname, 'plugins/sql'));
       await loadFiles(join(__dirname, 'plugins'));
       await connect();
       await config.DATABASE.sync();

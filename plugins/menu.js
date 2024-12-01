@@ -2,7 +2,7 @@ import config from '../config.js';
 import { commands, bot } from '../lib/plugins.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
-import { fancy } from '../lib/font.js';
+import { fancy } from './bot/font.js';
 
 bot(
    {

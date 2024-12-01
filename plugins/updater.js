@@ -1,9 +1,9 @@
 import { bot } from '../lib/plugins.js';
-import { fancy } from '../lib/font.js';
+import { fancy } from './bot/font.js';
 import { exec } from 'child_process';
 import simplegit from 'simple-git';
 import { manageProcess } from '../lib/utils.js';
-import { updateHerokuApp } from '../lib/tools.js';
+import { updateHerokuApp } from './bot/tools.js';
 import config from '../config.js';
 
 const git = simplegit();

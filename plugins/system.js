@@ -6,8 +6,8 @@ import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
 import { extractUrlFromMessage, manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../lib/sql/plugins.js';
-import { manageVar } from '../lib/tools.js';
-import { fancy } from '../lib/font.js';
+import { manageVar } from './bot/tools.js';
+import { fancy } from './bot/font.js';
 
 const envFilePath = path.join(process.cwd(), '.env');
 const envfile = () => {

@@ -1,4 +1,4 @@
-import { fancy } from '../lib/font.js';
+import { fancy } from './bot/font.js';
 import { bot } from '../lib/plugins.js';
 
 let autobioActive = false;

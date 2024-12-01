@@ -1,6 +1,6 @@
 import { bot } from '../lib/plugins.js';
-import { fancyText, flipText } from '../lib/font.js';
-import { convertToOpus, flipMedia, toBlackVideo, toSticker } from '../lib/tools.js';
+import { fancyText, flipText } from './bot/font.js';
+import { convertToOpus, flipMedia, toBlackVideo, toSticker } from './bot/tools.js';
 
 bot(
    {

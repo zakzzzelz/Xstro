@@ -1,18 +1,18 @@
 import moment from 'moment-timezone';
-import config from '../config.js';
+import config from '../../config.js';
 import { format } from 'date-fns';
 import { schedule as _schedule } from 'node-cron';
 import { downloadMediaMessage } from 'baileys';
-import { loadMessage } from './sql/store.js';
-import { getAnti } from './sql/antidel.js';
-import { Antilink } from './sql/antilink.js';
-import { getStatus } from './sql/antivv.js';
-import { AntiWord } from './sql/antiword.js';
-import { getKicks } from './sql/akick.js';
-import { isEnabled, getWelcomeMessage, getGoodByeMessage } from './sql/greetings.js';
-import { getBuffer, numtoId, getJson } from './utils.js';
-import { ChatBot } from './sql/lydia.js';
-import Scheduler from './sql/scheduler.js';
+import { loadMessage } from '../sql/store.js';
+import { getAnti } from '../sql/antidel.js';
+import { Antilink } from '../sql/antilink.js';
+import { getStatus } from '../sql/antivv.js';
+import { AntiWord } from '../sql/antiword.js';
+import { getKicks } from '../sql/akick.js';
+import { isEnabled, getWelcomeMessage, getGoodByeMessage } from '../sql/greetings.js';
+import { getBuffer, numtoId, getJson } from '../../lib/utils.js';
+import { ChatBot } from '../sql/lydia.js';
+import Scheduler from '../sql/scheduler.js';
 
 export const handleAntiDelete = async (conn, updates) => {
    for (const update of updates) {

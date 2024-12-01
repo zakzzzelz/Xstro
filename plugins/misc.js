@@ -3,7 +3,7 @@ import { bot } from '../lib/plugins.js';
 import { setAnti } from '../lib/sql/antidel.js';
 import { disableAntiVV, enableAntiVV, getStatus } from '../lib/sql/antivv.js';
 import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
-import { remini } from '../lib/tools.js';
+import { remini } from './bot/tools.js';
 
 const { API_KEY } = config;
 const base_url = `https://api.giftedtech.my.id/api/tools/`;

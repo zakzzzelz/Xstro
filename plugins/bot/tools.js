@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import axios from 'axios';
 import FormData from 'form-data';
-import config from '../config.js';
+import config from '../../config.js';
 import { fileTypeFromBuffer } from 'file-type';
 import { join } from 'path';
 import simpleGit from 'simple-git';

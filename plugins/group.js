@@ -1,8 +1,8 @@
 import { bot } from '../lib/plugins.js';
 import { delay } from 'baileys';
-import { fancy } from '../lib/font.js';
+import { fancy } from '../bot/font.js';
 import { numtoId, isAdmin } from '../lib/utils.js';
-import { Antilink } from '../lib/sql/antilink.js';
+import { Antilink } from './sql/antilink.js';
 import { AntiWord } from '../lib/sql/antiword.js';
 
 bot(
