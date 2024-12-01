@@ -7,7 +7,7 @@ const require = createRequire(import.meta.url);
 const toBool = (x) => x === 'true';
 const DATABASE_URL = process.env.DATABASE_URL || './database.db';
 const config = {
-   BASE_API_URL: process.env.BASE_API_URL || 'https://bit.ly/4g3AaWw',
+   BASE_API_URL: process.env.BASE_API_URL || 'https://xstro-api-ec3ad328e76f.herokuapp.com',
    API_KEY: process.env.API_KEY || 'astro_fx-k56DdhdS7@gifted_api',
    SESSION_ID: process.env.SESSION_ID || '',
    BOT_INFO: process.env.BOT_INFO || 'ᴀsᴛʀᴏ;xsᴛʀᴏ-ᴍᴅ',

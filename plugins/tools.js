@@ -49,3 +49,19 @@ bot(
       return await message.sendReply(res.encrypted_code);
    }
 );
+
+bot(
+   {
+      pattern: 'surl',
+      isPublic: true,
+      desc: 'Shorterns A Url',
+      type: 'tools',
+   },
+   async (message, match) => {
+      const url = extractUrlFromMessage(match || message.reply_message?.text);
+      if (!url) return message.sendReply('_No Url found_');
+      const msg = await message.sendReply('*wait*');
+      const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`);
+      return await msg.edit(res.link);
+   }
+);
