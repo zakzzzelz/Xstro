@@ -1,4 +1,3 @@
-import { fancy } from './bot/font.js';
 import { bot } from '../lib/plugins.js';
 
 let autobioActive = false;
@@ -15,7 +14,7 @@ bot(
 		const action = match?.toLowerCase();
 		const updateBio = async () => {
 			const timestamp = new Date().toLocaleString();
-			const newBio = `${fancy('xstro md auto bio bot')} ${timestamp}`; // Custom bio
+			const newBio = `${('xstro md auto bio bot')} ${timestamp}`; // Custom bio
 			try {
 				await message.client.updateProfileStatus(newBio);
 				console.log(`[Autobio] Bio updated: ${newBio}`);

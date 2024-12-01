@@ -1,9 +1,9 @@
-import mod from 'utils';
 import moment from 'moment-timezone';
 import config from '../../config.js';
 import { format } from 'date-fns';
 import { schedule as _schedule } from 'node-cron';
 import { downloadMediaMessage } from 'baileys';
+import { numtoId, utils } from '../../lib/utils.js';
 import { loadMessage } from '../sql/store.js';
 import { getAnti } from '../sql/antidel.js';
 import { Antilink } from '../sql/antilink.js';
@@ -11,7 +11,6 @@ import { getStatus } from '../sql/antivv.js';
 import { AntiWord } from '../sql/antiword.js';
 import { getKicks } from '../sql/akick.js';
 import { isEnabled, getWelcomeMessage, getGoodByeMessage } from '../sql/greetings.js';
-import { numtoId } from '../../lib/utils.js';
 import { ChatBot } from '../sql/lydia.js';
 import Scheduler from '../sql/scheduler.js';
 
@@ -238,7 +237,7 @@ const getProfilePicture = async (conn, jid) => {
 	const ppUrl = await conn.profilePictureUrl(jid, 'image');
 	if (!ppUrl) return null;
 
-	const res = await mod.getBufferFromUrl(ppUrl);
+	const res = await utils.getBufferFromUrl(ppUrl);
 	return res;
 };
 
@@ -289,7 +288,7 @@ export async function chatAi(msg, conn) {
 export async function chatBotReply(msg, conn) {
 	if (!msg || !conn) return;
 	if (!msg.body) return;
-	const res = await mod.getJsonFromUrl(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
+	const res = await utils.getJsonFromUrl(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
 	await conn.sendMessage(msg.from, { text: res.cnt });
 }
 

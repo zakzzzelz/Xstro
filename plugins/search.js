@@ -1,8 +1,7 @@
 import moment from 'moment-timezone';
 import config from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { getFloor } from '../lib/utils.js';
-import utils from 'utils';
+import { getFloor,utils } from '../lib/utils.js';
 const base_url = 'https://api.giftedtech.my.id/api/';
 const { API_KEY } = config;
 

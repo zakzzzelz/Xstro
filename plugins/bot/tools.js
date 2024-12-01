@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
-import utils from 'utils'
+import {utils} from '../../lib/utils.js'
 import { join } from 'path';
 import simpleGit from 'simple-git';
 import Heroku from 'heroku-client';

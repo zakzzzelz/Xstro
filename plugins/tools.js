@@ -1,5 +1,5 @@
 import config from '../config.js';
-import utils from 'utils'
+import {utils} from '../lib/utils.js'
 import { bot } from '../lib/plugins.js';
 
 const { API_KEY } = config;
