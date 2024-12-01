@@ -14,7 +14,7 @@ First, you gotta fork the repo to your own GitHub account.
 
 Grab a session to start using the bot.
 
-[![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://xstro-pair-ajbz.onrender.com)
+[![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://bit.ly/3OvLoat)
 
 ## Warning
 
