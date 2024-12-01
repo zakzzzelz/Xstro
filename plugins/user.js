@@ -1,10 +1,10 @@
 import { bot } from '../lib/plugins.js';
 import config from '../config.js';
 import { numtoId } from '../lib/utils.js';
-import { aliveMessage, setAliveMsg } from '../lib/sql/alive.js';
-import { addBan, getBanned, removeBan } from '../lib/sql/ban.js';
-import { getSudo, delSudo, addSudo } from '../lib/sql/sudo.js';
-import { addNote, removeNote, updateNote, getNotes } from '../lib/sql/notes.js';
+import { aliveMessage, setAliveMsg } from './sql/alive.js';
+import { addBan, getBanned, removeBan } from './sql/ban.js';
+import { getSudo, delSudo, addSudo } from './sql/sudo.js';
+import { addNote, removeNote, updateNote, getNotes } from './sql/notes.js';
 
 bot(
    {

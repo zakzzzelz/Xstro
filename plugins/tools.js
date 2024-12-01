@@ -1,6 +1,6 @@
 import config from '../config.js';
+import utils from 'utils'
 import { bot } from '../lib/plugins.js';
-import { extractUrlFromMessage, getBuffer, getJson } from '../lib/utils.js';
 
 const { API_KEY } = config;
 const base_url = `https://api.giftedtech.my.id/api/tools/`;
@@ -18,7 +18,7 @@ bot(
          if (!user) return message.sendReply('_Reply Or Tag Someone_');
          try {
             const pp = await message.client.profilePictureUrl(user, 'image');
-            const res = await getBuffer(pp);
+            const res = await utils.getBufferFromUrl(pp);
             await message.send(res);
          } catch {
             message.sendReply('_No Profile Photo_');
@@ -26,7 +26,7 @@ bot(
       } else {
          try {
             const pp = await message.client.profilePictureUrl(message.jid, 'image');
-            const res = await getBuffer(pp);
+            const res = await utils.getBufferFromUrl(pp);
             await message.send(res);
          } catch {
             message.sendReply('_No Profile Photo_');
@@ -45,7 +45,7 @@ bot(
    async (message, match) => {
       const code = match || message.reply_message?.text;
       if (!code) return message.sendReply('```Provide JS Code```');
-      const res = await getJson(`${base_url}encrypt?apikey=${API_KEY}&code=${code}`);
+      const res = await utils.getJsonFromUrl(`${base_url}encrypt?apikey=${API_KEY}&code=${code}`);
       return await message.sendReply(res.encrypted_code);
    }
 );
@@ -58,10 +58,10 @@ bot(
       type: 'tools',
    },
    async (message, match) => {
-      const url = extractUrlFromMessage(match || message.reply_message?.text);
+      const url = utils.extractUrlFromString(match || message.reply_message?.text);
       if (!url) return message.sendReply('_No Url found_');
       const msg = await message.sendReply('*wait*');
-      const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`);
+      const res = await utils.getJsonFromUrl(`${config.BASE_API_URL}/api/shorten?url=${url}`);
       return await msg.edit(res.link);
    }
 );

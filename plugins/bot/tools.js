@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
-import { fileTypeFromBuffer } from 'file-type';
+import utils from 'utils'
 import { join } from 'path';
 import simpleGit from 'simple-git';
 import Heroku from 'heroku-client';
@@ -73,7 +73,7 @@ export const updateHerokuApp = async () => {
 };
 
 export async function flipMedia(buffer, direction) {
-   const fileType = await fileTypeFromBuffer(buffer);
+   const fileType =  utils.FileTypeFromBuffer(buffer);
    if (!fileType) throw new Error('Unsupported file type.');
    const { ext, mime } = fileType;
    const form = new FormData();
@@ -120,7 +120,7 @@ export async function convertToOpus(buffer) {
 }
 
 export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';')[1], author = config.STICKER_PACK.split(';')[0]) => {
-   const fileType = await fileTypeFromBuffer(buffer);
+   const fileType =  utils.FileTypeFromBuffer(buffer);
    if (!fileType) throw new Error('Unsupported or unknown file type');
    const { mime, ext } = fileType;
    const form = new FormData();
