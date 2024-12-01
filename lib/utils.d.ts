@@ -1,0 +1,15 @@
+export function manageProcess(opts: any): Promise<void>;
+export function getBuffer(url: any, options?: {}): Promise<Buffer<ArrayBufferLike>>;
+export function extractUrlFromMessage(message: any): string | null;
+export function getJson(url: any, options?: {}): Promise<any>;
+export function parsedJid(text?: string): string[];
+export function formatBytes(bytes: any, decimals?: number): string;
+export function isAdmin(jid: any, user: any, client: any): Promise<any>;
+export function decodeJid(jid: any): any;
+export function runtime(seconds: any): string;
+export function getFloor(number: any): number;
+export function getRandom(array: any): any;
+export function sleep(ms: any): Promise<any>;
+export function numtoId(phoneNumber: any): string;
+export function getMimeType(buffer: any): Promise<"text/plain" | import("file-type").MimeType | "application/octet-stream">;
+import { Buffer } from 'buffer';

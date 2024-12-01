@@ -32,7 +32,7 @@ bot(
       desc: 'Set a time to automatically mute a group',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_This command is only for groups_');
       if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       if (!match) return message.sendReply(`*Please provide time in 12hr format*\n\n_Example: .automute 3:15pm_`);
@@ -63,7 +63,7 @@ bot(
       desc: 'Set a time to automatically unmute a group',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For Groups Only!_');
       if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       if (!match) return message.sendReply(`*Inavaild time in 12hr format*\n\n_Example: .autounmute 2:00am_`);
@@ -113,7 +113,7 @@ bot(
       desc: 'Cancel mute schedule for the group',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_For Groups Only!_');
       if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
       const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });

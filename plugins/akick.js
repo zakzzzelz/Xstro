@@ -9,7 +9,7 @@ bot(
       desc: 'AutoKicks a member from the group.',
       type: 'group',
    },
-   async (message, match, m) => {
+   async (message, match) => {
       if (!message.isGroup) return message.sendReply('_This command can only be used in groups!_');
       if (!isAdmin(message.jid, message.user, message.client)) return await message.sendReply("_I'm not admin_");
 

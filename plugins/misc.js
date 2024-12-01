@@ -15,7 +15,7 @@ bot(
       desc: 'Configure AntiDelete',
       type: 'misc',
    },
-   async (message, match, m, { prefix, pushName }) => {
+   async (message, match, { prefix, pushName }) => {
       if (!message.isGroup) return message.sendReply('_For groups only!_');
       if (!match) return message.sendReply(`_${pushName} Wrong Usage!_\n${prefix}antidel on | off`);
 
