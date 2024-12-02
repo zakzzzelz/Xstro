@@ -2648,7 +2648,7 @@ util-deprecate@^1.0.1:
 
 "utils@github:/AstroX11/Utils":
   version "0.0.0"
-  resolved "https://codeload.github.com/AstroX11/Utils/tar.gz/6f274323924bf5cc4f3df0d159044d0d9a4426ec"
+  resolved "https://codeload.github.com/AstroX11/Utils/tar.gz/36ef7033bda8fbe118992f137365d12839253de5"
 
 uuid@8.3.2, uuid@^8.3.2:
   version "8.3.2"
