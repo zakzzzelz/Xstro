@@ -185,7 +185,7 @@ bot(
    },
    async (message) => {
       if (!message.reply_message) return message.sendReply('_Reply A Status_');
-      const msg = await message.quoted;
+      const msg = await message.data?.quoted;
       await message.forward(message.user, msg, { force: false, quoted: msg });
    }
 );
@@ -206,7 +206,7 @@ bot(
          jid = numtoId(match);
       }
       if (!jid) return message.sendReply('_You have to provide a number/tag someone_');
-      const msg = message.quoted;
+      const msg = message.data?.quoted;
       await message.forward(jid, msg, { quoted: msg });
       return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, {
          mentions: [jid],
