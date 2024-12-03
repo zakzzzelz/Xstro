@@ -239,7 +239,7 @@ const getProfilePicture = async (conn, jid) => {
 	const ppUrl = await conn.profilePictureUrl(jid, 'image');
 	if (!ppUrl) return null;
 
-	const res = await utils.getBufferFromUrl(ppUrl);
+	const res = await utils.getBuffer(ppUrl);
 	return res;
 };
 
@@ -290,7 +290,7 @@ export async function chatAi(msg, conn) {
 export async function chatBotReply(msg, conn) {
 	if (!msg || !conn) return;
 	if (!msg.body) return;
-	const res = await utils.getJsonFromUrl(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
+	const res = await utils.getJson(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
 	await conn.sendMessage(msg.from, { text: res.cnt });
 }
 

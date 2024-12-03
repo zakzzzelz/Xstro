@@ -15,9 +15,9 @@ bot(
 	async (message, match) => {
 		const req = match || message.reply_message?.text;
 		if (!req) return message.sendReply('_Give me song Name_');
-		const res = await utils.getJsonFromUrl(`https://itzpire.com/search/lyrics?query=${req}`);
+		const res = await utils.getJson(`https://itzpire.com/search/lyrics?query=${req}`);
 		const { title, album, thumb, lyrics } = res.data;
-		const image = await utils.getBufferFromUrl(thumb);
+		const image = await utils.getBuffer(thumb);
 		return await message.sendReply(image, { caption: `*${title}*\n\`\`\`${album}\n\n${lyrics}\`\`\`` });
 	},
 );
@@ -31,9 +31,9 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.sendReply('```Give me a search query```');
-		const req = await utils.getJsonFromUrl(`${base_url}search/stickersearch?apikey=${API_KEY}&query=${match}`);
+		const req = await utils.getJson(`${base_url}search/stickersearch?apikey=${API_KEY}&query=${match}`);
 		for (const stickerUrl of req.results.sticker) {
-			const buff = await utils.getBufferFromUrl(stickerUrl);
+			const buff = await utils.getBuffer(stickerUrl);
 			await message.sendReply(buff, { type: 'sticker' });
 		}
 	},
@@ -48,7 +48,7 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.sendReply('```Give me a search query```');
-		const req = await utils.getJsonFromUrl(`https://api.giftedtech.my.id/api/search/google?apikey=${API_KEY}&query=${match}`);
+		const req = await utils.getJson(`https://api.giftedtech.my.id/api/search/google?apikey=${API_KEY}&query=${match}`);
 
 		if (!req.results || req.results.length === 0) return message.sendReply('```No results found for your query.```');
 
@@ -70,11 +70,11 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.sendReply('_Name a Series or movie._');
-		const data = await utils.getJsonFromUrl(`http://www.omdbapi.com/?apikey=742b2d09&t=${encodeURIComponent(match)}&plot=full`);
+		const data = await utils.getJson(`http://www.omdbapi.com/?apikey=742b2d09&t=${encodeURIComponent(match)}&plot=full`);
 
 		let imdbInfo = [`*Title:* ${data.Title}`, `*Year:* ${data.Year}`, `*Rated:* ${data.Rated}`, `*Released:* ${data.Released}`, `*Runtime:* ${data.Runtime}`, `*Genre:* ${data.Genre}`, `*Director:* ${data.Director}`, `*Writer:* ${data.Writer}`, `*Actors:* ${data.Actors}`, `*Plot:* ${data.Plot}`, `*Language:* ${data.Language}`, `*Country:* ${data.Country}`, `*Awards:* ${data.Awards}`, `*BoxOffice:* ${data.BoxOffice}`, `*Production:* ${data.Production}`, `*IMDb Rating:* ${data.imdbRating}`, `*IMDb Votes:* ${data.imdbVotes}`].join('\n\n');
 
-		const buff = await utils.getBufferFromUrl(data.Poster);
+		const buff = await utils.getBuffer(data.Poster);
 		await message.sendReply(buff, { caption: imdbInfo });
 	},
 );
@@ -88,7 +88,7 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return await message.sendReply('*Example : weather delhi*');
-		const data = await utils.getJsonFromUrl(`http://api.openweathermap.org/data/2.5/weather?q=${match}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en`).catch(() => {});
+		const data = await utils.getJson(`http://api.openweathermap.org/data/2.5/weather?q=${match}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en`).catch(() => {});
 		if (!data) return await message.sendReply(`_${match} not found_`);
 		const { name, timezone, sys, main, weather, visibility, wind } = data;
 		const degree = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'][getFloor(wind.deg / 22.5 + 0.5) % 16];
