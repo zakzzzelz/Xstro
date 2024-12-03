@@ -14,13 +14,13 @@ First, you gotta fork the repo to your own GitHub account.
 
 Grab a session to start using the bot.
 
-[![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://bit.ly/4ghofV3)
+[![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://bit.ly/41mQBbY)
 
-### Warning
+#### NOTICE
 
 I’m not responsible for you messing around and getting your account banned. As long as you don’t modify the source code to fit your idiotic needs, you’re fine. But seriously, don’t go spamming others. I’m tired of repeating this.
 
-### DEPLOYMENT TO PLATFORMS
+### DEPLOYMENT PLATFORMS
 
 ### Deploy to Render
 
