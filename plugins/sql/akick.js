@@ -14,6 +14,7 @@ const AutoKickDB = config.DATABASE.define(
       },
    },
    {
+      tableName: 'autokick',
       indexes: [
          {
             unique: true,

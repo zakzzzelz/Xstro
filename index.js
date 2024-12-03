@@ -11,7 +11,7 @@ async function startBot() {
 	try {
 		envlogger();
 		console.log('XSTRO MD');
-		await getSession();
+		// await getSession();
 		await loadFiles();
 		await config.DATABASE.sync();
 		await connect();
