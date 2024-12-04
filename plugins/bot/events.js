@@ -1,5 +1,6 @@
 import moment from 'moment-timezone';
 import config from '../../config.js';
+import { getBuffer, getJson } from 'utils';
 import { format } from 'date-fns';
 import { schedule as _schedule } from 'node-cron';
 import { downloadMediaMessage } from 'baileys';
@@ -239,7 +240,7 @@ const getProfilePicture = async (conn, jid) => {
 	const ppUrl = await conn.profilePictureUrl(jid, 'image');
 	if (!ppUrl) return null;
 
-	const res = await utils.getBuffer(ppUrl);
+	const res = await getBuffer(ppUrl);
 	return res;
 };
 
@@ -290,7 +291,7 @@ export async function chatAi(msg, conn) {
 export async function chatBotReply(msg, conn) {
 	if (!msg || !conn) return;
 	if (!msg.body) return;
-	const res = await utils.getJson(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
+	const res = await getJson(`http://api.brainshop.ai/get?bid=159501&key=6pq8dPiYt7PdqHz3&uid=234&msg=${encodeURIComponent(msg.body)}`);
 	await conn.sendMessage(msg.from, { text: res.cnt });
 }
 
