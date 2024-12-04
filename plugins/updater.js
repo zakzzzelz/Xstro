@@ -17,7 +17,7 @@ bot(
 	async (message, match) => {
 		await git.fetch();
 		const commits = await git.log(['master..origin/master']);
-		if (commits.total === 0) return await message.sendReply(`you are on version ${config.VERSION}`);
+		if (commits.total === 0) return await message.sendReply(`\`\`\`you are on version ${config.VERSION}\`\`\``);
 		if (match === 'now') {
 			message.sendReply('restarting bot');
 			exec('git stash && git pull origin master', async (err, stderr) => {
