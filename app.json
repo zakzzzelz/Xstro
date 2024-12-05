@@ -1,10 +1,8 @@
 {
-   "name": "xstro-md",
-   "description": "Xstro Md WhatsApp Bot",
+   "name": "xstro",
+   "description": "Simple WA bot",
    "logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
    "repository": "https://github.com/ASTRO-X10/xstro-md",
-   "success_url": "/",
-   "stack": "container",
    "env": {
       "HEROKU_API_KEY": {
          "description": "Heroku Account Api Key",
@@ -52,18 +50,6 @@
          "description": "Set the bot handler, you must choose one, multi prefix not supported",
          "value": ".",
          "required": false
-      },
-      "LOGGER": {
-         "description": "Logs every activity from the bot, for nerds",
-         "value": "false",
-         "required": false
       }
-   },
-   "formation": {
-      "worker": {
-         "quantity": 1,
-         "size": "standard-1x"
-      }
-   },
-   "addons": ["heroku-postgresql"]
+   }
 }
