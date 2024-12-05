@@ -1,4 +1,3 @@
-/**
 import express from 'express';
 import dotenv from 'dotenv';
 import connect from './lib/client.js';
@@ -12,35 +11,17 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.get('/', (req, res) => res.send('Server is running'));
-app.listen(PORT);
 
-(async () => {
-	try {
-		console.log('XSTRO MD');
-		await loadFiles();
-		await config.DATABASE.sync();
-		await getSession();
-		await connect();
-	} catch (err) {
-		console.error('Error during startup:', err);
-		process.exit(1);
-	}
-})();
-**/
-
-import express from 'express';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-const app = express();
-const PORT = process.env.PORT || 8000;
-
-app.get('/', (req, res) => res.send('Server is running'));
-
-app.listen(PORT, () => {
-    console.log(`Server listening on port ${PORT}`);
-}).on('error', (err) => {
-    console.error('Error starting server:', err);
-    process.exit(1);
+// Start server immediately, even if async tasks are still running
+app.listen(PORT, async () => {
+    try {
+        console.log(`Server listening on port ${PORT}`);
+        await loadFiles();
+        await config.DATABASE.sync();
+        await getSession();
+        await connect();
+    } catch (err) {
+        console.error('Error during startup:', err);
+        process.exit(1);
+    }
 });
