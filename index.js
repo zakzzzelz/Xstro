@@ -7,21 +7,15 @@ import getSession from './lib/session.js';
 
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 8000;
+(async () => {
+	console.log('XSTRO MD');
+	await loadFiles();
+	await config.DATABASE.sync();
+	await getSession();
+	await connect();
 
-app.get('/', (req, res) => res.send('Server is running'));
+	const app = express();
+	const PORT = process.env.PORT || 8000;
 
-// Start server immediately, even if async tasks are still running
-app.listen(PORT, async () => {
-    try {
-        console.log(`Server listening on port ${PORT}`);
-        await loadFiles();
-        await config.DATABASE.sync();
-        await getSession();
-        await connect();
-    } catch (err) {
-        console.error('Error during startup:', err);
-        process.exit(1);
-    }
-});
+	app.listen(PORT, () => {});
+})();
