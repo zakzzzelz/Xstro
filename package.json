@@ -1,16 +1,12 @@
 {
 	"name": "xstro",
-	"version": "1.1.2",
+	"version": "1.1.3",
 	"description": "Simple WhatsApp Bot By AstroX11",
 	"main": "server.js",
 	"type": "module",
 	"scripts": {
 		"start": "pm2 start ecosystem.config.cjs --attach",
-		"stop": "pm2 stop ecosystem.config.cjs",
-		"install:pm2": "yarn global add pm2",
-		"install:yarn": "npm install -g yarn",
-		"restart": "pm2 restart ecosystem.config.cjs",
-		"delete": "pm2 delete ecosystem.config.cjs"
+		"stop": "pm2 stop ecosystem.config.cjs"
 	},
 	"license": "MIT",
 	"dependencies": {
@@ -18,6 +14,7 @@
 		"baileys": "^6.7.9",
 		"date-fns": "^4.1.0",
 		"dotenv": "^16.4.5",
+		"express": "^4.21.1",
 		"file-type": "2",
 		"heroku-client": "^3.1.0",
 		"moment-timezone": "^0.5.46",
