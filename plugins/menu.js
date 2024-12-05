@@ -12,7 +12,7 @@ bot(
       dontAddCommandList: true,
    },
    async (message) => {
-      let menuText = `╭─ *${config.BOT_INFO.split(';')[1]}* ───
+      let menuText = `╭─ ${config.BOT_INFO.split(';')[1]} ───
 │ User ${message.pushName}
 │ Mode ${config.MODE}
 │ Uptime ${runtime(process.uptime())}
@@ -35,7 +35,7 @@ bot(
          }, {});
 
       Object.keys(categorized).forEach((category) => {
-         menuText += `\n╭──〈 *${category}* 〉────\n`;
+         menuText += `\n╭──〈 ${category} 〉────\n`;
          categorized[category].forEach((cmd) => {
             menuText += `│▸ ${commandCounter}. ${cmd}\n`;
             commandCounter++;
