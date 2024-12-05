@@ -17,5 +17,9 @@ dotenv.config();
 	const app = express();
 	const PORT = process.env.PORT || 8000;
 
-	app.listen(PORT, () => {});
+	app.get('/', (req, res) => {
+		res.send('Server is running');
+	});
+
+	app.listen(PORT);
 })();
