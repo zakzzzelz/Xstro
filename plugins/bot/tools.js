@@ -190,3 +190,47 @@ export const remini = async (image, filterType) => {
 		throw new Error(`Error enhancing image: ${error.message}`);
 	}
 };
+
+export const solveMath = expression => {
+	try {
+		return Function(`"use strict"; return (${expression})`)();
+	} catch {
+		return 'Invalid expression';
+	}
+};
+
+export const base64 = str => Buffer.from(str).toString('base64');
+
+export const ebinary = str =>
+	str
+		.split('')
+		.map(char => char.charCodeAt(0).toString(2).padStart(8, '0'))
+		.join(' ');
+
+export const dbinary = bin =>
+	bin
+		.split(' ')
+		.map(b => String.fromCharCode(parseInt(b, 2)))
+		.join('');
+
+export const obfuscate = code => {
+	let scrambled = code
+		.split('')
+		.map(char => String.fromCharCode(char.charCodeAt(0) + 5))
+		.join('');
+	return Buffer.from(scrambled).toString('base64');
+};
+
+export const deobfuscate = encoded => {
+	let decoded = Buffer.from(encoded, 'base64').toString('utf-8');
+	return decoded
+		.split('')
+		.map(char => String.fromCharCode(char.charCodeAt(0) - 5))
+		.join('');
+};
+
+export const toAscii = str =>
+	str
+		.split('')
+		.map(char => char.charCodeAt(0))
+		.join(' ');

@@ -1,3 +1,4 @@
+import { getBuffer, getJson } from 'utils';
 import { bot } from '../lib/plugins.js';
 import { convertToOpus, flipMedia, toBlackVideo, toSticker } from './bot/tools.js';
 
@@ -76,5 +77,22 @@ bot(
 		const media = await message.downloadAndSaveMedia();
 		const buff = await convertToOpus(media);
 		return await message.send(buff);
+	},
+);
+
+bot(
+	{
+		pattern: 'emix',
+		isPublic: true,
+		desc: 'Mix two emojis to be one',
+		type: 'converter',
+	},
+	async (message, match) => {
+		const isEmoji = str => /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
+		if (!isEmoji(match)) return message.sendReply('_Give me two emojis_');
+		const res = await getJson('https://levanter.onrender.com/emix?q=' + match + '');
+		const buff = await getBuffer(res.result);
+		const sticker = await toSticker(buff);
+		return await message.send(sticker);
 	},
 );
