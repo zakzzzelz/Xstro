@@ -4,7 +4,7 @@ import { getBuffer, getJson } from 'utils';
 import { format } from 'date-fns';
 import { schedule as _schedule } from 'node-cron';
 import { downloadMediaMessage } from 'baileys';
-import { numtoId, utils } from '../../lib/utils.js';
+import { numtoId } from '../../lib/utils.js';
 import { loadMessage } from '../sql/store.js';
 import { getAnti } from '../sql/antidel.js';
 import { Antilink } from '../sql/antilink.js';
