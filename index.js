@@ -11,6 +11,7 @@ dotenv.config();
 	console.log('XSTRO MD');
 	await loadFiles();
 	await config.DATABASE.sync();
+	await config.DATABASE.sync();
 	await getSession();
 	await connect();
 
