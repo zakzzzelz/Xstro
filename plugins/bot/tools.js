@@ -191,12 +191,56 @@ export const remini = async (image, filterType) => {
 	}
 };
 
-export const solveMath = expression => {
-	try {
-		return Function(`"use strict"; return (${expression})`)();
-	} catch {
-		return 'Invalid expression';
-	}
+export const solveMath = (expression) => {
+    // Validate input
+    if (typeof expression !== 'string') {
+        return 'Invalid input: expression must be a string';
+    }
+
+    // Sanitize the expression
+    const sanitizedExpression = expression
+        .replace(/[^0-9+\-*/().√^%\s]/g, '') // Remove any potentially dangerous characters
+        .trim();
+
+    // Prevent empty or invalid expressions
+    if (!sanitizedExpression || sanitizedExpression.length === 0) {
+        return 'Empty expression';
+    }
+
+    try {
+        // Replace custom math functions with JavaScript equivalents
+        let processedExpression = sanitizedExpression
+            .replace(/√/g, 'Math.sqrt')  // Square root
+            .replace(/\^/g, '**')        // Exponentiation
+            .replace(/\s+/g, '');        // Remove whitespace
+
+        // Use a more controlled evaluation method
+        const safeEval = new Function(`
+            "use strict";
+            try {
+                return String(${processedExpression});
+            } catch (error) {
+                return 'Evaluation error';
+            }
+        `);
+
+        const result = safeEval();
+
+        // Ensure the result is a string and handle potential issues
+        if (result === null || result === undefined) {
+            return 'Invalid result';
+        }
+
+        // Check for NaN or Infinity
+        if (Number.isNaN(Number(result)) || !Number.isFinite(Number(result))) {
+            return 'Mathematical error';
+        }
+
+        // Return result as a string with reasonable precision
+        return String(Number(result).toPrecision(15)).replace(/\.?0+$/, '');
+    } catch (error) {
+        return 'Invalid expression';
+    }
 };
 
 export const base64 = str => Buffer.from(str).toString('base64');
@@ -213,20 +257,50 @@ export const dbinary = bin =>
 		.map(b => String.fromCharCode(parseInt(b, 2)))
 		.join('');
 
-export const obfuscate = code => {
-	let scrambled = code
-		.split('')
-		.map(char => String.fromCharCode(char.charCodeAt(0) + 5))
-		.join('');
-	return Buffer.from(scrambled).toString('base64');
+export const obfuscate = (code) => {
+    if (typeof code !== 'string') {
+        throw new Error('Input must be a string');
+    }
+
+    let scrambled = code
+        .split('')
+        .map(char => {
+            // Get the Unicode code point and shift it
+            const codePoint = char.codePointAt(0);
+            // Use a more complex shifting mechanism
+            return String.fromCodePoint(codePoint + 5);
+        })
+        .join('');
+
+    // Use URL-safe Base64 encoding to handle special characters
+    return btoa(scrambled)
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
 };
 
-export const deobfuscate = encoded => {
-	let decoded = Buffer.from(encoded, 'base64').toString('utf-8');
-	return decoded
-		.split('')
-		.map(char => String.fromCharCode(char.charCodeAt(0) - 5))
-		.join('');
+export const deobfuscate = (encoded) => {
+    if (typeof encoded !== 'string') {
+        throw new Error('Input must be a string');
+    }
+
+    // Restore Base64 padding and convert from URL-safe to standard Base64
+    let base64 = encoded
+        .replace(/-/g, '+')
+        .replace(/_/g, '/')
+        .padEnd(encoded.length + (4 - encoded.length % 4) % 4, '=');
+
+    let decoded = atob(base64);
+    
+    return decoded
+        .split('')
+        .map(char => {
+            // Get the Unicode code point and shift it back
+            const codePoint = char.codePointAt(0);
+            // Shift back to original character
+            return String.fromCodePoint(codePoint - 5);
+        })
+        .join('');
 };
 
 export const toAscii = str =>
