@@ -1,3 +1,4 @@
+/**
 import express from 'express';
 import dotenv from 'dotenv';
 import connect from './lib/client.js';
@@ -25,3 +26,15 @@ app.listen(PORT);
 		process.exit(1);
 	}
 })();
+**/
+
+import express from 'express';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+const app = express();
+const PORT = process.env.PORT || 8000;
+
+app.get('/', (req, res) => res.send('Server is running'));
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
