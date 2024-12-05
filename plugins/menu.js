@@ -43,7 +43,7 @@ bot(
          menuText += `╰──────────────\n`;
       });
 
-      return await message.send(fancy(menuText), { quoted: false });
+      return await message.send(fancy(`\`\`\`${menuText}\`\`\``));
    }
 );
 
@@ -55,7 +55,7 @@ bot(
       dontAddCommandList: true,
    },
    async (message) => {
-      let menu = '*_xstro commands list_*\n\n';
+      let menu = 'XSTRO HELP LIST\n\n';
       let cmdList = [];
       let cmd, desc;
       commands.map((command) => {
