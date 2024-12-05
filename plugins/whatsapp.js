@@ -54,13 +54,13 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message) return await message.sendReply('_Reply A Message_');
+		if (!message.reply_message) return await message.sendReply('```Reply A Message```');
 		let key = message.reply_message.key.id;
 		let msg = await loadMessage(key);
-		if (!msg) return await message.sendReply('_Message not found maybe bot might not be running at that time_');
+		if (!msg) return await message.sendReply('```Xstro will not quoted Bot Message```');
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
 		if (!msg.quoted) return await message.sendReply('_No quoted message found_');
-		await message.forward(message.jid, msg.quoted, { force: false, quoted: msg.quoted });
+		await message.forward(message.jid, msg.quoted, { quoted: msg.quoted });
 	},
 );
 
