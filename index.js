@@ -37,4 +37,10 @@ const app = express();
 const PORT = process.env.PORT || 8000;
 
 app.get('/', (req, res) => res.send('Server is running'));
-app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
+
+app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+}).on('error', (err) => {
+    console.error('Error starting server:', err);
+    process.exit(1);
+});
