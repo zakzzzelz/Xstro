@@ -88,8 +88,8 @@ bot(
 		type: 'converter',
 	},
 	async (message, match) => {
-		const isEmoji = str => /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F)$/u.test(str);
-		if (!isEmoji(match)) return message.sendReply('_Give me two emojis_');
+		const isTwoEmojis = str => /^(\p{Emoji_Presentation}|\p{Emoji}\uFE0F){2}$/u.test(str);
+		if (!isTwoEmojis(match)) return message.sendReply('_Give me two emojis_');
 		const res = await getJson('https://levanter.onrender.com/emix?q=' + match + '');
 		const buff = await getBuffer(res.result);
 		const sticker = await toSticker(buff);

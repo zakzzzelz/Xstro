@@ -4,11 +4,13 @@ import connect from './lib/client.js';
 import config from './config.js';
 import loadFiles from './lib/utils.js';
 import getSession from './lib/session.js';
+import envlogger from './lib/logger.js';
 
 dotenv.config();
 
 (async () => {
 	console.log('XSTRO MD');
+	envlogger();
 	await loadFiles();
 	await config.DATABASE.sync();
 	await getSession();
