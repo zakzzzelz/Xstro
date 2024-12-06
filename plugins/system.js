@@ -8,6 +8,7 @@ import { manageProcess, runtime, utils } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from './sql/plugins.js';
 import { manageVar } from './bot/tools.js';
 import { fancy } from './bot/font.js';
+import { getBuffer, getJson } from 'utils';
 
 const envFilePath = path.join(process.cwd(), '.env');
 const envfile = () => {
@@ -223,6 +224,40 @@ bot(
 			await message.client.logout();
 		} else {
 			message.send('_that not right hmm_');
+		}
+	},
+);
+
+bot(
+	{
+		pattern: 'fetch',
+		isPublic: true,
+		desc: 'Get data from internet',
+		type: 'system',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_I need a URL_');
+
+		const [mode, url] = match.split(';');
+
+		if (!url) return message.send('_Invalid format. Use: mode;url_');
+
+		if (mode === 'json') {
+			try {
+				const data = await getJson(url);
+				await message.send(JSON.stringify(data, null, 2), { type: 'text' });
+			} catch {
+				await message.send('_Failed to fetch JSON data._');
+			}
+		} else if (mode === 'buffer') {
+			try {
+				const buffer = await getBuffer(url);
+				await message.send(buffer);
+			} catch {
+				await message.send('_Failed to fetch buffer data._');
+			}
+		} else {
+			await message.send('_Invalid mode. Use "json" or "buffer"._');
 		}
 	},
 );
