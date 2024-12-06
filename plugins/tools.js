@@ -14,13 +14,13 @@ bot(
 	async message => {
 		if (message.isGroup) {
 			const user = message.reply_message?.sender || message.mention[0];
-			if (!user) return message.sendReply('_Reply Or Tag Someone_');
+			if (!user) return message.send('_Reply Or Tag Someone_');
 			try {
 				const pp = await message.client.profilePictureUrl(user, 'image');
 				const res = await getBuffer(pp);
 				await message.send(res);
 			} catch {
-				message.sendReply('_No Profile Photo_');
+				message.send('_No Profile Photo_');
 			}
 		} else {
 			try {
@@ -28,7 +28,7 @@ bot(
 				const res = await getBuffer(pp);
 				await message.send(res);
 			} catch {
-				message.sendReply('_No Profile Photo_');
+				message.send('_No Profile Photo_');
 			}
 		}
 	},
@@ -43,8 +43,8 @@ bot(
 	},
 	async (message, match) => {
 		const url = utils.extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.sendReply('_No Url found_');
-		const msg = await message.sendReply('*wait*');
+		if (!url) return message.send('_No Url found_');
+		const msg = await message.send('*wait*');
 		const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`);
 		return await msg.edit(res.link);
 	},
@@ -58,9 +58,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide A Maths Expression_');
+		if (!match) return message.send('_Provide A Maths Expression_');
 		const result = solveMath(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -72,9 +72,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide text to encode._');
+		if (!match) return message.send('_Provide text to encode._');
 		const result = base64(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -86,9 +86,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide text to encode._');
+		if (!match) return message.send('_Provide text to encode._');
 		const result = ebinary(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -100,9 +100,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide binary to decode._');
+		if (!match) return message.send('_Provide binary to decode._');
 		const result = dbinary(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -114,9 +114,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide code to obfuscate._');
+		if (!match) return message.send('_Provide code to obfuscate._');
 		const result = obfuscate(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -128,9 +128,9 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide obfuscated code to decode._');
+		if (!match) return message.send('_Provide obfuscated code to decode._');
 		const result = deobfuscate(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );
 
@@ -142,8 +142,8 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide text to convert to ASCII._');
+		if (!match) return message.send('_Provide text to convert to ASCII._');
 		const result = toAscii(match);
-		return message.sendReply(result);
+		return message.send(result);
 	},
 );

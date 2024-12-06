@@ -15,17 +15,17 @@
 // 		const user = message.sender;
 
 // 		if (games.has(chatId)) {
-// 			return await message.sendReply('```❌ A game is already in progress in this chat!```');
+// 			return await message.send('```❌ A game is already in progress in this chat!```');
 // 		}
 
 // 		const game = new Wcg();
 // 		games.set(chatId, game);
 
-// 		await message.sendReply('```🎮 Word Chain Game is starting!\n⏳ You have 30 seconds to join.\n📝 Send "join" to participate!```');
+// 		await message.send('```🎮 Word Chain Game is starting!\n⏳ You have 30 seconds to join.\n📝 Send "join" to participate!```');
 
 // 		const result = await game.startJoinPhase(
 // 			async countdownMessage => {
-// 				await message.sendReply(countdownMessage);
+// 				await message.send(countdownMessage);
 // 			},
 // 			{
 // 				id: user,
@@ -35,10 +35,10 @@
 
 // 		if (result.status === 'failed') {
 // 			games.delete(chatId);
-// 			return await message.sendReply('```❌ Not enough players joined the game!```');
+// 			return await message.send('```❌ Not enough players joined the game!```');
 // 		}
 
-// 		await message.sendReply(`\`\`\`🎮 Game Started!\n📝 First word: ${result.firstWord}\n👤 It's ${game.players.get(result.currentPlayer).name}'s turn!\n⏳ You have 30 seconds to respond\`\`\``);
+// 		await message.send(`\`\`\`🎮 Game Started!\n📝 First word: ${result.firstWord}\n👤 It's ${game.players.get(result.currentPlayer).name}'s turn!\n⏳ You have 30 seconds to respond\`\`\``);
 // 	},
 // );
 
@@ -59,7 +59,7 @@
 // 		if (game.gameState === 'waiting' && text === 'join') {
 // 			const joined = game.addPlayer(user, message.pushName || 'Player');
 // 			if (joined) {
-// 				await message.sendReply(`\`\`\`✅ ${message.pushName} joined the game!\`\`\``);
+// 				await message.send(`\`\`\`✅ ${message.pushName} joined the game!\`\`\``);
 // 			}
 // 			return;
 // 		}
@@ -71,16 +71,16 @@
 
 // 			if (result.status === 'ended') {
 // 				if (result.winner) {
-// 					await message.sendReply(`\`\`\`🏆 Game Over!\n👑 Winner: ${result.winner.name}\n🎯 Points: ${result.winner.points}\`\`\``);
+// 					await message.send(`\`\`\`🏆 Game Over!\n👑 Winner: ${result.winner.name}\n🎯 Points: ${result.winner.points}\`\`\``);
 // 				} else {
-// 					await message.sendReply('```❌ Game Over! No winners!```');
+// 					await message.send('```❌ Game Over! No winners!```');
 // 				}
 // 				games.delete(chatId);
 // 				return;
 // 			}
 
 // 			const nextPlayer = game.players.get(result.nextPlayer);
-// 			await message.sendReply(`\`\`\`✅ Valid word!\n📝 Current word: ${result.currentWord}\n🎯 Points: ${result.points}\n👤 It's ${nextPlayer.name}'s turn!\n⏳ You have 30 seconds to respond\`\`\``);
+// 			await message.send(`\`\`\`✅ Valid word!\n📝 Current word: ${result.currentWord}\n🎯 Points: ${result.points}\n👤 It's ${nextPlayer.name}'s turn!\n⏳ You have 30 seconds to respond\`\`\``);
 // 		}
 // 	},
 // );

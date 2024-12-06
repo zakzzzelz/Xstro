@@ -25,22 +25,22 @@ bot(
 
 		if (action === 'on') {
 			if (autobioActive) {
-				return message.sendReply('_Autobio is already active!_');
+				return message.send('_Autobio is already active!_');
 			}
 			autobioActive = true;
 			await updateBio(); // Immediate bio update
-			message.sendReply('_Autobio activated! Bio will be updated every 5 minutes._');
+			message.send('_Autobio activated! Bio will be updated every 5 minutes._');
 
 			autobioInterval = setInterval(updateBio, 5 * 60 * 1000); // Every 5 minutes
 		} else if (action === 'off') {
 			if (!autobioActive) {
-				return message.sendReply('_Autobio is not active!_');
+				return message.send('_Autobio is not active!_');
 			}
 			clearInterval(autobioInterval);
 			autobioActive = false;
-			message.sendReply('_Autobio deactivated!_');
+			message.send('_Autobio deactivated!_');
 		} else {
-			return message.sendReply('_Use "autobio on" to activate or "autobio off" to deactivate._');
+			return message.send('_Use "autobio on" to activate or "autobio off" to deactivate._');
 		}
 	},
 );

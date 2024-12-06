@@ -17,18 +17,18 @@ bot(
 
 		if (command === 'on') {
 			await ChatBot.update({ isActive: true }, { where: {} });
-			await message.sendReply('Lydia has been enabled for all chats.');
+			await message.send('Lydia has been enabled for all chats.');
 		} else if (command === 'off') {
 			await ChatBot.update({ isActive: false }, { where: {} });
-			await message.sendReply('Lydia has been disabled for all chats.');
+			await message.send('Lydia has been disabled for all chats.');
 		} else if (command === 'dm') {
 			await ChatBot.update({ isActive: true, isDMOnly: true, isGCOnly: false }, { where: {} });
-			await message.sendReply('Lydia is enabled for direct messages only.');
+			await message.send('Lydia is enabled for direct messages only.');
 		} else if (command === 'gc') {
 			await ChatBot.update({ isActive: true, isDMOnly: false, isGCOnly: true }, { where: {} });
-			await message.sendReply('Lydia is enabled for group chats only.');
+			await message.send('Lydia is enabled for group chats only.');
 		} else {
-			await message.sendReply('Use `.lydia on`, `.lydia off`, `.lydia dm`, or `.lydia gc`.');
+			await message.send('Use `.lydia on`, `.lydia off`, `.lydia dm`, or `.lydia gc`.');
 		}
 	},
 );

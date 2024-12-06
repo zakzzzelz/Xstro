@@ -11,7 +11,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message.viewonce) return message.sendReply('_Reply A ViewOnce_');
+		if (!message.reply_message.viewonce) return message.send('_Reply A ViewOnce_');
 		const media = await message.downloadAndSaveMedia();
 		return await message.send(media);
 	},
@@ -25,9 +25,9 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide A New Name_');
+		if (!match) return message.send('_Provide A New Name_');
 		await message.updateName(match.toString());
-		return message.sendReply('_WhatsApp Name Updated!_');
+		return message.send('_WhatsApp Name Updated!_');
 	},
 );
 
@@ -39,10 +39,10 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message?.image) return message.sendReply('_Reply An Image_');
+		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.downloadAndSaveMedia();
 		await message.updatePP(img);
-		return await message.sendReply('_Profile Picture Updated_');
+		return await message.send('_Profile Picture Updated_');
 	},
 );
 
@@ -54,12 +54,12 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message) return await message.sendReply('```Reply A Message```');
+		if (!message.reply_message) return await message.send('```Reply A Message```');
 		let key = message.reply_message.key.id;
 		let msg = await loadMessage(key);
-		if (!msg) return await message.sendReply('```Xstro will not quoted Bot Message```');
+		if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
-		if (!msg.quoted) return await message.sendReply('_No quoted message found_');
+		if (!msg.quoted) return await message.send('_No quoted message found_');
 		await message.forward(message.jid, msg.quoted, { quoted: msg.quoted });
 	},
 );
@@ -72,7 +72,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message) return message.sendReply('_Reply A Message_');
+		if (!message.reply_message) return message.send('_Reply A Message_');
 		return await message.delete();
 	},
 );
@@ -86,7 +86,7 @@ bot(
 	},
 	async message => {
 		await message.archiveChat(true);
-		await message.sendReply('_Archived_');
+		await message.send('_Archived_');
 	},
 );
 
@@ -99,7 +99,7 @@ bot(
 	},
 	async message => {
 		await message.archiveChat(false);
-		await message.sendReply('_Unarchived_');
+		await message.send('_Unarchived_');
 	},
 );
 
@@ -115,9 +115,9 @@ bot(
 		if (blocklist.length > 0) {
 			const mentions = blocklist.map(number => `${number}`);
 			const formattedList = blocklist.map(number => `• @${number.split('@')[0]}`).join('\n');
-			await message.sendReply(`*_Blocked contacts:_*\n\n${formattedList}`, { mentions });
+			await message.send(`*_Blocked contacts:_*\n\n${formattedList}`, { mentions });
 		} else {
-			await message.sendReply('_No blocked Numbers!_');
+			await message.send('_No blocked Numbers!_');
 		}
 	},
 );
@@ -131,7 +131,7 @@ bot(
 	},
 	async message => {
 		await message.clearChat();
-		await message.sendReply('_Cleared_');
+		await message.send('_Cleared_');
 	},
 );
 
@@ -144,7 +144,7 @@ bot(
 	},
 	async message => {
 		await message.rPP();
-		return message.sendReply('_Profile Picture Removed!_');
+		return message.send('_Profile Picture Removed!_');
 	},
 );
 
@@ -157,7 +157,7 @@ bot(
 	},
 	async message => {
 		await message.client.chatModify({ pin: true }, message.jid);
-		return message.sendReply('_Pined.._');
+		return message.send('_Pined.._');
 	},
 );
 
@@ -170,7 +170,7 @@ bot(
 	},
 	async message => {
 		await message.client.chatModify({ pin: false }, message.jid);
-		return message.sendReply('_Unpined.._');
+		return message.send('_Unpined.._');
 	},
 );
 
@@ -182,7 +182,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message) return message.sendReply('_Reply A Status_');
+		if (!message.reply_message) return message.send('_Reply A Status_');
 		const msg = await message.data?.quoted;
 		await message.forward(message.user, msg, { force: false, quoted: msg });
 	},
@@ -196,17 +196,17 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!message.reply_message) return message.sendReply('_Reply A Message!_');
+		if (!message.reply_message) return message.send('_Reply A Message!_');
 		let jid;
 		if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (match) {
 			jid = numtoId(match);
 		}
-		if (!jid) return message.sendReply('_You have to provide a number/tag someone_');
+		if (!jid) return message.send('_You have to provide a number/tag someone_');
 		const msg = message.data?.quoted;
 		await message.forward(jid, msg, { quoted: msg });
-		return await message.sendReply(`_Message forward to @${jid.split('@')[0]}_`, {
+		return await message.send(`_Message forward to @${jid.split('@')[0]}_`, {
 			mentions: [jid],
 		});
 	},
@@ -246,8 +246,8 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match, { prefix }) => {
-		if (!message.reply_message) return message.sendReply('_Reply Your Own Message_');
-		if (!match) return await message.sendReply('```' + prefix + 'edit hello```');
+		if (!message.reply_message) return message.send('_Reply Your Own Message_');
+		if (!match) return await message.send('```' + prefix + 'edit hello```');
 		await message.edit(match);
 	},
 );
@@ -261,7 +261,7 @@ bot(
 	},
 	async message => {
 		const jid = await message.thatJid();
-		message.sendReply(jid);
+		message.send(jid);
 	},
 );
 
@@ -273,9 +273,9 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match, { prefix }) => {
-		if (!match) return message.sendReply(`_Usage:_\n_${prefix}bio Hello World_`);
+		if (!match) return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
 		await message.client.updateProfileStatus(match);
-		return await message.sendReply('```WhatsApp bio Updated to "' + match + '"```');
+		return await message.send('```WhatsApp bio Updated to "' + match + '"```');
 	},
 );
 
@@ -287,9 +287,9 @@ bot(
 		type: 'whatsapp',
 	},
 	async (message, match) => {
-		if (!message.reply_message) return message.sendReply('```Reply A Message```');
-		if (message.reply_message?.fromMe) return message.sendReply('```Cannot React to yourself Bro```');
-		if (!match) return message.sendReply('```react 😊```');
+		if (!message.reply_message) return message.send('```Reply A Message```');
+		if (message.reply_message?.fromMe) return message.send('```Cannot React to yourself Bro```');
+		if (!match) return message.send('```react 😊```');
 		return await message.react(match, { key: message.reply_message?.key });
 	},
 );

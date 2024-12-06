@@ -31,10 +31,10 @@ bot(
 							maxStringLength: null,
 					  });
 
-			return await message.sendReply(`*Result:*\n\`\`\`${output}\`\`\``);
+			return await message.send(`*Result:*\n\`\`\`${output}\`\`\``);
 		} catch (error) {
 			const errorMessage = error.stack || error.message || String(error);
-			await message.sendReply(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
+			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
 		}
 	},
 );

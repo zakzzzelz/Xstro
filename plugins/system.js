@@ -23,7 +23,7 @@ bot(
 	},
 	async message => {
 		const start = performance.now();
-		const msg = await message.sendReply('Testing Speed...');
+		const msg = await message.send('Testing Speed...');
 		const end = performance.now();
 		await msg.edit(fancy(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``));
 	},
@@ -37,7 +37,7 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		return await message.sendReply(fancy(`*Uptime: ${runtime(process.uptime())}*`));
+		return await message.send(fancy(`*Uptime: ${runtime(process.uptime())}*`));
 	},
 );
 
@@ -50,17 +50,17 @@ bot(
 	},
 	async (message, match) => {
 		const pluginUrl = utils.extractUrlFromString(match.trim() || message.reply_message?.text);
-		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.sendReply('_Provide a valid Plugin URL_');
+		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.send('_Provide a valid Plugin URL_');
 
 		const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
 		const existingPlugins = await getPlugins();
-		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.sendReply('_Plugin already installed_');
+		if (existingPlugins.some(plugin => plugin.name === pluginName)) return message.send('_Plugin already installed_');
 
 		const pluginPath = join('plugins', pluginName);
 		const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
 		fs.writeFileSync(pluginPath, response.data);
 		await addPlugin(pluginName);
-		message.sendReply(`_${pluginName} plugin installed_`);
+		message.send(`_${pluginName} plugin installed_`);
 	},
 );
 
@@ -72,16 +72,16 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide an installed plugin name_');
+		if (!match) return message.send('_Provide an installed plugin name_');
 		const baseName = match.trim();
 		const pluginName = `${baseName}.js`;
 
 		const deleted = await removePlugin(pluginName);
-		if (!deleted) return message.sendReply('_Plugin not found_');
+		if (!deleted) return message.send('_Plugin not found_');
 
 		const pluginPath = join('plugins', pluginName);
 		if (fs.existsSync(pluginPath)) fs.unlinkSync(pluginPath);
-		message.sendReply(`_${pluginName} plugin uninstalled_`);
+		message.send(`_${pluginName} plugin uninstalled_`);
 	},
 );
 
@@ -95,7 +95,7 @@ bot(
 	async message => {
 		const plugins = await getPlugins();
 		const pluginList = plugins.length > 0 ? `_Plugins Installed:_\n${plugins.map(plugin => plugin.name).join('\n')}` : '_No plugins installed_';
-		message.sendReply(pluginList);
+		message.send(pluginList);
 	},
 );
 
@@ -108,12 +108,12 @@ bot(
 	},
 	async (message, match) => {
 		envfile();
-		if (!match) return message.sendReply('_Use: .setvar KEY:VALUE_');
+		if (!match) return message.send('_Use: .setvar KEY:VALUE_');
 		const input = match.split(':');
-		if (input.length !== 2) return message.sendReply('_Use: .setvar KEY:VALUE_');
+		if (input.length !== 2) return message.send('_Use: .setvar KEY:VALUE_');
 		const [key, value] = input.map(item => item.trim());
 		await manageVar({ command: 'set', key, value });
-		return message.sendReply(`*✓ Variable set: ${key}=${value}*`);
+		return message.send(`*✓ Variable set: ${key}=${value}*`);
 	},
 );
 
@@ -126,10 +126,10 @@ bot(
 	},
 	async (message, match) => {
 		envfile();
-		if (!match) return message.sendReply('_Provide variable name to delete_');
+		if (!match) return message.send('_Provide variable name to delete_');
 		const key = match.trim();
 		await manageVar({ command: 'del', key });
-		return message.sendReply(`*✓ Deleted ${key} from env*`);
+		return message.send(`*✓ Deleted ${key} from env*`);
 	},
 );
 
@@ -143,7 +143,7 @@ bot(
 	async message => {
 		envfile();
 		const vars = await manageVar({ command: 'get' });
-		return message.sendReply(vars || '_No Vars Found_');
+		return message.send(vars || '_No Vars Found_');
 	},
 );
 
@@ -155,7 +155,7 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		await message.sendReply('_Restarting application..._');
+		await message.send('_Restarting application..._');
 		manageProcess('restart');
 	},
 );
@@ -168,7 +168,7 @@ bot(
 		type: 'system',
 	},
 	async message => {
-		await message.sendReply('_Shutting Down application..._');
+		await message.send('_Shutting Down application..._');
 		manageProcess();
 	},
 );
@@ -181,12 +181,12 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide code to evaluate_');
+		if (!match) return message.send('_Provide code to evaluate_');
 		try {
 			const result = eval(match);
-			message.sendReply(`Result: \`${result}\``);
+			message.send(`Result: \`${result}\``);
 		} catch (error) {
-			message.sendReply(`Error: ${error.message}`);
+			message.send(`Error: ${error.message}`);
 		}
 	},
 );
@@ -199,12 +199,12 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		if (!match) return message.sendReply('_Provide a shell command to run_');
+		if (!match) return message.send('_Provide a shell command to run_');
 		const command = match.trim();
 		exec(command, (error, stdout, stderr) => {
-			if (error) return message.sendReply(`*Error:*\n \`\`\`${error.message}\`\`\``);
-			if (stderr) return message.sendReply(`*Stderr:*\n \`\`\`${stderr}\`\`\``);
-			message.sendReply(`*Output:*\n\`\`\`${stdout}\`\`\``);
+			if (error) return message.send(`*Error:*\n \`\`\`${error.message}\`\`\``);
+			if (stderr) return message.send(`*Stderr:*\n \`\`\`${stderr}\`\`\``);
+			message.send(`*Output:*\n\`\`\`${stdout}\`\`\``);
 		});
 	},
 );

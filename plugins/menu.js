@@ -69,7 +69,7 @@ bot(
          if (desc) menu += `${desc}\n\n`;
       });
 
-      return await message.sendReply(fancy(menu), {
+      return await message.send(fancy(menu), {
          contextInfo: { isForwarded: true, forwardingscore: 999 },
       });
    }

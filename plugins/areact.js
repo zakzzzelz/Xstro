@@ -18,7 +18,7 @@ bot(
 		} else {
 			await AutoReact.create({ status: newStatus });
 		}
-		await message.sendReply(`_Autoreact set to ${newStatus ? 'ON' : 'OFF'}._`);
+		await message.send(`_Autoreact set to ${newStatus ? 'ON' : 'OFF'}._`);
 	},
 );
 
