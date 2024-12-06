@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { isAdmin, numtoId } from '../lib/utils.js';
+import { isAdmin } from '../lib/utils.js';
 import { addAKick, delKick, getKicks } from './sql/akick.js';
 
 bot(
@@ -15,14 +15,7 @@ bot(
 
 		const groupId = message.jid;
 
-		let jid;
-		if (message.reply_message) {
-			jid = message.reply_message.sender;
-		} else if (message.mention && message.mention[0]) {
-			jid = message.mention[0];
-		} else if (match) {
-			jid = numtoId(match);
-		}
+		const jid = await message.thatJid(match);
 		if (!jid) return message.send("_Reply, tag, or provide the participant's number!_");
 
 		const action = match?.split(' ')[0].toLowerCase();

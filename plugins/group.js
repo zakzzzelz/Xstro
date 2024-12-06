@@ -14,15 +14,7 @@ bot(
 	async (message, match) => {
 		if (!message.isGroup) return message.send('_For groups only!_');
 		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
-
-		let jid;
-		if (message.reply_message) {
-			jid = message.reply_message.sender;
-		} else if (message.mention && message.mention[0]) {
-			jid = message.mention[0];
-		} else if (match) {
-			jid = numtoId(match);
-		}
+		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		try {
 			await message.client.groupParticipantsUpdate(message.jid, [jid], 'add');
@@ -217,14 +209,7 @@ bot(
 	async (message, match) => {
 		if (!message.isGroup) return message.send('_For groups only!_');
 		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
-		let jid;
-		if (message.reply_message) {
-			jid = message.reply_message.sender;
-		} else if (message.mention && message.mention[0]) {
-			jid = message.mention[0];
-		} else if (match) {
-			jid = numtoId(match);
-		}
+		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
@@ -249,14 +234,7 @@ bot(
 	async (message, match) => {
 		if (!message.isGroup) return message.send('_For groups only!_');
 		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
-		let jid;
-		if (message.reply_message) {
-			jid = message.reply_message.sender;
-		} else if (message.mention && message.mention[0]) {
-			jid = message.mention[0];
-		} else if (match) {
-			jid = numtoId(match);
-		}
+		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
@@ -281,14 +259,7 @@ bot(
 	async (message, match) => {
 		if (!message.isGroup) return message.send('_For groups only!_');
 		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
-		let jid;
-		if (message.reply_message) {
-			jid = message.reply_message.sender;
-		} else if (message.mention && message.mention[0]) {
-			jid = message.mention[0];
-		} else if (match) {
-			jid = numtoId(match);
-		}
+		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
 		return message.send(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });

@@ -9,9 +9,7 @@ bot(
 		type: 'misc',
 	},
 	async (message, match) => {
-		if (!match || match.split(' ').length < 5) {
-			return message.send('```You must provide a reason for reporting a bug, and your message must be at least 5 words.```');
-		}
+		if (!match || match.split(' ').length < 5) return message.send('```You must provide a reason for reporting a bug, and your message must be at least 5 words.```');
 		const bugMessage = match;
 		const devs = ['2348039607375', '923192173398', '2347041620617', '923089660496'];
 		const errorReport = `\`\`\`

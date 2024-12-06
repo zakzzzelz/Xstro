@@ -1,7 +1,7 @@
 import moment from 'moment-timezone';
 import config from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { getFloor,utils } from '../lib/utils.js';
+import { getFloor } from '../lib/utils.js';
 import { getBuffer, getJson } from 'utils';
 const base_url = 'https://api.giftedtech.my.id/api/';
 const { API_KEY } = config;
@@ -50,14 +50,11 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('```Give me a search query```');
 		const req = await getJson(`https://api.giftedtech.my.id/api/search/google?apikey=${API_KEY}&query=${match}`);
-
 		if (!req.results || req.results.length === 0) return message.send('```No results found for your query.```');
-
 		let resultsMessage = '';
 		req.results.forEach(result => {
 			resultsMessage += `\n\n*Title:* ${result.title}\n*Description:* ${result.description}\n*URL:* ${result.url}\n\n`;
 		});
-
 		await message.send(`\`\`\`*Google Search*\n\n${resultsMessage}\`\`\``);
 	},
 );
@@ -72,9 +69,7 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('_Name a Series or movie._');
 		const data = await getJson(`http://www.omdbapi.com/?apikey=742b2d09&t=${encodeURIComponent(match)}&plot=full`);
-
 		let imdbInfo = [`*Title:* ${data.Title}`, `*Year:* ${data.Year}`, `*Rated:* ${data.Rated}`, `*Released:* ${data.Released}`, `*Runtime:* ${data.Runtime}`, `*Genre:* ${data.Genre}`, `*Director:* ${data.Director}`, `*Writer:* ${data.Writer}`, `*Actors:* ${data.Actors}`, `*Plot:* ${data.Plot}`, `*Language:* ${data.Language}`, `*Country:* ${data.Country}`, `*Awards:* ${data.Awards}`, `*BoxOffice:* ${data.BoxOffice}`, `*Production:* ${data.Production}`, `*IMDb Rating:* ${data.imdbRating}`, `*IMDb Votes:* ${data.imdbVotes}`].join('\n\n');
-
 		const buff = await getBuffer(data.Poster);
 		await message.send(buff, { caption: imdbInfo });
 	},
