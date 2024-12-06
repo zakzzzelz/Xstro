@@ -4,7 +4,7 @@ import axios from 'axios';
 import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
-import { manageProcess, runtime,utils } from '../lib/utils.js';
+import { manageProcess, runtime, utils } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from './sql/plugins.js';
 import { manageVar } from './bot/tools.js';
 import { fancy } from './bot/font.js';
@@ -206,5 +206,23 @@ bot(
 			if (stderr) return message.send(`*Stderr:*\n \`\`\`${stderr}\`\`\``);
 			message.send(`*Output:*\n\`\`\`${stdout}\`\`\``);
 		});
+	},
+);
+
+bot(
+	{
+		pattern: 'logout',
+		isPublic: false,
+		desc: 'End your Xstro Session',
+		type: 'system',
+	},
+	async (message, match) => {
+		if (!match) return message.send(`*Hello ${message.pushName} this isn't the goo, goo ga ga, this command will logout you out of your Xstro Session, and you will be unable to use this bot until you get a new session*\nAre you sure you want to continue with this decision, then type\n${message.prefix}logout confirm`);
+		if (match === 'confirm') {
+			message.send('_logging out_');
+			await message.client.logout();
+		} else {
+			message.send('_that not right hmm_');
+		}
 	},
 );
