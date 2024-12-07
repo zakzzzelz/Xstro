@@ -16,6 +16,19 @@
          "description": "Session ID for authentication or tracking.",
          "required": true
       },
+      "MENU_IMAGE_URL":{
+         "description":"add your image  url for menu",
+         "value":"",
+         "required":false
+
+   },
+      "MENU_DESIGN":{
+         "description":"put 1 if you want menu with image  ",
+         "value":"2",
+         "required" false
+
+         
+      },
       "SUDO": {
          "description": "User ID with sudo permissions for the bot.",
          "value": "2348039607375",
