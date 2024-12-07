@@ -2,27 +2,27 @@ import config from '../../config.js';
 import { DataTypes } from 'sequelize';
 
 const Greetings = config.DATABASE.define(
-   'Greetings',
-   {
-      groupJid: {
-         type: DataTypes.STRING,
-         allowNull: false,
-         unique: true,
-      },
-      enabled: {
-         type: DataTypes.BOOLEAN,
-         defaultValue: false,
-      },
-      welcomeMessage: {
-         type: DataTypes.TEXT,
-         allowNull: true,
-      },
-      goodbyeMessage: {
-         type: DataTypes.TEXT,
-         allowNull: true,
-      },
-   },
-   { tableName: 'greetings', timestamps: false }
+	'Greetings',
+	{
+		groupJid: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			unique: true,
+		},
+		enabled: {
+			type: DataTypes.BOOLEAN,
+			defaultValue: false,
+		},
+		welcomeMessage: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+		goodbyeMessage: {
+			type: DataTypes.TEXT,
+			allowNull: true,
+		},
+	},
+	{ tableName: 'greetings', timestamps: false },
 );
 
 /**
@@ -30,9 +30,9 @@ const Greetings = config.DATABASE.define(
  * @param {string} groupJid - The group JID.
  * @returns {Promise<boolean>} - True if enabled, false otherwise.
  */
-export const isEnabled = async (groupJid) => {
-   const group = await Greetings.findOne({ where: { groupJid } });
-   return group ? group.enabled : false;
+export const isEnabled = async groupJid => {
+	const group = await Greetings.findOne({ where: { groupJid } });
+	return group ? group.enabled : false;
 };
 
 /**
@@ -40,9 +40,9 @@ export const isEnabled = async (groupJid) => {
  * @param {string} groupJid - The group JID.
  * @returns {Promise<string|null>} - The welcome message or null if not set.
  */
-export const getWelcomeMessage = async (groupJid) => {
-   const group = await Greetings.findOne({ where: { groupJid } });
-   return group ? group.welcomeMessage : null;
+export const getWelcomeMessage = async groupJid => {
+	const group = await Greetings.findOne({ where: { groupJid } });
+	return group ? group.welcomeMessage : null;
 };
 
 /**
@@ -50,9 +50,9 @@ export const getWelcomeMessage = async (groupJid) => {
  * @param {string} groupJid - The group JID.
  * @returns {Promise<string|null>} - The goodbye message or null if not set.
  */
-export const getGoodByeMessage = async (groupJid) => {
-   const group = await Greetings.findOne({ where: { groupJid } });
-   return group ? group.goodbyeMessage : null;
+export const getGoodByeMessage = async groupJid => {
+	const group = await Greetings.findOne({ where: { groupJid } });
+	return group ? group.goodbyeMessage : null;
 };
 
 /**
@@ -62,7 +62,7 @@ export const getGoodByeMessage = async (groupJid) => {
  * @returns {Promise<void>}
  */
 export const setWelcomeMessage = async (groupJid, message) => {
-   await Greetings.upsert({ groupJid, welcomeMessage: message });
+	await Greetings.upsert({ groupJid, welcomeMessage: message });
 };
 
 /**
@@ -72,7 +72,7 @@ export const setWelcomeMessage = async (groupJid, message) => {
  * @returns {Promise<void>}
  */
 export const setGoodByeMessage = async (groupJid, message) => {
-   await Greetings.upsert({ groupJid, goodbyeMessage: message });
+	await Greetings.upsert({ groupJid, goodbyeMessage: message });
 };
 
 export default Greetings;

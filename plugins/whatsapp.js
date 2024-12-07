@@ -1,7 +1,8 @@
 import { bot } from '../lib/plugins.js';
-import { serialize } from '../lib/serialize.js';
+// import { serialize } from '../lib/serialize.js';
 import { loadMessage } from './sql/store.js';
 import { numtoId } from '../lib/utils.js';
+import { smsg } from '../lib/message.js';
 
 bot(
 	{
@@ -58,7 +59,7 @@ bot(
 		let key = message.reply_message.key.id;
 		let msg = await loadMessage(key);
 		if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
-		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
+		msg = await smsg(JSON.parse(JSON.stringify(msg.message)), message.client);
 		if (!msg.quoted) return await message.send('_No quoted message found_');
 		await message.forward(message.jid, msg.quoted, { quoted: msg.quoted });
 	},
@@ -290,6 +291,42 @@ bot(
 		if (!message.reply_message) return message.send('```Reply A Message```');
 		if (message.reply_message?.fromMe) return message.send('```Cannot React to yourself Bro```');
 		if (!match) return message.send('```react 😊```');
-		return await message.react(match, { key: message.reply_message?.key });
+		return message.client.sendMessage(message.jid, { react: { text: match, key: message.reply_message.key } });
+	},
+);
+
+bot(
+	{
+		pattern: 'star',
+		isPublic: false,
+		desc: 'Stars or Unstars a Message',
+		type: 'whatsapp',
+	},
+	async message => {
+		const replyMessage = message.reply_message;
+		if (!replyMessage) return message.send('_Reply to a message to star it_');
+		const jid = message.jid;
+		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
+		const star = true;
+		await message.client.star(jid, messages, star);
+		message.send('_Message starred successfully_');
+	},
+);
+
+bot(
+	{
+		pattern: 'unstar',
+		isPublic: false,
+		desc: 'Stars or Unstars a Message',
+		type: 'whatsapp',
+	},
+	async message => {
+		const replyMessage = message.reply_message;
+		if (!replyMessage) return message.send('_Reply to a message to star it_');
+		const jid = message.jid;
+		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
+		const star = false;
+		await message.client.star(jid, messages, star);
+		message.send('_Message starred successfully_');
 	},
 );

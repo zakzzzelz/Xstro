@@ -7,7 +7,7 @@ bot(
 		on: 'text',
 		dontAddCommandList: true,
 	},
-	async (message, match, m, client) => {
+	async (message, match, client) => {
 		const owner = isSudo(message.sender);
 		if (!owner) return;
 		if (!message.text.startsWith('$ ')) return;
@@ -31,7 +31,7 @@ bot(
 							maxStringLength: null,
 					  });
 
-			return await message.send(`*Result:*\n\`\`\`${output}\`\`\``);
+			return await message.send(`*Result:*\n\`\`\`${JSON.parse(JSON.stringify(output))}\`\`\``, { type: 'text' });
 		} catch (error) {
 			const errorMessage = error.stack || error.message || String(error);
 			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);

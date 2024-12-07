@@ -24,7 +24,7 @@ const AliveDB = config.DATABASE.define(
 
 const getAliveMsg = async () => {
 	const msg = await AliveDB.findOne();
-	return msg?.message || '```Bot is running\n\nFor Custom Alive Message, when you call alive put the following from the examples below\n\nalive @user i am runing for &runtime\nalive &quotes &owner &botname &user```';
+	return msg?.message || '```Bot is running\n\nFor Custom Alive Message, when you call alive put the following from the examples below\n\nalive "@user" i am runing for "&runtime"\nalive "&quotes" "&owner" "&botname" "&user"```';
 };
 
 const setAliveMsg = async text => {

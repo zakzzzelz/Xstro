@@ -1,17 +1,17 @@
 import { bot } from '../lib/plugins.js';
-import { isAdmin } from '../lib/utils.js';
 import { addAKick, delKick, getKicks } from './sql/akick.js';
 
 bot(
 	{
 		pattern: 'akick',
 		isPublic: false,
+		isGroup: true,
 		desc: 'AutoKicks a member from the group.',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_This command can only be used in groups!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
 		const groupId = message.jid;
 

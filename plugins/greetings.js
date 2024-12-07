@@ -9,7 +9,7 @@ bot(
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_for groups only!_');
+		
 		const groupJid = message.jid;
 		const args = match.trim().split(' ');
 
@@ -47,7 +47,7 @@ bot(
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_for groups only!_');
+		
 		const groupJid = message.jid;
 		const args = match.trim().split(' ');
 

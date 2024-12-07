@@ -1,6 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import { delay } from 'baileys';
-import { numtoId, isAdmin } from '../lib/utils.js';
+import { numtoId } from '../lib/utils.js';
 import { Antilink } from './sql/antilink.js';
 import { AntiWord } from './sql/antiword.js';
 
@@ -8,14 +8,14 @@ bot(
 	{
 		pattern: 'add',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Adds A User to Group',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const jid = await message.thatJid(match);
-		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		try {
 			await message.client.groupParticipantsUpdate(message.jid, [jid], 'add');
 			return message.send(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
@@ -35,6 +35,7 @@ bot(
 	{
 		pattern: 'advertise',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Create and Share Advertisement Messages to all Your Groups',
 		type: 'group',
 	},
@@ -62,12 +63,13 @@ bot(
 	{
 		pattern: 'antilink ?(.*)',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Setup Antilink For Groups',
 		type: 'Group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For Groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
 		const [settings] = await Antilink.findOrCreate({
 			where: { groupId: message.jid },
@@ -100,12 +102,13 @@ bot(
 	{
 		pattern: 'antiword',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Setup Antiword for Groups',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For Groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
 		const groupId = message.jid;
 		const antiWordConfig = await AntiWord.findOrCreate({ where: { groupId } });
@@ -145,12 +148,13 @@ bot(
 	{
 		pattern: 'ckick',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Kick a certain country code from a group',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const countryCode = match?.trim().replace('+', '');
 		if (!countryCode || isNaN(countryCode)) return message.send('_Please provide a valid country code._');
 		const metadata = await message.client.groupMetadata(message.jid);
@@ -170,12 +174,13 @@ bot(
 	{
 		pattern: 'gname',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Change Group Name',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const subject = match || message.reply_message?.text;
 		if (!subject) return message.send('_Provide A New Name for the Group!_');
 		await message.client.groupUpdateSubject(message.jid, subject);
@@ -187,12 +192,13 @@ bot(
 	{
 		pattern: 'gdesc ?(.*)',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Changes Group Description',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const desciption = match || message.reply_message?.text;
 		await message.client.groupUpdateDescription(message.jid, desciption);
 		return message.send('_Group Description Updated_');
@@ -203,12 +209,13 @@ bot(
 	{
 		pattern: 'promote',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Promotes Someone to Admin',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
@@ -228,12 +235,13 @@ bot(
 	{
 		pattern: 'demote',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Demotes Someone from Admin',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
@@ -253,12 +261,13 @@ bot(
 	{
 		pattern: 'kick ?(.*)',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Kicks A Participant from Group',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const jid = await message.thatJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
@@ -270,12 +279,13 @@ bot(
 	{
 		pattern: 'invite',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Get Group Invite link',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const msg = await message.send('*wait*');
 		const code = await message.client.groupInviteCode(message.jid);
 		return msg.edit(`https://chat.whatsapp.com/${code}`);
@@ -286,6 +296,7 @@ bot(
 	{
 		pattern: 'leave',
 		isPublic: false,
+		isGroup: true,
 		desc: 'leave a group',
 		type: 'group',
 	},
@@ -299,6 +310,7 @@ bot(
 	{
 		pattern: 'poll',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Creates a poll in the group.',
 		type: 'group',
 	},
@@ -320,11 +332,11 @@ bot(
 	{
 		pattern: 'tag',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Tag all participants in the group with an optional message',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
 		const msg = match || message.reply_message?.text;
 		const text = msg || '';
 		const participants = await message.client.groupMetadata(message.jid);
@@ -341,11 +353,11 @@ bot(
 	{
 		pattern: 'tagall',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Tag all participants in the group',
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isGroup) return message.send('_For groups only!_');
 		const msg = match || message.reply_message?.text;
 		if (!msg) return message.send('_You must provide a reason for tagging everyone._');
 		const participants = await message.client.groupMetadata(message.jid);
@@ -362,12 +374,13 @@ bot(
 	{
 		pattern: 'mute',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Mute a group (admins only)',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const metadata = await message.client.groupMetadata(message.jid);
 		if (metadata.announce) return message.send('_Group is already muted. Only admins can send messages._');
 		await message.client.groupSettingUpdate(message.jid, 'announcement');
@@ -379,12 +392,13 @@ bot(
 	{
 		pattern: 'unmute',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Unmute a group (admins only)',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const metadata = await message.client.groupMetadata(message.jid);
 		if (!metadata.announce) return message.send('_Group is already unmuted. All members can send messages._');
 		await message.client.groupSettingUpdate(message.jid, 'not_announcement');
@@ -396,11 +410,11 @@ bot(
 	{
 		pattern: 'tagadmin',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Tags Admins of A Group',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const groupAdmins = groupMetadata.participants.filter(p => p.admin !== null).map(p => p.id);
 		if (groupAdmins.length > 0) {
@@ -417,12 +431,13 @@ bot(
 	{
 		pattern: 'revoke',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Revoke Invite link',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		await message.client.groupRevokeInvite(message.jid);
 		return message.send('_Group Link Revoked!_');
 	},
@@ -432,12 +447,13 @@ bot(
 	{
 		pattern: 'gpp',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Changes Group Profile Picture',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		if (!message.reply_message?.image) return message.send('_Reply An Image!_');
 		const img = await message.downloadAndSaveMedia();
 		await message.client.updateProfilePicture(message.jid, img);
@@ -449,12 +465,13 @@ bot(
 	{
 		pattern: 'lock',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Lock groups settings',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const meta = await message.client.groupMetadata(message.jid);
 		if (meta.restrict) return message.send('_Group is already locked to Admins._');
 		await message.client.groupSettingUpdate(message.jid, 'locked');
@@ -466,12 +483,13 @@ bot(
 	{
 		pattern: 'unlock',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Unlock groups settings',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const meta = await message.client.groupMetadata(message.jid);
 		if (!meta.restrict) return message.send('_Group is already unlocked for participants._');
 		await message.client.groupSettingUpdate(message.jid, 'unlocked');
@@ -483,12 +501,13 @@ bot(
 	{
 		pattern: 'requests',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Shows the pending requests of the group',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
 		if (!joinRequests || !joinRequests[0]) return await message.send('_No Join Requests_');
 		let requestList = '*_Group Join Requets List_*\n\n';
@@ -505,12 +524,13 @@ bot(
 	{
 		pattern: 'acceptall',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Accept all join requests',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
 		const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
 		if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
@@ -529,12 +549,13 @@ bot(
 	{
 		pattern: 'rejectall',
 		isPublic: true,
+		isGroup: true,
 		desc: 'Reject all join requests',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
 		if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
 		let rejectedUsers = [];
@@ -552,12 +573,13 @@ bot(
 	{
 		pattern: 'rgpp',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Removes Group Profile Photo',
 		type: 'group',
 	},
 	async message => {
-		if (!message.isGroup) return message.send('_For groups only!_');
-		if (!isAdmin(message.jid, message.user, message.client)) return await message.send("_I'm not admin_");
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		await message.client.removeProfilePicture(message.jid);
 		return await message.send('_Group Profile Photo Removed!_');
 	},
@@ -567,6 +589,7 @@ bot(
 	{
 		pattern: 'newgc',
 		isPublic: false,
+		isGroup: true,
 		desc: 'Creates A New Group',
 		type: 'group',
 	},
