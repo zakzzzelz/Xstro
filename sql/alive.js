@@ -1,7 +1,6 @@
-import { runtime } from '../../lib/utils.js';
 import { DataTypes } from 'sequelize';
-import config from '../../config.js';
-const { BOT_INFO, PREFIX } = config;
+import config from '../config.js';
+import { runtime } from '../lib/utils.js';
 
 const AliveDB = config.DATABASE.define(
 	'AliveDB',
@@ -49,8 +48,8 @@ const aliveMessage = async message => {
 			.replace(/@user/g, `@${message.sender.split('@')[0]}`)
 			.replace(/&quotes/g, getRandomQuote())
 			// .replace(/&facts/g, await getFacts())
-			.replace(/&owner/g, BOT_INFO.split(';')[0])
-			.replace(/&botname/g, BOT_INFO.split(';')[1])
+			.replace(/&owner/g, config.BOT_INFO.split(';')[0])
+			.replace(/&botname/g, config.BOT_INFO.split(';')[1])
 	);
 };
 

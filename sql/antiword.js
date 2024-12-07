@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import config from '../../config.js';
+import config from '../config.js';
 
-const AntiWord = config.DATABASE.define(
+export const AntiWord = config.DATABASE.define(
 	'AntiWordDB',
 	{
 		groupId: {
@@ -41,5 +41,3 @@ const AntiWord = config.DATABASE.define(
 		timestamps: false,
 	},
 );
-
-export { AntiWord };

@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import Greetings, { isEnabled, setWelcomeMessage, setGoodByeMessage, getWelcomeMessage, getGoodByeMessage } from './sql/greetings.js';
+import Greetings, { isEnabled, setWelcomeMessage, setGoodByeMessage, getWelcomeMessage, getGoodByeMessage } from '../sql/greetings.js';
 
 bot(
 	{

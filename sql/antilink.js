@@ -1,6 +1,7 @@
-import config from '../../config.js';
+import config from '../config.js';
+import { DataTypes } from 'sequelize';
 
-const Antilink = config.DATABASE.define(
+export const Antilink = config.DATABASE.define(
 	'AntilinkDB',
 	{
 		groupId: {
@@ -26,5 +27,3 @@ const Antilink = config.DATABASE.define(
 		timestamps: false,
 	},
 );
-
-export { Antilink };

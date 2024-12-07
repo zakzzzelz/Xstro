@@ -1,9 +1,9 @@
 import { bot } from '../lib/plugins.js';
 import config from '../config.js';
-import { aliveMessage, setAliveMsg } from './sql/alive.js';
-import { addBan, getBanned, removeBan } from './sql/ban.js';
-import { getSudo, delSudo, addSudo, isSudo } from './sql/sudo.js';
-import { addNote, removeNote, updateNote, getNotes } from './sql/notes.js';
+import { aliveMessage, setAliveMsg } from '../sql/alive.js';
+import { addBan, getBanned, removeBan } from '../sql/ban.js';
+import { getSudo, delSudo, addSudo, isSudo } from '../sql/sudo.js';
+import { addNote, removeNote, updateNote, getNotes } from '../sql/notes.js';
 
 bot(
 	{

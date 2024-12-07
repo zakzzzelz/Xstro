@@ -1,6 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import { inspect } from 'util';
-import { isSudo } from './sql/sudo.js';
+import { isSudo } from '../sql/sudo.js';
 
 bot(
 	{

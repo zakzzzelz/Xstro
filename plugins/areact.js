@@ -1,6 +1,6 @@
 import { bot } from '../lib/plugins.js';
 import { getRandom } from '../lib/utils.js';
-import AutoReact from './sql/areact.js';
+import AutoReact from '../sql/areact.js';
 
 bot(
 	{

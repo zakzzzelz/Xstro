@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { getWarn, resetWarn, addWarn } from './sql/warn.js';
+import { getWarn, resetWarn, addWarn } from '../sql/warn.js';
 
 bot(
 	{

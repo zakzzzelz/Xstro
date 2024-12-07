@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { addAKick, delKick, getKicks } from './sql/akick.js';
+import { addAKick, delKick, getKicks } from '../sql/akick.js';
 
 bot(
 	{

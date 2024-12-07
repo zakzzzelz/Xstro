@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import config from '../../config.js';
+import config from '../config.js';
 
 const SudoDB = config.DATABASE.define(
 	'Sudo',

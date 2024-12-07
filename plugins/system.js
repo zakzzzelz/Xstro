@@ -5,7 +5,7 @@ import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
 import { manageProcess, runtime, utils } from '../lib/utils.js';
-import { addPlugin, getPlugins, removePlugin } from './sql/plugins.js';
+import { addPlugin, getPlugins, removePlugin } from '../sql/plugins.js';
 import { manageVar } from './bot/tools.js';
 import { fancy } from './bot/font.js';
 import { getBuffer, getJson } from 'utils';

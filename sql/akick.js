@@ -1,4 +1,4 @@
-import config from '../../config.js';
+import config from '../config.js';
 import { DataTypes } from 'sequelize';
 
 const AutoKickDB = config.DATABASE.define(
@@ -35,9 +35,7 @@ export const addAKick = async (groupJid, userJid) => {
 		await AutoKickDB.create({ groupJid, userJid });
 		return true;
 	} catch (error) {
-		if (error.name === 'SequelizeUniqueConstraintError') {
-			return false;
-		}
+		if (error.name === 'SequelizeUniqueConstraintError') return false;
 		throw error;
 	}
 };

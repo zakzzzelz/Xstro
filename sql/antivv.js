@@ -1,4 +1,4 @@
-import config from '../../config.js';
+import config from '../config.js';
 import { DataTypes } from 'sequelize';
 
 const AntiVVDB = config.DATABASE.define(

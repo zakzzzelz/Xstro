@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import config from '../../config.js';
+import config from '../config.js';
 
 export const AuthState = config.DATABASE.define(
 	'AuthState',

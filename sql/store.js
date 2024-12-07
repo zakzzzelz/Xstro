@@ -1,4 +1,4 @@
-import config from '../../config.js';
+import config from '../config.js';
 const { DATABASE } = config;
 import { isJidGroup } from 'baileys';
 import { DataTypes } from 'sequelize';
