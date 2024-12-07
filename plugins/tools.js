@@ -4,6 +4,8 @@ import { bot } from '../lib/plugins.js';
 import { base64, dbinary, deobfuscate, ebinary, obfuscate, solveMath, toAscii } from './bot/tools.js';
 import { getBuffer, getJson } from 'utils';
 
+
+
 bot(
 	{
 		pattern: 'getpp',
@@ -145,5 +147,48 @@ bot(
 		if (!match) return message.send('_Provide text to convert to ASCII._');
 		const result = toAscii(match);
 		return message.send(result);
+	},
+);
+//==========================added getbio command tested verifed 
+bot(
+	{
+		pattern: 'getbio',
+		isPublic: true,
+		desc: 'Get the WhatsApp Bio of a User',
+		type: 'tools',
+	},
+	async message => {
+		if (message.isGroup) {
+			// In a group: check if the user is tagged or replied
+			const user = message.reply_message?.sender || message.mention[0];
+			if (!user) return message.send('_Reply to or Tag Someone to Get their Bio_');
+			try {
+				// Fetch bio of the tagged orr replied user
+				const status = await message.client.fetchStatus(user);
+				if (status && status.status) {
+					await message.send(
+						`*Bio of ${user.split('@')[0]}:*\n_${status.status}_`
+					);
+				} else {
+					await message.send('_No Bio Found for the User_');
+				}
+			} catch {
+				await message.send('_Failed to Fetch Bio_');
+			}
+		} else {
+			// In personal chat: fetch bio of the sender
+			try {
+				const status = await message.client.fetchStatus(message.jid);
+				if (status && status.status) {
+					await message.send(
+						`*Your Bio:*\n_${status.status}_`
+					);
+				} else {
+					await message.send('_You Have No Bio Set_');
+				}
+			} catch {
+				await message.send('_Failed to Fetch Your Bio_');
+			}
+		}
 	},
 );
