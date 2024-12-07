@@ -9,6 +9,8 @@ const config = {
 	SESSION_ID: process.env.SESSION_ID || '',
 	PREFIX: process.env.PREFIX || '.',
 	SUDO: process.env.SUDO || '',
+	MENU_IMAGE_URL: '', // add your images url if u want bot menu with image 
+        MENU_DESIGN: 2, // 1 = Menu with image, 2 = Menu without image  pick style 1 if u want menu with image 
 	BOT_INFO: process.env.BOT_INFO || '𝙰𝚜𝚝𝚛𝚘;𝚇𝚜𝚝𝚛𝚘-𝙱𝚘𝚝',
 	STICKER_PACK: process.env.STICKER_PACK || 'xʂƚɾσ;Ⴆσƚ',
 	HEROKU_API_KEY: process.env.HEROKU_API_KEY || '',
