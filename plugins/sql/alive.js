@@ -24,7 +24,7 @@ const AliveDB = config.DATABASE.define(
 
 const getAliveMsg = async () => {
 	const msg = await AliveDB.findOne();
-	return msg?.message || '```Bot is running\n\nFor Custom Alive Message, when you call alive put the following from the examples below\n\nalive "@user" i am runing for "&runtime"\nalive "&quotes" "&owner" "&botname" "&user"```';
+	return msg?.message || 'No Alive Message Was Set, use @ or & in place before the following keywords below:\n"runtime","user","quotes","owner","botname"';
 };
 
 const setAliveMsg = async text => {
@@ -40,7 +40,7 @@ const getRandomQuote = () => {
 
 const aliveMessage = async message => {
 	const msg = await getAliveMsg();
-	if (!msg) return 'ᴛʜᴀɴᴋ ʏᴏᴜ ғᴏʀ ᴄʜᴏᴏsɪɴɢ xsᴛʀᴏ ᴍᴅ, ɪ ᴀᴍ ᴀʟɪᴠᴇ ᴀɴᴅ ʀᴜɴɴɪɴɢ, ᴍᴀᴅᴇ ʙʏ ᴀsᴛʀᴏ ғᴏʀ ʏᴏᴜ\nᴜsᴇ ' + PREFIX + 'ᴀʟɪᴠᴇ ᴡɪᴛʜ ɴᴇᴡ ᴡᴏʀᴅs ᴛᴏ ᴄʜᴀɴɢᴇ ᴛʜᴇ ᴀʟɪᴠᴇ ᴍᴇssᴀɢᴇ';
+	if (!msg) return;
 
 	return (
 		msg
