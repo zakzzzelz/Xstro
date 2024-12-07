@@ -69,3 +69,29 @@ bot(
 		return await msg.edit('```Pairing CODE:\n' + res.code + '```');
 	},
 );
+
+
+
+bot(
+   {
+      pattern: 'support',
+      isPublic: true,
+      desc: 'Sends developer support information ',
+      type: 'misc',
+   },
+   async message => {
+      const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  
+│  
+│ *📱 WhatsApp Channel:* https://whatsapp.com/channel/0029VaDK8ZUDjiOhwFS1cP2j \n
+│ *💬 Testing Group:*   https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6\n
+│ *🐙 GitHub Repository:* https://github.com/AstroX11/Xstro.git \n
+│ *✉️ Support Email:* support@xstrobot  \n
+│  
+│ *⚠️ Note:* Please contact us for any issues. We respond within 24 hours.  
+│  
+╰───────────────────────────╯  
+`;
+   await message.send(supportMessage);
+   },
+);
+
