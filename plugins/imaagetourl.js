@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import axios from 'axios';
 import FormData from 'form-data';
 import { FileTypeFromBuffer } from 'utils';
 import { bot } from '../lib/plugins.js';
@@ -21,20 +24,22 @@ bot(
 	},
 );
 
-const uploadFile = async media => {
-	const fileType = FileTypeFromBuffer(media);
+export const uploadFile = async mediaBuffer => {
+	const fileType = FileTypeFromBuffer(mediaBuffer);
+	if (!fileType) throw new Error('Unable to determine the file type of the media.');
 	const filename = `file.${fileType}`;
-
+	const tempFilePath = path.join(process.cwd(), filename);
+	fs.writeFileSync(tempFilePath, mediaBuffer);
 	const form = new FormData();
-	form.append('fileToUpload', media, {
+	form.append('fileToUpload', fs.createReadStream(tempFilePath), {
 		filename: filename,
-		contentType: fileType.mime,
+		contentType: fileType,
 	});
 	form.append('reqtype', 'fileupload');
-	const response = await fetch('https://catbox.moe/user/api.php', {
-		method: 'POST',
-		body: form,
+	const response = await axios.post('https://catbox.moe/user/api.php', form, {
+		headers: form.getHeaders(),
 	});
-	const url = await response.text();
+	const url = response.data.trim();
+	fs.unlinkSync(tempFilePath);
 	return url;
 };
