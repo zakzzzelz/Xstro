@@ -96,3 +96,17 @@ bot(
 		return await message.send(sticker);
 	},
 );
+
+bot(
+	{
+		pattern: 'togif',
+		isPublic: true,
+		desc: 'Converts An Image to Gif',
+		type: 'converter',
+	},
+	async message => {
+		if (!message.reply_message?.video) return message.send('_Reply A Video Only!_');
+		const video = await message.downloadAndSaveMedia();
+		return await message.send(video, { caption: '_success!_', gifPlayback: true });
+	},
+);
