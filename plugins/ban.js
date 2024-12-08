@@ -11,8 +11,9 @@ bot(
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
-		if (isSudo(jid)) return mentions.send('_You cannot ban a sudo user_');
-		return message.send(await addBan(jid.split('@')[0]), { mentions: [jid] });
+		if (isSudo(jid)) return message.send('_You cannot ban a sudo user_');
+		const msg = await addBan(jid);
+		return await message.send(msg, { mentions: [jid] });
 	},
 );
 
@@ -25,7 +26,8 @@ bot(
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
-		return message.send(await removeBan(jid.split('@')[0]), { mentions: [jid] });
+		const msg = await removeBan(jid);
+		return await message.send(msg, { mentions: [jid] });
 	},
 );
 

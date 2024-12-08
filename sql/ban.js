@@ -17,21 +17,19 @@ const BanDB = config.DATABASE.define(
 );
 
 export const addBan = async jid => {
-	const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
-	const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
-	await BanDB.create({ jid: trimmedJid });
-	return `_@${trimmedJid} has been banned._`;
+	if (!jid) throw new Error('JID is required.');
+	await BanDB.create({ jid });
+	return `_@${jid} has been banned._`;
 };
 
 export const removeBan = async jid => {
-	const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
-	const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
-	const ban = await BanDB.findOne({ where: { jid: trimmedJid } });
+	if (!jid) throw new Error('JID is required.');
+	const ban = await BanDB.findOne({ where: { jid } });
 	if (ban) {
 		await ban.destroy();
-		return `_@${trimmedJid} unbanned._`;
+		return `_@${jid} unbanned._`;
 	}
-	return `_@${trimmedJid} wasn't banned._`;
+	return `_@${jid} wasn't banned._`;
 };
 
 export const getBanned = async () => {
@@ -40,13 +38,9 @@ export const getBanned = async () => {
 };
 
 export const isBanned = async jid => {
-	if (!jid) return;
-	const fullJid = jid.includes('@s.whatsapp.net') ? jid : `${jid}@s.whatsapp.net`;
-	const trimmedJid = fullJid.replace('@s.whatsapp.net', '');
+	if (!jid) throw new Error('JID is required.');
 	const bannedUsers = await getBanned();
-	if (bannedUsers.includes('2348060598064@s.whatsapp.net')) return false;
-	if (bannedUsers.includes(trimmedJid)) return true;
-	return false;
+	return bannedUsers.includes(jid);
 };
 
 export default BanDB;
