@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
-import { getJson } from '../lib/function.js';
+import { getJson } from 'utils';
 
 const AutoBioDB = config.DATABASE.define(
 	'autobio',
