@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path, { join, basename, extname } from 'path';
 import axios from 'axios';
-import utils from 'utils';
 import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
