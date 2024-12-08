@@ -19,7 +19,7 @@ const BanDB = config.DATABASE.define(
 export const addBan = async jid => {
 	if (!jid) throw new Error('JID is required.');
 	await BanDB.create({ jid });
-	return `_@${jid} has been banned._`;
+	return `_@${jid.split('@')[0]} has been banned._`;
 };
 
 export const removeBan = async jid => {
@@ -29,7 +29,7 @@ export const removeBan = async jid => {
 		await ban.destroy();
 		return `_@${jid} unbanned._`;
 	}
-	return `_@${jid} wasn't banned._`;
+	return `_@${jid.split('@')[0]} wasn't banned._`;
 };
 
 export const getBanned = async () => {
