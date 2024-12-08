@@ -10,7 +10,7 @@ bot(
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
-		if (isSudo(jid)) return message.send('_Already Sudo User_');
+		if (isSudo(jid, message.user)) return message.send('_Already Sudo User_');
 		const sudolist = await addSudo(jid);
 		return message.send(sudolist);
 	},
