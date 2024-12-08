@@ -276,15 +276,14 @@ export const toAscii = str =>
 		.join(' ');
 
 export const generatePdf = async text => {
-	const response = await axios.post(
-		'' + config.BASE_API_URL + '/api/topdf',
+	const res = await axios.post(
+		`${config.BASE_API_URL}/api/topdf`,
 		{ text },
 		{
 			responseType: 'arraybuffer',
 		},
 	);
-	const buff = await getBuffer(response.data);
-	return buff;
+	return res.data;
 };
 
 export const uploadFile = async mediaBuffer => {

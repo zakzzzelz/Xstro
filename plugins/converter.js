@@ -1,6 +1,7 @@
 import { getBuffer, getJson } from 'utils';
 import { bot } from '../lib/plugins.js';
 import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from './bot/tools.js';
+import config from '../config.js';
 
 bot(
 	{
@@ -122,6 +123,6 @@ bot(
 		const text = match || message.reply_message?.text;
 		if (!text) return message.send('_Give Me to convert to pdf_');
 		const doc = await generatePdf(text.trim());
-		return await message.send(doc, { type: 'document' });
+		return await message.send(doc, { type: 'document', fileName: config.BOT_INFO.split(';')[1] || 'xstro' });
 	},
 );

@@ -13,7 +13,8 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		let menuText = `╭─ ${config.BOT_INFO.split(';')[1]} ───
+		let menuText = `\`\`\`
+╭── ${config.BOT_INFO.split(';')[1]} ───
 │ User: ${message.pushName}
 │ Mode: ${config.MODE}
 │ Uptime: ${runtime(process.uptime())}
@@ -21,7 +22,8 @@ bot(
 │ Plugins: ${commands.length}
 │ Memory: ${formatBytes(totalmem() - freemem())}
 │ Version: ${config.VERSION}
-╰────────────────\n`;
+╰────────────────
+\`\`\`\n`;
 
 		let commandCounter = 1;
 		const categorized = commands
@@ -36,14 +38,14 @@ bot(
 			}, {});
 
 		Object.keys(categorized).forEach(category => {
-			menuText += `\n╭──〈 ${category} 〉────\n`;
+			menuText += `\n╭── *${category.toUpperCase()}* ────\n`;
 			categorized[category].forEach(cmd => {
-				menuText += `│▸ ${commandCounter}. ${cmd}\n`;
+				menuText += fancy(`│▸ ${commandCounter}. ${cmd}\n`);
 				commandCounter++;
 			});
 			menuText += `╰──────────────\n`;
 		});
 		const gif = readFileSync('./media/intro.mp4');
-		return message.send(gif, { caption: fancy(menuText), gifPlayback: true });
+		return message.send(gif, { caption: menuText, gifPlayback: true });
 	},
 );

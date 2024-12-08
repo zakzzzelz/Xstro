@@ -11,7 +11,7 @@ bot(
 		pattern: 'getpp',
 		isPublic: true,
 		desc: 'Get Another Person Profile Image',
-		type: 'tools',
+		type: 'utils',
 	},
 	async message => {
 		if (message.isGroup) {
@@ -41,7 +41,7 @@ bot(
 		pattern: 'surl',
 		isPublic: true,
 		desc: 'Shorterns A Url',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		const url = utils.extractUrlFromString(match || message.reply_message?.text);
@@ -57,7 +57,7 @@ bot(
 		pattern: 'calc',
 		isPublic: true,
 		desc: 'Solves Math Equation',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide A Maths Expression_');
@@ -71,7 +71,7 @@ bot(
 		pattern: 'base64',
 		isPublic: true,
 		desc: 'Encodes text to Base64',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide text to encode._');
@@ -85,7 +85,7 @@ bot(
 		pattern: 'ebinary',
 		isPublic: true,
 		desc: 'Encodes text to binary',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide text to encode._');
@@ -99,7 +99,7 @@ bot(
 		pattern: 'dbinary',
 		isPublic: true,
 		desc: 'Decodes binary to text',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide binary to decode._');
@@ -113,7 +113,7 @@ bot(
 		pattern: 'obfuscate',
 		isPublic: true,
 		desc: 'Obfuscates JavaScript code using a basic scrambling technique',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide code to obfuscate._');
@@ -127,7 +127,7 @@ bot(
 		pattern: 'deobfuscate',
 		isPublic: true,
 		desc: 'Deobfuscates scrambled and encoded JavaScript code',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide obfuscated code to decode._');
@@ -141,7 +141,7 @@ bot(
 		pattern: 'ascii',
 		isPublic: true,
 		desc: 'Converts each character of the string to its ASCII code',
-		type: 'tools',
+		type: 'utils',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide text to convert to ASCII._');
@@ -155,7 +155,7 @@ bot(
 		pattern: 'getbio',
 		isPublic: true,
 		desc: 'Get the WhatsApp Bio of a User',
-		type: 'tools',
+		type: 'utils',
 	},
 	async message => {
 		if (message.isGroup) {

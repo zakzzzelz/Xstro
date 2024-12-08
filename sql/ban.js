@@ -38,7 +38,7 @@ export const getBanned = async () => {
 };
 
 export const isBanned = async jid => {
-	if (!jid) throw new Error('JID is required.');
+	if (!jid) jid = '';
 	const bannedUsers = await getBanned();
 	return bannedUsers.includes(jid);
 };
