@@ -1,4 +1,6 @@
 import fs from 'fs/promises';
+import { createReadStream, unlinkSync, writeFileSync } from 'fs';
+import path from 'path';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
@@ -283,4 +285,24 @@ export const generatePdf = async text => {
 	);
 	const buff = await getBuffer(response.data);
 	return buff;
+};
+
+export const uploadFile = async mediaBuffer => {
+	const fileType = FileTypeFromBuffer(mediaBuffer);
+	if (!fileType) throw new Error('Unable to determine the file type of the media.');
+	const filename = `file.${fileType}`;
+	const temp = path.join(process.cwd(), filename);
+	writeFileSync(temp, mediaBuffer);
+	const form = new FormData();
+	form.append('fileToUpload', createReadStream(temp), {
+		filename: filename,
+		contentType: fileType,
+	});
+	form.append('reqtype', 'fileupload');
+	const response = await axios.post('https://catbox.moe/user/api.php', form, {
+		headers: form.getHeaders(),
+	});
+	const url = response.data.trim();
+	unlinkSync(temp);
+	return url;
 };
