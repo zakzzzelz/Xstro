@@ -174,27 +174,6 @@ bot(
 	},
 );
 
-bot(
-  {
-    pattern: 'eval ?(.*)',
-    isPublic: false,
-    desc: 'Evaluate code securely using utils',
-    type: 'system',
-  },
-  async (message, match) => {
-    if (!match) return message.send('_Provide code to evaluate_');
-    
-    let userCode = match;
-    userCode = userCode.replace(/\blet\b/g, 'iftrue');
-
-    try {
-      const result = utils.safeEval(userCode);
-      message.send(`Result: \`${result}\``);
-    } catch (error) {
-      message.send(`Error: ${error.message}`);
-    }
-  },
-);
 
 bot(
 	{
