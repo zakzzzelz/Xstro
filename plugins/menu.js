@@ -3,7 +3,7 @@ import { commands, bot } from '../lib/plugins.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from './bot/font.js';
-import { readFile } from 'fs';
+import { readFileSync } from 'fs';
 
 bot(
 	{
@@ -43,7 +43,7 @@ bot(
 			});
 			menuText += `╰──────────────\n`;
 		});
-		const gif = readFile('./media/intro.mp4');
+		const gif = readFileSync('./media/intro.mp4');
 		return message.send(gif, { caption: fancy(menuText), gifPlayback: true });
 	},
 );
