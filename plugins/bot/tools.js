@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
-import { FileTypeFromBuffer } from 'utils';
+import { FileTypeFromBuffer, getBuffer } from 'utils';
 import { join } from 'path';
 import simpleGit from 'simple-git';
 import Heroku from 'heroku-client';
@@ -272,3 +272,15 @@ export const toAscii = str =>
 		.split('')
 		.map(char => char.charCodeAt(0))
 		.join(' ');
+
+export const generatePdf = async text => {
+	const response = await axios.post(
+		'' + config.BASE_API_URL + '/api/topdf',
+		{ text },
+		{
+			responseType: 'arraybuffer',
+		},
+	);
+	const buff = await getBuffer(response.data);
+	return buff;
+};

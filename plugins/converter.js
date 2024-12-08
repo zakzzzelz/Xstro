@@ -1,6 +1,6 @@
 import { getBuffer, getJson } from 'utils';
 import { bot } from '../lib/plugins.js';
-import { convertToOpus, flipMedia, toBlackVideo, toSticker } from './bot/tools.js';
+import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from './bot/tools.js';
 
 bot(
 	{
@@ -108,5 +108,20 @@ bot(
 		if (!message.reply_message?.video) return message.send('_Reply A Video Only!_');
 		const video = await message.downloadAndSaveMedia();
 		return await message.send(video, { caption: '_success!_', gifPlayback: true });
+	},
+);
+
+bot(
+	{
+		pattern: 'topdf',
+		isPublic: true,
+		desc: 'Converts text to Pdf',
+		type: 'converter',
+	},
+	async (message, match) => {
+		const text = match || message.reply_message?.text;
+		if (!text) return message.send('_Give Me to convert to pdf_');
+		const doc = await generatePdf(text.trim());
+		return await message.send(doc, { type: 'document' });
 	},
 );
