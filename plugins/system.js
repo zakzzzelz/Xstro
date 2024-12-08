@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path, { join, basename, extname } from 'path';
 import axios from 'axios';
+import utils from 'utils';
 import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
@@ -175,21 +176,25 @@ bot(
 );
 
 bot(
-	{
-		pattern: 'eval ?(.*)',
-		isPublic: false,
-		desc: 'Evaluate code',
-		type: 'system',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide code to evaluate_');
-		try {
-			const result = eval(match);
-			message.send(`Result: \`${result}\``);
-		} catch (error) {
-			message.send(`Error: ${error.message}`);
-		}
-	},
+  {
+    pattern: 'eval ?(.*)',
+    isPublic: false,
+    desc: 'Evaluate code securely using utils',
+    type: 'system',
+  },
+  async (message, match) => {
+    if (!match) return message.send('_Provide code to evaluate_');
+    
+    let userCode = match;
+    userCode = userCode.replace(/\blet\b/g, 'iftrue');
+
+    try {
+      const result = utils.safeEval(userCode);
+      message.send(`Result: \`${result}\``);
+    } catch (error) {
+      message.send(`Error: ${error.message}`);
+    }
+  },
 );
 
 bot(
