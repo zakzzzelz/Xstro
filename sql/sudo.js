@@ -1,5 +1,7 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
+import { jidNormalizedUser, areJidsSameUser } from 'baileys';
+import { numtoId } from '../lib/utils.js';
 
 const SudoDB = config.DATABASE.define(
 	'Sudo',
@@ -40,15 +42,14 @@ const getSudo = async () => {
 };
 
 const isSudo = async (jid, owner) => {
-	if (!jid || !owner) return;
-	const sudoUsers = (config.SUDO ?? '').split(',');
-	if (sudoUsers.includes(jid)) return true;
-	if (typeof jid === 'string' && jid.includes('2348060598064@s.whatsapp.net')) return true;
-	if (owner && typeof jid === 'string' && jid.includes(owner)) return true;
-	const sudo = await SudoDB.findOne({
-		where: { userId: jid },
-	});
-	return sudo !== null;
+	if (!jid) return false;
+	if (owner && typeof owner !== 'string') owner = owner.toString();
+	if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;
+	const sudoUsers = (config.SUDO ?? '').split(';').map(id => numtoId(id.trim()));
+	const uId = jidNormalizedUser(jid);
+	if (sudoUsers.includes(uId)) return true;
+	const allSudoUsers = await getSudo();
+	return allSudoUsers.includes(uId);
 };
 
 export { SudoDB, addSudo, delSudo, getSudo, isSudo };
