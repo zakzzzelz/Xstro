@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { createReadStream, unlinkSync, writeFileSync } from 'fs';
 import path from 'path';
 import axios from 'axios';
 import FormData from 'form-data';
@@ -28,10 +28,10 @@ export const uploadFile = async mediaBuffer => {
 	const fileType = FileTypeFromBuffer(mediaBuffer);
 	if (!fileType) throw new Error('Unable to determine the file type of the media.');
 	const filename = `file.${fileType}`;
-	const tempFilePath = path.join(process.cwd(), filename);
-	fs.writeFileSync(tempFilePath, mediaBuffer);
+	const temp = path.join(process.cwd(), filename);
+	writeFileSync(temp, mediaBuffer);
 	const form = new FormData();
-	form.append('fileToUpload', fs.createReadStream(tempFilePath), {
+	form.append('fileToUpload', createReadStream(temp), {
 		filename: filename,
 		contentType: fileType,
 	});
@@ -40,6 +40,6 @@ export const uploadFile = async mediaBuffer => {
 		headers: form.getHeaders(),
 	});
 	const url = response.data.trim();
-	fs.unlinkSync(tempFilePath);
+	unlinkSync(temp);
 	return url;
 };
