@@ -1,8 +1,7 @@
 import config from '../config.js';
-import { utils } from '../lib/utils.js';
 import { bot } from '../lib/plugins.js';
 import { base64, dbinary, deobfuscate, ebinary, obfuscate, solveMath, toAscii } from './bot/tools.js';
-import { getBuffer, getJson } from 'utils';
+import { extractUrlFromString, getBuffer, getJson } from 'utils';
 
 
 
@@ -44,7 +43,7 @@ bot(
 		type: 'utils',
 	},
 	async (message, match) => {
-		const url = utils.extractUrlFromString(match || message.reply_message?.text);
+		const url = extractUrlFromString(match || message.reply_message?.text);
 		if (!url) return message.send('_No Url found_');
 		const msg = await message.send('*wait*');
 		const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`);

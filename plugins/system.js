@@ -4,11 +4,11 @@ import axios from 'axios';
 import { exec } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
-import { manageProcess, runtime, utils } from '../lib/utils.js';
+import { manageProcess, runtime } from '../lib/utils.js';
 import { addPlugin, getPlugins, removePlugin } from '../sql/plugins.js';
 import { manageVar } from './bot/tools.js';
 import { fancy } from './bot/font.js';
-import { getBuffer, getJson } from 'utils';
+import { extractUrlFromString, getBuffer, getJson } from 'utils';
 
 const envFilePath = path.join(process.cwd(), '.env');
 const envfile = () => {
@@ -50,7 +50,7 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		const pluginUrl = utils.extractUrlFromString(match.trim() || message.reply_message?.text);
+		const pluginUrl = extractUrlFromString(match.trim() || message.reply_message?.text);
 		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.send('_Provide a valid Plugin URL_');
 
 		const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;

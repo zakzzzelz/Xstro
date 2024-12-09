@@ -4,7 +4,7 @@ import path from 'path';
 import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
-import { FileTypeFromBuffer, getBuffer } from 'utils';
+import { FileTypeFromBuffer } from 'utils';
 import { join } from 'path';
 import simpleGit from 'simple-git';
 import Heroku from 'heroku-client';
