@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const BanDB = config.DATABASE.define(
+const BanDB = DATABASE.define(
 	'ban',
 	{
 		jid: {

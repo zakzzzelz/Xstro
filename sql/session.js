@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import config from '../config.js';
+import DATABASE from '../lib/database.js';
 
-export const AuthState = config.DATABASE.define(
+export const AuthState = DATABASE.define(
 	'AuthState',
 	{
 		session_id: {

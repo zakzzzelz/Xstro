@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const Greetings = config.DATABASE.define(
+const Greetings = DATABASE.define(
 	'Greetings',
 	{
 		groupJid: {

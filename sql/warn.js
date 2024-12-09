@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const WarnDB = config.DATABASE.define(
+const WarnDB = DATABASE.define(
 	'Warn',
 	{
 		jid: {

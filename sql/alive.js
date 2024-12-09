@@ -1,8 +1,10 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
 import { runtime } from '../lib/utils.js';
+import DATABASE from '../lib/database.js';
+import { placeholderService } from './autobio.js';
 
-const AliveDB = config.DATABASE.define(
+const AliveDB = DATABASE.define(
 	'AliveDB',
 	{
 		id: {
@@ -23,7 +25,7 @@ const AliveDB = config.DATABASE.define(
 
 const getAliveMsg = async () => {
 	const msg = await AliveDB.findOne();
-	return msg?.message || 'No Alive Message Was Set, use @ or & in place before the following keywords below:\n"runtime","user","quotes","owner","botname"';
+	return msg?.message || '@user ' + config.BOT_INFO.split(';')[0] + ' is alive';
 };
 
 const setAliveMsg = async text => {
@@ -32,24 +34,19 @@ const setAliveMsg = async text => {
 	return true;
 };
 
-const getRandomQuote = () => {
-	const quotes = ["Life is what happens while you're busy making other plans.", 'The only way to do great work is to love what you do.', 'Success is not final, failure is not fatal.', 'Be the change you wish to see in the world.', 'Every moment is a fresh beginning.'];
-	return quotes[Math.floor(Math.random() * quotes.length)];
-};
-
 const aliveMessage = async message => {
 	const msg = await getAliveMsg();
-	if (!msg) return;
+	if (!msg) msg = '';
 
-	return (
+	return async(
 		msg
 			.replace(/&runtime/g, runtime(process.uptime()))
 			.replace(/&user/g, message.pushName || 'user')
 			.replace(/@user/g, `@${message.sender.split('@')[0]}`)
-			.replace(/&quotes/g, getRandomQuote())
-			// .replace(/&facts/g, await getFacts())
+			.replace(/&quotes/g, await placeholderService.quotes())
+			.replace(/&facts/g, await placeholderService.facts())
 			.replace(/&owner/g, config.BOT_INFO.split(';')[0])
-			.replace(/&botname/g, config.BOT_INFO.split(';')[1])
+			.replace(/&botname/g, config.BOT_INFO.split(';')[1]),
 	);
 };
 

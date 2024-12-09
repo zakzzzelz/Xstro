@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import config from '../config.js';
+import DATABASE from '../lib/database.js';
 
-const AfkDB = config.DATABASE.define(
+const AfkDB = DATABASE.define(
 	'Afk',
 	{
 		message: {

@@ -1,7 +1,6 @@
-import config from '../config.js';
-const { DATABASE } = config;
 import { isJidGroup } from 'baileys';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
 const messageDb = DATABASE.define(
 	'message',

@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const AntiDelDB = config.DATABASE.define(
+const AntiDelDB = DATABASE.define(
 	'AntiDelete',
 	{
 		chatId: {

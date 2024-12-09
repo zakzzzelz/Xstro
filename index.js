@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import connect from './lib/client.js';
-import config from './config.js';
 import loadFiles from './lib/utils.js';
 import getSession from './lib/session.js';
 import envlogger from './lib/logger.js';
+import DATABASE from './lib/database.js';
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ dotenv.config();
 	console.log('XSTRO MD');
 	envlogger();
 	await loadFiles();
-	await config.DATABASE.sync();
+	await DATABASE.sync();
 	await getSession();
 	await connect();
 

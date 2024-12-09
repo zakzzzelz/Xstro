@@ -1,24 +1,23 @@
-import config from '../config.js';
-import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-export const Antilink = config.DATABASE.define(
+export const Antilink = DATABASE.define(
 	'AntilinkDB',
 	{
 		groupId: {
-			type: config.DATABASE.Sequelize.STRING,
+			type: DATABASE.Sequelize.STRING,
 			allowNull: false,
 			primaryKey: true,
 		},
 		enabled: {
-			type: config.DATABASE.Sequelize.BOOLEAN,
+			type: DATABASE.Sequelize.BOOLEAN,
 			defaultValue: false,
 		},
 		action: {
-			type: config.DATABASE.Sequelize.ENUM('delete', 'warn', 'kick'),
+			type: DATABASE.Sequelize.ENUM('delete', 'warn', 'kick'),
 			defaultValue: 'delete',
 		},
 		warnings: {
-			type: config.DATABASE.Sequelize.JSON,
+			type: DATABASE.Sequelize.JSON,
 			defaultValue: {},
 		},
 	},

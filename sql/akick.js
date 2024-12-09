@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const AutoKickDB = config.DATABASE.define(
+const AutoKickDB = DATABASE.define(
 	'AutoKick',
 	{
 		groupJid: {

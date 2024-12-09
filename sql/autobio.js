@@ -1,8 +1,9 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
 import { getJson } from 'utils';
+import DATABASE from '../lib/database.js';
 
-const AutoBioDB = config.DATABASE.define(
+const AutoBioDB = DATABASE.define(
 	'autobio',
 	{
 		autobio_msg: {

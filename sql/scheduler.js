@@ -1,7 +1,7 @@
-import config from '../config.js';
 import { DataTypes } from 'sequelize';
+import DATABASE from '../lib/database.js';
 
-const Scheduler = config.DATABASE.define(
+const Scheduler = DATABASE.define(
 	'Schedule',
 	{
 		groupId: {
