@@ -3,12 +3,11 @@
 	"description": "Simple WA bot",
 	"logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
 	"repository": "https://github.com/ASTRO-X10/xstro-md",
+	"stack": "container",
+	"success_url": "/",
 	"buildpacks": [
 		{
 			"url": "heroku/nodejs"
-		},
-		{
-			"url": "heroku/git"
 		}
 	],
 	"env": {
