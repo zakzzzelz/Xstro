@@ -10,12 +10,12 @@ bot(
 	async (message, match) => {
 		const updated = await isLatest();
 		if (updated) return message.send('```You are on the Latest Update```');
-		if (!match === 'now') return message.send('```Invaild, use ' + message.prefix + 'update now```');
-		const updater = await updateBot();
-		if (updater) {
-			message.send('```Update Success```');
+		if (match.toString().toLowerCase() === 'now') {
+			await message.send('```Updating Bot```');
+			await updateBot();
+			await message.send('```Bot Updated```');
 		} else {
-			message.send('```Failed to update bot```');
+			return message.send('```Invaild, use ' + message.prefix + 'update now```');
 		}
 	},
 );
