@@ -54,11 +54,6 @@
 			"value": "false",
 			"required": false
 		},
-		"AUTO_READ": {
-			"description": "Automaically Read Messages",
-			"value": "false",
-			"required": false
-		},
 		"STICKER_PACK": {
 			"description": "Set the bot sticker meta data",
 			"value": "Astro;Xstro",
