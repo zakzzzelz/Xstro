@@ -1,7 +1,5 @@
-import moment from 'moment-timezone';
 import config from '../config.js';
 import { bot } from '../lib/plugins.js';
-import { getFloor } from '../lib/utils.js';
 import { getBuffer, getJson } from 'utils';
 const base_url = 'https://api.giftedtech.my.id/api/';
 const { API_KEY } = config;
@@ -87,7 +85,13 @@ bot(
 		const data = await getJson(`http://api.openweathermap.org/data/2.5/weather?q=${match}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=en`).catch(() => {});
 		if (!data) return await message.send(`_${match} not found_`);
 		const { name, timezone, sys, main, weather, visibility, wind } = data;
-		const degree = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'][getFloor(wind.deg / 22.5 + 0.5) % 16];
-		return await message.send(`*Name :* ${name}\n*Country :* ${sys.country}\n*Weather :* ${weather[0].description}\n*Temp :* ${getFloor(main.temp)}°\n*Feels Like :* ${getFloor(main.feels_like)}°\n*Humidity :* ${main.humidity}%\n*Visibility  :* ${visibility}m\n*Wind* : ${wind.speed}m/s ${degree}\n*Sunrise :* ${moment.utc(sys.sunrise, 'X').add(timezone, 'seconds').format('hh:mm a')}\n*Sunset :* ${moment.utc(sys.sunset, 'X').add(timezone, 'seconds').format('hh:mm a')}`);
+		const degree = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'][Math.floor(wind.deg / 22.5 + 0.5) % 16];
+		const formatTime = (timestamp, timezoneOffset) => {
+			const localTime = new Date((timestamp + timezoneOffset) * 1000);
+			return new Intl.DateTimeFormat('en-US', { hour: '2-digit', minute: '2-digit', hour12: true }).format(localTime);
+		};
+		const sunrise = formatTime(sys.sunrise, timezone);
+		const sunset = formatTime(sys.sunset, timezone);
+		return await message.send(`*Name :* ${name}\n*Country :* ${sys.country}\n*Weather :* ${weather[0].description}\n*Temp :* ${Math.floor(main.temp)}°\n*Feels Like :* ${Math.floor(main.feels_like)}°\n*Humidity :* ${main.humidity}%\n*Visibility  :* ${visibility}m\n*Wind* : ${wind.speed}m/s ${degree}\n*Sunrise :* ${sunrise}\n*Sunset :* ${sunset}`);
 	},
 );
