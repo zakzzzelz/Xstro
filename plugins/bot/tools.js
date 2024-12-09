@@ -5,12 +5,8 @@ import axios from 'axios';
 import FormData from 'form-data';
 import config from '../../config.js';
 import { FileTypeFromBuffer } from 'utils';
-import { join } from 'path';
-import simpleGit from 'simple-git';
-import Heroku from 'heroku-client';
 
-const git = simpleGit();
-const envPath = join(process.cwd(), '.env');
+const envPath = './.env';
 
 export async function manageVar(params) {
 	const { command, key, value } = params;
@@ -58,21 +54,6 @@ export async function manageVar(params) {
 		}
 	}
 }
-
-export const updateHerokuApp = async () => {
-	const heroku = new Heroku({ token: process.env.HEROKU_API_KEY });
-
-	await git.fetch();
-	const commits = await git.log(['master..origin/master']);
-	if (commits.total === 0) return '```You already have the latest version installed.```';
-
-	const app = await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}`);
-	const gitUrl = app.git_url.replace('https://', `https://api:${process.env.HEROKU_API_KEY}@`);
-	await git.addRemote('heroku', gitUrl);
-	await git.push('heroku', 'master');
-
-	return '```Bot updated. Restarting.```';
-};
 
 export async function flipMedia(buffer, direction) {
 	const fileType = FileTypeFromBuffer(buffer);
@@ -142,9 +123,9 @@ export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';'
 		const fileType = FileTypeFromBuffer(buffer);
 		const fileInfo = getMimeAndExt(fileType);
 		if (!fileInfo) throw new Error('Unsupported or unknown file type');
-		const { mime, ext } = fileInfo;
+		const { mime } = fileInfo;
 		const form = new FormData();
-		form.append('media', buffer, { filename: `media.${ext}`, contentType: mime });
+		form.append('media', buffer, { filename: `media.${fileType}`, contentType: mime });
 		form.append('packname', packname);
 		form.append('author', author);
 

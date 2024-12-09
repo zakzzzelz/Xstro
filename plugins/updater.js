@@ -1,11 +1,7 @@
 import { bot } from '../lib/plugins.js';
 import { exec } from 'child_process';
-import simplegit from 'simple-git';
 import { manageProcess } from '../lib/utils.js';
-import { updateHerokuApp } from './bot/tools.js';
-import config from '../config.js';
-
-const git = simplegit();
+import { performUpdate, updateHerokuApp } from '../lib/updater.js';
 
 bot(
 	{
@@ -15,19 +11,20 @@ bot(
 		type: 'system',
 	},
 	async (message, match) => {
-		await git.fetch();
-		const commits = await git.log(['master..origin/master']);
-		if (commits.total === 0) return await message.send(`\`\`\`you are on version ${config.VERSION}\`\`\``);
-		if (match === 'now') {
-			message.send('restarting bot');
-			exec('git stash && git pull origin master', async (err, stderr) => {
-				if (err) return await message.send('```' + stderr + '```');
-			});
-			manageProcess('restart');
+		const updateInfo = await performUpdate();
+		if (typeof updateInfo === 'string') {
+			message.send('```' + updateInfo + '```');
 		} else {
-			let changesList = commits.all.map((c, i) => `${i + 1}. ${c.message}`).join('\n');
-			let changes = `*New Update*\n\n*Changes:*\n${changesList}\n\n*Use:* ${message.prefix}update now`;
-			await message.send('```' + changes + '```');
+			if (match === 'now') {
+				message.send('Restarting bot...');
+				exec('git stash && git pull origin master', (pullErr, stderr) => {
+					if (pullErr) return message.send('Error pulling updates: ' + stderr);
+					manageProcess('restart');
+				});
+			} else {
+				const changes = `*New Update*\n\n*Changes:*\n${updateInfo}\n\n*Use:* ${message.prefix}update now`;
+				message.send('```' + changes + '```');
+			}
 		}
 	},
 );
