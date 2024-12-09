@@ -35,51 +35,39 @@ I’m not responsible for you messing around and getting your account banned. As
 
 [![Deploy to Render](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=render&logoColor=white)](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
 
-#### Deploy to Heroku
+#### Heroku Deployment
 
 1. Create an account on Heroku if you don’t have one.
 
 [![Create Heroku Account](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=heroku&logoColor=white)](https://signup.heroku.com/)
 
-2. Deploy the bot.
+2. Setup Application
 
 [![Deploy to Heroku](https://img.shields.io/badge/-Deploy-black?style=for-the-badge&logo=heroku&logoColor=white)](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
 
-#### Deploy to Koyeb
+3. On Heroku make sure to to choose worker as runtime else the application would crash, I don't know how to support heroku web, it's not my code it's their platform.
 
-1. Create an account on Koyeb.
+#### Koyeb Deployment
+
+1. Create an account on Koyeb, make sure to use a 1 year old Gmail/Outlook Account else you will ban instantly.
 
 [![Create Koyeb Account](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://app.koyeb.com/auth/signup)
 
-2. Get your **DATABASE_URL** from Koyeb.
+2. Get your **_DATABASE_URL_** from Koyeb or Render, I'm not going to provide tutorial on that, ask in the community
 
 3. Deploy the bot.
 
 [![Deploy to Koyeb](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=koyeb&logoColor=white)](https://app.koyeb.com/services/deploy/?type=git&repository=https%3A%2F%2Fgithub.com%2FAstroX11%2FXstro&branch=main&name=xstro-bot&builder=dockerfile&dockerfile=.%2Flib%2FDockerfile&ports=3000%3Bhttp%3B%2F&env%5BNODE_ENV%5D=production&env%5BSESSION_ID%5D=&env%5BSUDO%5D=2348039607375&env%5BCMD_REACT%5D=true&env%5BBOT_INFO%5D=Astro%3BXstro-Md%3B&env%5BMODE%5D=private&env%5BAUTO_STATUS_READ%5D=false&env%5BAUTO_READ%5D=false&env%5BSTICKER_PACK%5D=Astro%3BXstro&env%5BPREFIX%5D=.&env%5BLOGS%5D=false&env%5BPORT%5D=3000)
 
-#### Deploy to Replit
-
-1. Create an account on Replit if you don’t have one.
-
-[![Create Replit Account](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=replit&logoColor=white)](https://replit.com/signup)
-
-2. Deploy the bot.
-
-[![Deploy to Replit](https://img.shields.io/badge/-DEPLOY-black?style=for-the-badge&logo=replit&logoColor=white)](https://replit.com/github/AstroX11/Xstro)
-
-#### Deploy to Codespaces
-
-1. Click Below to run on codespaces
-
-[![Run on Codespaces](https://img.shields.io/badge/-Create-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/codespaces/new?skip_quickstart=true&machine=standardLinux32gb&repo=882210451&ref=master&geo=EuropeWest)
-
-### RUN ON VPS OR LOCALLY
+#### Windows Support
 
 #### 1. Install Node.js
 
-Make sure Node.js is installed on your system.
+NodeJs is the core of this project, not installing it on windows make you dumb, so in order to have nodejs download this version I used to build Xstro from [Here](https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi).
 
 #### 2. Installation
+
+Once you have setup NodeJs make sure to restart your pc, then install [git](https://git-scm.com/download/win), once done copy the following below and paste in powershell.
 
 ```bash
 npm i -g pm2 yarn
@@ -90,7 +78,7 @@ yarn install
 
 #### 3. Configuration
 
-Create the `.env` file with the required environment variables:
+If you don't trust the terminal (noobs) then go to the folder where the git file was downloaded to and create a file named `.env` once you have done that copy the line below and paste in there, remove `echo` from the line and edit the vars.
 
 ```bash
 echo "SESSION_ID=null
@@ -113,6 +101,57 @@ npm start
 
 ```bash
 npm stop
+```
+
+### DEVLOPMENTS && TESTING
+
+#### Understanding the Structure
+
+Xstro has a simple structure for managing complex data, I have built a custom Seralization and Class Instance to manage messages [Object] from baileys, check out the `Base.js` and `message.js` to see more details of the structure.
+
+#### Sending Messages Simplifed
+
+```javascript
+import Message from './Base.js';
+
+const Instance = new Message(sock, messages);
+
+// Sending Text
+Instance.send('Hello World!', { ...miscOptions });
+
+// Sending Image
+const imageBuffer = Buffer.from('<ImageBuffer>');
+Instance.send(imageBuffer, { ...miscOptions });
+
+// Sending Video
+const videoBuffer = Buffer.from('<VideoBuffer>');
+Instance.send(videoBuffer, { ...miscOptions });
+
+// Sending Audio
+const audioBuffer = Buffer.from('<AudioBuffer>');
+Instance.sendAudio(audioBuffer, { ...miscOptions });
+
+// Sending Document
+const docBuffer = Buffer.from('<DocumentBuffer>');
+Instance.sendDocument(docBuffer, { ...miscOptions });
+
+// Sending Sticker
+const stickerBuffer = Buffer.from('<StickerBuffer>');
+Instance.sendSticker(stickerBuffer);
+```
+
+#### Misc Options?
+
+There are so many misc options, you can check them out from [here](https://github.com/WhiskeySockets/Baileys/blob/master/src/Types/Message.ts) and [here](https://github.com/AstroX11/Xstro/blob/44449ea436b15fb97ab0289d421be8e79f7df4d9/lib/Base.js#L139)
+
+```javascript
+const miscOptions = {
+    caption: '',
+    contextInfo: {
+        ...opts, ...opts
+    },
+    quoted: ...opts
+}
 ```
 
 ## CONTRIBUTING
