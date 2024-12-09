@@ -1,0 +1,17 @@
+# Exported from Render on 2024-12-09T14:48:10Z
+services:
+- type: web
+  name: Xstro
+  runtime: docker
+  repo: https://github.com/AstroX11/Xstro
+  plan: free
+  envVars:
+  - key: PORT
+    sync: false
+  - key: SESSION_ID
+    sync: false
+  region: oregon
+  healthCheckPath: /
+  dockerContext: .
+  dockerfilePath: ./Dockerfile
+version: "1"
