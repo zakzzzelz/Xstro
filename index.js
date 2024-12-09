@@ -15,9 +15,6 @@ dotenv.config();
 	await DATABASE.sync();
 	await getSession();
 	await connect();
-
-	const app = express();
-	const PORT = process.env.PORT || 8000;
-
-	app.listen(PORT, () => {});
+	const app = express().get('/', (_, r) => r.json({ alive: true }));
+	app.listen(process.env.PORT || 8000);
 })();

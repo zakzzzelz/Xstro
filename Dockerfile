@@ -1,10 +1,9 @@
-FROM node:alpine
-WORKDIR /bot
-RUN apk add --no-cache git && \
-    npm install -g pm2 && \
-    git config --global url."https://".insteadOf git:// && \
-    git config --global url."https://github.com/".insteadOf git@github.com && \
-    git clone https://github.com/AstroX11/Xstro.git . && \
-    yarn install
+FROM node:alpine3.19
+ENV NODE_ENV=production
+RUN apk add --no-cache git
+RUN git clone https://github.com/AstroX11/Xstro
+WORKDIR /xstro
+RUN yarn install --production
+COPY . .
 EXPOSE 8000
-CMD ["npm", "start"]
+CMD [ "npm", "start" ]
