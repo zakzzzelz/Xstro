@@ -13,7 +13,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A ViewOnce_');
-		const media = await message.downloadAndSaveMedia();
+		const media = await message.download();
 		return await message.send(media);
 	},
 );
@@ -41,7 +41,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
-		const img = await message.downloadAndSaveMedia();
+		const img = await message.download();
 		await message.updatePP(img);
 		return await message.send('_Profile Picture Updated_');
 	},

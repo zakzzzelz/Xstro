@@ -1,6 +1,6 @@
 {
 	"name": "xstro",
-	"version": "1.1.5",
+	"version": "1.1.6",
 	"description": "Simple WhatsApp Bot By AstroX11",
 	"main": "index.js",
 	"type": "module",

@@ -13,7 +13,7 @@ bot(
 		}
 
 		const msg = await message.send('*Wait...*');
-		const media = await message.downloadAndSaveMedia();
+		const media = await message.download();
 		const res = await uploadFile(media);
 		await msg.edit(res);
 		return await msg.react('✅');

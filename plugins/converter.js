@@ -13,7 +13,7 @@ bot(
 	async message => {
 		const media = message.reply_message?.video || message.reply_message?.image;
 		if (!media) return message.send('_Reply with an Image or Video!_');
-		const msg = await message.downloadAndSaveMedia();
+		const msg = await message.download();
 		const stickerBuffer = await toSticker(msg);
 		await message.send(stickerBuffer, { type: 'sticker' });
 	},
@@ -28,7 +28,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message?.sticker) return message.send('_Reply Sticker_');
-		const msg = await message.downloadAndSaveMedia();
+		const msg = await message.download();
 		const buff = await toSticker(msg);
 		return await message.send(buff, { type: 'sticker' });
 	},
@@ -45,7 +45,7 @@ bot(
 		if (!message.reply_message?.image && !message.reply_message?.video) return message.send('_Reply to an Image or Video_');
 		const options = ['left', 'right', 'vertical', 'horizontal'];
 		if (!options.includes(match)) return message.send('_Choose a valid option:_ ' + message.prefix + 'flip left, right, vertical, or horizontal');
-		const buff = await message.downloadAndSaveMedia();
+		const buff = await message.download();
 		const flippedMedia = await flipMedia(buff, match);
 		return await message.send(flippedMedia, { caption: '_Flipped successfully_' });
 	},
@@ -60,7 +60,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message?.audio) return message.send('_Reply An Audio_');
-		const buff = await message.downloadAndSaveMedia();
+		const buff = await message.download();
 		const res = await toBlackVideo(buff);
 		return await message.send(res);
 	},
@@ -75,7 +75,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message?.audio) return message.send('_Reply An Audio_');
-		const media = await message.downloadAndSaveMedia();
+		const media = await message.download();
 		const buff = await convertToOpus(media);
 		return await message.send(buff);
 	},
@@ -107,7 +107,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message?.video) return message.send('_Reply A Video Only!_');
-		const video = await message.downloadAndSaveMedia();
+		const video = await message.download();
 		return await message.send(video, { caption: '_success!_', gifPlayback: true });
 	},
 );

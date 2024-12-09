@@ -455,7 +455,7 @@ bot(
 		if (!message.isAdmin) return message.send('```You are not an Admin```');
 		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 		if (!message.reply_message?.image) return message.send('_Reply An Image!_');
-		const img = await message.downloadAndSaveMedia();
+		const img = await message.download();
 		await message.client.updateProfilePicture(message.jid, img);
 		return await message.send('_Group Image Updated_');
 	},
