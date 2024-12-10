@@ -19,6 +19,7 @@ const WarnDB = DATABASE.define(
 		},
 	},
 	{
+		tableName: 'warnings',
 		timestamps: false,
 	},
 );
