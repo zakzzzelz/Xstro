@@ -94,7 +94,7 @@ bot(
 		const res = await getJson('https://levanter.onrender.com/emix?q=' + match + '');
 		const buff = await getBuffer(res.result);
 		const sticker = await toSticker(buff);
-		return await message.send(sticker);
+		return await message.send(sticker, { type: 'sticker' });
 	},
 );
 
