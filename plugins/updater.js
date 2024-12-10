@@ -26,9 +26,9 @@ bot(
 		isPublic: false,
 		desc: 'Upgrades Bot',
 	},
-	async (message, match) => {
-		await message.send('```Upgrading Depenidences```');
+	async message => {
+		await message.send('```Upgrading Bot Files```');
 		await upgradeBot();
-		return message.send('```Upgrade Success```')
+		return message.send('```Upgrade Success```');
 	},
 );
