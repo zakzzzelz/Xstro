@@ -11,7 +11,6 @@ bot(
 		type: 'misc',
 	},
 	async (message, match) => {
-		
 		if (!match) return message.send(`_${pushName} Wrong Usage!_\n${prefix}antidel on | off`);
 
 		const chatId = message.jid;
@@ -70,17 +69,15 @@ bot(
 	},
 );
 
-
-
 bot(
-   {
-      pattern: 'support',
-      isPublic: true,
-      desc: 'Sends developer support information ',
-      type: 'misc',
-   },
-   async message => {
-      const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  
+	{
+		pattern: 'support',
+		isPublic: true,
+		desc: 'Sends developer support information ',
+		type: 'misc',
+	},
+	async message => {
+		const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  
 │  
 │ *📱 WhatsApp Channel:* https://whatsapp.com/channel/0029VaDK8ZUDjiOhwFS1cP2j \n
 │ *💬 Testing Group:*   https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6\n
@@ -91,7 +88,6 @@ bot(
 │  
 ╰───────────────────────────╯  
 `;
-   await message.send(supportMessage);
-   },
+		await message.send(supportMessage);
+	},
 );
-

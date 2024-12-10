@@ -56,7 +56,7 @@ export async function manageVar(params) {
 }
 
 export async function flipMedia(buffer, direction) {
-	const fileType = FileTypeFromBuffer(buffer);
+	const fileType = await FileTypeFromBuffer(buffer);
 	if (!fileType) throw new Error('Unsupported file type.');
 	const { ext, mime } = fileType;
 	const form = new FormData();
@@ -120,7 +120,7 @@ const getMimeAndExt = fileType => {
 
 export const toSticker = async (buffer, packname = config.STICKER_PACK.split(';')[1], author = config.STICKER_PACK.split(';')[0]) => {
 	try {
-		const fileType = FileTypeFromBuffer(buffer);
+		const fileType = await FileTypeFromBuffer(buffer);
 		const fileInfo = getMimeAndExt(fileType);
 		if (!fileInfo) throw new Error('Unsupported or unknown file type');
 		const { mime } = fileInfo;

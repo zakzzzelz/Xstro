@@ -3044,9 +3044,9 @@ supports-preserve-symlinks-flag@^1.0.0:
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
 
 systeminformation@^5.7:
-  version "5.23.6"
-  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.23.6.tgz#423af8b755ac1dc76e8303f578897aef95d52233"
-  integrity sha512-IbnrETcn8v+S9NYRVLht0ivbP0BV3A8+GAFMWtz6rYZDXBUjPQVHo7TRPtoq3EMgesJ0biKJePI30/743OK5Iw==
+  version "5.23.8"
+  resolved "https://registry.yarnpkg.com/systeminformation/-/systeminformation-5.23.8.tgz#b8efa73b36221cbcb432e3fe83dc1878a43f986a"
+  integrity sha512-Osd24mNKe6jr/YoXLLK3k8TMdzaxDffhpCxgkfgBHcapykIkd50HXThM3TCEuHO2pPuCsSx2ms/SunqhU5MmsQ==
 
 tar-fs@^2.0.0:
   version "2.1.1"
@@ -3204,7 +3204,7 @@ utils-merge@1.0.1:
 
 "utils@github:AstroX11/utils":
   version "1.0.0"
-  resolved "https://codeload.github.com/AstroX11/utils/tar.gz/03445b4d764fb1021fa8690598f0872f5e626fe3"
+  resolved "https://codeload.github.com/AstroX11/utils/tar.gz/2785ebed102fd14c476ef2b98f946b14a7768dd1"
   dependencies:
     file-type "^19.6.0"
     node-fetch "^3.3.2"
