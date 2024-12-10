@@ -114,6 +114,45 @@ bot(
 	async message => {
 		const msg = await message.send('```Yoo````');
 		const res = await getJson('https://rizzapi.vercel.app/random');
-		return msg.edit(res.text);
+		return msg.edit('```' + res.text + '```');
+	},
+);
+
+bot(
+	{
+		pattern: 'joke',
+		isPublic: true,
+		desc: 'Get a Random Joke',
+	},
+	async message => {
+		const msg = await message.send('```Hmm```');
+		const res = await getJson('https://official-joke-api.appspot.com/random_joke');
+		return msg.edit(`\`\`\`${res.setup} - ${res.punchline}\`\`\``);
+	},
+);
+
+bot(
+	{
+		pattern: 'quotes',
+		isPublic: true,
+		desc: 'Get Quotes',
+	},
+	async message => {
+		const msg = await message.send('```Getting Quotes```');
+		const res = await getJson('https://zenquotes.io/api/random');
+		return msg.edit(`\`\`\`Quote: ${res.q}\nAuthor: ${res.a}\`\`\``);
+	},
+);
+
+bot(
+	{
+		pattern: 'facts',
+		isPublic: true,
+		desc: 'Get Facts',
+	},
+	async message => {
+		const msg = await message.send('```Fetching Facts```');
+		const res = await getJson('https://uselessfacts.jsph.pl/api/v2/facts/random?language=en');
+		return msg.edit(`\`\`\`${res.text}\`\`\``);
 	},
 );
