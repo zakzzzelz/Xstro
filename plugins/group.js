@@ -614,3 +614,31 @@ bot(
 		return await message.send(`_Group Created_`);
 	},
 );
+
+//===============================================added on 10/12/2024 =============== 10:01pm  pk time============================
+bot(
+	{
+		pattern: 'left',
+		isPublic: false,
+		isGroup: true,
+		desc: 'Leaves the Group using bot....',
+		type: 'group',
+	},
+	async (message, match) => {
+		if (!message.isAdmin) {
+			return message.send('```only onwer can use this command```');
+		}
+		if (match.trim().toLowerCase() === 'sure' || match.trim().toLowerCase() === 'ok') {
+			// Bot leaves the group
+			await message.send('```Leaving the group... Goodbye!```');
+			return await message.client.groupLeave(message.jid);
+		} else {
+			// Prompt user for confirmation
+			return message.send(
+				'```Are you sure you want me to leave the group? Use "left sure" or "left ok" to confirm.```'
+			);
+		}
+	}
+);
+
+
