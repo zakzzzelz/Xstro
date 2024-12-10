@@ -9,7 +9,6 @@ bot(
 		pattern: 'lyrics',
 		isPublic: true,
 		desc: 'Search Lyrics',
-		type: 'search',
 	},
 	async (message, match) => {
 		const req = match || message.reply_message?.text;
@@ -26,7 +25,6 @@ bot(
 		pattern: 'stickersearch',
 		isPublic: true,
 		desc: 'Search and Download Stickers',
-		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('```Give me a search query```');
@@ -43,7 +41,6 @@ bot(
 		pattern: 'google',
 		isPublic: true,
 		desc: 'Search and Get Google Results',
-		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('```Give me a search query```');
@@ -62,7 +59,6 @@ bot(
 		pattern: 'imdb',
 		isPublic: true,
 		desc: 'Sends info of a movie or series.',
-		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Name a Series or movie._');
@@ -78,7 +74,6 @@ bot(
 		pattern: 'weather ?(.*)',
 		isPublic: true,
 		desc: 'weather info',
-		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Example : weather delhi*');
@@ -93,5 +88,32 @@ bot(
 		const sunrise = formatTime(sys.sunrise, timezone);
 		const sunset = formatTime(sys.sunset, timezone);
 		return await message.send(`*Name :* ${name}\n*Country :* ${sys.country}\n*Weather :* ${weather[0].description}\n*Temp :* ${Math.floor(main.temp)}°\n*Feels Like :* ${Math.floor(main.feels_like)}°\n*Humidity :* ${main.humidity}%\n*Visibility  :* ${visibility}m\n*Wind* : ${wind.speed}m/s ${degree}\n*Sunrise :* ${sunrise}\n*Sunset :* ${sunset}`);
+	},
+);
+
+bot(
+	{
+		pattern: 'define',
+		isPublic: true,
+		desc: 'Define A Word',
+	},
+	async (message, match) => {
+		if (!match) return message.send('```Provide A Word to Define```');
+		const word = match.trim();
+		const res = await getJson(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+		return res && res.length > 0 ? message.send(`**${word}**: ${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}`) : message.send('```No definition found for this word.```');
+	},
+);
+
+bot(
+	{
+		pattern: 'rizz',
+		isPublic: true,
+		desc: 'Rizz your babe lol',
+	},
+	async message => {
+		const msg = await message.send('```Yoo````');
+		const res = await getJson('https://rizzapi.vercel.app/random');
+		return msg.edit(res.text);
 	},
 );

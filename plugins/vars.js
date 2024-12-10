@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { manageVar } from './bot/tools.js';
+import { manageVar } from '../lib/variables.js';
 
 bot(
 	{
@@ -8,7 +8,6 @@ bot(
 		desc: 'Set system var',
 	},
 	async (message, match) => {
-		envfile();
 		if (!match) return message.send('_Use: .setvar KEY:VALUE_');
 		const input = match.split(':');
 		if (input.length !== 2) return message.send('_Use: .setvar KEY:VALUE_');
@@ -25,7 +24,6 @@ bot(
 		desc: 'Delete system var',
 	},
 	async (message, match) => {
-		envfile();
 		if (!match) return message.send('_Provide variable name to delete_');
 		const key = match.trim();
 		await manageVar({ command: 'del', key });
@@ -40,7 +38,6 @@ bot(
 		desc: 'Get system vars',
 	},
 	async message => {
-		envfile();
 		const vars = await manageVar({ command: 'get' });
 		return message.send(vars || '_No Vars Found_');
 	},
