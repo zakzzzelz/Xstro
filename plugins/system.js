@@ -1,10 +1,9 @@
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import { performance } from 'perf_hooks';
 import { bot } from '../lib/plugins.js';
 import { manageProcess, runtime } from '../lib/utils.js';
-import { manageVar } from './bot/tools.js';
-import { fancy } from './bot/font.js';
 import { getBuffer, getJson } from 'utils';
+import os from 'os';
 
 bot(
 	{
@@ -16,7 +15,7 @@ bot(
 		const start = performance.now();
 		const msg = await message.send('Testing Speed...');
 		const end = performance.now();
-		await msg.edit(fancy(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``));
+		await msg.edit(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``);
 	},
 );
 
@@ -27,52 +26,7 @@ bot(
 		desc: 'Get Runtime of bot',
 	},
 	async message => {
-		return await message.send(fancy(`*Uptime: ${runtime(process.uptime())}*`));
-	},
-);
-
-bot(
-	{
-		pattern: 'setvar',
-		isPublic: false,
-		desc: 'Set system var',
-	},
-	async (message, match) => {
-		envfile();
-		if (!match) return message.send('_Use: .setvar KEY:VALUE_');
-		const input = match.split(':');
-		if (input.length !== 2) return message.send('_Use: .setvar KEY:VALUE_');
-		const [key, value] = input.map(item => item.trim());
-		await manageVar({ command: 'set', key, value });
-		return message.send(`*✓ Variable set: ${key}=${value}*`);
-	},
-);
-
-bot(
-	{
-		pattern: 'delvar',
-		isPublic: false,
-		desc: 'Delete system var',
-	},
-	async (message, match) => {
-		envfile();
-		if (!match) return message.send('_Provide variable name to delete_');
-		const key = match.trim();
-		await manageVar({ command: 'del', key });
-		return message.send(`*✓ Deleted ${key} from env*`);
-	},
-);
-
-bot(
-	{
-		pattern: 'getvar',
-		isPublic: false,
-		desc: 'Get system vars',
-	},
-	async message => {
-		envfile();
-		const vars = await manageVar({ command: 'get' });
-		return message.send(vars || '_No Vars Found_');
+		return await message.send(`\`\`\`Runtime: ${runtime(process.uptime())}\`\`\``);
 	},
 );
 
@@ -83,7 +37,7 @@ bot(
 		desc: 'Restarts Bot',
 	},
 	async message => {
-		await message.send('_Restarting application..._');
+		await message.send('```Restarting bot```');
 		manageProcess('restart');
 	},
 );
@@ -95,27 +49,36 @@ bot(
 		desc: 'Off Bot',
 	},
 	async message => {
-		await message.send('_Shutting Down application..._');
+		await message.send('```Shutting down bot```');
 		manageProcess();
 	},
 );
 
 bot(
-	{
-		pattern: 'shell ?(.*)',
-		isPublic: false,
-		desc: 'Run shell commands',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide a shell command to run_');
-		const command = match.trim();
-		exec(command, (error, stdout, stderr) => {
-			if (error) return message.send(`*Error:*\n \`\`\`${error.message}\`\`\``);
-			if (stderr) return message.send(`*Stderr:*\n \`\`\`${stderr}\`\`\``);
-			message.send(`*Output:*\n\`\`\`${stdout}\`\`\``);
-		});
-	},
+  {
+    pattern: 'shell ?(.*)',
+    isPublic: false,
+    desc: 'Run shell commands',
+  },
+  async (message, match) => {
+    if (!match) return message.send('_Provide a shell command to run_');
+    const command = match.trim();
+
+    try {
+      const stdout = execSync(command, { encoding: 'utf8' });
+      message.send(`*Output:*\n\`\`\`${stdout}\`\`\``);
+    } catch (error) {
+      if (error.stderr) {
+        message.send(`*Stderr:*\n\`\`\`${error.stderr}\`\`\``);
+      } else if (error.message.includes('command not found')) {
+        message.send(`*Error:*\n\`\`\`Command not found\`\`\``);
+      } else {
+        message.send(`*Error:*\n\`\`\`${error.message}\`\`\``);
+      }
+    }
+  }
 );
+
 
 bot(
 	{
@@ -171,7 +134,26 @@ bot(
 	{
 		pattern: 'cpu',
 		isPublic: false,
-		desc: 'Get Cpu Information',
+		desc: 'Get CPU Information',
 	},
-	async message => {},
+	async message => {
+		const cpus = os.cpus();
+		const coreCount = cpus.length;
+		const model = cpus[0].model
+			.replace(/\s+\(.*\)/g, '')
+			.replace(/CPU|Processor/gi, '')
+			.trim();
+
+		const averageSpeed = Math.round(cpus.reduce((sum, cpu) => sum + cpu.speed, 0) / coreCount);
+
+		const response = `CPU Information:
+Model: ${model}
+Cores: ${coreCount}
+Average Speed: ${averageSpeed} MHz
+Architecture: ${os.arch()}
+Platform: ${os.platform()}
+Uptime: ${Math.floor(os.uptime() / 60)} minutes`;
+
+		await message.send('```' + response + '```');
+	},
 );
