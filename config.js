@@ -11,7 +11,6 @@ const config = {
 	STICKER_PACK: process.env.STICKER_PACK || 'Xstro;Md',
 	HEROKU_API_KEY: process.env.HEROKU_API_KEY || '',
 	HEROKU_APP_NAME: process.env.HEROKU_APP_NAME || '',
-	DISABLE_GROUP: process.env.DISABLE_GROUP || false,
 	MUTE_MSG: process.env.MUTE_MSG || '```Group has been muted, due to AutoMute```',
 	UN_MUTE_MSG: process.env.UN_MUTE_MSG || '```Group is now unmuted, due to AutoUnMute```',
 	READ_CMD: process.env.READ_CMD || false,
