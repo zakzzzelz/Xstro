@@ -1,5 +1,5 @@
 import { bot } from '../lib/plugins.js';
-import { isLatest, updateBot } from '../lib/updater.js';
+import { isLatest, updateBot, upgradeBot } from '../lib/updater.js';
 
 bot(
 	{
@@ -17,5 +17,18 @@ bot(
 		} else {
 			return message.send('```Invaild, use ' + message.prefix + 'update now```');
 		}
+	},
+);
+
+bot(
+	{
+		pattern: 'upgrade',
+		isPublic: false,
+		desc: 'Upgrades Bot',
+	},
+	async (message, match) => {
+		await message.send('```Upgrading Depenidences```');
+		await upgradeBot();
+		return message.send('```Upgrade Success```')
 	},
 );
