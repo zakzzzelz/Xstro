@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { addFilter, removeFilter, getFilters } from '../sql/filters.js';
 
 bot(

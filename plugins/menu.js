@@ -1,8 +1,8 @@
 import config from '../config.js';
-import { commands, bot } from '../lib/exec.js';
+import { commands, bot } from '../lib/cmds.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { platform, totalmem, freemem } from 'os';
-import { fancy } from './bot/font.js';
+import { fancy } from '../lib/tools/fancy.js';
 
 bot(
 	{

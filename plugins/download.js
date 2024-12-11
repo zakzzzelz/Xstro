@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 
 //bot({
 //  pattern: 'fb'

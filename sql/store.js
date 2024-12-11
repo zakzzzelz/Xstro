@@ -21,7 +21,7 @@ const messageDb = DATABASE.define(
 	},
 	{
 		tableName: 'messages',
-		timestamps: false,
+		timestamps: true,
 	},
 );
 
@@ -59,12 +59,12 @@ const saveContact = async (jid, name) => {
 	}
 };
 
-const saveMessage = async (message, user) => {
+const saveMessage = async message => {
 	const jid = message.key.remoteJid;
 	const id = message.key.id;
 	const msg = message;
 	if (!id || !jid || !msg) return;
-	await saveContact(user, message.pushName);
+	await saveContact(message.sender, message.pushName);
 	let exists = await messageDb.findOne({ where: { id, jid } });
 	if (exists) {
 		await messageDb.update({ message: msg }, { where: { id, jid } }).catch(handleError);
@@ -84,4 +84,41 @@ const getName = async jid => {
 	return contact ? contact.name : jid.split('@')[0].replace(/_/g, ' ');
 };
 
-export { saveContact, saveMessage, loadMessage, getName };
+const getChatSummary = async () => {
+	try {
+		const distinctChats = await messageDb.findAll({
+			attributes: ['jid'],
+			group: ['jid'],
+		});
+
+		const chatSummaries = await Promise.all(
+			distinctChats.map(async chat => {
+				const jid = chat.jid;
+				const messageCount = await messageDb.count({
+					where: { jid },
+				});
+
+				const lastMessage = await messageDb.findOne({
+					where: { jid },
+					order: [['createdAt', 'DESC']],
+				});
+
+				const chatName = isJidGroup(jid) ? jid : await getName(jid);
+
+				return {
+					jid,
+					name: chatName,
+					messageCount,
+					lastMessageTimestamp: lastMessage ? lastMessage.createdAt : null,
+				};
+			}),
+		);
+
+		return chatSummaries.sort((a, b) => b.lastMessageTimestamp - a.lastMessageTimestamp);
+	} catch (error) {
+		console.error('Error retrieving chat summaries:', error);
+		return [];
+	}
+};
+
+export { saveContact, saveMessage, loadMessage, getName, getChatSummary };

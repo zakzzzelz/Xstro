@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import config from '../config.js';
 import { aliveMessage, setAliveMsg } from '../sql/alive.js';
 

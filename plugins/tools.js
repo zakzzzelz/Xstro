@@ -1,7 +1,7 @@
 import config from '../config.js';
 import { extractUrlFromString, getJson } from 'utils';
-import { bot } from '../lib/exec.js';
-import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from './bot/tools.js';
+import { bot } from '../lib/cmds.js';
+import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '../lib/xstro.js';
 
 bot(
 	{

@@ -1,6 +1,6 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { extractUrlFromString } from 'utils';
-import { installPlugin, removePluginByName, listPlugins } from '../lib/pluginManager.js';
+import { installPlugin, removePluginByName, listPlugins } from '../lib/tools/plugins.js';
 
 bot(
 	{

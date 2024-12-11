@@ -1,5 +1,5 @@
 import config from '../config.js';
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { getBuffer, getJson } from 'utils';
 const base_url = 'https://api.giftedtech.my.id/api/';
 const { API_KEY } = config;

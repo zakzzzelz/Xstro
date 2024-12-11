@@ -1,8 +1,6 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { delay } from 'baileys';
 import { numtoId } from '../lib/utils.js';
-import { Antilink } from '../sql/antilink.js';
-import { AntiWord } from '../sql/antiword.js';
 import { isSudo } from '../sql/sudo.js';
 
 bot(
@@ -57,91 +55,6 @@ bot(
 			await message.client.sendMessage(groupId, { text: broadcastMessage, contextInfo: messageOptions });
 		}
 		return await message.send(`_Advertised Message to ${groupIds.length} Groups_`);
-	},
-);
-
-bot(
-	{
-		pattern: 'antilink ?(.*)',
-		isPublic: true,
-		isGroup: true,
-		desc: 'Setup Antilink For Groups',
-		type: 'Group',
-	},
-	async (message, match) => {
-		if (!message.isAdmin) return message.send('```You are not an Admin```');
-		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-
-		const [settings] = await Antilink.findOrCreate({
-			where: { groupId: message.jid },
-			defaults: { groupId: message.jid, warnings: {} },
-		});
-
-		const cmd = match.trim().toLowerCase();
-		const validActions = ['delete', 'warn', 'kick'];
-
-		if (['on', 'off'].includes(cmd)) {
-			const newState = cmd === 'on';
-			if (settings.enabled === newState) return message.send(`_Antilink is already ${cmd}_`);
-			settings.enabled = newState;
-			await settings.save();
-			return message.send(`_Antilink ${cmd === 'on' ? 'enabled' : 'disabled'}!_`);
-		}
-
-		if (validActions.includes(cmd)) {
-			if (!settings.enabled) return message.send('_Enable antilink first using antilink on_');
-			if (settings.action === cmd) return message.send(`_Antilink action is already set to ${cmd}_`);
-			settings.action = cmd;
-			await settings.save();
-			return message.send(`_Antilink action set to ${cmd}_`);
-		}
-		return message.send('_' + message.prefix + 'antilink on/off/delete/kick/warn_');
-	},
-);
-
-bot(
-	{
-		pattern: 'antiword',
-		isPublic: true,
-		isGroup: true,
-		desc: 'Setup Antiword for Groups',
-		type: 'group',
-	},
-	async (message, match) => {
-		if (!message.isAdmin) return message.send('```You are not an Admin```');
-		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-
-		const groupId = message.jid;
-		const antiWordConfig = await AntiWord.findOrCreate({ where: { groupId } });
-
-		if (!match) return message.send(`_${message.prefix}antiword on_\n_${message.prefix}antiword off_\n_${message.prefix}antiword set badword1,badword2_`);
-
-		if (match === 'on') {
-			if (antiWordConfig[0].isEnabled) return message.send('_Antiword is already enabled for this group._');
-			antiWordConfig[0].isEnabled = true;
-			await antiWordConfig[0].save();
-			const words = antiWordConfig[0].filterWords;
-			return message.send(words.length > 0 ? '_Antiword has been enabled for this group._' : '_Antiword is enabled but no bad words were set._');
-		}
-
-		if (match === 'off') {
-			if (!antiWordConfig[0].isEnabled) return message.send('_Antiword is already disabled for this group._');
-			antiWordConfig[0].isEnabled = false;
-			await antiWordConfig[0].save();
-			return message.send('_Antiword has been disabled for this group._');
-		}
-
-		if (match.startsWith('set ')) {
-			const words = match
-				.slice(4)
-				.split(',')
-				.map(word => word.trim());
-			antiWordConfig[0].filterWords = words;
-			await antiWordConfig[0].save();
-			return message.send(`_Antiword filter updated with words: ${words.join(', ')}_`);
-		}
-
-		return message.send(`_${message.prefix}antiword on_\n_${message.prefix}antiword off_\n_${message.prefix}antiword set badword1,badword2_`);
 	},
 );
 

@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { getAfkMessage, setAfkMessage, delAfkMessage } from '../sql/afk.js';
 import { isSudo } from '../sql/sudo.js';
 

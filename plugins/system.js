@@ -1,6 +1,6 @@
 import { execSync } from 'child_process';
 import { performance } from 'perf_hooks';
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { manageProcess, runtime } from '../lib/utils.js';
 import { getBuffer, getJson } from 'utils';
 import os from 'os';

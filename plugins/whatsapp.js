@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { loadMessage } from '../sql/store.js';
 import { numtoId } from '../lib/utils.js';
 import { smsg } from '../lib/message.js';

@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { addWarn, getWarn, resetWarn } from '../sql/warn.js';
 import config from '../config.js';
 

@@ -1,5 +1,5 @@
-import { bot } from '../lib/exec.js';
-import { manageVar } from '../lib/variables.js';
+import { bot } from '../lib/cmds.js';
+import { manageVar } from '../lib/tools/variables.js';
 
 bot(
 	{

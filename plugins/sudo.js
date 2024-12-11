@@ -1,4 +1,4 @@
-import { bot } from '../lib/exec.js';
+import { bot } from '../lib/cmds.js';
 import { getSudo, delSudo, addSudo, isSudo } from '../sql/sudo.js';
 
 bot(
