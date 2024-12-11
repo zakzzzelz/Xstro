@@ -1,30 +1,28 @@
 import { bot } from '../lib/cmds.js';
 import { delay } from 'baileys';
 import { numtoId } from '../lib/utils.js';
-import { isSudo } from '../sql/sudo.js';
 
 bot(
 	{
 		pattern: 'add',
 		isPublic: false,
 		isGroup: true,
-		desc: 'Adds A User to Group',
+		desc: 'Adds a user to the group',
 	},
 	async (message, match) => {
-		if (!message.isAdmin) return message.send('```You are not an Admin```');
-		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
+		if (!message.isAdmin) return message.send('You are not an Admin');
+		if (!message.isBotAdmin) return message.send('I am not an Admin');
 		const jid = await message.thatJid(match);
 		try {
 			await message.client.groupParticipantsUpdate(message.jid, [jid], 'add');
 			return message.send(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
 		} catch {
 			const inviteLink = await message.client.groupInviteCode(message.jid);
-			const userMessage = {
-				text: `_@${message.sender.split('@')[0]} wants to add you to the group._\n\n*_Join here: https://chat.whatsapp.com/${inviteLink}_*\n`,
+			await message.send(jid, {
+				text: `_@${message.sender.split('@')[0]} wants to add you to the group._\n\n*_Join here: https://chat.whatsapp.com/${inviteLink}_*`,
 				mentions: [message.sender],
-			};
-			await message.send(jid, userMessage);
-			return message.send("_Can't Added User, Invite Sent In DM_");
+			});
+			return message.send("_Can't add user, invite sent in DM_");
 		}
 	},
 );
@@ -501,24 +499,5 @@ bot(
 		members = [...new Set(members)];
 		await message.client.groupCreate(groupName, members);
 		return await message.send(`_Group Created_`);
-	},
-);
-
-//===============================================added on 10/12/2024 =============== 10:01pm  pk time============================
-bot(
-	{
-		pattern: 'left',
-		isPublic: false,
-		isGroup: true,
-		desc: 'Leaves the Group using bot....',
-	},
-	async (message, match) => {
-		if (!(await isSudo(message.sender, message.user))) return message.send('```For My Owners Only!```');
-		if (match.trim().toLowerCase() === 'sure' || match.trim().toLowerCase() === 'ok') {
-			await message.send('```Leaving the group... Goodbye!```');
-			return await message.client.groupLeave(message.jid);
-		} else {
-			return message.send('```Are you sure you want me to leave the group? Use "left sure" or "left ok" to confirm.```');
-		}
 	},
 );

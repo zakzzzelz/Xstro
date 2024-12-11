@@ -43,6 +43,40 @@ const contactDb = DATABASE.define(
 	},
 );
 
+const groupMetadataDb = DATABASE.define(
+	'groupMetadata',
+	{
+		jid: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
+		subject: { type: DataTypes.STRING, allowNull: true },
+		subjectOwner: { type: DataTypes.STRING, allowNull: true },
+		subjectTime: { type: DataTypes.DATE, allowNull: true },
+		size: { type: DataTypes.INTEGER, allowNull: true },
+		creation: { type: DataTypes.DATE, allowNull: true },
+		owner: { type: DataTypes.STRING, allowNull: true },
+		desc: { type: DataTypes.TEXT, allowNull: true },
+		descId: { type: DataTypes.STRING, allowNull: true },
+		linkedParent: { type: DataTypes.STRING, allowNull: true },
+		restrict: { type: DataTypes.BOOLEAN, allowNull: true },
+		announce: { type: DataTypes.BOOLEAN, allowNull: true },
+		isCommunity: { type: DataTypes.BOOLEAN, allowNull: true },
+		isCommunityAnnounce: { type: DataTypes.BOOLEAN, allowNull: true },
+		joinApprovalMode: { type: DataTypes.BOOLEAN, allowNull: true },
+		memberAddMode: { type: DataTypes.BOOLEAN, allowNull: true },
+		ephemeralDuration: { type: DataTypes.INTEGER, allowNull: true },
+	},
+	{ tableName: 'groupMetadata', timestamps: true },
+);
+
+const groupParticipantsDb = DATABASE.define(
+	'groupParticipants',
+	{
+		jid: { type: DataTypes.STRING, allowNull: false },
+		participantId: { type: DataTypes.STRING, allowNull: false },
+		admin: { type: DataTypes.STRING, allowNull: true },
+	},
+	{ tableName: 'groupParticipants', timestamps: false },
+);
+
 const handleError = error => {
 	console.error('Database operation failed:', error);
 };
@@ -121,4 +155,67 @@ const getChatSummary = async () => {
 	}
 };
 
-export { saveContact, saveMessage, loadMessage, getName, getChatSummary };
+const saveGroupMetadata = async (jid, client) => {
+	if (!isJidGroup(jid)) return;
+	const groupMetadata = await client.groupMetadata(jid);
+	const { id, subject, subjectOwner, subjectTime, size, creation, owner, desc, descId, linkedParent, restrict, announce, isCommunity, isCommunityAnnounce, joinApprovalMode, memberAddMode, participants, ephemeralDuration } = groupMetadata;
+	const metadata = {
+		jid: id,
+		subject,
+		subjectOwner,
+		subjectTime: subjectTime ? new Date(subjectTime * 1000) : null,
+		size,
+		creation: creation ? new Date(creation * 1000) : null,
+		owner,
+		desc,
+		descId,
+		linkedParent,
+		restrict,
+		announce,
+		isCommunity,
+		isCommunityAnnounce,
+		joinApprovalMode,
+		memberAddMode,
+		ephemeralDuration,
+	};
+	const existingGroup = await groupMetadataDb.findOne({ where: { jid } });
+	if (existingGroup) {
+		await groupMetadataDb.update(metadata, { where: { jid } });
+	} else {
+		await groupMetadataDb.create(metadata);
+	}
+	await Promise.all(
+		participants.map(async participant => {
+			const { id: participantId, admin } = participant;
+			const existingParticipant = await groupParticipantsDb.findOne({
+				where: { jid, participantId },
+			});
+			if (existingParticipant) {
+				if (existingParticipant.admin !== admin) {
+					await groupParticipantsDb.update({ admin }, { where: { jid, participantId } });
+				}
+			} else {
+				await groupParticipantsDb.create({ jid, participantId, admin });
+			}
+		}),
+	);
+};
+
+const getGroupMetadata = async jid => {
+	if (!isJidGroup(jid)) return null;
+	const groupMetadata = await groupMetadataDb.findOne({ where: { jid } });
+	if (!groupMetadata) return null;
+	const participants = await groupParticipantsDb.findAll({
+		where: { jid },
+		attributes: ['participantId', 'admin'],
+	});
+	return {
+		...groupMetadata.dataValues,
+		participants: participants.map(p => ({
+			id: p.participantId,
+			admin: p.admin,
+		})),
+	};
+};
+
+export { saveContact, saveMessage, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata };
