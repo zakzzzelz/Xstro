@@ -13,7 +13,7 @@ bot(
 	},
 	async message => {
 		const start = performance.now();
-		const msg = await message.send('Testing Speed...');
+		const msg = await message.snd('Testing Speed...');
 		const end = performance.now();
 		await msg.edit(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``);
 	},

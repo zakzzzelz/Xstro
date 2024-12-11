@@ -1,6 +1,6 @@
 import { bot } from '../lib/cmds.js';
 import { extractUrlFromString } from 'utils';
-import { installPlugin, removePluginByName, listPlugins } from '../lib/tools/plugins.js';
+import { installPlugin, removePluginByName, listPlugins } from '../utils/plugins.js';
 
 bot(
 	{
