@@ -1,6 +1,5 @@
 import { bot } from '../lib/exec.js';
-import { fancy } from './bot/font.js';
-import { addDmFilter, addGcFilter, getDmFilters, getGcFilters, removeDmFilter, removeGcFilter } from '../sql/filters.js';
+import { addFilter, removeFilter, getFilters } from '../sql/filters.js';
 
 bot(
 	{
@@ -10,7 +9,7 @@ bot(
 	},
 	async message => {
 		const Msg = `
-Filters Setup For Xstro
+Filters Setup
 
 ${message.prefix}pfilter hi;hello (To setup filter for direct messages)
 
@@ -19,8 +18,8 @@ ${message.prefix}gfilter hello;Hi how are you (To setup filter for group message
 ${message.prefix}delfilter gc hi (To delete a filter set for groups)
 
 ${message.prefix}delfilter dm hi (To delete a filter set for direct messages)
-    `;
-		return await message.send(fancy(Msg));
+        `;
+		return await message.send(`\`\`\`${Msg.trim().trim()}\`\`\``);
 	},
 );
 
@@ -36,8 +35,8 @@ bot(
 		const [text, response] = match.split(';');
 		if (!text || !response) return await message.send('Both text and response are required.');
 
-		const result = await addDmFilter(text.trim(), response.trim());
-		return await message.send(result);
+		const result = await addFilter('dm', text.trim(), response.trim());
+		return await message.send(`\`\`\`${result}\`\`\``);
 	},
 );
 
@@ -53,8 +52,8 @@ bot(
 		const [text, response] = match.split(';');
 		if (!text || !response) return await message.send('Both text and response are required.');
 
-		const result = await addGcFilter(text.trim(), response.trim());
-		return await message.send(result);
+		const result = await addFilter('gc', text.trim(), response.trim());
+		return await message.send(`\`\`\`${result}\`\`\``);
 	},
 );
 
@@ -73,16 +72,8 @@ bot(
 		const text = textParts.join(' ').trim();
 		if (!text) return await message.send('Filter text is required.');
 
-		let result;
-		if (type === 'gc') {
-			result = await removeGcFilter(text);
-		} else if (type === 'dm') {
-			result = await removeDmFilter(text);
-		} else {
-			return await message.send('Invalid type. Use "gc" for group or "dm" for direct messages.');
-		}
-
-		return await message.send(result);
+		const result = await removeFilter(type, text);
+		return await message.send(`\`\`\`${result}\`\`\``);
 	},
 );
 
@@ -93,8 +84,8 @@ bot(
 		desc: 'List all filters',
 	},
 	async message => {
-		const dmFilters = await getDmFilters();
-		const gcFilters = await getGcFilters();
+		const dmFilters = await getFilters('dm');
+		const gcFilters = await getFilters('gc');
 
 		let response = 'Available Filters:\n\nDirect Message Filters:\n';
 		response += dmFilters.length ? dmFilters.map(filter => `• ${filter.word}: ${filter.response}`).join('\n') : 'None';
@@ -102,7 +93,7 @@ bot(
 		response += '\n\nGroup Chat Filters:\n';
 		response += gcFilters.length ? gcFilters.map(filter => `• ${filter.word}: ${filter.response}`).join('\n') : 'None';
 
-		return await message.send(response);
+		return await message.send(`\`\`\`${response}\`\`\``);
 	},
 );
 
@@ -112,12 +103,11 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		const sender = message.sender;
-		if (sender === message.user) return; // Don't reply to yourself
+		if (message.sender === message.user) return; // Don't reply to yourself
 
 		const chatType = message.isGroup ? 'gc' : 'dm';
-		const filters = chatType === 'gc' ? await getGcFilters() : await getDmFilters();
-		const content = message.text?.trim();
+		const filters = await getFilters(chatType);
+		const content = message.text?.toLowerCase().trim();
 
 		if (!content || !filters.length) return;
 
