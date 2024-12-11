@@ -37,6 +37,8 @@ This optionally close to useless, unless you are ready to pay for a faster postg
 
 I have setup a Docker build container, thanks to Github actions all our Docker builds are passing and a success, the blueprint deployment will automatically configure render to suite xstro environment on the blue print configureations, make sure to use **PORT:8000** if you don't the application will eventually crash causing a build failure on render. Now [Deploy BluePrint](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
 
+---
+
 #### Heroku Support, Deployments, Dynos & Warnings
 
 ##### 1. Create An Heroku Account
@@ -51,9 +53,103 @@ Once you have done that we must ensure that Xstro is built as an [Heroku Contani
 
 On Heroku make sure to to choose worker as runtime else the application would crash, I don't know how to support heroku web, it's not my code it's their platform. I think I have this the time I was editing this by then 2 weeks old readme
 
+---
+
 #### Koyeb Deployment
 
 I have no Idea, Koyeb Banned Me.
+
+---
+
+#### Offical Panel Support
+
+It's been long await jackass, Now Xstro Support's Panel deployment, on your panel you can create an `index.js` file or [Download the File Here](https://raw.githubusercontent.com/AstroX11/Xstro/refs/heads/master/.github/js/panel.js?raw=true) make sure it's on the root of your panel, the script automatically downloads and install Xstro to the panel without issue, guess what? I used my windows laptop which isn't linux and it's not panel to test it worked, crazy right at the idioticy. Okay If you can't download the file the code is below.
+
+```javascript
+const { existsSync, writeFileSync } = require('node:fs');
+const { spawnSync } = require('node:child_process');
+const path = require('node:path');
+
+const CONFIG = {
+	SESSION_ID: '', // Put your Session ID Here kid!
+	PROJECT_DIR: 'Xstro',
+	REPO_URL: 'https://github.com/AstroX11/Xstro.git',
+	APP_NAME: 'Xstro',
+	MAIN_SCRIPT: 'index.js',
+};
+
+function handleError(message, error) {
+	console.error(message, error);
+	process.exit(1);
+}
+
+function cloneRepository() {
+	console.log('Cloning repository...');
+	const cloneResult = spawnSync('git', ['clone', CONFIG.REPO_URL, CONFIG.PROJECT_DIR], {
+		stdio: 'inherit',
+		shell: true, // For Windows compatibility
+	});
+	if (cloneResult.error || cloneResult.status !== 0) {
+		handleError('Failed to clone repository.', cloneResult.error);
+	}
+}
+
+function writeEnvFile() {
+	try {
+		writeFileSync(path.join(CONFIG.PROJECT_DIR, '.env'), `SESSION_ID=${CONFIG.SESSION_ID}`);
+	} catch (error) {
+		handleError('Failed to write .env file', error);
+	}
+}
+
+function installDependencies() {
+	console.log('Installing dependencies...');
+	const installResult = spawnSync('yarn', ['install'], {
+		cwd: path.resolve(CONFIG.PROJECT_DIR),
+		stdio: 'inherit',
+		shell: true, // Ensure compatibility with Windows
+	});
+	if (installResult.error || installResult.status !== 0) {
+		handleError('Failed to install dependencies.', installResult.error);
+	}
+}
+
+function startApplication() {
+	console.log('Starting application...');
+	const startResult = spawnSync('pm2', ['start', CONFIG.MAIN_SCRIPT, '--name', CONFIG.APP_NAME, '--attach'], {
+		cwd: path.resolve(CONFIG.PROJECT_DIR),
+		stdio: 'inherit',
+		shell: true, // Ensure compatibility with Windows
+	});
+
+	if (startResult.error || startResult.status !== 0) {
+		console.error('PM2 start failed. Falling back to Node.js.');
+		const nodeResult = spawnSync('node', [CONFIG.MAIN_SCRIPT], {
+			cwd: path.resolve(CONFIG.PROJECT_DIR),
+			stdio: 'inherit',
+			shell: true,
+		});
+		if (nodeResult.error || nodeResult.status !== 0) {
+			handleError('Failed to start the application with Node.js.', nodeResult.error);
+		}
+	}
+}
+
+function XstroPanel() {
+	if (!existsSync(CONFIG.PROJECT_DIR)) cloneRepository();
+	writeEnvFile();
+	installDependencies();
+	startApplication();
+}
+
+XstroPanel();
+```
+
+###### Warning
+
+Don't change a single line of code you nerd, just put your session id and run the botto, if it's slow then upgrade with your hard earn money and get better performance, peace.
+
+---
 
 #### Windows Support
 
@@ -97,57 +193,6 @@ npm start
 
 ```bash
 npm stop
-```
-
-### DEVLOPMENTS && TESTING
-
-#### Understanding the Structure
-
-Xstro has a simple structure for managing complex data, I have built a custom Seralization and Class Instance to manage messages [Object] from baileys, check out the `Base.js` and `message.js` to see more details of the structure.
-
-#### Sending Messages Simplifed
-
-```javascript
-import Message from './Base.js';
-
-const Instance = new Message(sock, messages);
-
-// Sending Text
-Instance.send('Hello World!', { ...miscOptions });
-
-// Sending Image
-const imageBuffer = Buffer.from('<ImageBuffer>');
-Instance.send(imageBuffer, { ...miscOptions });
-
-// Sending Video
-const videoBuffer = Buffer.from('<VideoBuffer>');
-Instance.send(videoBuffer, { ...miscOptions });
-
-// Sending Audio
-const audioBuffer = Buffer.from('<AudioBuffer>');
-Instance.sendAudio(audioBuffer, { ...miscOptions });
-
-// Sending Document
-const docBuffer = Buffer.from('<DocumentBuffer>');
-Instance.sendDocument(docBuffer, { ...miscOptions });
-
-// Sending Sticker
-const stickerBuffer = Buffer.from('<StickerBuffer>');
-Instance.sendSticker(stickerBuffer);
-```
-
-#### Misc Options?
-
-There are so many misc options, you can check them out from [here](https://github.com/WhiskeySockets/Baileys/blob/master/src/Types/Message.ts) and [here](https://github.com/AstroX11/Xstro/blob/44449ea436b15fb97ab0289d421be8e79f7df4d9/lib/Base.js#L139)
-
-```javascript
-const miscOptions = {
-    caption: '',
-    contextInfo: {
-        ...opts, ...opts
-    },
-    quoted: ...opts
-}
 ```
 
 ## CONTRIBUTING
