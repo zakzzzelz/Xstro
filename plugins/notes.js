@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { addNote, removeNote, updateNote, getNotes } from '../sql/notes.js';
 
 bot(

@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { fancy } from './bot/font.js';
 import { addDmFilter, addGcFilter, getDmFilters, getGcFilters, removeDmFilter, removeGcFilter } from '../sql/filters.js';
 

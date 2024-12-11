@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { numtoId } from '../lib/utils.js';
 
 bot(

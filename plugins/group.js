@@ -1,8 +1,9 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { delay } from 'baileys';
 import { numtoId } from '../lib/utils.js';
 import { Antilink } from '../sql/antilink.js';
 import { AntiWord } from '../sql/antiword.js';
+import { isSudo } from '../sql/sudo.js';
 
 bot(
 	{
@@ -625,20 +626,12 @@ bot(
 		type: 'group',
 	},
 	async (message, match) => {
-		if (!message.isAdmin) {
-			return message.send('```only onwer can use this command```');
-		}
+		if (!(await isSudo(message.sender, message.user))) return message.send('```For My Owners Only!```');
 		if (match.trim().toLowerCase() === 'sure' || match.trim().toLowerCase() === 'ok') {
-			// Bot leaves the group
 			await message.send('```Leaving the group... Goodbye!```');
 			return await message.client.groupLeave(message.jid);
 		} else {
-			// Prompt user for confirmation
-			return message.send(
-				'```Are you sure you want me to leave the group? Use "left sure" or "left ok" to confirm.```'
-			);
+			return message.send('```Are you sure you want me to leave the group? Use "left sure" or "left ok" to confirm.```');
 		}
-	}
+	},
 );
-
-

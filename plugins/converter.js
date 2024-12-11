@@ -1,5 +1,5 @@
 import { getBuffer, getJson } from 'utils';
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from './bot/tools.js';
 import config from '../config.js';
 

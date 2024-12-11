@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { autobioDBService, placeholderService } from '../sql/autobio.js';
 
 let autobioInterval;

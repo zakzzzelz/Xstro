@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { getRandom } from '../lib/utils.js';
 import AutoReact from '../sql/areact.js';
 

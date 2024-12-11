@@ -1,5 +1,5 @@
 import { getJson } from 'utils';
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import { setAnti } from '../sql/antidel.js';
 import { disableAntiVV, enableAntiVV, getStatus } from '../sql/antivv.js';
 

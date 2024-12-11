@@ -1,4 +1,4 @@
-import { bot } from '../lib/plugins.js';
+import { bot } from '../lib/exec.js';
 import Scheduler from '../sql/scheduler.js';
 
 const convertTo24Hour = timeStr => {
