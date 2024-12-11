@@ -6,7 +6,6 @@ bot(
 		pattern: 'addnote',
 		isPublic: true,
 		desc: 'Create Notes',
-		type: 'user',
 	},
 	async (message, match) => {
 		const text = match.trim() || message.reply_message?.text;
@@ -26,7 +25,6 @@ bot(
 		pattern: 'delnote',
 		isPublic: true,
 		desc: 'Delete a Note',
-		type: 'user',
 	},
 	async (message, match) => {
 		const noteId = parseInt(match.trim());
@@ -42,7 +40,6 @@ bot(
 		pattern: 'editnote',
 		isPublic: true,
 		desc: 'Update an Existing Note',
-		type: 'user',
 	},
 	async (message, match) => {
 		const text = match.trim() || message.reply_message?.text;
@@ -65,7 +62,6 @@ bot(
 		pattern: 'getnotes',
 		isPublic: true,
 		desc: 'List all Notes',
-		type: 'user',
 	},
 	async message => {
 		const notes = await getNotes().catch(() => null);
@@ -81,7 +77,6 @@ bot(
 		pattern: 'cnote',
 		isPublic: true,
 		desc: 'Get Note Content',
-		type: 'user',
 	},
 	async (message, match) => {
 		const noteId = parseInt(match.trim());

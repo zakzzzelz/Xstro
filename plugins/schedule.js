@@ -30,7 +30,6 @@ bot(
 		isPublic: true,
 		isGroup: true,
 		desc: 'Set a time to automatically mute a group',
-		type: 'group',
 	},
 	async (message, match) => {
 		if (!message.isGroup) return message.send('_This command is only for groups_');
@@ -63,7 +62,6 @@ bot(
 		isPublic: true,
 		isGroup: true,
 		desc: 'Set a time to automatically unmute a group',
-		type: 'group',
 	},
 	async (message, match) => {
 		if (!message.isAdmin) return message.send('```You are not an Admin```');
@@ -95,7 +93,6 @@ bot(
 		isPublic: true,
 		isGroup: true,
 		desc: 'Get muting time for a group',
-		type: 'group',
 	},
 	async message => {
 		const schedule = await Scheduler.findOne({ where: { groupId: message.jid } });
@@ -114,7 +111,6 @@ bot(
 		isPublic: true,
 		isGroup: true,
 		desc: 'Cancel mute schedule for the group',
-		type: 'group',
 	},
 	async message => {
 		if (!message.isAdmin) return message.send('```You are not an Admin```');

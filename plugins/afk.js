@@ -9,7 +9,6 @@ bot(
 		pattern: 'afk',
 		isPublic: false,
 		desc: 'Manage the global AFK message',
-		type: 'user',
 	},
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`\`\`\`${prefix}afk on\n${prefix}afk set <your afk message>\n${prefix}afk off\`\`\``);

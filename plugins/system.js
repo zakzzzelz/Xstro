@@ -13,7 +13,7 @@ bot(
 	},
 	async message => {
 		const start = performance.now();
-		const msg = await message.snd('Testing Speed...');
+		const msg = await message.send('Testing Speed...');
 		const end = performance.now();
 		await msg.edit(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``);
 	},
@@ -55,32 +55,6 @@ bot(
 );
 
 bot(
-  {
-    pattern: 'shell ?(.*)',
-    isPublic: false,
-    desc: 'Run shell commands',
-  },
-  async (message, match) => {
-    if (!match) return message.send('_Provide a shell command to run_');
-    const command = match.trim();
-
-    try {
-      const stdout = execSync(command, { encoding: 'utf8' });
-      message.send(`*Output:*\n\`\`\`${stdout}\`\`\``);
-    } catch (error) {
-      if (error.stderr) {
-        message.send(`*Stderr:*\n\`\`\`${error.stderr}\`\`\``);
-      } else if (error.message.includes('command not found')) {
-        message.send(`*Error:*\n\`\`\`Command not found\`\`\``);
-      } else {
-        message.send(`*Error:*\n\`\`\`${error.message}\`\`\``);
-      }
-    }
-  }
-);
-
-
-bot(
 	{
 		pattern: 'logout',
 		isPublic: false,
@@ -105,28 +79,10 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.send('_I need a URL_');
-
 		const [mode, url] = match.split(';');
-
-		if (!url) return message.send('_Invalid format. Use: mode;url_');
-
-		if (mode === 'json') {
-			try {
-				const data = await getJson(url);
-				await message.send(JSON.stringify(data, null, 2), { type: 'text' });
-			} catch {
-				await message.send('_Failed to fetch JSON data._');
-			}
-		} else if (mode === 'buffer') {
-			try {
-				const buffer = await getBuffer(url);
-				await message.send(buffer);
-			} catch {
-				await message.send('_Failed to fetch buffer data._');
-			}
-		} else {
-			await message.send('_Invalid mode. Use "json" or "buffer"._');
-		}
+		if (!url) return message.send('_Use: mode;url_');
+		const data = mode === 'json' ? JSON.stringify(await getJson(url), null, 2) : await getBuffer(url);
+		return await message.send(data, mode === 'json' ? { type: 'text' } : undefined);
 	},
 );
 

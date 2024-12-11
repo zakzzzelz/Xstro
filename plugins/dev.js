@@ -7,7 +7,7 @@ bot(
 		on: 'text',
 		dontAddCommandList: true,
 	},
-	async (message, match, client) => {
+	async message => {
 		if (!(await isSudo(message.sender, message.user))) return;
 		if (!message.text.startsWith('$ ')) return;
 
@@ -43,7 +43,6 @@ bot(
 		pattern: 'eval ?(.*)',
 		isPublic: false,
 		desc: 'Evaluate code',
-		type: 'system',
 	},
 	async (message, match) => {
 		const src_code = match || message.reply_message?.text;

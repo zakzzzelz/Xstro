@@ -5,7 +5,6 @@ bot(
 		pattern: 'repo',
 		isPublic: true,
 		desc: 'Sends bot info, social links, and GitHub repo details.',
-		type: 'misc',
 	},
 	async message => {
 		const adMessage = `\`\`\`

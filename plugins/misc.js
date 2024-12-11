@@ -6,7 +6,6 @@ bot(
 		pattern: 'pair',
 		isPublic: true,
 		desc: 'Get Your Pairing Code Now',
-		type: 'misc',
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
@@ -24,7 +23,6 @@ bot(
 		pattern: 'support',
 		isPublic: true,
 		desc: 'Sends developer support information ',
-		type: 'misc',
 	},
 	async message => {
 		const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  

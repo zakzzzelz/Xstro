@@ -4,8 +4,8 @@ import { uploadFile } from '../lib/xstro.js';
 bot(
 	{
 		pattern: 'upload',
+		isPublic: true,
 		desc: 'Upload files and get a shareable URL.',
-		type: 'utils',
 	},
 	async message => {
 		if (!message.reply_message?.image && !message.reply_message?.video && !message.reply_message?.audio && !message.reply_message?.document) {

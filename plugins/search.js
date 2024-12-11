@@ -1,8 +1,5 @@
-import config from '../config.js';
 import { bot } from '../lib/cmds.js';
 import { getBuffer, getJson } from 'utils';
-const base_url = 'https://api.giftedtech.my.id/api/';
-const { API_KEY } = config;
 
 bot(
 	{
@@ -17,40 +14,6 @@ bot(
 		const { title, album, thumb, lyrics } = res.data;
 		const image = await getBuffer(thumb);
 		return await message.send(image, { caption: `*${title}*\n\`\`\`${album}\n\n${lyrics}\`\`\`` });
-	},
-);
-
-bot(
-	{
-		pattern: 'stickersearch',
-		isPublic: true,
-		desc: 'Search and Download Stickers',
-	},
-	async (message, match) => {
-		if (!match) return message.send('```Give me a search query```');
-		const req = await getJson(`${base_url}search/stickersearch?apikey=${API_KEY}&query=${match}`);
-		for (const stickerUrl of req.results.sticker) {
-			const buff = await getBuffer(stickerUrl);
-			await message.send(buff, { type: 'sticker' });
-		}
-	},
-);
-
-bot(
-	{
-		pattern: 'google',
-		isPublic: true,
-		desc: 'Search and Get Google Results',
-	},
-	async (message, match) => {
-		if (!match) return message.send('```Give me a search query```');
-		const req = await getJson(`https://api.giftedtech.my.id/api/search/google?apikey=${API_KEY}&query=${match}`);
-		if (!req.results || req.results.length === 0) return message.send('```No results found for your query.```');
-		let resultsMessage = '';
-		req.results.forEach(result => {
-			resultsMessage += `\n\n*Title:* ${result.title}\n*Description:* ${result.description}\n*URL:* ${result.url}\n\n`;
-		});
-		await message.send(`\`\`\`*Google Search*\n\n${resultsMessage}\`\`\``);
 	},
 );
 

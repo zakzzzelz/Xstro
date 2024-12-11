@@ -7,7 +7,6 @@ bot(
 		pattern: 'alive',
 		isPublic: true,
 		desc: 'Is Bot Alive?',
-		type: 'user',
 	},
 	async (message, match) => {
 		if (match) {

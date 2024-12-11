@@ -8,7 +8,6 @@ bot(
 		pattern: 'vv',
 		isPublic: false,
 		desc: 'Download ViewOnce Messages',
-		type: 'whatsapp',
 	},
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A ViewOnce_');
@@ -22,7 +21,6 @@ bot(
 		pattern: 'myname',
 		isPublic: false,
 		desc: 'Changes your WhatsApp Name',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide A New Name_');
@@ -36,7 +34,6 @@ bot(
 		pattern: 'setpp',
 		isPublic: false,
 		desc: 'Set Your Profile Picture',
-		type: 'whatsapp',
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
@@ -51,7 +48,6 @@ bot(
 		pattern: 'quoted',
 		isPublic: false,
 		desc: 'quoted message',
-		type: 'whatsapp',
 	},
 	async message => {
 		if (!message.reply_message) return await message.send('```Reply A Message```');
@@ -69,7 +65,6 @@ bot(
 		pattern: 'dlt',
 		isPublic: false,
 		desc: 'Deletes Message',
-		type: 'whatsapp',
 	},
 	async message => {
 		if (!message.reply_message) return message.send('_Reply A Message_');
@@ -82,7 +77,6 @@ bot(
 		pattern: 'archive',
 		isPublic: false,
 		desc: 'archive whatsapp chat',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.archiveChat(true);
@@ -95,7 +89,6 @@ bot(
 		pattern: 'unarchive',
 		isPublic: false,
 		desc: 'unarchive whatsapp chat',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.archiveChat(false);
@@ -108,7 +101,6 @@ bot(
 		pattern: 'blocklist',
 		isPublic: false,
 		desc: 'Fetches BlockList',
-		type: 'whatsapp',
 	},
 	async message => {
 		const blocklist = await message.client.fetchBlocklist();
@@ -127,7 +119,6 @@ bot(
 		pattern: 'clear ?(.*)',
 		isPublic: false,
 		desc: 'delete whatsapp chat',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.clearChat();
@@ -140,7 +131,6 @@ bot(
 		pattern: 'rpp',
 		isPublic: false,
 		desc: 'Removes Profile Picture',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.rPP();
@@ -153,7 +143,6 @@ bot(
 		pattern: 'pin',
 		isPublic: false,
 		desc: 'pin a chat',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.client.chatModify({ pin: true }, message.jid);
@@ -166,7 +155,6 @@ bot(
 		pattern: 'unpin ?(.*)',
 		isPublic: false,
 		desc: 'unpin a msg',
-		type: 'whatsapp',
 	},
 	async message => {
 		await message.client.chatModify({ pin: false }, message.jid);
@@ -179,7 +167,6 @@ bot(
 		pattern: 'save',
 		isPublic: false,
 		desc: 'Saves Status',
-		type: 'whatsapp',
 	},
 	async message => {
 		if (!message.reply_message) return message.send('_Reply A Status_');
@@ -193,7 +180,6 @@ bot(
 		pattern: 'forward',
 		isPublic: false,
 		desc: 'Forwards A Replied Message',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		if (!message.reply_message) return message.send('_Reply A Message!_');
@@ -217,7 +203,6 @@ bot(
 		pattern: 'block',
 		isPublic: false,
 		desc: 'Blocks A Person',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
@@ -230,7 +215,6 @@ bot(
 		pattern: 'unblock',
 		isPublic: false,
 		desc: 'Unblocks A Person',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
@@ -243,7 +227,6 @@ bot(
 		pattern: 'edit',
 		isPublic: false,
 		desc: 'Edits A Sent Message',
-		type: 'whatsapp',
 	},
 	async (message, match, { prefix }) => {
 		if (!message.reply_message) return message.send('_Reply Your Own Message_');
@@ -257,7 +240,6 @@ bot(
 		pattern: 'jid',
 		isPublic: true,
 		desc: 'Get Jid of Current Chat',
-		type: 'whatsapp',
 	},
 	async message => {
 		const jid = await message.thatJid();
@@ -270,7 +252,6 @@ bot(
 		pattern: 'bio',
 		isPublic: true,
 		desc: 'Change your whatsapp bio',
-		type: 'whatsapp',
 	},
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
@@ -284,7 +265,6 @@ bot(
 		pattern: 'react',
 		isPublic: false,
 		desc: 'React to A Message',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		if (!message.reply_message) return message.send('```Reply A Message```');
@@ -299,7 +279,6 @@ bot(
 		pattern: 'star',
 		isPublic: false,
 		desc: 'Stars or Unstars a Message',
-		type: 'whatsapp',
 	},
 	async message => {
 		const replyMessage = message.reply_message;
@@ -308,7 +287,6 @@ bot(
 		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = true;
 		await message.client.star(jid, messages, star);
-		message.send('_Message starred successfully_');
 	},
 );
 
@@ -317,7 +295,6 @@ bot(
 		pattern: 'unstar',
 		isPublic: false,
 		desc: 'Stars or Unstars a Message',
-		type: 'whatsapp',
 	},
 	async message => {
 		const replyMessage = message.reply_message;
@@ -326,6 +303,5 @@ bot(
 		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = false;
 		await message.client.star(jid, messages, star);
-		message.send('_Message starred successfully_');
 	},
 );

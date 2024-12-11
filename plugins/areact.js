@@ -7,7 +7,6 @@ bot(
 		pattern: 'areact',
 		isPublic: false,
 		desc: 'Toggle Auto React On/Off',
-		type: 'user',
 	},
 	async (message, match) => {
 		const status = match;

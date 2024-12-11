@@ -8,7 +8,6 @@ bot(
 		pattern: 'autobio ?(.*)',
 		isPublic: false,
 		desc: 'Manage auto bio. Use "on" or "off".',
-		type: 'whatsapp',
 	},
 	async (message, match) => {
 		const action = match?.toLowerCase().trim();

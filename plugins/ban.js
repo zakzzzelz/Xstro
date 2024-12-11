@@ -7,7 +7,6 @@ bot(
 		pattern: 'ban ?(.*)',
 		isPublic: false,
 		desc: 'Ban a user from the bot',
-		type: 'user',
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
@@ -22,7 +21,6 @@ bot(
 		pattern: 'unban ?(.*)',
 		isPublic: false,
 		desc: 'Unban a user from the bot',
-		type: 'user',
 	},
 	async (message, match) => {
 		const jid = await message.thatJid(match);
@@ -36,7 +34,6 @@ bot(
 		pattern: 'getban',
 		isPublic: false,
 		desc: 'Get a list of all banned users',
-		type: 'user',
 	},
 	async message => {
 		const bannedUsers = await getBanned();

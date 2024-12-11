@@ -6,7 +6,6 @@ bot(
 		pattern: 'report',
 		isPublic: true,
 		desc: 'Request Feature or Report Bugs',
-		type: 'misc',
 	},
 	async (message, match) => {
 		if (!match || match.split(' ').length < 5) return message.send('```You must provide a reason for reporting a bug, and your message must be at least 5 words.```');
