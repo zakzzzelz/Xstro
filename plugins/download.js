@@ -87,6 +87,7 @@ bot(
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`${prefix}play hello by adele`);
 		const res = await play(match);
+		console.log(res)
 		const { songName, Image, music_url } = res;
 		const img = await getBuffer(Image);
 		const mp3 = await getBuffer(music_url);

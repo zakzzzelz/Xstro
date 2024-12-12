@@ -134,5 +134,5 @@ export async function gdrivedl(url) {
 }
 
 export async function play(query) {
-	return await getJson(`${config.BASE_API_URL}/api/play?query${query}`);
+	return await getJson(`${config.BASE_API_URL}/api/play?query=${query}`);
 }
