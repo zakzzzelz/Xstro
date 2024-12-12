@@ -4,76 +4,81 @@ import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '../utils/s
 import config from '../config.js';
 
 bot(
-	{
-		pattern: 'facebook',
-		isPublic: true,
-		desc: 'Downloads Facebook Videos',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_Invaild Url_');
-		const res = await facebook(url);
-		const video = await getBuffer(res.hd_video);
-		return await message.send(video);
-	},
+    {
+        pattern: 'facebook',
+        isPublic: true,
+        desc: 'Downloads Facebook Videos',
+    },
+    async (message, match) => {
+        const inputText = match || message.reply_message?.text;
+        const url = extractUrlFromString(inputText);
+        if (!url) return message.send('_Invalid URL_');
+        const res = await facebook(url);
+        const video = await getBuffer(res.hd_video);
+        return await message.send(video);
+    },
 );
 
 bot(
-	{
-		pattern: 'instagram',
-		isPublic: true,
-		desc: 'Downloads Instagram Videos',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_Invaild Url_');
-		const res = await instagram(url);
-		const video = await getBuffer(res.download_url);
-		return await message.send(video);
-	},
+    {
+        pattern: 'instagram',
+        isPublic: true,
+        desc: 'Downloads Instagram Videos',
+    },
+    async (message, match) => {
+        const inputText = match || message.reply_message?.text;
+        const url = extractUrlFromString(inputText);
+        if (!url) return message.send('_Invalid URL_');
+        const res = await instagram(url);
+        const video = await getBuffer(res.download_url);
+        return await message.send(video);
+    },
 );
 
 bot(
-	{
-		pattern: 'twitter',
-		isPublic: true,
-		desc: 'Downloads X Videos',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_Invaild Url_');
-		const res = await twitter(url);
-		const video = await getBuffer(res.downloads.url);
-		return await message.send(video);
-	},
+    {
+        pattern: 'twitter',
+        isPublic: true,
+        desc: 'Downloads X Videos',
+    },
+    async (message, match) => {
+        const inputText = match || message.reply_message?.text;
+        const url = extractUrlFromString(inputText);
+        if (!url) return message.send('_Invalid URL_');
+        const res = await twitter(url);
+        const video = await getBuffer(res.downloads.url);
+        return await message.send(video);
+    },
 );
 
 bot(
-	{
-		pattern: 'tiktok',
-		isPublic: true,
-		desc: 'Downloads Tiktok Videos',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_Invaild Url_');
-		const res = await tiktok(url);
-		const video = await getBuffer(res.video.noWatermark);
-		return await message.send(video, { caption: res.title });
-	},
+    {
+        pattern: 'tiktok',
+        isPublic: true,
+        desc: 'Downloads Tiktok Videos',
+    },
+    async (message, match) => {
+        const inputText = match || message.reply_message?.text;
+        const url = extractUrlFromString(inputText);
+        if (!url) return message.send('_Invalid URL_');
+        const res = await tiktok(url);
+        const video = await getBuffer(res.video.noWatermark);
+        return await message.send(video, { caption: res.title });
+    },
 );
 
 bot(
-	{
-		pattern: 'gdrive',
-		isPublic: true,
-		desc: 'Downloads Google Drive Documents',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_Invaild Url_');
-		const res = await gdrivedl(url);
-		const doc = await getBuffer(res.link);
-		return await message.send(doc);
-	},
+    {
+        pattern: 'gdrive',
+        isPublic: true,
+        desc: 'Downloads Google Drive Documents',
+    },
+    async (message, match) => {
+        const inputText = match || message.reply_message?.text;
+        const url = extractUrlFromString(inputText);
+        if (!url) return message.send('_Invalid URL_');
+        const res = await gdrivedl(url);
+        const doc = await getBuffer(res.link);
+        return await message.send(doc);
+    },
 );
