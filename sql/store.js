@@ -64,7 +64,7 @@ const groupMetadataDb = DATABASE.define(
 		memberAddMode: { type: DataTypes.BOOLEAN, allowNull: true },
 		ephemeralDuration: { type: DataTypes.INTEGER, allowNull: true },
 	},
-	{ tableName: 'groupMetadata', timestamps: true },
+	{ tableName: 'metadata', timestamps: true },
 );
 
 const groupParticipantsDb = DATABASE.define(
@@ -74,7 +74,7 @@ const groupParticipantsDb = DATABASE.define(
 		participantId: { type: DataTypes.STRING, allowNull: false },
 		admin: { type: DataTypes.STRING, allowNull: true },
 	},
-	{ tableName: 'groupParticipants', timestamps: false },
+	{ tableName: 'participants', timestamps: false },
 );
 
 const handleError = error => {
