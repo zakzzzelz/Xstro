@@ -41,8 +41,11 @@ bot(
 	async (message, match) => {
 		const url = extractUrlFromString(match || message.reply_message?.text);
 		if (!url) return message.send('_Invaild Url_');
+		console.log(url)
 		const res = await twitter(url);
+		console.log(res)
 		const video = await getBuffer(res.downloads);
+		console.log(video)
 		return await message.send(video, { caption: res.title });
 	},
 );
