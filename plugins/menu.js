@@ -1,6 +1,7 @@
 import config from '../config.js';
 import { commands, bot } from '../lib/cmds.js';
 import { formatBytes, runtime } from '../lib/utils.js';
+import { getConfigValues } from '../lib/bot.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from '../utils/fancy.js';
 
@@ -12,9 +13,10 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
+		const { mode } = await getConfigValues();
 		let menuText = `╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ User: ${message.pushName}
-│ Mode: ${config.MODE}
+│ Mode: ${mode ? 'public' : 'private'}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
 │ Plugins: ${commands.length}
