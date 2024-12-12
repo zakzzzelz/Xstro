@@ -8,6 +8,7 @@
   "topLevelPatterns": [
     "axios@^1.7.9",
     "baileys@^6.7.9",
+    "cheerio@^1.0.0",
     "dotenv@^16.4.7",
     "express@^4.21.2",
     "gifted-downs@^1.0.2",
@@ -170,6 +171,7 @@
     "chalk@~3.0.0": "https://registry.yarnpkg.com/chalk/-/chalk-3.0.0.tgz#3f73c2bf526591f574cc492c51e2456349f844e4",
     "charm@~0.1.1": "https://registry.yarnpkg.com/charm/-/charm-0.1.2.tgz#06c21eed1a1b06aeb67553cdc53e23274bac2296",
     "cheerio-select@^2.1.0": "https://registry.yarnpkg.com/cheerio-select/-/cheerio-select-2.1.0.tgz#4d8673286b8126ca2a8e42740d5e3c4884ae21b4",
+    "cheerio@^1.0.0": "https://registry.yarnpkg.com/cheerio/-/cheerio-1.0.0.tgz#1ede4895a82f26e8af71009f961a9b8cb60d6a81",
     "cheerio@~1.0.0-rc.5": "https://registry.yarnpkg.com/cheerio/-/cheerio-1.0.0.tgz#1ede4895a82f26e8af71009f961a9b8cb60d6a81",
     "chokidar@^3.5.3": "https://registry.yarnpkg.com/chokidar/-/chokidar-3.6.0.tgz#197c6cc669ef2a8dc5e7b4d97ee4e092c3eb0d5b",
     "chownr@^1.1.1": "https://registry.yarnpkg.com/chownr/-/chownr-1.1.4.tgz#6fc9d7b42d32a583596337666e7d08084da2cc6b",
