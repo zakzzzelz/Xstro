@@ -27,7 +27,7 @@ export const removeBan = async jid => {
 	const ban = await BanDB.findOne({ where: { jid } });
 	if (ban) {
 		await ban.destroy();
-		return `_@${jid} unbanned._`;
+		return `_@${jid.split('@')[0]} unbanned._`;
 	}
 	return `_@${jid.split('@')[0]} wasn't banned._`;
 };
