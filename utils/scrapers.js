@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { getRandom } from '../lib/utils';
+import { getRandom } from '../lib/utils.js';
 
 export async function facebook(videoUrl) {
 	const gifted = await import('gifted-downs');
