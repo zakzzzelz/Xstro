@@ -77,38 +77,3 @@ bot(
 		return await message.send(doc);
 	},
 );
-
-bot(
-	{
-		pattern: 'play',
-		isPublic: true,
-		desc: 'Searches and download yt audio',
-	},
-	async (message, match, { prefix }) => {
-		if (!match) return message.send(`${prefix}play hello by adele`);
-		const res = await play(match);
-		console.log(res);
-		const { songName, Image, music_url } = res;
-		const img = await getBuffer(Image);
-		console.log(img);
-		const mp3 = await getBuffer(music_url);
-		console.log(mp3);
-
-		return await message.send(
-			mp3, {type: 'audio'}
-			// 	{
-			// 	type: 'audio',
-			// 	contextInfo: {
-			// 		externalAdReply: {
-			// 			title: songName,
-			// 			body: config.BOT_INFO.split(';')[1],
-			// 			mediaType: 1,
-			// 			thumbnailUrl: img,
-			// 			renderLargerThumbnail: true,
-			// 			sourceUrl: music_url,
-			// 		},
-			// 	},
-			// }
-		);
-	},
-);
