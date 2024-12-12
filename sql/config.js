@@ -32,7 +32,7 @@ const CONFIG_CMDS = DATABASE.define(
 		mode: {
 			type: DataTypes.BOOLEAN,
 			allowNull: false,
-			defaultValue: false,
+			defaultValue: true,
 		},
 	},
 	{
@@ -74,7 +74,7 @@ async function getConfig() {
 				autoStatusRead: false,
 				cmdReact: true,
 				cmdRead: false,
-				mode: false,
+				mode: true,
 		  };
 }
 
