@@ -1,6 +1,6 @@
 import { extractUrlFromString, getBuffer } from 'utils';
 import { bot } from '../lib/cmds.js';
-import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '../utils/scrapers.js';
+import { facebook, gdrivedl, instagram, tiktok, twitter } from '../utils/scrapers.js';
 import config from '../config.js';
 
 bot(
@@ -10,7 +10,9 @@ bot(
         desc: 'Downloads Facebook Videos',
     },
     async (message, match) => {
-        const url = extractUrlFromString(match || message.reply_message?.text);
+        const input = match || message.reply_message?.text;
+        if (!input) return message.send('_Invalid URL_');
+        const url = extractUrlFromString(input);
         if (!url) return message.send('_Invalid URL_');
         const res = await facebook(url);
         const video = await getBuffer(res.hd_video);
@@ -25,7 +27,9 @@ bot(
         desc: 'Downloads Instagram Videos',
     },
     async (message, match) => {
-        const url = extractUrlFromString(match || message.reply_message?.text);
+        const input = match || message.reply_message?.text;
+        if (!input) return message.send('_Invalid URL_');
+        const url = extractUrlFromString(input);
         if (!url) return message.send('_Invalid URL_');
         const res = await instagram(url);
         const video = await getBuffer(res.download_url);
@@ -40,7 +44,9 @@ bot(
         desc: 'Downloads X Videos',
     },
     async (message, match) => {
-        const url = extractUrlFromString(match || message.reply_message?.text);
+        const input = match || message.reply_message?.text;
+        if (!input) return message.send('_Invalid URL_');
+        const url = extractUrlFromString(input);
         if (!url) return message.send('_Invalid URL_');
         const res = await twitter(url);
         const video = await getBuffer(res.downloads.url);
@@ -55,7 +61,9 @@ bot(
         desc: 'Downloads Tiktok Videos',
     },
     async (message, match) => {
-        const url = extractUrlFromString(match || message.reply_message?.text);
+        const input = match || message.reply_message?.text;
+        if (!input) return message.send('_Invalid URL_');
+        const url = extractUrlFromString(input);
         if (!url) return message.send('_Invalid URL_');
         const res = await tiktok(url);
         const video = await getBuffer(res.video.noWatermark);
@@ -70,7 +78,9 @@ bot(
         desc: 'Downloads Google Drive Documents',
     },
     async (message, match) => {
-        const url = extractUrlFromString(match || message.reply_message?.text);
+        const input = match || message.reply_message?.text;
+        if (!input) return message.send('_Invalid URL_');
+        const url = extractUrlFromString(input);
         if (!url) return message.send('_Invalid URL_');
         const res = await gdrivedl(url);
         const doc = await getBuffer(res.link);
