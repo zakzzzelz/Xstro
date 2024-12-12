@@ -12,7 +12,7 @@ bot(
 		if (updated.latest) {
 			return message.send('```You are on the Latest Update```');
 		}
-		await message.send(`\`\`\`Old Patch: ${updated.localCommit}, Latest Patch: ${updated.remoteCommit}\`\`\``);
+		await message.send(`\`\`\`Old Patch: ${updated.localCommit}\n\nLatest Patch: ${updated.remoteCommit}\`\`\``);
 		if (match.toString().toLowerCase() === 'now') {
 			await message.send('```Updating Bot```');
 			await updateBot();
