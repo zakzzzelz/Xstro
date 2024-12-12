@@ -1,6 +1,7 @@
 import { extractUrlFromString, getBuffer } from 'utils';
 import { bot } from '../lib/cmds.js';
-import { facebook, gdrivedl, instagram, tiktok, twitter } from '../utils/scrapers.js';
+import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '../utils/scrapers.js';
+import config from '../config.js';
 
 bot(
 	{
@@ -74,5 +75,34 @@ bot(
 		const res = await gdrivedl(url);
 		const doc = await getBuffer(res.link);
 		return await message.send(doc);
+	},
+);
+
+bot(
+	{
+		pattern: 'play',
+		isPublic: true,
+		desc: 'Searches and download yt audio',
+	},
+	async (message, match, { prefix }) => {
+		if (!match) return message.send(`${prefix}play hello by adele`);
+		const res = await play(match);
+		const { songName, Image, music_url } = res;
+		const img = await getBuffer(Image);
+		const mp3 = await getBuffer(music_url);
+
+		return await message.send(mp3, {
+			type: 'audio',
+			contextInfo: {
+				externalAdReply: {
+					title: songName,
+					body: config.BOT_INFO.split(';')[1],
+					mediaType: 1,
+					thumbnailUrl: img,
+					renderLargerThumbnail: true,
+					sourceUrl: music_url,
+				},
+			},
+		});
 	},
 );

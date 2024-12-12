@@ -1,6 +1,8 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { getRandom } from '../lib/utils.js';
+import { getJson } from 'utils';
+import config from '../config.js';
 
 export async function facebook(videoUrl) {
 	const gifted = await import('gifted-downs');
@@ -129,4 +131,8 @@ export async function gdrivedl(url) {
 			reject(e);
 		}
 	});
+}
+
+export async function play(query) {
+	return await getJson(`${config.BASE_API_URL}/api/play?query${query}`);
 }
