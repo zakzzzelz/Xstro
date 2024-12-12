@@ -27,9 +27,24 @@ export async function isLatest() {
 		execSync('git fetch');
 		const localCommit = execSync('git rev-parse HEAD').toString().trim();
 		const remoteCommit = execSync('git rev-parse @{upstream}').toString().trim();
-		return localCommit === remoteCommit;
+		if (localCommit === remoteCommit) {
+			return {
+				latest: true,
+				commit: localCommit,
+			};
+		} else {
+			return {
+				latest: false,
+				localCommit,
+				remoteCommit,
+			};
+		}
 	} catch {
-		return false;
+		return {
+			latest: false,
+			localCommit: null,
+			remoteCommit: null,
+		};
 	}
 }
 

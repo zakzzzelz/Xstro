@@ -9,13 +9,16 @@ bot(
 	},
 	async (message, match) => {
 		const updated = await isLatest();
-		if (updated) return message.send('```You are on the Latest Update```');
+		if (updated.latest) {
+			return message.send('```You are on the Latest Update```');
+		}
+		await message.send(`\`\`\`Old Patch: ${updated.localCommit}, Latest Patch: ${updated.remoteCommit}\`\`\``);
 		if (match.toString().toLowerCase() === 'now') {
 			await message.send('```Updating Bot```');
 			await updateBot();
 			await message.send('```Bot Updated```');
 		} else {
-			return message.send('```Invaild, use ' + message.prefix + 'update now```');
+			return message.send('```Invalid, use ' + message.prefix + 'update now```');
 		}
 	},
 );
