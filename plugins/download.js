@@ -89,19 +89,26 @@ bot(
 		const res = await play(match);
 		console.log(res);
 		const { songName, Image, music_url } = res;
+		const img = await getBuffer(Image);
+		console.log(img);
+		const mp3 = await getBuffer(music_url);
+		console.log(mp3);
 
-		return await message.send(await getBuffer(music_url), {
-			type: 'audio',
-			contextInfo: {
-				externalAdReply: {
-					title: songName,
-					body: config.BOT_INFO.split(';')[1],
-					mediaType: 1,
-					thumbnailUrl: Image,
-					renderLargerThumbnail: true,
-					sourceUrl: music_url,
-				},
-			},
-		});
+		return await message.send(
+			mp3.buffer,
+			// 	{
+			// 	type: 'audio',
+			// 	contextInfo: {
+			// 		externalAdReply: {
+			// 			title: songName,
+			// 			body: config.BOT_INFO.split(';')[1],
+			// 			mediaType: 1,
+			// 			thumbnailUrl: img,
+			// 			renderLargerThumbnail: true,
+			// 			sourceUrl: music_url,
+			// 		},
+			// 	},
+			// }
+		);
 	},
 );
