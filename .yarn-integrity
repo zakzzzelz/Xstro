@@ -71,8 +71,8 @@
     "@sec-ant/readable-stream@^0.4.1": "https://registry.yarnpkg.com/@sec-ant/readable-stream/-/readable-stream-0.4.1.tgz#60de891bb126abfdc5410fdc6166aca065f10a0c",
     "@sindresorhus/is@^4.0.0": "https://registry.yarnpkg.com/@sindresorhus/is/-/is-4.6.0.tgz#3c7c9c46e678feefe7a2e5bb609d3dbd665ffb3f",
     "@szmarczak/http-timer@^4.0.5": "https://registry.yarnpkg.com/@szmarczak/http-timer/-/http-timer-4.0.6.tgz#b4a914bb62e7c272d4e5989fe4440f812ab1d807",
-    "@thi.ng/bitstream@^2.2.12": "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.5.tgz#3408ceb594eb8f156ba28f6b5a2d052a7afb513f",
-    "@thi.ng/errors@^2.5.19": "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.19.tgz#b97d583a31b9cc55c3399b991e435489c5351954",
+    "@thi.ng/bitstream@^2.2.12": "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.6.tgz#06c4544a82dd3f33b9123c36c06ca13b8715c034",
+    "@thi.ng/errors@^2.5.20": "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.20.tgz#e118042802205d8f6934d6350bce5120cbc6c8f7",
     "@tokenizer/token@^0.3.0": "https://registry.yarnpkg.com/@tokenizer/token/-/token-0.3.0.tgz#fe98a93fe789247e998c75e74e9c7c63217aa276",
     "@tootallnate/once@1": "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82",
     "@tootallnate/quickjs-emscripten@^0.23.0": "https://registry.yarnpkg.com/@tootallnate/quickjs-emscripten/-/quickjs-emscripten-0.23.0.tgz#db4ecfd499a9765ab24002c3b696d02e6d32a12c",
@@ -678,7 +678,7 @@
     "uri-js@^4.2.2": "https://registry.yarnpkg.com/uri-js/-/uri-js-4.4.1.tgz#9b1a52595225859e55f669d928f88c6c57f2a77e",
     "util-deprecate@^1.0.1": "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf",
     "utils-merge@1.0.1": "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713",
-    "utils@github:AstroX11/utils": "https://codeload.github.com/AstroX11/utils/tar.gz/57798bb24c4d0a60bef2c52d705372816a3cef47",
+    "utils@github:AstroX11/utils": "https://codeload.github.com/AstroX11/utils/tar.gz/41fa1fea6c69a415170ded8d6b2bd62358c8aed2",
     "uuid@^10.0.0": "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294",
     "uuid@^3.3.2": "https://registry.yarnpkg.com/uuid/-/uuid-3.4.0.tgz#b23e4358afa8a202fe7a100af1f5f883f02007ee",
     "uuid@^8.3.2": "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2",
@@ -701,8 +701,7 @@
     "yallist@^4.0.0": "https://registry.yarnpkg.com/yallist/-/yallist-4.0.0.tgz#9bb92790d9c0effec63be73519e11a35019a3a72",
     "yargs-parser@^21.1.1": "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-21.1.1.tgz#9096bceebf990d21bb31fa9516e0ede294a77d35",
     "yargs@^17.0.1": "https://registry.yarnpkg.com/yargs/-/yargs-17.7.2.tgz#991df39aca675a192b816e1e0363f9d75d2aa269",
-    "ytdl-core@^4.11.5": "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.11.5.tgz#8cc3dc9e4884e24e8251250cfb56313a300811f0",
-    "zod@^3.24.1": "https://registry.yarnpkg.com/zod/-/zod-3.24.1.tgz#27445c912738c8ad1e9de1bea0359fa44d9d35ee"
+    "ytdl-core@^4.11.5": "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.11.5.tgz#8cc3dc9e4884e24e8251250cfb56313a300811f0"
   },
   "files": [],
   "artifacts": {
