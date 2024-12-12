@@ -95,7 +95,7 @@ bot(
 		console.log(mp3);
 
 		return await message.send(
-			mp3.buffer,
+			mp3,
 			// 	{
 			// 	type: 'audio',
 			// 	contextInfo: {
