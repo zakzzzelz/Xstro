@@ -14,8 +14,6 @@ const config = {
 	MUTE_MSG: process.env.MUTE_MSG || '```Group has been muted, due to AutoMute```',
 	UN_MUTE_MSG: process.env.UN_MUTE_MSG || '```Group is now unmuted, due to AutoUnMute```',
 	READ_CMD: process.env.READ_CMD || false,
-	AUTO_READ: process.env.AUTO_READ || false,
-	AUTO_STATUS_READ: process.env.AUTO_STATUS_READ || false,
 	CMD_REACT: process.env.CMD_REACT || true,
 	WARN_COUNT: process.env.WARN_COUNT || 3,
 	MODE: process.env.MODE || 'private',
