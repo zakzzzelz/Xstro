@@ -1,7 +1,6 @@
 import { extractUrlFromString, getBuffer } from 'utils';
 import { bot } from '../lib/cmds.js';
-import { facebook, instagram } from '../utils/scrapers.js';
-import { twitter } from '../test.js';
+import { facebook, instagram, twitter } from '../utils/scrapers.js';
 
 bot(
 	{
@@ -11,6 +10,7 @@ bot(
 	},
 	async (message, match) => {
 		const url = extractUrlFromString(match || message.reply_message?.text);
+		if (!url) return message.send('_Invaild Url_');
 		const res = await facebook(url);
 		const video = await getBuffer(res.hd_video);
 		return await message.send(video);
@@ -25,6 +25,7 @@ bot(
 	},
 	async (message, match) => {
 		const url = extractUrlFromString(match || message.reply_message?.text);
+		if (!url) return message.send('_Invaild Url_');
 		const res = await instagram(url);
 		const video = await getBuffer(res.download_url);
 		return await message.send(video);
@@ -39,8 +40,9 @@ bot(
 	},
 	async (message, match) => {
 		const url = extractUrlFromString(match || message.reply_message?.text);
+		if (!url) return message.send('_Invaild Url_');
 		const res = await twitter(url);
 		const video = await getBuffer(res.downloads);
-		return await message.send(video, {caption: res.title});
+		return await message.send(video, { caption: res.title });
 	},
 );
