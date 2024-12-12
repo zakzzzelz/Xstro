@@ -1,6 +1,6 @@
 import { extractUrlFromString, getBuffer } from 'utils';
 import { bot } from '../lib/cmds.js';
-import { facebook, instagram, tiktok, twitter } from '../utils/scrapers.js';
+import { facebook, gdrivedl, instagram, tiktok, twitter } from '../utils/scrapers.js';
 
 bot(
 	{
@@ -59,5 +59,20 @@ bot(
 		const res = await tiktok(url);
 		const video = await getBuffer(res.video.noWatermark);
 		return await message.send(video, { caption: res.title });
+	},
+);
+
+bot(
+	{
+		pattern: 'gdrive',
+		isPublic: true,
+		desc: 'Downloads Google Drive Documents',
+	},
+	async (message, match) => {
+		const url = extractUrlFromString(match || message.reply_message?.text);
+		if (!url) return message.send('_Invaild Url_');
+		const res = await gdrivedl(url);
+		const doc = await getBuffer(res.link);
+		return await message.send(doc, { type: 'document', filename: res.name });
 	},
 );

@@ -110,3 +110,23 @@ export async function tiktok(url) {
 			return null;
 		});
 }
+
+export async function gdrivedl(url) {
+	return new Promise(async (resolve, reject) => {
+		try {
+			if (!/drive\.google\.com\/file\/d\//gi.test(url)) return reject('Invalid URL');
+			const res = await fetch(url).then(v => v.text());
+			const $ = cheerio.load(res);
+			const id = url.split('/')[5];
+			const data = {
+				name: $('head').find('title').text().split('-')[0].trim(),
+				download: `https://drive.usercontent.google.com/uc?id=${id}&export=download`,
+				link: url,
+			};
+
+			resolve(data);
+		} catch (e) {
+			reject(e);
+		}
+	});
+}
