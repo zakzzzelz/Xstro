@@ -23,16 +23,6 @@
 			"description": "Session ID for authentication or tracking.",
 			"required": true
 		},
-		"MENU_IMAGE_URL": {
-			"description": "add your image  url for menu",
-			"value": "https://avatars.githubusercontent.com/u/188756392?v=4",
-			"required": false
-		},
-		"MENU_DESIGN": {
-			"description": "put 1 if you want menu with image  ",
-			"value": "2",
-			"required": false
-		},
 		"SUDO": {
 			"description": "User ID with sudo permissions for the bot.",
 			"value": "2348039607375",
@@ -41,16 +31,6 @@
 		"BOT_INFO": {
 			"description": "Information about the bot, such as version or ID.",
 			"value": "Astro;Xstro-Md;",
-			"required": false
-		},
-		"MODE": {
-			"description": "Set the bot public | private",
-			"value": "private",
-			"required": false
-		},
-		"AUTO_STATUS_READ": {
-			"description": "Automaically Read Status",
-			"value": "false",
 			"required": false
 		},
 		"STICKER_PACK": {
