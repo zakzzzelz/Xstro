@@ -100,3 +100,13 @@ export async function twitter(id) {
 
 	return data;
 }
+
+export async function tiktok(url) {
+	return fetch(`${'https://api.tiklydown.eu.org/api/download?url='}${encodeURIComponent(url)}`)
+		.then(response => response.json())
+		.then(data => data)
+		.catch(error => {
+			console.error('Error fetching tiktok data:', error);
+			return null;
+		});
+}
