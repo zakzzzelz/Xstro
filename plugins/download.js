@@ -10,8 +10,7 @@ bot(
         desc: 'Downloads Facebook Videos',
     },
     async (message, match) => {
-        const inputText = match || message.reply_message?.text;
-        const url = extractUrlFromString(inputText);
+        const url = extractUrlFromString(match || message.reply_message?.text);
         if (!url) return message.send('_Invalid URL_');
         const res = await facebook(url);
         const video = await getBuffer(res.hd_video);
@@ -26,8 +25,7 @@ bot(
         desc: 'Downloads Instagram Videos',
     },
     async (message, match) => {
-        const inputText = match || message.reply_message?.text;
-        const url = extractUrlFromString(inputText);
+        const url = extractUrlFromString(match || message.reply_message?.text);
         if (!url) return message.send('_Invalid URL_');
         const res = await instagram(url);
         const video = await getBuffer(res.download_url);
@@ -42,8 +40,7 @@ bot(
         desc: 'Downloads X Videos',
     },
     async (message, match) => {
-        const inputText = match || message.reply_message?.text;
-        const url = extractUrlFromString(inputText);
+        const url = extractUrlFromString(match || message.reply_message?.text);
         if (!url) return message.send('_Invalid URL_');
         const res = await twitter(url);
         const video = await getBuffer(res.downloads.url);
@@ -58,8 +55,7 @@ bot(
         desc: 'Downloads Tiktok Videos',
     },
     async (message, match) => {
-        const inputText = match || message.reply_message?.text;
-        const url = extractUrlFromString(inputText);
+        const url = extractUrlFromString(match || message.reply_message?.text);
         if (!url) return message.send('_Invalid URL_');
         const res = await tiktok(url);
         const video = await getBuffer(res.video.noWatermark);
@@ -74,8 +70,7 @@ bot(
         desc: 'Downloads Google Drive Documents',
     },
     async (message, match) => {
-        const inputText = match || message.reply_message?.text;
-        const url = extractUrlFromString(inputText);
+        const url = extractUrlFromString(match || message.reply_message?.text);
         if (!url) return message.send('_Invalid URL_');
         const res = await gdrivedl(url);
         const doc = await getBuffer(res.link);
