@@ -64,7 +64,7 @@ bot(
 		if (!match) return message.send('```Provide A Word to Define```');
 		const word = match.trim();
 		const res = await getJson(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-		return res && res.length > 0 ? message.send(`**${word}**: ${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}`) : message.send('```No definition found for this word.```');
+		return res && res.length > 0 ? message.send(`\`\`\`${word}:\n${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}\`\`\``) : message.send('```No definition found for this word.```');
 	},
 );
 
@@ -103,7 +103,8 @@ bot(
 	async message => {
 		const msg = await message.send('```Getting Quotes```');
 		const res = await getJson('https://zenquotes.io/api/random');
-		return msg.edit(`\`\`\`Quote: ${res.q}\nAuthor: ${res.a}\`\`\``);
+		const { q, a } = res[0];
+		return msg.edit(`\`\`\`Quote: ${q}\nAuthor: ${a}\`\`\``);
 	},
 );
 
