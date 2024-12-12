@@ -73,6 +73,6 @@ bot(
 		if (!url) return message.send('_Invaild Url_');
 		const res = await gdrivedl(url);
 		const doc = await getBuffer(res.link);
-		return await message.send(doc, { type: 'document', filename: res.name });
+		return await message.send(doc, { type: 'document', fileName: res.name });
 	},
 );
