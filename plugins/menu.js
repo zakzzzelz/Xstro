@@ -35,7 +35,7 @@ bot(
 			menuText += `│${nums}· ${cmd}\n`;
 			nums++;
 		});
-		menuText += `╰───────────\n`;
+		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
 
 		return await message.send(fancy(menuText.trim().trim().trim()), { contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
 	},
