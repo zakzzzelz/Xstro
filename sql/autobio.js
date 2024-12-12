@@ -56,7 +56,7 @@ export const autobioDBService = {
 export const placeholderService = {
 	async facts() {
 		try {
-			const res = await getJson(config.BASE_API_URL + '/api/facts');
+			const res = await getJson(config.XSTRO_API + '/api/facts');
 			return res.fact;
 		} catch (error) {
 			console.error('Failed to fetch facts:', error);
@@ -66,7 +66,7 @@ export const placeholderService = {
 
 	async quotes() {
 		try {
-			const res = await getJson(config.BASE_API_URL + '/api/quotes');
+			const res = await getJson(config.XSTRO_API + '/api/quotes');
 			return `${res.quote}\n_Author:_${res.author}`;
 		} catch (error) {
 			console.error('Failed to fetch quotes:', error);

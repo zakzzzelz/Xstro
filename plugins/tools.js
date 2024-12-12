@@ -26,7 +26,7 @@ bot(
 		const url = extractUrlFromString(match || message.reply_message?.text);
 		if (!url) return message.send('_No Url found_');
 		const msg = await message.send('*wait*');
-		const res = await getJson(`${config.BASE_API_URL}/api/shorten?url=${url}`);
+		const res = await getJson(`${config.XSTRO_API}/api/shorten?url=${url}`);
 		return await msg.edit(res.link);
 	},
 );
