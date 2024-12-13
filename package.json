@@ -42,5 +42,8 @@
 		"utils": "github:AstroX11/utils",
 		"xstro": "^1.1.8"
 	},
+	"publishConfig": {
+		"registry": "https://npm.pkg.github.com/"
+	},
 	"packageManager": "yarn@1.22.22"
 }
