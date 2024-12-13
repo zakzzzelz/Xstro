@@ -19,7 +19,7 @@ bot(
 		const READ_MORE = long.repeat(4000);
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ User: ${message.pushName}
-│ Mode: ${mode ? 'public' : 'private'}
+│ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
 │ Plugins: ${commands.length}
