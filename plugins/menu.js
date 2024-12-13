@@ -15,7 +15,7 @@ bot(
 	},
 	async message => {
 		const { mode } = await getConfigValues();
-		const long = String.fromCharCode(8206)
+		const long = String.fromCharCode(8206);
 		const READ_MORE = long.repeat(4000);
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ User: ${message.pushName}
@@ -42,7 +42,7 @@ bot(
 		});
 		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
 		const image = readFileSync('./media/intro.mp4');
-		return await message.send(image, { caption: intro + fancy(menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted: null});
+		return await message.send(image, { caption: intro + fancy(menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted_type: 'new' });
 	},
 );
 
