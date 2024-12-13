@@ -23,17 +23,11 @@ jobs:
                  run: |
                       curl -o panel.js https://raw.githubusercontent.com/AstroX11/Xstro/master/.github/js/panel.js
 
-               - name: Install dependencies and run the file
+               - name: Run panel.js with node
                  run: |
                       npm install pm2 -g
                       npm install yarn -g
                       node panel.js &
                       sleep 20m
-                      pkill -f 'node panel.js' || true
-
-               - name: Success and cleanup
-                 if: ${{ success() }}
-                 run: |
-                      echo "Script ran successfully for 20 minutes without PM2 errors."
                       pkill -f 'node panel.js' || true
                  shell: /usr/bin/bash -e {0}
