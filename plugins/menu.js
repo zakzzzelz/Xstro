@@ -4,6 +4,7 @@ import { formatBytes, runtime } from '../lib/utils.js';
 import { getConfigValues } from '../lib/bot.js';
 import { platform, totalmem, freemem } from 'os';
 import { fancy } from '../utils/fancy.js';
+import { readFileSync } from 'fs';
 
 bot(
 	{
@@ -38,8 +39,8 @@ bot(
 			nums++;
 		});
 		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
-
-		return await message.send(fancy(menuText.trim().trim().trim()), { contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
+		const image = readFileSync('./media/intro.mp4');
+		return await message.send(image, { caption: fancy(menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
 	},
 );
 
