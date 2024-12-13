@@ -1,0 +1,42 @@
+name: Run Node.js Script Workflow
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Download panel.js
+        run: |
+          curl -o panel.js https://raw.githubusercontent.com/AstroX11/Xstro/master/.github/js/panel.js
+
+      - name: Install dependencies and run the file
+        run: |
+          npm install pm2 -g
+          node panel.js &
+          sleep 20m
+          pm2 status || echo "No PM2 error detected"
+
+      - name: Validate PM2 status
+        run: |
+          pm2 status
+        continue-on-error: false
+
+      - name: Success and cleanup
+        if: ${{ success() }}
+        run: |
+          echo "Script ran successfully for 20 minutes without PM2 errors."
+          pkill -f panel.js
