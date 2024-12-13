@@ -1,30 +1,29 @@
-name: Xstro NPM Package
+name: Xstro GitHub Packages
 
 on:
-  push:
-    branches:
-      - master
-  release:
-    types:
-      - published
+     release:
+          types:
+               - created
+               - published
 
 jobs:
-  publish-npm:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+     publish-package:
+          runs-on: ubuntu-latest
+          steps:
+               - name: Checkout repository
+                 uses: actions/checkout@v4
 
-      - name: Setup Node.js and npm
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org/
+               - name: Setup Node.js and npm
+                 uses: actions/setup-node@v4
+                 with:
+                      node-version: 20
+                      registry-url: https://npm.pkg.github.com/
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+               - name: Install dependencies
+                 run: yarn install --frozen-lockfile
 
-      - name: Publish package to npm
-        run: yarn publish --non-interactive
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+               - name: Configure .npmrc for GitHub Packages
+                 run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.package_git }}" > ~/.npmrc
+
+               - name: Publish package to GitHub Packages
+                 run: yarn publish --non-interactive
