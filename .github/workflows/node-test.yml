@@ -19,15 +19,17 @@ jobs:
                  with:
                       node-version: '20'
 
+               - name: Install Global Dependencies
+                 run: |
+                      npm install pm2 -g
+                      npm install yarn -g
+                      npm install
+
                - name: Download panel.js
                  run: |
                       curl -o panel.js https://raw.githubusercontent.com/AstroX11/Xstro/master/.github/js/panel.js
 
-               - name: Run panel.js with node
+               - name: Run panel.js
                  run: |
-                      npm install pm2 -g
-                      npm install yarn -g
-                      node panel.js &
-                      sleep 20m
-                      pkill -f 'node panel.js' || true
-                 shell: /usr/bin/bash -e {0}
+                      node panel.js
+                 shell: bash
