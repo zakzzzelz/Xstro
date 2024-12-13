@@ -21,7 +21,7 @@ Get Session ID from render server.
 
 I’m not responsible for you messing around and getting your account banned. As long as you don’t modify the source code to fit your idiotic needs, you’re fine. But seriously, don’t go spamming others. I’m tired of repeating this.
 
-### DEPLOYMENT PLATFORMS
+### NODE JS DEPLOYMENT PLATFORMS
 
 #### Render Support
 
@@ -63,7 +63,7 @@ I have no Idea, Koyeb Banned Me.
 
 #### Offical Panel Support
 
-It's been long await jackass, Now Xstro Support's Panel deployment, on your panel you can create an `index.js` file or [Download the File Here](https://raw.githubusercontent.com/AstroX11/Xstro/refs/heads/master/.github/js/panel.js?raw=true) make sure it's on the root of your panel, the script automatically downloads and install Xstro to the panel without issue, guess what? I used my windows laptop which isn't linux and it's not panel to test it worked, crazy right at the idioticy. Okay If you can't download the file the code is below.
+It's been long await jackass, Now Xstro Support's Panel deployment, on your panel you can create an `index.js` file and make sure it's on the root of your panel, once done make sure to fill in the variables in the in the `CONFIG` constant, in must be in this format `SESSION_ID: 'Xstro_something'` do not remove the single quote, once you have done that then run the panel script, this will automatically install Xstro and all it's file, don't worry about error, check our workflow to see how xstro passess the panel test actions.
 
 ```javascript
 const { existsSync, writeFileSync } = require('node:fs');
