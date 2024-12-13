@@ -8,8 +8,9 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
+		if (!message.text) return;
 		if (!(await isSudo(message.sender, message.user))) return;
-		if (!message.text.startsWith('$ ')) return;
+		if (!message?.text?.startsWith('$ ')) return;
 
 		const code = message.text.slice(2).trim().replace(/\$\s*/g, '');
 
