@@ -15,7 +15,8 @@ bot(
 	},
 	async message => {
 		const { mode } = await getConfigValues();
-		const READ_MORE = '\n'.repeat(4000);
+		const long = String.fromCharCode(8206)
+		const READ_MORE = long.repeat(4000);
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ User: ${message.pushName}
 │ Mode: ${mode ? 'public' : 'private'}
