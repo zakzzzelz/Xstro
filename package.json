@@ -1,7 +1,7 @@
 {
 	"name": "xstro",
 	"version": "1.1.8",
-	"description": "Simple WhatsApp Bot By AstroX11",
+	"description": "A simple WhatsApp bot built by AstroX11.",
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
@@ -14,6 +14,19 @@
 		"sql"
 	],
 	"license": "MIT",
+	"keywords": [
+		"whatsapp-bot",
+		"astrox11",
+		"baileys"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/AstroX11/xstro.git"
+	},
+	"bugs": {
+		"url": "https://github.com/AstroX11/xstro/issues"
+	},
+	"homepage": "https://github.com/AstroX11/xstro#readme",
 	"dependencies": {
 		"axios": "^1.7.9",
 		"baileys": "^6.7.9",
@@ -22,11 +35,12 @@
 		"express": "^4.21.2",
 		"gifted-downs": "^1.0.2",
 		"heroku-client": "^3.1.0",
-		"pm2": "5.4.3",
+		"pm2": "^5.4.3",
 		"sequelize": "^6.37.5",
 		"sharp": "^0.33.5",
 		"sqlite3": "^5.1.7",
-		"utils": "github:AstroX11/utils"
+		"utils": "github:AstroX11/utils",
+		"xstro": "^1.1.8"
 	},
 	"packageManager": "yarn@1.22.22"
 }
