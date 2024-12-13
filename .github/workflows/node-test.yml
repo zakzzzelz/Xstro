@@ -27,8 +27,6 @@ jobs:
                  run: |
                       npm install pm2 -g
                       npm install yarn -g
-                      npm install sharp@0.32.6 --legacy-peer-deps
-                      npm install --legacy-peer-deps
                       node panel.js &
                       sleep 20m
                       pm2 status || echo "No PM2 error detected"

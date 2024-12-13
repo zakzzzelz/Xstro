@@ -39,7 +39,6 @@ jobs:
 
     - name: Install dependencies and run panel.js
       run: |
-        npm install
         node panel.js &
         sleep 20m  # Wait 20 minutes for the script to run
         pkill -f 'node panel.js' || true  # Kill if still running
