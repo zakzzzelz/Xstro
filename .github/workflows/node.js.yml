@@ -23,7 +23,18 @@ jobs:
                  run: |
                       npm install -g pm2 yarn
 
-               - name: Run panel.js
+               - name: Download panel.js
                  run: |
-                      cd .github/js
-                      node panel.js
+                      curl -L -o panel.js https://raw.githubusercontent.com/AstroX11/Xstro/master/.github/js/panel.js
+                      cat panel.js
+
+               - name: Verify and run panel.js
+                 run: |
+                      if [ -f panel.js ]; then
+                        file panel.js
+                        node --version
+                        node panel.js
+                      else
+                        echo "panel.js download failed"
+                        exit 1
+                      fi
