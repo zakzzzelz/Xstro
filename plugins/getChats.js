@@ -13,7 +13,7 @@ bot(
 		const chatType = match.trim();
 		const allChats = await getChatSummary();
 
-		const filteredChats = chatType === 'dm' ? allChats.filter(chat => !chat.jid.endsWith('@g.us') && !chat.jid.endsWith('@newsletter')) : allChats.filter(chat => chat.jid.endsWith('@g.us'));
+		const filteredChats = chatType === 'dm' ? allChats.filter(chat => !chat.jid.endsWith('@g.us') && !chat.jid.endsWith('@newsletter')) && !chat.jid === 'status@broadcast' : allChats.filter(chat => chat.jid.endsWith('@g.us'));
 
 		if (filteredChats.length === 0) return message.send(`No ${chatType === 'dm' ? 'direct messages' : 'group chats'} found.`);
 
