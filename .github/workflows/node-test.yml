@@ -27,7 +27,7 @@ jobs:
                  run: |
                       npm install pm2 -g
                       npm install yarn -g
-                      npm install --force
+                      npm install --legacy-peer-deps  # Allow legacy peer dependencies
                       node panel.js &
                       sleep 20m
                       pm2 status || echo "No PM2 error detected"
@@ -41,4 +41,5 @@ jobs:
                  if: ${{ success() }}
                  run: |
                       echo "Script ran successfully for 20 minutes without PM2 errors."
-                      pkill -f panel.js
+                      pkill -f 'node panel.js' || true
+                 shell: /usr/bin/bash -e {0}
