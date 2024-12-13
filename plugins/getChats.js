@@ -1,5 +1,5 @@
 import { bot } from '../lib/cmds.js';
-import { getChatSummary, getGroupMetadata } from '../sql/store.js';
+import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '../sql/store.js';
 
 bot(
 	{
@@ -34,5 +34,44 @@ bot(
 				  );
 
 		message.send(`\`\`\`${chatType.toUpperCase()} Chats:\n\n${formattedChats.join('\n\n')}\`\`\``, { mentions: mentionJids });
+	},
+);
+
+bot(
+	{
+		pattern: 'gactive',
+		isPublic: true,
+		isGroup: true,
+		desc: 'Return the Active Group Members from when the bot started running',
+	},
+	async message => {
+		const groupData = await getGroupMembersMessageCount(message.jid);
+		if (groupData.length === 0) return await message.send('No active members found.');
+		let responseMessage = '🏆 Most Active Group Members\n\n';
+		groupData.forEach((member, index) => {
+			responseMessage += `${index + 1}. ${member.name}\n`;
+			responseMessage += `   • Messages: ${member.messageCount}\n`;
+		});
+
+		await message.send(`\`\`\`${responseMessage}\`\`\``);
+	},
+);
+
+bot(
+	{
+		pattern: 'inactive',
+		isPublic: true,
+		isGroup: true,
+		desc: 'Get the inactive group members from a group',
+	},
+	async message => {
+		const groupData = await getInactiveGroupMembers(message.jid);
+		if (groupData.length === 0) return await message.reply('*📊 Inactive Members:* No inactive members found.');
+		let responseMessage = '📊 Inactive Members:\n\n';
+		responseMessage += `Total Inactive: ${groupData.length}\n\n`;
+		groupData.forEach((jid, index) => {
+			responseMessage += `${index + 1}. @${jid.split('@')[0]}\n`;
+		});
+		await message.send(`\`\`\`${responseMessage}\`\`\``, { mentions: groupData });
 	},
 );

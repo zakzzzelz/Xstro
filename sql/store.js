@@ -25,6 +25,34 @@ const messageDb = DATABASE.define(
 	},
 );
 
+const messageCountDb = DATABASE.define(
+	'messageCount',
+	{
+		jid: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		sender: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		count: {
+			type: DataTypes.INTEGER,
+			allowNull: false,
+			defaultValue: 0,
+		},
+	},
+	{
+		tableName: 'message_counts',
+		timestamps: true,
+		uniqueKeys: {
+			unique_sender_group: {
+				fields: ['jid', 'sender'],
+			},
+		},
+	},
+);
+
 const contactDb = DATABASE.define(
 	'contact',
 	{
@@ -218,4 +246,87 @@ const getGroupMetadata = async jid => {
 	};
 };
 
-export { saveContact, saveMessage, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata };
+/**
+ * Save or update message count for a specific sender in a group
+ * @param {Object} message - The message object
+ */
+const saveMessageCount = async message => {
+	const jid = message.key.remoteJid;
+	const sender = message.key.participant || message.sender;
+	if (!jid || !sender) return;
+	if (!isJidGroup(jid)) return;
+	const [record, created] = await messageCountDb.findOrCreate({
+		where: { jid, sender },
+		defaults: { count: 1 },
+	});
+
+	if (!created) {
+		await messageCountDb.increment('count', {
+			by: 1,
+			where: { jid, sender },
+		});
+	}
+};
+
+/**
+ * Get inactive group members (those with no message count record or zero messages)
+ * @param {string} jid - Group JID
+ * @returns {Promise<Array>} List of inactive participants
+ */
+const getInactiveGroupMembers = async jid => {
+	if (!isJidGroup(jid)) return [];
+
+	const groupMetadata = await getGroupMetadata(jid);
+	if (!groupMetadata) return [];
+
+	const inactiveMembers = await Promise.all(
+		groupMetadata.participants.map(async participant => {
+			const messageCount = await messageCountDb.findOne({
+				where: {
+					jid,
+					sender: participant.id,
+				},
+			});
+
+			// Return participant ID if no message count record exists or count is zero
+			return !messageCount || messageCount.count === 0 ? participant.id : null;
+		}),
+	);
+
+	return inactiveMembers.filter(member => member !== null);
+};
+
+/**
+ * Get group members ranked by message count
+ * @param {string} jid - Group JID
+ * @returns {Promise<Array>} Ranked list of participants by message count
+ */
+const getGroupMembersMessageCount = async jid => {
+	if (!isJidGroup(jid)) return [];
+	const messageCounts = await messageCountDb.findAll({
+		where: {
+			jid,
+			count: { [DATABASE.Sequelize.Op.gt]: 0 }, // Only non-zero counts
+		},
+		order: [['count', 'DESC']],
+		attributes: ['sender', 'count'],
+	});
+
+	const rankedMembers = await Promise.all(
+		messageCounts.map(async record => ({
+			sender: record.sender,
+			name: await getName(record.sender),
+			messageCount: record.count,
+		})),
+	);
+
+	return rankedMembers;
+};
+
+const saveMessageV1 = saveMessage;
+const saveMessageV2 = async message => {
+	await saveMessageV1(message);
+	await saveMessageCount(message);
+};
+
+export { saveContact, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata, saveMessageCount, getInactiveGroupMembers, getGroupMembersMessageCount, saveMessageV2 as saveMessage };
