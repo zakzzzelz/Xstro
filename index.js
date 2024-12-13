@@ -8,7 +8,7 @@ import DATABASE from './lib/database.js';
 
 dotenv.config();
 
-(async () => {
+export default async function startBot() {
 	console.log('XSTRO MD');
 	envlogger();
 	await loadFiles();
@@ -17,4 +17,5 @@ dotenv.config();
 	await connect();
 	const app = express().get('/', (_, r) => r.json({ alive: true }));
 	app.listen(process.env.PORT || 8000);
-})();
+}
+startBot();
