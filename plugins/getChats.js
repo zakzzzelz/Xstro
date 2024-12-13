@@ -8,7 +8,7 @@ bot(
 		desc: 'Get chats summary',
 	},
 	async (message, match, { prefix }) => {
-		if (!match) return message.send(`Usage: ${prefix}getchats dm/gc`);
+		if (!match) return message.send(`\`\`\`Usage: ${prefix}getchats dm/gc\`\`\``);
 
 		const chatType = match.trim();
 		const allChats = await getChatSummary();
