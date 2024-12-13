@@ -15,7 +15,8 @@ bot(
 	},
 	async message => {
 		const { mode } = await getConfigValues();
-		let menuText = `╭─── ${config.BOT_INFO.split(';')[1]} ────
+		const READ_MORE = '\n'.repeat(4000);
+		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ User: ${message.pushName}
 │ Mode: ${mode ? 'public' : 'private'}
 │ Uptime: ${runtime(process.uptime())}
@@ -25,7 +26,7 @@ bot(
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}
 │ Date: ${new Date().toLocaleTimeString('en-US', { timeZone: config.TIME_ZONE })}
-╰─────────────`;
+╰─────────────\`\`\`\n${READ_MORE}`;
 
 		let nums = 1;
 		const allCommands = commands
@@ -33,14 +34,14 @@ bot(
 			.map(cmd => cmd.pattern.toString().toUpperCase().split(/\W+/)[2])
 			.sort();
 
-		menuText += `\n\n${`COMMANDS LIST V${config.VERSION}`} \n\n╭─────────\n`;
+		let menuText = `\n\n${`COMMANDS LIST V${config.VERSION}`} \n\n╭─────────\n`;
 		allCommands.forEach(cmd => {
 			menuText += `│${nums}· ${cmd}\n`;
 			nums++;
 		});
 		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
 		const image = readFileSync('./media/intro.mp4');
-		return await message.send(image, { caption: fancy(menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
+		return await message.send(image, { caption: fancy(intro + menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
 	},
 );
 
