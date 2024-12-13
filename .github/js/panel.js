@@ -1,6 +1,6 @@
-const { existsSync, writeFileSync } = require('node:fs');
-const { spawnSync } = require('node:child_process');
-const path = require('node:path');
+import { existsSync, writeFileSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
+import { join, resolve } from 'node:path';
 
 const CONFIG = {
 	SESSION_ID: 'XSTRO_42_46_64', // Put your Session ID Here kid!
@@ -28,7 +28,7 @@ function cloneRepository() {
 
 function writeEnvFile() {
 	try {
-		writeFileSync(path.join(CONFIG.PROJECT_DIR, '.env'), `SESSION_ID=${CONFIG.SESSION_ID}`);
+		writeFileSync(join(CONFIG.PROJECT_DIR, '.env'), `SESSION_ID=${CONFIG.SESSION_ID}`);
 	} catch (error) {
 		handleError('Failed to write .env file', error);
 	}
@@ -37,7 +37,7 @@ function writeEnvFile() {
 function installDependencies() {
 	console.log('Installing dependencies...');
 	const installResult = spawnSync('yarn', ['install'], {
-		cwd: path.resolve(CONFIG.PROJECT_DIR),
+		cwd: resolve(CONFIG.PROJECT_DIR),
 		stdio: 'inherit',
 		shell: true, // Ensure compatibility with Windows
 	});
@@ -49,7 +49,7 @@ function installDependencies() {
 function startApplication() {
 	console.log('Starting application...');
 	const startResult = spawnSync('pm2', ['start', CONFIG.MAIN_SCRIPT, '--name', CONFIG.APP_NAME, '--attach'], {
-		cwd: path.resolve(CONFIG.PROJECT_DIR),
+		cwd: resolve(CONFIG.PROJECT_DIR),
 		stdio: 'inherit',
 		shell: true, // Ensure compatibility with Windows
 	});
@@ -57,7 +57,7 @@ function startApplication() {
 	if (startResult.error || startResult.status !== 0) {
 		console.error('PM2 start failed. Falling back to Node.js.');
 		const nodeResult = spawnSync('node', [CONFIG.MAIN_SCRIPT], {
-			cwd: path.resolve(CONFIG.PROJECT_DIR),
+			cwd: resolve(CONFIG.PROJECT_DIR),
 			stdio: 'inherit',
 			shell: true,
 		});
