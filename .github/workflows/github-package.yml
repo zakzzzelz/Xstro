@@ -1,11 +1,14 @@
-name: Xstro NPM Package
+name: xstro GitHub Packages
 
 on:
   push:
     branches:
       - master
+    tags:
+      - '*'
   release:
     types:
+      - created
       - published
 
 jobs:
@@ -24,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Publish package to npm
+      - name: Publish package to GitHub Packages
         run: yarn publish --non-interactive
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+          NODE_AUTH_TOKEN: ${{ secrets.package_git }}
