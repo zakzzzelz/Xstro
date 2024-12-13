@@ -3,7 +3,7 @@ name: Run Node.js Script Workflow
 on:
      push:
           branches:
-               - main
+               - master
      workflow_dispatch:
 
 jobs:
@@ -29,12 +29,7 @@ jobs:
                       npm install yarn -g
                       node panel.js &
                       sleep 20m
-                      pm2 status || echo "No PM2 error detected"
-
-               - name: Validate PM2 status
-                 run: |
-                      pm2 status
-                 continue-on-error: false
+                      pkill -f 'node panel.js' || true
 
                - name: Success and cleanup
                  if: ${{ success() }}
