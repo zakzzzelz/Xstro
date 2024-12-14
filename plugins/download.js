@@ -115,6 +115,7 @@ bot(
 					renderLargerThumbnail: true,
 				},
 			},
+			quoted_type: 'new',
 		});
 	},
 );
