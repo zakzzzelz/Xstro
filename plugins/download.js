@@ -102,16 +102,16 @@ bot(
 		await msg.edit(`*${songName}*\n*downloaded*`);
 		await msg.react('✅');
 		const audio = await getBuffer(audio_url.downloadUrl);
-		await message.send(audio, {
+		return await message.send(audio, {
 			type: 'audio',
 			contextInfo: {
 				isForwarded: false,
 				externalAdReply: {
-					title: 'Audio Message',
-					body: 'Sent an audio',
+					title: songName,
+					body: config.CAPTION,
 					mediaType: 1,
 					thumbnail: await getBuffer(Image),
-					sourceUrl: 'https://example.com/audio',
+					sourceUrl: 'https://whatsapp.com/channel/0029VazuKvb7z4kbLQvbn50x',
 					renderLargerThumbnail: true,
 				},
 			},
