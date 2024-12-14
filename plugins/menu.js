@@ -17,6 +17,7 @@ bot(
 		const long = String.fromCharCode(8206);
 		const READ_MORE = long.repeat(4000);
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
+│ Prefix: ${config.PREFIX}
 │ User: ${message.pushName}
 │ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}
@@ -34,12 +35,12 @@ bot(
 			.map(cmd => cmd.pattern.toString().toUpperCase().split(/\W+/)[2])
 			.sort();
 
-		let menuText = `\n\n${`COMMANDS LIST V${config.VERSION}`} \n\n╭─────────\n`;
+		let menuText = `\n\n${`\`\`\`XSTRO PATCH V${config.VERSION}\`\`\``} \n\n╭─────────\n`;
 		allCommands.forEach(cmd => {
 			menuText += `│\`\`\`${nums}· ${cmd}\`\`\`\n`;
 			nums++;
 		});
-		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
+		menuText += `╰───────────\n\n> ${config.CAPTION}`;
 		const image = readFileSync('./media/intro.mp4');
 		return await message.send(image, { caption: intro + menuText, gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted_type: 'new' });
 	},
