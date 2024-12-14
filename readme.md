@@ -3,6 +3,9 @@
 <p>Xstro is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used Axios to keep it lightweight and fast. All you need is a decent internet connection from your server.
 Powered By Baileys Open Source WhatsApp Web API</p>
 
+![npm](https://img.shields.io/npm/dm/xstro)
+
+
 ## SETUP
 
 ### Fork the Repo

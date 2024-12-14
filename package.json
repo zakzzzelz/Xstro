@@ -27,6 +27,7 @@
 		"url": "https://github.com/AstroX11/xstro/issues"
 	},
 	"homepage": "https://github.com/AstroX11/xstro#readme",
+	"author": "AstroX11 <danielfx0012@gmail.com>",
 	"dependencies": {
 		"axios": "^1.7.9",
 		"baileys": "^6.7.9",
@@ -39,11 +40,7 @@
 		"sequelize": "^6.37.5",
 		"sharp": "^0.33.5",
 		"sqlite3": "^5.1.7",
-		"xstro": "^1.1.8",
 		"xstro-utils": "^1.0.0"
-	},
-	"publishConfig": {
-		"registry": "https://npm.pkg.github.com/"
 	},
 	"packageManager": "yarn@1.22.22"
 }
