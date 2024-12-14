@@ -1,5 +1,5 @@
 import { bot } from '../lib/cmds.js';
-import { extractUrlFromString } from 'utils';
+import { extractUrlFromString } from 'xstro-utils';
 import { installPlugin, removePluginByName, listPlugins } from '../utils/plugins.js';
 
 bot(

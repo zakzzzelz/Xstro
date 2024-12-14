@@ -1,4 +1,4 @@
-import { getBuffer, getJson } from 'utils';
+import { getBuffer, getJson } from 'xstro-utils';
 import { bot } from '../lib/cmds.js';
 import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from '../lib/xstro.js';
 import config from '../config.js';

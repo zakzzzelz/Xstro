@@ -3967,6 +3967,14 @@ ws@^8.13.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==
 
+xstro-utils@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/xstro-utils/-/xstro-utils-1.0.0.tgz#7561f36e3bff93420aae83c0e2cf9435d17a2d95"
+  integrity sha512-/vek+ZzWax2SlPRgV7/w8CATbmdaB06aaWebBMUf+uspNweSiJT12N2SC2k+h4S2xhgrviYEXzVUq1M+/x/0lw==
+  dependencies:
+    file-type "^19.6.0"
+    node-fetch "^3.3.2"
+
 xstro@^1.1.8:
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/xstro/-/xstro-1.1.8.tgz#fd90e647bab6934dfb674ce35ec4d49e09b30c53"

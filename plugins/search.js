@@ -1,5 +1,5 @@
 import { bot } from '../lib/cmds.js';
-import { getBuffer, getJson } from 'utils';
+import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
 	{

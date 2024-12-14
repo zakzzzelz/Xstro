@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { getRandom } from '../lib/utils.js';
-import { getJson } from 'utils';
+import { getJson } from 'xstro-utils';
 import config from '../config.js';
 
 export async function facebook(videoUrl) {

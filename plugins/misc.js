@@ -1,4 +1,4 @@
-import { getJson } from 'utils';
+import { getJson } from 'xstro-utils';
 import { bot } from '../lib/cmds.js';
 
 bot(

@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
-import { getJson } from 'utils';
+import { getJson } from 'xstro-utils';
 import DATABASE from '../lib/database.js';
 
 const AutoBioDB = DATABASE.define(
