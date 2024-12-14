@@ -3,7 +3,6 @@ import { commands, bot } from '../lib/cmds.js';
 import { formatBytes, runtime } from '../lib/utils.js';
 import { getConfigValues } from '../lib/bot.js';
 import { platform, totalmem, freemem } from 'os';
-import { fancy } from '../utils/fancy.js';
 import { readFileSync } from 'fs';
 
 bot(
@@ -37,12 +36,12 @@ bot(
 
 		let menuText = `\n\n${`COMMANDS LIST V${config.VERSION}`} \n\n╭─────────\n`;
 		allCommands.forEach(cmd => {
-			menuText += `│${nums}· ${cmd}\n`;
+			menuText += `│\`\`\`${nums}· ${cmd}\`\`\`\n`;
 			nums++;
 		});
 		menuText += `╰───────────\n\n> Some Command Are Hidden from the Menu`;
 		const image = readFileSync('./media/intro.mp4');
-		return await message.send(image, { caption: intro + fancy(menuText), gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted_type: 'new' });
+		return await message.send(image, { caption: intro + menuText, gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted_type: 'new' });
 	},
 );
 
