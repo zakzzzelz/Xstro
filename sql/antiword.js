@@ -33,33 +33,25 @@ const AntiWord = DATABASE.define(
  * @returns {Promise<Object>} - Result of the operation
  */
 async function setAntiWordStatus(jid, action) {
-	try {
-		const [record, created] = await AntiWord.findOrCreate({
-			where: { jid },
-			defaults: {
-				jid,
-				status: action,
-				words: [],
-			},
-		});
+	if (!jid) return;
+	const [record, created] = await AntiWord.findOrCreate({
+		where: { jid },
+		defaults: {
+			jid,
+			status: action,
+			words: [],
+		},
+	});
 
-		if (!created) {
-			record.status = action;
-			await record.save();
-		}
-
-		return {
-			success: true,
-			message: `Antiword ${action ? 'enabled' : 'disabled'} for group ${jid}`,
-		};
-	} catch (error) {
-		console.error('Error setting antiword status:', error);
-		return {
-			success: false,
-			message: 'Failed to set antiword status',
-			error: error.message,
-		};
+	if (!created) {
+		record.status = action;
+		await record.save();
 	}
+
+	return {
+		success: true,
+		message: `Antiword ${action ? 'enabled' : 'disabled'} for group ${jid}`,
+	};
 }
 
 /**
@@ -69,36 +61,28 @@ async function setAntiWordStatus(jid, action) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function addAntiWords(jid, words) {
-	try {
-		const [record, created] = await AntiWord.findOrCreate({
-			where: { jid },
-			defaults: {
-				jid,
-				status: false,
-				words: words,
-			},
-		});
+	if (!jid || !words) return;
+	const [record, created] = await AntiWord.findOrCreate({
+		where: { jid },
+		defaults: {
+			jid,
+			status: false,
+			words: words,
+		},
+	});
 
-		if (!created) {
-			// Remove duplicates and merge with existing words
-			const uniqueWords = [...new Set([...record.words, ...words])];
-			record.words = uniqueWords;
-			await record.save();
-		}
-
-		return {
-			success: true,
-			message: `Added ${words.length} antiwords to group ${jid}`,
-			addedWords: words,
-		};
-	} catch (error) {
-		console.error('Error adding antiwords:', error);
-		return {
-			success: false,
-			message: 'Failed to add antiwords',
-			error: error.message,
-		};
+	if (!created) {
+		// Remove duplicates and merge with existing words
+		const uniqueWords = [...new Set([...record.words, ...words])];
+		record.words = uniqueWords;
+		await record.save();
 	}
+
+	return {
+		success: true,
+		message: `Added ${words.length} antiwords to group ${jid}`,
+		addedWords: words,
+	};
 }
 
 /**
@@ -108,33 +92,25 @@ async function addAntiWords(jid, words) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function removeAntiWords(jid, words) {
-	try {
-		const record = await AntiWord.findOne({ where: { jid } });
+	if (!jid) return;
+	const record = await AntiWord.findOne({ where: { jid } });
 
-		if (!record) {
-			return {
-				success: false,
-				message: `No antiwords found for group ${jid}`,
-			};
-		}
-
-		// Remove specified words from the existing list
-		record.words = record.words.filter(word => !words.includes(word));
-		await record.save();
-
-		return {
-			success: true,
-			message: `Removed ${words.length} antiwords from group ${jid}`,
-			removedWords: words,
-		};
-	} catch (error) {
-		console.error('Error removing antiwords:', error);
+	if (!record) {
 		return {
 			success: false,
-			message: 'Failed to remove antiwords',
-			error: error.message,
+			message: `No antiwords found for group ${jid}`,
 		};
 	}
+
+	// Remove specified words from the existing list
+	record.words = record.words.filter(word => !words.includes(word));
+	await record.save();
+
+	return {
+		success: true,
+		message: `Removed ${words.length} antiwords from group ${jid}`,
+		removedWords: words,
+	};
 }
 
 /**
@@ -143,30 +119,33 @@ async function removeAntiWords(jid, words) {
  * @returns {Promise<Object>} - Antiwords and status for the group
  */
 async function getAntiWords(jid) {
-	try {
-		const record = await AntiWord.findOne({ where: { jid } });
+	if (!jid) return;
+	const record = await AntiWord.findOne({ where: { jid } });
 
-		if (!record) {
-			return {
-				success: true,
-				status: false,
-				words: [],
-			};
-		}
-
+	if (!record) {
 		return {
 			success: true,
-			status: record.status,
-			words: record.words,
-		};
-	} catch (error) {
-		console.error('Error retrieving antiwords:', error);
-		return {
-			success: false,
-			message: 'Failed to retrieve antiwords',
-			error: error.message,
+			status: false,
+			words: [],
 		};
 	}
+
+	return {
+		success: true,
+		status: record.status,
+		words: record.words,
+	};
 }
 
-export { AntiWord, setAntiWordStatus, addAntiWords, removeAntiWords, getAntiWords };
+/**
+ * Check if antiword is enabled for a specific group
+ * @param {string} jid - Group JID
+ * @returns {Promise<boolean>} - True if enabled, false otherwise
+ */
+async function isAntiWordEnabled(jid) {
+	if (!jid) return;
+	const record = await AntiWord.findOne({ where: { jid } });
+	return record ? record.status : false;
+}
+
+export { AntiWord, setAntiWordStatus, addAntiWords, removeAntiWords, getAntiWords, isAntiWordEnabled };
