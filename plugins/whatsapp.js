@@ -1,7 +1,9 @@
 import { bot } from '../lib/cmds.js';
-import { loadMessage } from '../sql/store.js';
+import { getName, loadMessage } from '../sql/store.js';
 import { numtoId } from '../lib/utils.js';
 import { smsg } from '../lib/message.js';
+import config from '../config.js';
+import { getBuffer } from 'xstro-utils';
 
 bot(
 	{
@@ -303,5 +305,37 @@ bot(
 		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = false;
 		await message.client.star(jid, messages, star);
+	},
+);
+
+bot(
+	{
+		pattern: 'owner',
+		isPublic: true,
+		desc: 'Get Bot Owner',
+	},
+	async message => {
+		const name = await getName(message.user);
+		const img = await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4');
+		const vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:' + name + '\n' + 'ORG:' + config.BOT_INFO.split(';')[0] + '\n' + 'TEL;type=CELL;type=VOICE;waid=' + message.user.split('@')[0] + ':' + message.user.split('@')[0] + '\n' + 'END:VCARD';
+
+		return await message.client.sendMessage(message.jid, {
+			contacts: {
+				displayName: name,
+				contacts: [{ vcard }],
+			},
+			contextInfo: {
+				forwardingScore: 999,
+				isForwarded: true,
+				externalAdReply: {
+					title: config.BOT_INFO.split(';')[0],
+					body: config.BOT_INFO.split(';')[1],
+					mediaType: 1,
+					thumbnail: img,
+					sourceUrl: 'https://github.com/AstroX11/Xstro',
+					renderLargerThumbnail: true,
+				},
+			},
+		});
 	},
 );
