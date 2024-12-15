@@ -4,58 +4,6 @@ import { numtoId } from '../lib/utils.js';
 
 bot(
 	{
-		pattern: 'add',
-		isPublic: false,
-		isGroup: true,
-		desc: 'Adds a user to the group',
-	},
-	async (message, match) => {
-		if (!message.isAdmin) return message.send('You are not an Admin');
-		if (!message.isBotAdmin) return message.send('I am not an Admin');
-		const jid = await message.thatJid(match);
-		try {
-			await message.client.groupParticipantsUpdate(message.jid, [jid], 'add');
-			return message.send(`_@${jid.split('@')[0]} added_`, { mentions: [jid] });
-		} catch {
-			const inviteLink = await message.client.groupInviteCode(message.jid);
-			await message.send(jid, {
-				text: `_@${message.sender.split('@')[0]} wants to add you to the group._\n\n*_Join here: https://chat.whatsapp.com/${inviteLink}_*`,
-				mentions: [message.sender],
-			});
-			return message.send("_Can't add user, invite sent in DM_");
-		}
-	},
-);
-
-bot(
-	{
-		pattern: 'advertise',
-		isPublic: false,
-		isGroup: true,
-		desc: 'Create and Share Advertisement Messages to all Your Groups',
-	},
-	async (message, match) => {
-		const adMsg = match || message.reply_message?.text;
-		if (!adMsg) return message.send('_I need text to advertise!_');
-		const groups = await message.client.groupFetchAllParticipating();
-		const groupDetails = Object.values(groups);
-		const groupIds = groupDetails.map(group => group.id);
-		await message.send(`_Broadcasting to ${groupIds.length} groups. Estimated completion in ${groupIds.length * 1.5} seconds_`);
-		const broadcastMessage = `\`\`\`*Broadcast*\n\n*Message:*\`\`\`` + adMsg;
-		const messageOptions = {
-			forwardingScore: 9999999,
-			isForwarded: true,
-		};
-		for (const groupId of groupIds) {
-			await delay(1500);
-			await message.client.sendMessage(groupId, { text: broadcastMessage, contextInfo: messageOptions });
-		}
-		return await message.send(`_Advertised Message to ${groupIds.length} Groups_`);
-	},
-);
-
-bot(
-	{
 		pattern: 'ckick',
 		isPublic: false,
 		isGroup: true,
