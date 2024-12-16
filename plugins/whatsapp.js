@@ -4,6 +4,7 @@ import { numtoId } from '../lib/utils.js';
 import { smsg } from '../lib/message.js';
 import config from '../config.js';
 import { getBuffer } from 'xstro-utils';
+import { isJidGroup } from 'baileys';
 
 bot(
 	{
@@ -188,7 +189,9 @@ bot(
 		let jid;
 		if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
-		} else if (match) {
+		} else if (isJidGroup(match)) {
+			jid = match;
+		} else if (!isJidGroup(match)) {
 			jid = numtoId(match);
 		}
 		if (!jid) return message.send('_You have to provide a number/tag someone_');
