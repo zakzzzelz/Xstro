@@ -98,19 +98,19 @@ bot(
 		if (!match) return message.send('_Give me A Search Query!_');
 		const msg = await message.send('*downloading*');
 		const res = await play(encodeURIComponent(match.trim()));
-		const { songName, Image, audio_url } = res;
-		await msg.edit(`*${songName}*\n*downloaded*`);
+		const { title, downloadUrl } = res;
+		await msg.edit(`*${title}*\n*downloaded*`);
 		await msg.react('✅');
-		const audio = await getBuffer(audio_url.downloadUrl);
+		const audio = await getBuffer(downloadUrl);
 		return await message.send(audio, {
 			type: 'audio',
 			contextInfo: {
 				isForwarded: false,
 				externalAdReply: {
-					title: songName,
+					title: title,
 					body: config.CAPTION,
 					mediaType: 1,
-					thumbnail: await getBuffer(Image),
+					thumbnail: await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4'),
 					sourceUrl: 'https://whatsapp.com/channel/0029VazuKvb7z4kbLQvbn50x',
 					renderLargerThumbnail: true,
 				},
