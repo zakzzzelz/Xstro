@@ -1,4 +1,4 @@
-import config from '../config.js';
+const XSTRO_API = 'https://xstro-api-ec3ad328e76f.herokuapp.com';
 import { extractUrlFromString, getJson } from 'xstro-utils';
 import { bot } from '../lib/cmds.js';
 import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '../lib/xstro.js';
@@ -26,7 +26,7 @@ bot(
 		const url = extractUrlFromString(match || message.reply_message?.text);
 		if (!url) return message.send('_No Url found_');
 		const msg = await message.send('*wait*');
-		const res = await getJson(`${config.XSTRO_API}/api/shorten?url=${url}`);
+		const res = await getJson(`${XSTRO_API}/api/tiny?url=${url}`);
 		return await msg.edit(res.link);
 	},
 );
