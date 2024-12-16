@@ -342,3 +342,27 @@ bot(
 		});
 	},
 );
+
+//===============================addded gjid
+
+bot(
+	{
+	  pattern: 'gjid',
+	  isPublic: true,
+	  desc: 'Get JID of the Current Group',
+	},
+	async (message) => {
+	  try {
+
+		const groupJid = message.chat || message.jid;
+		if (!groupJid.endsWith('@g.us')) {
+		  await message.send('_This command can only be used in groups._');
+		  return;
+		}
+		await message.send(`Group JID: ${groupJid}`);
+	  } catch (error) {
+		console.error('Error fetching group JID:', error);
+		await message.send('_Failed to fetch the group JID. Please try again._');
+	  }
+	}
+  );
