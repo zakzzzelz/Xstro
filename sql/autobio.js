@@ -3,7 +3,7 @@ import config from '../config.js';
 import { getJson } from 'xstro-utils';
 import DATABASE from '../lib/database.js';
 
-const XSTRO_API = 'https://xstro-api-ec3ad328e76f.herokuapp.com';
+const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 
 const AutoBioDB = DATABASE.define(
 	'autobio',

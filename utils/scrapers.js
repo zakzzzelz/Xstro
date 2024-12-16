@@ -2,7 +2,8 @@ import axios from 'axios';
 import * as cheerio from 'cheerio';
 import { getRandom } from '../lib/utils.js';
 import { getJson } from 'xstro-utils';
-import config from '../config.js';
+
+const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 
 export async function facebook(videoUrl) {
 	const gifted = await import('gifted-downs');
@@ -134,5 +135,5 @@ export async function gdrivedl(url) {
 }
 
 export async function play(query) {
-	return await getJson(`${config.XSTRO_API}/api/play?query=${query}`);
+	return await getJson(`${XSTRO_API}/api/play?query=${query}`);
 }
