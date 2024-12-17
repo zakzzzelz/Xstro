@@ -96,18 +96,16 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me A Search Query!_');
-		const msg = await message.send('*downloading*');
-		const res = await play(encodeURIComponent(match.trim()));
-		const { title, downloadUrl } = res;
-		await msg.edit(`*${title}*\n*downloaded*`);
+		const res = await play(match);
+		const { url } = res;
 		await msg.react('✅');
-		const audio = await getBuffer(downloadUrl);
+		const audio = await getBuffer(url);
 		return await message.send(audio, {
 			type: 'audio',
 			contextInfo: {
 				isForwarded: false,
 				externalAdReply: {
-					title: title,
+					title: 'xsᴛʀᴏ sᴏɴɢ ᴅʟ',
 					body: config.CAPTION,
 					mediaType: 1,
 					thumbnail: await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4'),
