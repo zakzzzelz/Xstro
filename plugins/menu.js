@@ -22,7 +22,6 @@ bot(
 │ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
-│ Plugins: ${commands.length}
 │ Memory: ${formatBytes(totalmem() - freemem())}
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}

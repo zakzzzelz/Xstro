@@ -3,14 +3,14 @@ import { getConfig, updateConfig } from '../sql/config.js';
 
 bot(
 	{
-		pattern: 'myconfig',
+		pattern: 'config',
 		isPublic: false,
 		desc: 'Get Database configurations',
 	},
 	async message => {
 		const db_list = await getConfig();
 		const { autoRead, autoStatusRead, cmdReact, mode } = db_list;
-		return await message.send(`\`\`\`DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'public' : 'private'}\`\`\``);
+		return await message.send(`\`\`\`DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'private' : 'public'}\`\`\``);
 	},
 );
 
