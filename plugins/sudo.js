@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { getSudo, delSudo, addSudo, isSudo } from '../sql/sudo.js';
+import { bot } from '#lib/cmds';
+import { getSudo, delSudo, addSudo, isSudo } from '#sql/sudo';
 
 bot(
 	{

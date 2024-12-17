@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '../sql/store.js';
+import { bot } from '#lib/cmds';
+import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '#sql/store';
 
 bot(
 	{

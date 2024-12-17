@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { isLatest, updateBot, updateHerokuApp, upgradeBot } from '../utils/updater.js';
+import { bot } from '#lib/cmds';
+import { isLatest, updateBot, updateHerokuApp, upgradeBot } from '#utils/updater';
 
 bot(
 	{

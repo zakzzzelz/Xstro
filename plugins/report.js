@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { numtoId } from '../lib/utils.js';
+import { bot } from '#lib/cmds';
+import { numtoId } from '#lib/utils';
 
 bot(
 	{

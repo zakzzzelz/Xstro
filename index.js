@@ -1,10 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import connect from './lib/client.js';
-import loadFiles from './lib/utils.js';
-import getSession from './lib/session.js';
-import envlogger from './lib/logger.js';
-import DATABASE from './lib/database.js';
+import connect from '#lib/client';
+import loadFiles from '#lib/utils';
+import getSession from '#lib/session';
+import envlogger from '#lib/logger';
+import DATABASE from '#lib/database';
 
 dotenv.config();
 

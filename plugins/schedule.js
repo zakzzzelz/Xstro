@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import Scheduler from '../sql/scheduler.js';
+import { bot } from '#lib/cmds';
+import Scheduler from '#sql/scheduler';
 
 const convertTo24Hour = timeStr => {
 	const timeRegex = /^(0?[1-9]|1[0-2]):([0-5][0-9])(am|pm)$/i;

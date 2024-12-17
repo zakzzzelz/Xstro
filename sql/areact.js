@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import DATABASE from '../lib/database.js';
+import DATABASE from '#lib/database';
 
 const AutoReact = DATABASE.define(
 	'AReact',

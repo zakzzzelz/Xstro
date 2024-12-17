@@ -1,4 +1,4 @@
-import { bot } from '../lib/cmds.js';
+import { bot } from '#lib/cmds';
 import { readFileSync } from 'fs';
 
 bot(

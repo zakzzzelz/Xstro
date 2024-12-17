@@ -1,6 +1,6 @@
 import { extractUrlFromString, getBuffer } from 'xstro-utils';
-import { bot } from '../lib/cmds.js';
-import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '../utils/scrapers.js';
+import { bot } from '#lib/cmds';
+import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '#utils/scrapers';
 import config from '../config.js';
 
 bot(

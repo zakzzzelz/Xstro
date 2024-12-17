@@ -1,6 +1,6 @@
-import { bot } from '../lib/cmds.js';
+import { bot } from '#lib/cmds';
 import { inspect } from 'util';
-import { isSudo } from '../sql/sudo.js';
+import { isSudo } from '#sql/sudo';
 
 bot(
 	{

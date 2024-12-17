@@ -1,4 +1,4 @@
-import { bot } from '../lib/cmds.js';
+import { bot } from '#lib/cmds';
 import { delay } from 'baileys';
 
 bot(

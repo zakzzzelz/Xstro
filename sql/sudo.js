@@ -1,8 +1,8 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
 import { jidNormalizedUser, areJidsSameUser } from 'baileys';
-import { numtoId } from '../lib/utils.js';
-import DATABASE from '../lib/database.js';
+import { numtoId } from '#lib/utils';
+import DATABASE from '#lib/database';
 
 const SudoDB = DATABASE.define(
 	'Sudo',

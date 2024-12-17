@@ -1,6 +1,6 @@
-import { bot } from '../lib/cmds.js';
+import { bot } from '#lib/cmds';
 import config from '../config.js';
-import { aliveMessage, setAliveMsg } from '../sql/alive.js';
+import { aliveMessage, setAliveMsg } from '#sql/alive';
 
 bot(
 	{

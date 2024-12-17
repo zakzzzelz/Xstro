@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { addWarn, getWarn, resetWarn } from '../sql/warn.js';
+import { bot } from '#lib/cmds';
+import { addWarn, getWarn, resetWarn } from '#sql/warn';
 import config from '../config.js';
 
 const { WARN_COUNT } = config;

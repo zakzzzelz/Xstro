@@ -1,4 +1,4 @@
-import DATABASE from '../lib/database.js';
+import DATABASE from '#lib/database';
 import { DataTypes } from 'sequelize';
 
 const AutoKick = DATABASE.define(

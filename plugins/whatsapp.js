@@ -1,7 +1,7 @@
-import { bot } from '../lib/cmds.js';
-import { getName, loadMessage } from '../sql/store.js';
-import { numtoId } from '../lib/utils.js';
-import { smsg } from '../lib/message.js';
+import { bot } from '#lib/cmds';
+import { getName, loadMessage } from '#sql/store';
+import { numtoId } from '#lib/utils';
+import { smsg } from '#lib/message';
 import config from '../config.js';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';

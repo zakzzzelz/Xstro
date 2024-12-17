@@ -1,7 +1,7 @@
 import { isJidGroup } from 'baileys';
-import { isSudo } from '../sql/sudo.js';
+import { isSudo } from '#sql/sudo';
 import config from '../config.js';
-import { getAntilink, incrementWarningCount, resetWarningCount } from '../sql/antilink.js';
+import { getAntilink, incrementWarningCount, resetWarningCount } from '#sql/antilink';
 
 const { WARN_COUNT } = config;
 

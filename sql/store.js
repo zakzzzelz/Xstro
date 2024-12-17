@@ -1,6 +1,6 @@
 import { isJidGroup } from 'baileys';
 import { DataTypes } from 'sequelize';
-import DATABASE from '../lib/database.js';
+import DATABASE from '#lib/database';
 
 const messageDb = DATABASE.define(
 	'message',

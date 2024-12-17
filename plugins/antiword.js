@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '../sql/antiword.js';
+import { bot } from '#lib/cmds';
+import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '#sql/antiword';
 
 bot(
 	{

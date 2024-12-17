@@ -4,6 +4,12 @@
 	"description": "A simple WhatsApp bot built by AstroX11.",
 	"main": "index.js",
 	"type": "module",
+	"imports": {
+		"#lib/*": "./lib/*.js",
+		"#bot/*": "./bot/*.js",
+		"#sql/*": "./sql/*.js",
+		"#utils/*": "./utils/*.js"
+	},
 	"scripts": {
 		"start": "pm2 start ecosystem.config.cjs --attach",
 		"stop": "pm2 stop ecosystem.config.cjs"

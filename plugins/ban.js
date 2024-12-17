@@ -1,6 +1,6 @@
-import { bot } from '../lib/cmds.js';
-import { addBan, getBanned, removeBan } from '../sql/ban.js';
-import { isSudo } from '../sql/sudo.js';
+import { bot } from '#lib/cmds';
+import { addBan, getBanned, removeBan } from '#sql/ban';
+import { isSudo } from '#sql/sudo';
 
 bot(
 	{

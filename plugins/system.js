@@ -1,7 +1,6 @@
-import { execSync } from 'child_process';
 import { performance } from 'perf_hooks';
-import { bot } from '../lib/cmds.js';
-import { manageProcess, runtime } from '../lib/utils.js';
+import { bot } from '#lib/cmds';
+import { manageProcess, runtime } from '#lib/utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
 

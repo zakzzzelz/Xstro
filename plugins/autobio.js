@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { autobioDBService, placeholderService } from '../sql/autobio.js';
+import { bot } from '#lib/cmds';
+import { autobioDBService, placeholderService } from '#sql/autobio';
 
 let autobioInterval;
 

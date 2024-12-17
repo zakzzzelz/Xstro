@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
 import { getJson } from 'xstro-utils';
-import DATABASE from '../lib/database.js';
+import DATABASE from '#lib/database';
 
 const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 

@@ -1,7 +1,7 @@
 const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 import { extractUrlFromString, getJson } from 'xstro-utils';
-import { bot } from '../lib/cmds.js';
-import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '../lib/xstro.js';
+import { bot } from '#lib/cmds';
+import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '#lib/xstro';
 
 bot(
 	{

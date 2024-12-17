@@ -1,6 +1,6 @@
-import { bot } from '../lib/cmds.js';
-import { getAfkMessage, setAfkMessage, delAfkMessage } from '../sql/afk.js';
-import { isSudo } from '../sql/sudo.js';
+import { bot } from '#lib/cmds';
+import { getAfkMessage, setAfkMessage, delAfkMessage } from '#sql/afk';
+import { isSudo } from '#sql/sudo';
 
 const afkTrack = {};
 

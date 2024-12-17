@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { getConfig, updateConfig } from '../sql/config.js';
+import { bot } from '#lib/cmds';
+import { getConfig, updateConfig } from '#sql/config';
 
 bot(
 	{

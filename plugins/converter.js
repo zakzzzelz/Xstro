@@ -1,6 +1,6 @@
 import { getBuffer, getJson } from 'xstro-utils';
-import { bot } from '../lib/cmds.js';
-import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from '../lib/xstro.js';
+import { bot } from '#lib/cmds';
+import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from '#lib/xstro';
 import config from '../config.js';
 
 bot(

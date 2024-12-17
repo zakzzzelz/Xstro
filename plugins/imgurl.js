@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { uploadFile } from '../lib/xstro.js';
+import { bot } from '#lib/cmds';
+import { uploadFile } from '#lib/xstro';
 
 bot(
 	{

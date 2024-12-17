@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import config from '../config.js';
-import { runtime } from '../lib/utils.js';
-import DATABASE from '../lib/database.js';
+import { runtime } from '#lib/utils';
+import DATABASE from '#lib/database';
 import { placeholderService } from './autobio.js';
 
 const AliveDB = DATABASE.define(

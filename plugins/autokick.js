@@ -1,5 +1,5 @@
-import { bot } from '../lib/cmds.js';
-import { addToAutoKick, removeFromAutoKick, getAutoKickList, isInAutoKickList } from '../sql/akick.js';
+import { bot } from '#lib/cmds';
+import { addToAutoKick, removeFromAutoKick, getAutoKickList, isInAutoKickList } from '#sql/akick';
 
 bot(
 	{

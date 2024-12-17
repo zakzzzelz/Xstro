@@ -1,6 +1,6 @@
-import { bot } from '../lib/cmds.js';
+import { bot } from '#lib/cmds';
 import { delay } from 'baileys';
-import { numtoId } from '../lib/utils.js';
+import { numtoId } from '#lib/utils';
 
 bot(
 	{
