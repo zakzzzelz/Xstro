@@ -25,7 +25,7 @@ const AliveDB = DATABASE.define(
 
 const getAliveMsg = async () => {
 	const msg = await AliveDB.findOne();
-	return msg?.message || `@user ${config.BOT_INFO.split(';')[0]} is alive`;
+	return msg?.message || `@user ${config.BOT_INFO.split(';')[1]} is alive`;
 };
 
 const setAliveMsg = async text => {

@@ -9,8 +9,8 @@ bot(
 	},
 	async message => {
 		const db_list = await getConfig();
-		const { autoRead, autoStatusRead, cmdReact, mode } = db_list;
-		return await message.send(`\`\`\`DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'private' : 'public'}\`\`\``);
+		const { autoRead, autoStatusRead, cmdReact, mode, PREFIX } = db_list;
+		return await message.send(`\`\`\`DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'private' : 'public'}\nPrefix: ${PREFIX}\`\`\``);
 	},
 );
 
@@ -96,5 +96,19 @@ bot(
 
 		await updateConfig('cmdReact', newValue);
 		return await message.send(`_CmdRead set to ${newValue ? 'on' : 'off'}._`);
+	},
+);
+
+bot(
+	{
+		pattern: 'setprefix',
+		isPublic: false,
+		desc: 'Setup bot prefix',
+	},
+	async (message, match, { prefix }) => {
+		const newValue = match;
+		if (!newValue) return await message.send(`${prefix}setprefix ,`);
+		await updateConfig('PREFIX', newValue);
+		return await message.send(`_Prefix set to "${newValue}"_`);
 	},
 );

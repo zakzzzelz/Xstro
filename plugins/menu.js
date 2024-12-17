@@ -13,11 +13,11 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		const { mode } = await getConfigValues();
+		const { mode, PREFIX } = await getConfigValues();
 		const long = String.fromCharCode(8206);
 		const READ_MORE = long.repeat(4000);
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
-│ Prefix: ${config.PREFIX}
+│ Prefix: ${PREFIX}
 │ User: ${message.pushName}
 │ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}

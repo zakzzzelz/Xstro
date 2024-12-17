@@ -34,6 +34,11 @@ const CONFIG_CMDS = DATABASE.define(
 			allowNull: false,
 			defaultValue: true,
 		},
+		PREFIX: {
+			type: DataTypes.STRING,
+			allowNull: false,
+			defaultValue: '.',
+		},
 	},
 	{
 		tableName: 'configs',
@@ -42,19 +47,20 @@ const CONFIG_CMDS = DATABASE.define(
 );
 
 async function updateConfig(field, value) {
-	const boolValue = !!value;
+	const updatedValue = field === 'PREFIX' ? value : !!value; // Treat PREFIX as a string
 	let [config, created] = await CONFIG_CMDS.findOrCreate({
-		where: { id: 1 }, // Ensure a specific record is targeted
+		where: { id: 1 },
 		defaults: {
 			autoRead: false,
 			autoStatusRead: false,
 			cmdReact: true,
 			cmdRead: false,
 			mode: false,
+			PREFIX: '.',
 		},
 	});
 
-	await config.update({ [field]: boolValue });
+	await config.update({ [field]: updatedValue });
 
 	return config;
 }
@@ -68,6 +74,7 @@ async function getConfig() {
 				cmdReact: config.cmdReact,
 				cmdRead: config.cmdRead,
 				mode: config.mode,
+				PREFIX: config.PREFIX,
 		  }
 		: {
 				autoRead: false,
@@ -75,6 +82,7 @@ async function getConfig() {
 				cmdReact: true,
 				cmdRead: false,
 				mode: true,
+				PREFIX: '.',
 		  };
 }
 
