@@ -43,6 +43,7 @@
 		"gifted-downs": "^1.0.2",
 		"heroku-client": "^3.1.0",
 		"pm2": "^5.4.3",
+		"proxy-agent": "^6.5.0",
 		"sequelize": "^6.37.5",
 		"sharp": "^0.33.5",
 		"sqlite3": "^5.1.7",
