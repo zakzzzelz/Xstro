@@ -1,7 +1,7 @@
 import { extractUrlFromString, getBuffer } from 'xstro-utils';
 import { bot } from '#lib/cmds';
-import { facebook, gdrivedl, instagram, play, tiktok, twitter } from '#utils/scrapers';
-import config from '../config.js';
+import { fancy } from '#utils/fancy';
+import { facebook, gdrivedl, instagram, tiktok, twitter, youtube } from '#utils/scrapers';
 
 bot(
 	{
@@ -90,29 +90,36 @@ bot(
 
 bot(
 	{
-		pattern: 'play',
-		isPublic: false,
-		desc: 'Downloads Music from search query',
+		pattern: 'ytv',
+		isPublic: true,
+		desc: 'Downloads A Youtube Video',
 	},
 	async (message, match) => {
-		if (!match) return message.send('_Give me A Search Query!_');
-		const res = await play(match);
-		console.log(res);
-		const audio = await getBuffer(res.url);
-		return await message.send(audio, {
-			type: 'audio',
-			contextInfo: {
-				isForwarded: true,
-				externalAdReply: {
-					title: 'xsᴛʀᴏ sᴏɴɢ ᴅʟ',
-					body: config.CAPTION,
-					mediaType: 1,
-					thumbnail: await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4'),
-					sourceUrl: 'https://whatsapp.com/channel/0029VazuKvb7z4kbLQvbn50x',
-					renderLargerThumbnail: true,
-				},
-			},
-			quoted_type: 'new',
-		});
+		const input = match || message.reply_message?.text;
+		if (!input) return message.send('_Invalid URL_');
+		const url = extractUrlFromString(input);
+		if (!url) return message.send('_Invalid URL_');
+		const res = await youtube(url, { ytmp4: true });
+		const { link, thumbnail, title } = res;
+		const video = await getBuffer(link);
+		return await message.send(video, { contextInfo: { isForwarded: true, externalAdReply: { title: fancy(`Xstro youtube downloader`), body: title, mediaType: 1, thumbnail: await getBuffer(thumbnail), sourceUrl: 'https://whatsapp.com/channel/0029VazuKvb7z4kbLQvbn50x', renderLargerThumbnail: true } } });
+	},
+);
+
+bot(
+	{
+		pattern: 'yta',
+		isPublic: true,
+		desc: 'Downloads A Youtube Audio',
+	},
+	async (message, match) => {
+		const input = match || message.reply_message?.text;
+		if (!input) return message.send('_Invalid URL_');
+		const url = extractUrlFromString(input);
+		if (!url) return message.send('_Invalid URL_');
+		const res = await youtube(url, { ytmp3: true });
+		const { link, thumbnail, title } = res;
+		const audio = await getBuffer(link);
+		return await message.send(audio, { contextInfo: { isForwarded: true, externalAdReply: { title: title, body: title, mediaType: 1, thumbnail: await getBuffer(thumbnail), sourceUrl: 'https://whatsapp.com/channel/0029VazuKvb7z4kbLQvbn50x', renderLargerThumbnail: true } } });
 	},
 );

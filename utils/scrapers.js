@@ -134,6 +134,14 @@ export async function gdrivedl(url) {
 	});
 }
 
-export async function play(query) {
-	return await getJson(`${XSTRO_API}/api/play?query=${query}`);
+export async function youtube(url = '', type = {}) {
+	if (type.ytmp4) {
+		const res = await getJson(`${XSTRO_API}/api/ytmp4?url=${encodeURIComponent(url.trim())}`);
+		const { link, durationLabel, thumbnail, title } = res;
+		return { link, durationLabel, thumbnail, title };
+	} else if (type.ytmp3) {
+		const res = await getJson(`${XSTRO_API}/api/ytmp3?url=${encodeURIComponent(url.trim())}`);
+		const { link, thumbnail } = res;
+		return { link, thumbnail };
+	}
 }
