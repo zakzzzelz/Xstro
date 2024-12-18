@@ -1,6 +1,6 @@
 import { getBuffer, getJson } from 'xstro-utils';
 import { bot } from '#lib/cmds';
-import { convertToOpus, flipMedia, generatePdf, toBlackVideo, toSticker } from '#lib/xstro';
+import { convertToOpus, flipMedia, generatePdf, StickerToPhoto, toBlackVideo, toSticker } from '#lib/xstro';
 import config from '../config.js';
 
 bot(
@@ -116,5 +116,20 @@ bot(
 		if (!text) return message.send('_Give Me to convert to pdf_');
 		const doc = await generatePdf(text.trim());
 		return await message.send(doc, { type: 'document', fileName: config.BOT_INFO.split(';')[1] || 'xstro' });
+	},
+);
+
+bot(
+	{
+		pattern: 'photo',
+		isPublic: true,
+		desc: 'Converts Sticker to Photo',
+	},
+	async message => {
+		if (!message.reply_message?.sticker) return message.send('_Reply A Sticker_');
+		const sticker = await message.download();
+		console.log(sticker)
+		const image = await StickerToPhoto(sticker);
+		return await message.send(image);
 	},
 );
