@@ -11,14 +11,6 @@
 		}
 	],
 	"env": {
-		"HEROKU_API_KEY": {
-			"description": "Heroku Account Api Key",
-			"required": true
-		},
-		"HEROKU_APP_NAME": {
-			"description": "Heroku App Name, Must Be the same above else you can't upgrade",
-			"required": true
-		},
 		"SESSION_ID": {
 			"description": "Session ID for authentication or tracking.",
 			"required": true
@@ -36,11 +28,6 @@
 		"STICKER_PACK": {
 			"description": "Set the bot sticker meta data",
 			"value": "Astro;Xstro",
-			"required": false
-		},
-		"PREFIX": {
-			"description": "Set the bot handler, you must choose one, multi prefix not supported",
-			"value": ".",
 			"required": false
 		}
 	}

@@ -1,5 +1,5 @@
 import { bot } from '#lib/cmds';
-import { isLatest, updateBot, updateHerokuApp, upgradeBot } from '#utils/updater';
+import { isLatest, updateBot, upgradeBot } from '#utils/updater';
 
 bot(
 	{
@@ -33,19 +33,5 @@ bot(
 		await message.send('```Upgrading Bot Files```');
 		await upgradeBot();
 		return message.send('```Upgrade Success```');
-	},
-);
-
-bot(
-	{
-		pattern: 'redeploy',
-		isPublic: false,
-		desc: 'Fully Updates & Redeploy Heroku App',
-		type: 'system',
-	},
-	async message => {
-		if (!process.env.HEROKU_APP_NAME && !process.env.HEROKU_API_KEY) return message.send('invaild heroku app, make sure you are running on heroku with the correct variables');
-		message.send('Redeploying Heroku Dyno\n5mins');
-		await updateHerokuApp();
 	},
 );

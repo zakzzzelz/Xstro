@@ -1,5 +1,4 @@
 import { execSync } from 'child_process';
-import Heroku from 'heroku-client';
 
 export async function updateBot() {
 	try {
@@ -47,19 +46,3 @@ export async function isLatest() {
 		};
 	}
 }
-
-export const updateHerokuApp = async () => {
-	const heroku = new Heroku({ token: process.env.HEROKU_API_KEY });
-	const isLatestVersion = await isLatest();
-	if (!isLatestVersion) return '```You already have the latest version installed.```';
-	const app = await heroku.get(`/apps/${process.env.HEROKU_APP_NAME}`);
-	const gitUrl = app.git_url.replace('https://', `https://api:${process.env.HEROKU_API_KEY}@`);
-
-	try {
-		execSync('git remote add heroku ' + gitUrl);
-	} catch {
-		execSync('git remote set-url heroku ' + gitUrl);
-	}
-	execSync('git push heroku master');
-	return '```Bot updated. Restarting.```';
-};
