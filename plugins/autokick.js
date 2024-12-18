@@ -1,40 +1,45 @@
 import { bot } from '#lib/cmds';
-import { addToAutoKick, removeFromAutoKick, getAutoKickList, isInAutoKickList } from '#sql/akick';
+import { addAKick, delKick, getKicks } from '#sql/akick';
+
+const ACTIONS = {
+	async add(message, groupId, jid) {
+		const added = await addAKick(groupId, jid);
+		return added ? `_User added to auto-kick list._ @${jid.split('@')[0]}` : `_User is already on the list._ @${jid.split('@')[0]}`;
+	},
+
+	async del(message, groupId, jid) {
+		const deleted = await delKick(groupId, jid);
+		return deleted ? `_User removed from auto-kick list._ @${jid.split('@')[0]}` : `_User was not on the list._ @${jid.split('@')[0]}`;
+	},
+
+	async get(message, groupId) {
+		const kicks = await getKicks(groupId);
+		if (kicks.length > 0) {
+			return `_Users in auto-kick list:_\n${kicks.map(k => `• @$${k.userJid.split('@')[0]}`).join('\n')}`, { mentions: [kicks] };
+		}
+		return '_No users found in the auto-kick list._';
+	},
+};
 
 bot(
 	{
-		pattern: 'autokick',
+		pattern: 'akick',
 		isPublic: false,
 		isGroup: true,
-		desc: 'Setup autokick to automatically kick losers from the group',
+		desc: 'AutoKicks a member from the group.',
 	},
 	async (message, match) => {
+		if (!message.isAdmin) return message.send('```You are not an Admin```');
+		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
+
+		const [action, ...rest] = match?.toLowerCase().split(' ') || [];
 		const groupId = message.jid;
-		const userId = await message.thatJid(match);
+		const jid = await message.thatJid();
 
-		const [action] = match.split(' ');
-
-		if ((action === 'add' || action === 'del') && !userId) return await message.send('```AutoKick Command Usage:\n' + '• `.autokick add @user` - Add user to autokick list\n' + '• `.autokick del @user` - Remove user from autokick list\n' + '• `.autokick get` - View current autokick list```');
-
-		if (action === 'add') {
-			const isAlreadyInList = await isInAutoKickList(groupId, userId);
-			if (isAlreadyInList) return await message.send('_User is already in the autokick list_');
-
-			const added = await addToAutoKick(groupId, userId);
-			if (added) await message.send(`_User added to autokick list_`);
-		} else if (action === 'del') {
-			const removed = await removeFromAutoKick(groupId, userId);
-			if (removed) await message.send(`_User removed from autokick list_`);
-		} else if (action === 'get') {
-			const kickList = await getAutoKickList(groupId);
-			if (kickList && kickList.length > 0) {
-				const formattedList = kickList.map(jid => `• @${jid.split('@')[0]}`).join('\n');
-				await message.send(`\`\`\`Current AutoKick List:\n ${formattedList}\`\`\``, { mentions: kickList });
-			} else {
-				await message.send('*AutoKick list is empty*');
-			}
-		} else {
-			await message.send('```' + '• Use `.autokick add @user`\n' + '• Use `.autokick del @user`\n' + '• Use `.autokick get````');
+		if (ACTIONS[action]) {
+			const response = await ACTIONS[action](message, groupId, jid);
+			return message.send(response);
 		}
+		return message.send('_Invalid action! Use add, del, or get._');
 	},
 );

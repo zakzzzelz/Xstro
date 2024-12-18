@@ -1,92 +1,71 @@
 import DATABASE from '#lib/database';
 import { DataTypes } from 'sequelize';
 
-const AutoKick = DATABASE.define(
+const AutoKickDB = DATABASE.define(
 	'AutoKick',
 	{
 		groupJid: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			primaryKey: true,
 		},
-		participantJid: {
+		userJid: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			primaryKey: true,
 		},
 	},
 	{
+		indexes: [
+			{
+				unique: true,
+				fields: ['groupJid', 'userJid'],
+			},
+		],
 		tableName: 'autokick',
 		timestamps: false,
 	},
 );
 
 /**
- * Add a participant to the autokick list for a specific group
- * @param {string} groupJid - The group's unique identifier
- * @param {string} participantJid - The participant's unique identifier to be added to autokick
- * @returns {Promise<boolean>} - Returns true if successfully added, false otherwise
+ * Adds a user to the AutoKick list.
+ * @param {string} groupJid - Group's JID.
+ * @param {string} userJid - User's JID.
+ * @returns {Promise<boolean>} - True if added successfully, false if already exists.
  */
-const addToAutoKick = async (groupJid, participantJid) => {
-	// Check if the entry already exists to prevent duplicates
-	const [instance, created] = await AutoKick.findOrCreate({
-		where: {
-			groupJid,
-			participantJid,
-		},
-	});
-
-	return created;
+export const addAKick = async (groupJid, userJid) => {
+	try {
+		await AutoKickDB.create({ groupJid, userJid });
+		return true;
+	} catch (error) {
+		if (error.name === 'SequelizeUniqueConstraintError') {
+			return false;
+		}
+		throw error;
+	}
 };
 
 /**
- * Remove a participant from the autokick list
- * @param {string} groupJid - The group's unique identifier
- * @param {string} participantJid - The participant's unique identifier to be removed
- * @returns {Promise<boolean>} - Returns true if successfully removed, false otherwise
+ * Deletes a user from the AutoKick list.
+ * @param {string} groupJid - Group's JID.
+ * @param {string} userJid - User's JID.
+ * @returns {Promise<number>} - The number of rows deleted.
  */
-const removeFromAutoKick = async (groupJid, participantJid) => {
-	const deletedCount = await AutoKick.destroy({
-		where: {
-			groupJid,
-			participantJid,
-		},
+export const delKick = async (groupJid, userJid) => {
+	const result = await AutoKickDB.destroy({
+		where: { groupJid, userJid },
 	});
-
-	return deletedCount > 0;
+	return result;
 };
 
 /**
- * Get the list of participants in the autokick list for a specific group
- * @param {string} groupJid - The group's unique identifier
- * @returns {Promise<string[]|false>} - Returns array of participant JIDs or false if no entries found
+ * Retrieves AutoKick entries for a specific group or user.
+ * @param {string} groupJid - Group's JID.
+ * @param {string} [userJid] - User's JID (optional).
+ * @returns {Promise<Array>} - An array of kick records.
  */
-const getAutoKickList = async groupJid => {
-	const kickList = await AutoKick.findAll({
-		where: { groupJid },
-		attributes: ['participantJid'],
-	});
+export const getKicks = async (groupJid, userJid = null) => {
+	const whereClause = { groupJid };
+	if (userJid) whereClause.userJid = userJid;
 
-	if (kickList.length === 0) return false;
-
-	return kickList.map(entry => entry.participantJid);
+	const kicks = await AutoKickDB.findAll({ where: whereClause });
+	return kicks.map(kick => kick.get());
 };
-
-/**
- * Check if a specific participant is in the autokick list
- * @param {string} groupJid - The group's unique identifier
- * @param {string} participantJid - The participant's unique identifier to check
- * @returns {Promise<boolean>} - Returns true if participant is in autokick list, false otherwise
- */
-const isInAutoKickList = async (groupJid, participantJid) => {
-	const count = await AutoKick.count({
-		where: {
-			groupJid,
-			participantJid,
-		},
-	});
-
-	return count > 0;
-};
-
-export { AutoKick, addToAutoKick, removeFromAutoKick, getAutoKickList, isInAutoKickList };

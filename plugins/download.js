@@ -97,13 +97,12 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('_Give me A Search Query!_');
 		const res = await play(match);
-		const { url } = res;
-		await msg.react('✅');
-		const audio = await getBuffer(url);
+		console.log(res);
+		const audio = await getBuffer(res.url);
 		return await message.send(audio, {
 			type: 'audio',
 			contextInfo: {
-				isForwarded: false,
+				isForwarded: true,
 				externalAdReply: {
 					title: 'xsᴛʀᴏ sᴏɴɢ ᴅʟ',
 					body: config.CAPTION,

@@ -425,7 +425,6 @@ bot(
 	{
 		pattern: 'newgc',
 		isPublic: false,
-		isGroup: true,
 		desc: 'Creates A New Group',
 	},
 	async (message, match) => {
