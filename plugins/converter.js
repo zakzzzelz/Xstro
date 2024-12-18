@@ -128,7 +128,6 @@ bot(
 	async message => {
 		if (!message.reply_message?.sticker) return message.send('_Reply A Sticker_');
 		const sticker = await message.download();
-		console.log(sticker)
 		const image = await StickerToPhoto(sticker);
 		return await message.send(image);
 	},
