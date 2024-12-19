@@ -65,6 +65,6 @@ bot(
 			if (desc) menu += `${desc}\n\n`;
 		});
 
-		return await message.send(`\`\`\`${menu.trim().trim().trim()}\`\`\``);
+		return await message.sendPaymentMessage(message.jid, 5000, 'NGN', menu, message.user);
 	},
 );
