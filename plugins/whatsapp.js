@@ -15,7 +15,7 @@ bot(
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A ViewOnce_');
 		const media = await message.download();
-		return await message.send(media);
+		return await message.forward(media);
 	},
 );
 

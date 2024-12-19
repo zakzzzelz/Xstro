@@ -19,7 +19,16 @@ const handleTextMessage = async (conn, msg, sendTo, notificationText, isGroup, u
 };
 
 const handleMediaMessage = async (conn, msg, sendTo) => {
-	await conn.relayMessage(sendTo, msg.message, { quoted: msg });
+    const antideletedMsg = JSON.parse(JSON.stringify(msg.message));
+    const messageType = Object.keys(antideletedMsg)[0];
+    if (antideletedMsg[messageType]) {
+        antideletedMsg[messageType].contextInfo = {
+            stanzaId: msg.key.id,
+            participant: msg.sender,
+            quotedMessage: msg.message
+        };
+    }
+    await conn.relayMessage(sendTo, antideletedMsg, {});
 };
 
 export const AntiDelete = async (conn, updates) => {

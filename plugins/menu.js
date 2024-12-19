@@ -39,9 +39,9 @@ bot(
 			menuText += `│\`\`\`${nums}· ${cmd}\`\`\`\n`;
 			nums++;
 		});
-		menuText += `╰───────────\n\n> ${config.CAPTION}`;
+		menuText += `╰───────────\n`;
 		const image = readFileSync('./media/intro.mp4');
-		return await message.send(image, { caption: intro + menuText, gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } }, quoted_type: 'new' });
+		return await message.send(image, { caption: intro + menuText, gifPlayback: true, contextInfo: { forwardingScore: 1, isForwarded: true, forwardedNewsletterMessageInfo: { newsletterJid: '120363376441437991@newsletter', newsletterName: 'xsᴛʀᴏ ᴍᴅ' } } });
 	},
 );
 

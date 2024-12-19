@@ -24,10 +24,10 @@ Maintainers
 © 2024 Xstro 
     \`\`\``;
 
-//will add new media  called repo logo dont change this code
+		//will add new media  called repo logo dont change this code
 		const media = readFileSync('./media/intro.mp4');
 
-		// Send message with media and newsletter context info its looks batter 
+		// Send message with media and newsletter context info its looks batter
 		return await message.send(media, {
 			caption: adMessage,
 			gifPlayback: true,
@@ -39,7 +39,6 @@ Maintainers
 					newsletterName: 'xsᴛʀᴏ ᴍᴅ',
 				},
 			},
-			quoted_type: 'new',
 		});
 	},
 );
