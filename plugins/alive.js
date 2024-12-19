@@ -1,5 +1,5 @@
 import { bot } from '#lib/cmds';
-import config from '../config.js';
+import config from '#config';
 import { aliveMessage, setAliveMsg } from '#sql/alive';
 
 bot(

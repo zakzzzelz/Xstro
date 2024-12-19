@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import config from '../config.js';
+import config from '#config';
 import { runtime } from '#lib/utils';
 import DATABASE from '#lib/database';
 import { placeholderService } from './autobio.js';

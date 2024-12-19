@@ -1,4 +1,4 @@
-import config from '../config.js';
+import config from '#config';
 import { commands, bot } from '#lib/cmds';
 import { formatBytes, runtime } from '#lib/utils';
 import { getConfigValues } from '#lib/bot';

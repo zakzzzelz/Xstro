@@ -2,7 +2,7 @@ import { bot } from '#lib/cmds';
 import { getName, loadMessage } from '#sql/store';
 import { numtoId } from '#lib/utils';
 import { smsg } from '#lib/message';
-import config from '../config.js';
+import config from '#config';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';
 

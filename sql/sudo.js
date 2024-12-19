@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import config from '../config.js';
+import config from '#config';
 import { jidNormalizedUser, areJidsSameUser } from 'baileys';
 import { numtoId } from '#lib/utils';
 import DATABASE from '#lib/database';
