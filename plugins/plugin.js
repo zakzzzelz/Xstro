@@ -1,6 +1,6 @@
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 import { extractUrlFromString } from 'xstro-utils';
-import { installPlugin, removePluginByName, listPlugins } from '#utils/plugins';
+import { installPlugin, removePluginByName, listPlugins } from '#utils';
 
 bot(
 	{

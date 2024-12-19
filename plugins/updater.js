@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { isLatest, updateBot, upgradeBot } from '#utils/updater';
+import { bot } from '#lib';
+import { isLatest, updateBot, upgradeBot } from '#utils';
 
 bot(
 	{

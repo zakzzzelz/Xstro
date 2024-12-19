@@ -1,6 +1,6 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
-import { getRandom } from '#lib/utils';
+import { getRandom } from '#lib';
 import { getJson } from 'xstro-utils';
 
 const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';

@@ -1,6 +1,5 @@
 import { isJidGroup } from 'baileys';
-import { isSudo } from '#sql/sudo';
-import { getAntiWords, isAntiWordEnabled } from '#sql/antiword';
+import { isSudo,getAntiWords, isAntiWordEnabled } from '#sql';
 
 export async function AntiWord(msg) {
 	if (!isJidGroup(msg.from)) return;

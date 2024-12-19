@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
-import DATABASE from '#lib/database';
+import { DATABASE } from '#lib';
 
-const WarnDB = DATABASE.define(
+export const WarnDB = DATABASE.define(
 	'Warn',
 	{
 		jid: {
@@ -55,4 +55,3 @@ export const isWarned = async jid => {
 	return user ? user.warnings > 0 : false;
 };
 
-export default WarnDB;

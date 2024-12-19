@@ -1,6 +1,5 @@
 import { isJidGroup } from 'baileys';
-import { loadMessage } from '#sql/store';
-import { getAnti } from '#sql/antidelete';
+import { loadMessage, getAnti } from '#sql';
 
 const handleTextMessage = async (conn, msg, sendTo, notificationText, isGroup, update) => {
 	const messageContent = msg.message?.conversation || msg.message?.extendedTextMessage?.text || 'Unknown content';
@@ -19,16 +18,16 @@ const handleTextMessage = async (conn, msg, sendTo, notificationText, isGroup, u
 };
 
 const handleMediaMessage = async (conn, msg, sendTo) => {
-    const antideletedMsg = JSON.parse(JSON.stringify(msg.message));
-    const messageType = Object.keys(antideletedMsg)[0];
-    if (antideletedMsg[messageType]) {
-        antideletedMsg[messageType].contextInfo = {
-            stanzaId: msg.key.id,
-            participant: msg.sender,
-            quotedMessage: msg.message
-        };
-    }
-    await conn.relayMessage(sendTo, antideletedMsg, {});
+	const antideletedMsg = JSON.parse(JSON.stringify(msg.message));
+	const messageType = Object.keys(antideletedMsg)[0];
+	if (antideletedMsg[messageType]) {
+		antideletedMsg[messageType].contextInfo = {
+			stanzaId: msg.key.id,
+			participant: msg.sender,
+			quotedMessage: msg.message,
+		};
+	}
+	await conn.relayMessage(sendTo, antideletedMsg, {});
 };
 
 export const AntiDelete = async (conn, updates) => {

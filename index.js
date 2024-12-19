@@ -1,18 +1,18 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import connect from '#lib/client';
-import loadFiles from '#lib/utils';
-import getSession from '#lib/session';
-import envlogger from '#lib/logger';
-import DATABASE from '#lib/database';
+import { config } from 'dotenv';
+import { DATABASE } from '#lib/database';
+import { envlogger, loadFiles, getSession, connect, commands } from '#lib';
 
-dotenv.config();
+config();
 
 export default async function startBot() {
 	console.log('XSTRO MD');
-	envlogger();
-	await loadFiles();
+	console.log('Syncing Database');
 	await DATABASE.sync();
+	envlogger();
+	console.log('Loading Files');
+	await loadFiles();
+	console.log('Connecting to Session');
 	await getSession();
 	await connect();
 	const app = express().get('/', (_, r) => r.json({ alive: true }));

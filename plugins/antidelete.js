@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { getAnti, setAnti, initializeAntiDeleteSettings } from '#sql/antidelete';
+import { bot } from '#lib';
+import { getAnti, setAnti, initializeAntiDeleteSettings } from '#sql';
 initializeAntiDeleteSettings();
 
 bot(

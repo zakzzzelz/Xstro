@@ -1,6 +1,5 @@
-import { bot } from '#lib/cmds';
-import { addBan, getBanned, removeBan } from '#sql/ban';
-import { isSudo } from '#sql/sudo';
+import { bot } from '#lib';
+import { addBan, getBanned, removeBan,isSudo } from '#sql';
 
 bot(
 	{

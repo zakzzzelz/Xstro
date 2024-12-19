@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { setAntiSpam, getAntiSpamMode } from '#sql/antispam';
+import { bot } from '#lib';
+import { setAntiSpam, getAntiSpamMode } from '#sql';
 import { isJidGroup } from 'baileys';
 
 bot(

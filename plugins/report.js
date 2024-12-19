@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { numtoId } from '#lib/utils';
+import { bot } from '#lib';
+import { numtoId } from '#lib';
 
 bot(
 	{

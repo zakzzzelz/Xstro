@@ -9,7 +9,7 @@ const config = {
 	WARN_COUNT: process.env.WARN_COUNT || 3,
 	CAPTION: 'ʙʏ xsᴛʀᴏ ᴍᴅ 𝟸𝟶𝟸𝟺',
 	TIME_ZONE: process.env.TZ || process.env.TIME_ZONE || 'Africa/Lagos',
-	VERSION: '1.1.8',
+	VERSION: '1.1.9',
 };
 
 export default config;

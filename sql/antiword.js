@@ -1,4 +1,4 @@
-import DATABASE from '#lib/database';
+import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
 
 const AntiWord = DATABASE.define(

@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { setAntilink, getAntilink, removeAntilink } from '#sql/antilink';
+import { bot } from '#lib';
+import { setAntilink, getAntilink, removeAntilink } from '#sql';
 
 bot(
 	{

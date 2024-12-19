@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
-import { bot } from '#lib/cmds';
-import { manageProcess, runtime } from '#lib/utils';
+import { bot } from '#lib';
+import { manageProcess, runtime } from '#lib';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
 

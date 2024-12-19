@@ -1,6 +1,6 @@
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 import config from '#config';
-import { aliveMessage, setAliveMsg } from '#sql/alive';
+import { aliveMessage, setAliveMsg } from '#sql';
 
 bot(
 	{

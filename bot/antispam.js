@@ -1,5 +1,4 @@
-import { getAntiSpamMode } from '#sql/antispam';
-import { isSudo } from '#sql/sudo';
+import { getAntiSpamMode,isSudo } from '#sql';
 import { isJidGroup } from 'baileys';
 const messageStore = new Map();
 const deleteCount = new Map();

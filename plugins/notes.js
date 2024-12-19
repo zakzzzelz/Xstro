@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { addNote, removeNote, updateNote, getNotes } from '#sql/notes';
+import { bot } from '#lib';
+import { addNote, removeNote, updateNote, getNotes } from '#sql';
 
 bot(
 	{

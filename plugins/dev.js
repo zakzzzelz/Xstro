@@ -1,6 +1,6 @@
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 import { inspect } from 'util';
-import { isSudo } from '#sql/sudo';
+import { isSudo } from '#sql';
 
 bot(
 	{

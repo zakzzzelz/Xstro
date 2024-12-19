@@ -1,10 +1,10 @@
 import { DataTypes } from 'sequelize';
 import config from '#config';
 import { jidNormalizedUser, areJidsSameUser } from 'baileys';
-import { numtoId } from '#lib/utils';
-import DATABASE from '#lib/database';
+import { numtoId } from '#lib';
+import { DATABASE } from '#lib';
 
-const SudoDB = DATABASE.define(
+ const SudoDB = DATABASE.define(
 	'Sudo',
 	{
 		userId: {
@@ -54,5 +54,6 @@ const isSudo = async (jid, owner) => {
 	const allSudoUsers = await getSudo();
 	return allSudoUsers.includes(uId);
 };
+
 
 export { SudoDB, addSudo, delSudo, getSudo, isSudo };

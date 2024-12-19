@@ -1,7 +1,5 @@
 import config from '#config';
-import { commands, bot } from '#lib/cmds';
-import { formatBytes, runtime } from '#lib/utils';
-import { getConfigValues } from '#lib/bot';
+import { bot, commands, getConfigValues, formatBytes, runtime } from '#lib';
 import { platform, totalmem, freemem } from 'os';
 import { readFileSync } from 'fs';
 

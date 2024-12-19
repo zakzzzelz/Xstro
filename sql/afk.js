@@ -1,7 +1,7 @@
+import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
-import DATABASE from '#lib/database';
 
-const AfkDB = DATABASE.define(
+export const AfkDB = DATABASE.define(
 	'Afk',
 	{
 		message: {
@@ -33,3 +33,4 @@ export const setAfkMessage = async (afkMessage, timestamp) => {
 export const delAfkMessage = async () => {
 	await AfkDB.destroy({ where: { id: 1 } });
 };
+

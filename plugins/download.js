@@ -1,7 +1,7 @@
 import { extractUrlFromString, getBuffer } from 'xstro-utils';
-import { bot } from '#lib/cmds';
-import { fancy } from '#utils/fancy';
-import { facebook, gdrivedl, instagram, tiktok, twitter, youtube } from '#utils/scrapers';
+import { bot } from '#lib';
+import { fancy } from '#utils';
+import { facebook, gdrivedl, instagram, tiktok, twitter, youtube } from '#utils';
 
 bot(
 	{

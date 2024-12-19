@@ -1,4 +1,4 @@
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 
 bot({
 	pattern: 'bgm',

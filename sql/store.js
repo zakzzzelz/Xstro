@@ -1,8 +1,8 @@
 import { isJidGroup } from 'baileys';
 import { DataTypes } from 'sequelize';
-import DATABASE from '#lib/database';
+import { DATABASE } from '#lib';
 
-const messageDb = DATABASE.define(
+export const messageDb = DATABASE.define(
 	'message',
 	{
 		jid: {
@@ -25,7 +25,7 @@ const messageDb = DATABASE.define(
 	},
 );
 
-const messageCountDb = DATABASE.define(
+export const messageCountDb = DATABASE.define(
 	'messageCount',
 	{
 		jid: {
@@ -53,7 +53,7 @@ const messageCountDb = DATABASE.define(
 	},
 );
 
-const contactDb = DATABASE.define(
+export const contactDb = DATABASE.define(
 	'contact',
 	{
 		jid: {
@@ -71,7 +71,7 @@ const contactDb = DATABASE.define(
 	},
 );
 
-const groupMetadataDb = DATABASE.define(
+export const groupMetadataDb = DATABASE.define(
 	'groupMetadata',
 	{
 		jid: { type: DataTypes.STRING, allowNull: false, primaryKey: true },
@@ -95,7 +95,7 @@ const groupMetadataDb = DATABASE.define(
 	{ tableName: 'metadata', timestamps: true },
 );
 
-const groupParticipantsDb = DATABASE.define(
+export const groupParticipantsDb = DATABASE.define(
 	'groupParticipants',
 	{
 		jid: { type: DataTypes.STRING, allowNull: false },
@@ -328,5 +328,6 @@ const saveMessageV2 = async message => {
 	await saveMessageV1(message);
 	await saveMessageCount(message);
 };
+
 
 export { saveContact, loadMessage, getName, getChatSummary, saveGroupMetadata, getGroupMetadata, saveMessageCount, getInactiveGroupMembers, getGroupMembersMessageCount, saveMessageV2 as saveMessage };

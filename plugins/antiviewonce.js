@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { setViewOnce, setViewOnceType, getSettings } from '#sql/antivv';
+import { bot } from '#lib';
+import { setViewOnce, setViewOnceType, getSettings } from '#sql';
 
 bot(
 	{

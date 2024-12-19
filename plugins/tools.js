@@ -1,7 +1,7 @@
-const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
+import { bot,base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '#lib';
 import { extractUrlFromString, getJson } from 'xstro-utils';
-import { bot } from '#lib/cmds';
-import { base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '#lib/xstro';
+
+const base = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 
 bot(
 	{
@@ -26,7 +26,7 @@ bot(
 		const url = extractUrlFromString(match || message.reply_message?.text);
 		if (!url) return message.send('_No Url found_');
 		const msg = await message.send('*wait*');
-		const res = await getJson(`${XSTRO_API}/api/tiny?url=${url}`);
+		const res = await getJson(`${base}/api/tiny?url=${url}`);
 		return await msg.edit(res.link);
 	},
 );

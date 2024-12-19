@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { addAKick, delKick, getKicks } from '#sql/akick';
+import { bot } from '#lib';
+import { addAKick, delKick, getKicks } from '#sql';
 
 const ACTIONS = {
 	async add(message, groupId, jid) {

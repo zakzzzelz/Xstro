@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '#sql/store';
+import { bot } from '#lib';
+import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '#sql';
 
 bot(
 	{

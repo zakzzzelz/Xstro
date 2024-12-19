@@ -1,7 +1,6 @@
-import { getBuffer, getJson } from 'xstro-utils';
-import { bot } from '#lib/cmds';
-import { convertToOpus, flipMedia, generatePdf, StickerToPhoto, toBlackVideo, toSticker } from '#lib/xstro';
 import config from '#config';
+import { bot, convertToOpus, flipMedia, generatePdf, StickerToPhoto, toBlackVideo, toSticker } from '#lib';
+import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
 	{

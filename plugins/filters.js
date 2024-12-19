@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { addFilter, removeFilter, getFilters } from '#sql/filters';
+import { bot } from '#lib';
+import { addFilter, removeFilter, getFilters } from '#sql';
 
 bot(
 	{

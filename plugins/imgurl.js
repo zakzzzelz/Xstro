@@ -1,5 +1,4 @@
-import { bot } from '#lib/cmds';
-import { uploadFile } from '#lib/xstro';
+import { bot, uploadFile } from '#lib';
 
 bot(
 	{

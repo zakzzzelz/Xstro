@@ -1,4 +1,4 @@
-import DATABASE from '#lib/database';
+import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
 
 const AntiVV = DATABASE.define('AntiViewOnce', {
@@ -54,7 +54,6 @@ async function getSettings() {
         return { type: 'all', isEnabled: false };
     }
 }
-
 export {
     AntiVV,
     setViewOnce,

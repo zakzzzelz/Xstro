@@ -1,5 +1,5 @@
 import { getJson } from 'xstro-utils';
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 
 bot(
 	{

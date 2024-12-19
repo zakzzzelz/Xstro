@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '#sql/antiword';
+import { bot } from '#lib';
+import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '#sql';
 
 bot(
 	{

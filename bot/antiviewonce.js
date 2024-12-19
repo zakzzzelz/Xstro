@@ -1,4 +1,4 @@
-import { getSettings } from '#sql/antivv';
+import { getSettings } from '#sql';
 import { isJidGroup } from 'baileys';
 
 export async function AntiViewOnce(msg) {

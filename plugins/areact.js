@@ -1,6 +1,5 @@
-import { bot } from '#lib/cmds';
-import { getRandom } from '#lib/utils';
-import AutoReact from '#sql/areact';
+import { bot, getRandom } from '#lib';
+import { AutoReact } from '#sql';
 
 bot(
 	{

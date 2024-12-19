@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { addWarn, getWarn, resetWarn } from '#sql/warn';
+import { bot } from '#lib';
+import { addWarn, getWarn, resetWarn } from '#sql';
 import config from '#config';
 
 const { WARN_COUNT } = config;

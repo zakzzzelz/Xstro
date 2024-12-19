@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import config from '#config';
-import { runtime } from '#lib/utils';
-import DATABASE from '#lib/database';
+import { runtime } from '#lib';
+import { DATABASE } from '#lib';
 import { placeholderService } from './autobio.js';
 
 const AliveDB = DATABASE.define(
@@ -47,4 +47,4 @@ const aliveMessage = async message => {
 		.replace(/&botname/g, config.BOT_INFO.split(';')[1]);
 };
 
-export { getAliveMsg, setAliveMsg, aliveMessage };
+export { AliveDB, getAliveMsg, setAliveMsg, aliveMessage };

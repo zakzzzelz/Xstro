@@ -1,5 +1,5 @@
-import { bot } from '#lib/cmds';
-import { getSudo, delSudo, addSudo, isSudo } from '#sql/sudo';
+import { bot } from '#lib';
+import { getSudo, delSudo, addSudo, isSudo } from '#sql';
 
 bot(
 	{

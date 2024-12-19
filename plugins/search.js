@@ -1,4 +1,4 @@
-import { bot } from '#lib/cmds';
+import { bot } from '#lib';
 import { getBuffer, getJson } from 'xstro-utils';
 
 bot(

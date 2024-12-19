@@ -1,8 +1,6 @@
-import { bot } from '#lib/cmds';
-import { getName, loadMessage } from '#sql/store';
-import { numtoId } from '#lib/utils';
-import { smsg } from '#lib/message';
 import config from '#config';
+import { getName, loadMessage } from '#sql';
+import { bot, numtoId, smsg } from '#lib';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';
 
@@ -343,14 +341,13 @@ bot(
 	},
 );
 bot(
-	
 	{
-	  pattern: 'gjid',
-	  isPublic: true,
-	  isGroup: true,
-	  desc: 'Get JID of the Current Group',
+		pattern: 'gjid',
+		isPublic: true,
+		isGroup: true,
+		desc: 'Get JID of the Current Group',
 	},
-	async (message) => {
-		 message.send(`Group JID: ${message.jid}`);
-	}
-  );
+	async message => {
+		message.send(`Group JID: ${message.jid}`);
+	},
+);

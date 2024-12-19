@@ -1,11 +1,11 @@
 import { DataTypes } from 'sequelize';
 import config from '#config';
 import { getJson } from 'xstro-utils';
-import DATABASE from '#lib/database';
+import { DATABASE } from '#lib';
 
 const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
 
-const AutoBioDB = DATABASE.define(
+export const AutoBioDB = DATABASE.define(
 	'autobio',
 	{
 		autobio_msg: {
@@ -90,4 +90,3 @@ export const placeholderService = {
 		return Object.entries(placeholders).reduce((msg, [key, value]) => msg.replace(new RegExp(key, 'g'), value), message);
 	},
 };
-export default AutoBioDB;
