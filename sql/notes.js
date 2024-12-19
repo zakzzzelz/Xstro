@@ -60,4 +60,3 @@ export async function getNote(id) {
 	const note = await NotesDB.findByPk(id);
 	return note;
 }
-await DATABASE.sync()
