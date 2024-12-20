@@ -7,7 +7,7 @@ import os from 'os';
 bot(
 	{
 		pattern: 'ping',
-		isPublic: true,
+		public: true,
 		desc: 'Get Performance',
 	},
 	async message => {
@@ -21,7 +21,7 @@ bot(
 bot(
 	{
 		pattern: 'runtime',
-		isPublic: true,
+		public: true,
 		desc: 'Get Runtime of bot',
 	},
 	async message => {
@@ -32,7 +32,7 @@ bot(
 bot(
 	{
 		pattern: 'restart',
-		isPublic: false,
+		public: false,
 		desc: 'Restarts Bot',
 	},
 	async message => {
@@ -44,7 +44,7 @@ bot(
 bot(
 	{
 		pattern: 'shutdown',
-		isPublic: false,
+		public: false,
 		desc: 'Off Bot',
 	},
 	async message => {
@@ -56,7 +56,7 @@ bot(
 bot(
 	{
 		pattern: 'logout',
-		isPublic: false,
+		public: false,
 		desc: 'End your Xstro Session',
 	},
 	async (message, match) => {
@@ -73,7 +73,7 @@ bot(
 bot(
 	{
 		pattern: 'fetch',
-		isPublic: true,
+		public: true,
 		desc: 'Get data from internet',
 	},
 	async (message, match) => {
@@ -88,7 +88,7 @@ bot(
 bot(
 	{
 		pattern: 'cpu',
-		isPublic: false,
+		public: false,
 		desc: 'Get CPU Information',
 	},
 	async message => {

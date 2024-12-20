@@ -27,7 +27,7 @@ const convertTo12Hour = timeStr => {
 bot(
 	{
 		pattern: 'automute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Set a time to automatically mute a group',
 	},
@@ -59,7 +59,7 @@ bot(
 bot(
 	{
 		pattern: 'autounmute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Set a time to automatically unmute a group',
 	},
@@ -90,7 +90,7 @@ bot(
 bot(
 	{
 		pattern: 'getmute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Get muting time for a group',
 	},
@@ -108,7 +108,7 @@ bot(
 bot(
 	{
 		pattern: 'delmute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Cancel mute schedule for the group',
 	},

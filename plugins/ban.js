@@ -4,11 +4,11 @@ import { addBan, getBanned, removeBan,isSudo } from '#sql';
 bot(
 	{
 		pattern: 'ban ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Ban a user from the bot',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (await isSudo(jid, message.user)) return message.send('_You cannot ban a sudo user_');
 		const msg = await addBan(jid);
 		return await message.send(msg, { mentions: [jid] });
@@ -18,11 +18,11 @@ bot(
 bot(
 	{
 		pattern: 'unban ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Unban a user from the bot',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		const msg = await removeBan(jid);
 		return await message.send(msg, { mentions: [jid] });
 	},
@@ -31,7 +31,7 @@ bot(
 bot(
 	{
 		pattern: 'getban',
-		isPublic: false,
+		public: false,
 		desc: 'Get a list of all banned users',
 	},
 	async message => {

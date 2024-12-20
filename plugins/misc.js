@@ -4,11 +4,11 @@ import { bot } from '#lib';
 bot(
 	{
 		pattern: 'pair',
-		isPublic: true,
+		public: true,
 		desc: 'Get Your Pairing Code Now',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (!jid) return message.send('_Give me the number that needs pairing code_');
 		const id = jid.split('@')[0];
 		const msg = await message.send('*Getting Pairing Code*');
@@ -21,7 +21,7 @@ bot(
 bot(
 	{
 		pattern: 'support',
-		isPublic: true,
+		public: true,
 		desc: 'Sends developer support information ',
 	},
 	async message => {

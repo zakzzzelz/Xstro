@@ -5,7 +5,7 @@ import { isJidGroup } from 'baileys';
 bot(
 	{
 		pattern: 'antispam',
-		isPublic: false,
+		public: false,
 		desc: 'Simple Antispam Setup',
 	},
 	async (message, match) => {

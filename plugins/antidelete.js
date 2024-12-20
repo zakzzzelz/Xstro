@@ -5,7 +5,7 @@ initializeAntiDeleteSettings();
 bot(
 	{
 		pattern: 'antidelete',
-		isPublic: false,
+		public: false,
 		desc: 'Setup Antidelete',
 	},
 	async (message, match) => {

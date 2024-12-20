@@ -4,7 +4,7 @@ import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '
 bot(
 	{
 		pattern: 'antiword',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Set Antiword Management for Group Chats',
 	},

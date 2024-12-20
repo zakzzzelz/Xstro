@@ -4,7 +4,7 @@ import { delay } from 'baileys';
 bot(
 	{
 		pattern: 'advertise',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Create and Share Advertisement Messages to all Your Groups',
 	},

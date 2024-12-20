@@ -1,7 +1,7 @@
 import express from 'express';
 import { config } from 'dotenv';
 import { DATABASE } from '#lib/database';
-import { envlogger, loadFiles, getSession, connect, commands } from '#lib';
+import { envlogger, loadFiles, getSession, connect } from '#lib';
 
 config();
 

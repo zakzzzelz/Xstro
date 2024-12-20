@@ -4,7 +4,7 @@ import { addNote, removeNote, updateNote, getNotes } from '#sql';
 bot(
 	{
 		pattern: 'addnote',
-		isPublic: true,
+		public: true,
 		desc: 'Create Notes',
 	},
 	async (message, match) => {
@@ -23,7 +23,7 @@ bot(
 bot(
 	{
 		pattern: 'delnote',
-		isPublic: true,
+		public: true,
 		desc: 'Delete a Note',
 	},
 	async (message, match) => {
@@ -38,7 +38,7 @@ bot(
 bot(
 	{
 		pattern: 'editnote',
-		isPublic: true,
+		public: true,
 		desc: 'Update an Existing Note',
 	},
 	async (message, match) => {
@@ -60,7 +60,7 @@ bot(
 bot(
 	{
 		pattern: 'getnotes',
-		isPublic: true,
+		public: true,
 		desc: 'List all Notes',
 	},
 	async message => {
@@ -75,7 +75,7 @@ bot(
 bot(
 	{
 		pattern: 'cnote',
-		isPublic: true,
+		public: true,
 		desc: 'Get Note Content',
 	},
 	async (message, match) => {

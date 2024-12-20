@@ -4,7 +4,7 @@ import { setViewOnce, setViewOnceType, getSettings } from '#sql';
 bot(
 	{
 		pattern: 'antivv',
-		isPublic: false,
+		public: false,
 		desc: 'Setup Anti ViewOnce',
 	},
 	async (message, match) => {

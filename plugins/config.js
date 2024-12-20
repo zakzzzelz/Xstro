@@ -4,7 +4,7 @@ import { getConfig, updateConfig } from '#sql';
 bot(
 	{
 		pattern: 'config',
-		isPublic: false,
+		public: false,
 		desc: 'Get Database configurations',
 	},
 	async message => {
@@ -17,7 +17,7 @@ bot(
 bot(
 	{
 		pattern: 'autoread',
-		isPublic: false,
+		public: false,
 		desc: 'Set bot to automatically read messages',
 	},
 	async (message, match) => {
@@ -34,7 +34,7 @@ bot(
 bot(
 	{
 		pattern: 'autostatus',
-		isPublic: false,
+		public: false,
 		desc: 'Set bot to automatically read status',
 	},
 	async (message, match) => {
@@ -51,7 +51,7 @@ bot(
 bot(
 	{
 		pattern: 'mode',
-		isPublic: false,
+		public: false,
 		desc: 'Set bot Mode private or public',
 	},
 	async (message, match) => {
@@ -68,7 +68,7 @@ bot(
 bot(
 	{
 		pattern: 'cmdreact',
-		isPublic: false,
+		public: false,
 		desc: 'Set bot to react to Cmds',
 	},
 	async (message, match) => {
@@ -85,7 +85,7 @@ bot(
 bot(
 	{
 		pattern: 'cmdread',
-		isPublic: false,
+		public: false,
 		desc: 'Set bot to read cmds',
 	},
 	async (message, match) => {
@@ -102,7 +102,7 @@ bot(
 bot(
 	{
 		pattern: 'setprefix',
-		isPublic: false,
+		public: false,
 		desc: 'Setup bot prefix',
 	},
 	async (message, match, { prefix }) => {

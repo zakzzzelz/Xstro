@@ -5,7 +5,7 @@ import { numtoId } from '#lib';
 bot(
 	{
 		pattern: 'ckick',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Kick a certain country code from a group',
 	},
@@ -30,7 +30,7 @@ bot(
 bot(
 	{
 		pattern: 'gname',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Change Group Name',
 	},
@@ -47,7 +47,7 @@ bot(
 bot(
 	{
 		pattern: 'gdesc ?(.*)',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Changes Group Description',
 	},
@@ -63,14 +63,14 @@ bot(
 bot(
 	{
 		pattern: 'promote',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Promotes Someone to Admin',
 	},
 	async (message, match) => {
 		if (!message.isAdmin) return message.send('```You are not an Admin```');
 		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
@@ -88,14 +88,14 @@ bot(
 bot(
 	{
 		pattern: 'demote',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Demotes Someone from Admin',
 	},
 	async (message, match) => {
 		if (!message.isAdmin) return message.send('```You are not an Admin```');
 		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
@@ -113,14 +113,14 @@ bot(
 bot(
 	{
 		pattern: 'kick ?(.*)',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Kicks A Participant from Group',
 	},
 	async (message, match) => {
 		if (!message.isAdmin) return message.send('```You are not an Admin```');
 		if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
 		return message.send(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });
@@ -130,7 +130,7 @@ bot(
 bot(
 	{
 		pattern: 'invite',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Get Group Invite link',
 	},
@@ -146,7 +146,7 @@ bot(
 bot(
 	{
 		pattern: 'leave',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'leave a group',
 	},
@@ -159,7 +159,7 @@ bot(
 bot(
 	{
 		pattern: 'poll',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Creates a poll in the group.',
 	},
@@ -180,7 +180,7 @@ bot(
 bot(
 	{
 		pattern: 'tag',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Tag all participants in the group with an optional message',
 	},
@@ -200,7 +200,7 @@ bot(
 bot(
 	{
 		pattern: 'tagall',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Tag all participants in the group',
 	},
@@ -220,7 +220,7 @@ bot(
 bot(
 	{
 		pattern: 'mute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Mute a group (admins only)',
 	},
@@ -237,7 +237,7 @@ bot(
 bot(
 	{
 		pattern: 'unmute',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Unmute a group (admins only)',
 	},
@@ -254,7 +254,7 @@ bot(
 bot(
 	{
 		pattern: 'tagadmin',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Tags Admins of A Group',
 	},
@@ -274,7 +274,7 @@ bot(
 bot(
 	{
 		pattern: 'revoke',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Revoke Invite link',
 	},
@@ -289,7 +289,7 @@ bot(
 bot(
 	{
 		pattern: 'gpp',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Changes Group Profile Picture',
 	},
@@ -306,7 +306,7 @@ bot(
 bot(
 	{
 		pattern: 'lock',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Lock groups settings',
 	},
@@ -323,7 +323,7 @@ bot(
 bot(
 	{
 		pattern: 'unlock',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Unlock groups settings',
 	},
@@ -340,7 +340,7 @@ bot(
 bot(
 	{
 		pattern: 'requests',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Shows the pending requests of the group',
 	},
@@ -362,7 +362,7 @@ bot(
 bot(
 	{
 		pattern: 'acceptall',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Accept all join requests',
 	},
@@ -386,7 +386,7 @@ bot(
 bot(
 	{
 		pattern: 'rejectall',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Reject all join requests',
 	},
@@ -409,7 +409,7 @@ bot(
 bot(
 	{
 		pattern: 'rgpp',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Removes Group Profile Photo',
 	},
@@ -424,7 +424,7 @@ bot(
 bot(
 	{
 		pattern: 'newgc',
-		isPublic: false,
+		public: false,
 		desc: 'Creates A New Group',
 	},
 	async (message, match) => {

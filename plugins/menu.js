@@ -6,7 +6,7 @@ import { readFileSync } from 'fs';
 bot(
 	{
 		pattern: 'menu',
-		isPublic: true,
+		public: true,
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},
@@ -46,7 +46,7 @@ bot(
 bot(
 	{
 		pattern: 'list',
-		isPublic: true,
+		public: true,
 		desc: 'Show All Commands',
 		dontAddCommandList: true,
 	},
@@ -65,6 +65,6 @@ bot(
 			if (desc) menu += `${desc}\n\n`;
 		});
 
-		return await message.sendPaymentMessage(message.jid, 5000, 'NGN', menu, message.user);
+		return await message.sendPaymentMessage(message.jid, 5, 'USD', menu, message.user);
 	},
 );

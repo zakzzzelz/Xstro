@@ -4,7 +4,7 @@ import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInact
 bot(
 	{
 		pattern: 'getchats',
-		isPublic: false,
+		public: false,
 		desc: 'Get chats summary',
 	},
 	async (message, match, { prefix }) => {
@@ -40,7 +40,7 @@ bot(
 bot(
 	{
 		pattern: 'gactive',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Return the Active Group Members from when the bot started running',
 	},
@@ -60,7 +60,7 @@ bot(
 bot(
 	{
 		pattern: 'inactive',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Get the inactive group members from a group',
 	},

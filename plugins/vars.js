@@ -4,7 +4,7 @@ import { manageVar } from '#utils';
 bot(
 	{
 		pattern: 'setvar',
-		isPublic: false,
+		public: false,
 		desc: 'Set system var',
 	},
 	async (message, match) => {
@@ -20,7 +20,7 @@ bot(
 bot(
 	{
 		pattern: 'delvar',
-		isPublic: false,
+		public: false,
 		desc: 'Delete system var',
 	},
 	async (message, match) => {
@@ -34,7 +34,7 @@ bot(
 bot(
 	{
 		pattern: 'getvar',
-		isPublic: false,
+		public: false,
 		desc: 'Get system vars',
 	},
 	async message => {

@@ -4,7 +4,7 @@ import { numtoId } from '#lib';
 bot(
 	{
 		pattern: 'report',
-		isPublic: true,
+		public: true,
 		desc: 'Request Feature or Report Bugs',
 	},
 	async (message, match) => {

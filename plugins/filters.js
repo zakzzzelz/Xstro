@@ -4,7 +4,7 @@ import { addFilter, removeFilter, getFilters } from '#sql';
 bot(
 	{
 		pattern: 'filters',
-		isPublic: false,
+		public: false,
 		desc: 'Displays Available Filter Commands and how to use them',
 	},
 	async message => {
@@ -26,7 +26,7 @@ ${message.prefix}delfilter dm hi (To delete a filter set for direct messages)
 bot(
 	{
 		pattern: 'pfilter',
-		isPublic: false,
+		public: false,
 		desc: 'Set up DM filters',
 	},
 	async (message, match) => {
@@ -43,7 +43,7 @@ bot(
 bot(
 	{
 		pattern: 'gfilter',
-		isPublic: false,
+		public: false,
 		desc: 'Set up group chat filters',
 	},
 	async (message, match) => {
@@ -60,7 +60,7 @@ bot(
 bot(
 	{
 		pattern: 'delfilter',
-		isPublic: false,
+		public: false,
 		desc: 'Delete filters (DM or group)',
 	},
 	async (message, match) => {
@@ -80,7 +80,7 @@ bot(
 bot(
 	{
 		pattern: 'getfilters',
-		isPublic: false,
+		public: false,
 		desc: 'List all filters',
 	},
 	async message => {

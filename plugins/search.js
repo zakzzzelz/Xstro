@@ -4,7 +4,7 @@ import { getBuffer, getJson } from 'xstro-utils';
 bot(
 	{
 		pattern: 'lyrics',
-		isPublic: true,
+		public: true,
 		desc: 'Search Lyrics',
 	},
 	async (message, match) => {
@@ -20,7 +20,7 @@ bot(
 bot(
 	{
 		pattern: 'imdb',
-		isPublic: true,
+		public: true,
 		desc: 'Sends info of a movie or series.',
 	},
 	async (message, match) => {
@@ -35,7 +35,7 @@ bot(
 bot(
 	{
 		pattern: 'weather ?(.*)',
-		isPublic: true,
+		public: true,
 		desc: 'weather info',
 	},
 	async (message, match) => {
@@ -57,7 +57,7 @@ bot(
 bot(
 	{
 		pattern: 'define',
-		isPublic: true,
+		public: true,
 		desc: 'Define A Word',
 	},
 	async (message, match) => {
@@ -71,7 +71,7 @@ bot(
 bot(
 	{
 		pattern: 'rizz',
-		isPublic: true,
+		public: true,
 		desc: 'Rizz your babe lol',
 	},
 	async message => {
@@ -84,7 +84,7 @@ bot(
 bot(
 	{
 		pattern: 'joke',
-		isPublic: true,
+		public: true,
 		desc: 'Get a Random Joke',
 	},
 	async message => {
@@ -97,7 +97,7 @@ bot(
 bot(
 	{
 		pattern: 'quotes',
-		isPublic: true,
+		public: true,
 		desc: 'Get Quotes',
 	},
 	async message => {
@@ -111,7 +111,7 @@ bot(
 bot(
 	{
 		pattern: 'facts',
-		isPublic: true,
+		public: true,
 		desc: 'Get Facts',
 	},
 	async message => {

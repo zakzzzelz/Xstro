@@ -5,7 +5,7 @@ import { aliveMessage, setAliveMsg } from '#sql';
 bot(
 	{
 		pattern: 'alive',
-		isPublic: true,
+		public: true,
 		desc: 'Is Bot Alive?',
 	},
 	async (message, match) => {

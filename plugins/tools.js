@@ -1,136 +1,27 @@
-import { bot,base64, dbinary, deobfuscate, ebinary, obfuscate, remini, solveMath, toAscii } from '#lib';
-import { extractUrlFromString, getJson } from 'xstro-utils';
-
-const base = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
+import { bot } from '#lib';
+import { remini, uploadFile } from '#utils';
 
 bot(
 	{
 		pattern: 'getpp',
-		isPublic: true,
+		public: true,
 		desc: 'Get Another Person Profile Image',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
-		const img = await message.thatProfilePic(jid);
+		const jid = await message.getUserJid(match);
+		const img = await message.getProfileImage(jid);
 		await message.send(img);
 	},
 );
 
 bot(
 	{
-		pattern: 'surl',
-		isPublic: true,
-		desc: 'Shorterns A Url',
-	},
-	async (message, match) => {
-		const url = extractUrlFromString(match || message.reply_message?.text);
-		if (!url) return message.send('_No Url found_');
-		const msg = await message.send('*wait*');
-		const res = await getJson(`${base}/api/tiny?url=${url}`);
-		return await msg.edit(res.link);
-	},
-);
-
-bot(
-	{
-		pattern: 'calc',
-		isPublic: true,
-		desc: 'Solves Math Equation',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide A Maths Expression_');
-		const result = solveMath(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'base64',
-		isPublic: true,
-		desc: 'Encodes text to Base64',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide text to encode._');
-		const result = base64(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'ebinary',
-		isPublic: true,
-		desc: 'Encodes text to binary',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide text to encode._');
-		const result = ebinary(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'dbinary',
-		isPublic: true,
-		desc: 'Decodes binary to text',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide binary to decode._');
-		const result = dbinary(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'obfuscate',
-		isPublic: true,
-		desc: 'Obfuscates JavaScript code using a basic scrambling technique',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide code to obfuscate._');
-		const result = obfuscate(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'deobfuscate',
-		isPublic: true,
-		desc: 'Deobfuscates scrambled and encoded JavaScript code',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide obfuscated code to decode._');
-		const result = deobfuscate(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
-		pattern: 'ascii',
-		isPublic: true,
-		desc: 'Converts each character of the string to its ASCII code',
-	},
-	async (message, match) => {
-		if (!match) return message.send('_Provide text to convert to ASCII._');
-		const result = toAscii(match);
-		return message.send(result);
-	},
-);
-
-bot(
-	{
 		pattern: 'getbio',
-		isPublic: true,
+		public: true,
 		desc: 'Get the WhatsApp Bio of a User',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
-		if (!jid) return message.send('_Reply Someone, Tag Someone or Provide their Number_');
+		const jid = await message.getUserJid(match);
 		const bioDetails = await message.client.fetchStatus(jid);
 		const { status, setAt } = bioDetails;
 		if (status && setAt) {
@@ -144,13 +35,13 @@ bot(
 bot(
 	{
 		pattern: 'enhance',
-		isPublic: true,
+		public: true,
 		desc: 'Enahnces An Image',
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
-		const buff = await message.download();
-		const enhancedImg = await remini(buff, 'enhance');
+		const img = await message.download();
+		const enhancedImg = await remini(img, 'enhance');
 		await message.send(enhancedImg);
 	},
 );
@@ -158,27 +49,43 @@ bot(
 bot(
 	{
 		pattern: 'recolor',
-		isPublic: true,
+		public: true,
 		desc: 'Recolors An Image',
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
-		const buff = await message.download();
-		const enhancedImg = await remini(buff, 'recolor');
-		await message.send(enhancedImg);
+		const img = await message.download();
+		const recoloredImg = await remini(img, 'recolor');
+		await message.send(recoloredImg);
 	},
 );
 
 bot(
 	{
 		pattern: 'dehaze',
-		isPublic: true,
+		public: true,
 		desc: 'Dehazes An Image',
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
-		const buff = await message.download();
-		const enhancedImg = await remini(buff, 'dehaze');
-		await message.send(enhancedImg);
+		const img = await message.download();
+		const dehazedImg = await remini(img, 'dehaze');
+		await message.send(dehazedImg);
+	},
+);
+
+bot(
+	{
+		pattern: 'upload',
+		public: true,
+		desc: 'Uploads A File',
+	},
+	async message => {
+		if (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker && !message.reply_message.document) {
+			return message.send('_Reply A File_');
+		}
+		const data = await message.download();
+		const url = await uploadFile(data);
+		await message.send(`_Uploaded File:\n${url}_`);
 	},
 );

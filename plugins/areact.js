@@ -4,7 +4,7 @@ import { AutoReact } from '#sql';
 bot(
 	{
 		pattern: 'areact',
-		isPublic: false,
+		public: false,
 		desc: 'Toggle Auto React On/Off',
 	},
 	async (message, match) => {

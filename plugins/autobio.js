@@ -6,7 +6,7 @@ let autobioInterval;
 bot(
 	{
 		pattern: 'autobio ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Manage auto bio. Use "on" or "off".',
 	},
 	async (message, match) => {

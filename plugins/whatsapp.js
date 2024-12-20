@@ -7,7 +7,7 @@ import { isJidGroup } from 'baileys';
 bot(
 	{
 		pattern: 'vv',
-		isPublic: false,
+		public: false,
 		desc: 'Download ViewOnce Messages',
 	},
 	async message => {
@@ -20,7 +20,7 @@ bot(
 bot(
 	{
 		pattern: 'myname',
-		isPublic: false,
+		public: false,
 		desc: 'Changes your WhatsApp Name',
 	},
 	async (message, match) => {
@@ -33,7 +33,7 @@ bot(
 bot(
 	{
 		pattern: 'setpp',
-		isPublic: false,
+		public: false,
 		desc: 'Set Your Profile Picture',
 	},
 	async message => {
@@ -47,7 +47,7 @@ bot(
 bot(
 	{
 		pattern: 'quoted',
-		isPublic: false,
+		public: false,
 		desc: 'quoted message',
 	},
 	async message => {
@@ -64,7 +64,7 @@ bot(
 bot(
 	{
 		pattern: 'dlt',
-		isPublic: false,
+		public: false,
 		desc: 'Deletes Message',
 	},
 	async message => {
@@ -76,7 +76,7 @@ bot(
 bot(
 	{
 		pattern: 'archive',
-		isPublic: false,
+		public: false,
 		desc: 'archive whatsapp chat',
 	},
 	async message => {
@@ -88,7 +88,7 @@ bot(
 bot(
 	{
 		pattern: 'unarchive',
-		isPublic: false,
+		public: false,
 		desc: 'unarchive whatsapp chat',
 	},
 	async message => {
@@ -100,7 +100,7 @@ bot(
 bot(
 	{
 		pattern: 'blocklist',
-		isPublic: false,
+		public: false,
 		desc: 'Fetches BlockList',
 	},
 	async message => {
@@ -118,7 +118,7 @@ bot(
 bot(
 	{
 		pattern: 'clear ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'delete whatsapp chat',
 	},
 	async message => {
@@ -130,7 +130,7 @@ bot(
 bot(
 	{
 		pattern: 'rpp',
-		isPublic: false,
+		public: false,
 		desc: 'Removes Profile Picture',
 	},
 	async message => {
@@ -142,7 +142,7 @@ bot(
 bot(
 	{
 		pattern: 'pin',
-		isPublic: false,
+		public: false,
 		desc: 'pin a chat',
 	},
 	async message => {
@@ -154,7 +154,7 @@ bot(
 bot(
 	{
 		pattern: 'unpin ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'unpin a msg',
 	},
 	async message => {
@@ -166,7 +166,7 @@ bot(
 bot(
 	{
 		pattern: 'save',
-		isPublic: false,
+		public: false,
 		desc: 'Saves Status',
 	},
 	async message => {
@@ -179,7 +179,7 @@ bot(
 bot(
 	{
 		pattern: 'forward',
-		isPublic: false,
+		public: false,
 		desc: 'Forwards A Replied Message',
 	},
 	async (message, match) => {
@@ -204,11 +204,11 @@ bot(
 bot(
 	{
 		pattern: 'block',
-		isPublic: false,
+		public: false,
 		desc: 'Blocks A Person',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		await message.Block(jid);
 	},
 );
@@ -216,11 +216,11 @@ bot(
 bot(
 	{
 		pattern: 'unblock',
-		isPublic: false,
+		public: false,
 		desc: 'Unblocks A Person',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		await message.Unblock(jid);
 	},
 );
@@ -228,7 +228,7 @@ bot(
 bot(
 	{
 		pattern: 'edit',
-		isPublic: false,
+		public: false,
 		desc: 'Edits A Sent Message',
 	},
 	async (message, match, { prefix }) => {
@@ -241,11 +241,11 @@ bot(
 bot(
 	{
 		pattern: 'jid',
-		isPublic: true,
+		public: true,
 		desc: 'Get Jid of Current Chat',
 	},
 	async message => {
-		const jid = await message.thatJid();
+		const jid = await message.getUserJid();
 		message.send(jid);
 	},
 );
@@ -253,7 +253,7 @@ bot(
 bot(
 	{
 		pattern: 'bio',
-		isPublic: true,
+		public: true,
 		desc: 'Change your whatsapp bio',
 	},
 	async (message, match, { prefix }) => {
@@ -266,7 +266,7 @@ bot(
 bot(
 	{
 		pattern: 'react',
-		isPublic: false,
+		public: false,
 		desc: 'React to A Message',
 	},
 	async (message, match) => {
@@ -280,7 +280,7 @@ bot(
 bot(
 	{
 		pattern: 'star',
-		isPublic: false,
+		public: false,
 		desc: 'Stars or Unstars a Message',
 	},
 	async message => {
@@ -296,7 +296,7 @@ bot(
 bot(
 	{
 		pattern: 'unstar',
-		isPublic: false,
+		public: false,
 		desc: 'Stars or Unstars a Message',
 	},
 	async message => {
@@ -312,7 +312,7 @@ bot(
 bot(
 	{
 		pattern: 'owner',
-		isPublic: true,
+		public: true,
 		desc: 'Get Bot Owner',
 	},
 	async message => {
@@ -343,7 +343,7 @@ bot(
 bot(
 	{
 		pattern: 'gjid',
-		isPublic: true,
+		public: true,
 		isGroup: true,
 		desc: 'Get JID of the Current Group',
 	},

@@ -5,7 +5,7 @@ import { installPlugin, removePluginByName, listPlugins } from '#utils';
 bot(
 	{
 		pattern: 'install ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Installs a Plugin',
 	},
 	async (message, match) => {
@@ -24,7 +24,7 @@ bot(
 bot(
 	{
 		pattern: 'delplugin ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Deletes a Plugin',
 	},
 	async (message, match) => {
@@ -43,7 +43,7 @@ bot(
 bot(
 	{
 		pattern: 'getplugins',
-		isPublic: false,
+		public: false,
 		desc: 'Lists all installed plugins',
 	},
 	async message => {

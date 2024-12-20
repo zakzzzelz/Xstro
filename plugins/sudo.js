@@ -4,11 +4,11 @@ import { getSudo, delSudo, addSudo, isSudo } from '#sql';
 bot(
 	{
 		pattern: 'setsudo',
-		isPublic: false,
+		public: false,
 		desc: 'Add User to Sudo list',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		if (await isSudo(jid, message.user)) return message.send('_Already Sudo User_');
 		const sudolist = await addSudo(jid);
 		return message.send(sudolist);
@@ -18,11 +18,11 @@ bot(
 bot(
 	{
 		pattern: 'delsudo',
-		isPublic: false,
+		public: false,
 		desc: 'Remove User from Sudo',
 	},
 	async (message, match) => {
-		const jid = await message.thatJid(match);
+		const jid = await message.getUserJid(match);
 		const rsudo = await delSudo(jid);
 		return message.send(rsudo);
 	},
@@ -31,7 +31,7 @@ bot(
 bot(
 	{
 		pattern: 'getsudo',
-		isPublic: false,
+		public: false,
 		desc: 'Get Sudo Users',
 	},
 	async message => {

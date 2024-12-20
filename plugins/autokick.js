@@ -24,7 +24,7 @@ const ACTIONS = {
 bot(
 	{
 		pattern: 'akick',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'AutoKicks a member from the group.',
 	},
@@ -34,7 +34,7 @@ bot(
 
 		const [action, ...rest] = match?.toLowerCase().split(' ') || [];
 		const groupId = message.jid;
-		const jid = await message.thatJid();
+		const jid = await message.getUserJid();
 
 		if (ACTIONS[action]) {
 			const response = await ACTIONS[action](message, groupId, jid);

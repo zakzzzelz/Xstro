@@ -4,7 +4,7 @@ import { setAntilink, getAntilink, removeAntilink } from '#sql';
 bot(
 	{
 		pattern: 'antilink',
-		isPublic: false,
+		public: false,
 		isGroup: true,
 		desc: 'Setup Antilink for Groups',
 	},

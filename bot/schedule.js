@@ -19,7 +19,8 @@ const getCurrentTime = () => {
 	}
 };
 
-export const schedules = async client => {
+export const schedules = async msg => {
+	const client = msg.client;
 	setInterval(async () => {
 		const currentTime = getCurrentTime();
 

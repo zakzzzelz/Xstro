@@ -42,7 +42,7 @@ bot(
 bot(
 	{
 		pattern: 'eval ?(.*)',
-		isPublic: false,
+		public: false,
 		desc: 'Evaluate code',
 	},
 	async (message, match) => {

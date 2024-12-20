@@ -6,7 +6,7 @@ const afkTrack = {};
 bot(
 	{
 		pattern: 'afk',
-		isPublic: false,
+		public: false,
 		desc: 'Manage the global AFK message',
 	},
 	async (message, match, { prefix }) => {

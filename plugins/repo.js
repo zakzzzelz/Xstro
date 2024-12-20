@@ -4,7 +4,7 @@ import { readFileSync } from 'fs';
 bot(
 	{
 		pattern: 'repo',
-		isPublic: true,
+		public: true,
 		desc: 'Sends bot info, social links, and GitHub repo details.',
 	},
 	async message => {
