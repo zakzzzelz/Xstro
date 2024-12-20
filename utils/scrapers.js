@@ -3,7 +3,7 @@ import * as cheerio from 'cheerio';
 import { getRandom } from '#lib';
 import { getJson } from 'xstro-utils';
 
-export const XSTRO_API = 'https://xstro-pair-9add3cd2fdfd.herokuapp.com';
+export const XSTRO_API = 'https://server-j264.onrender.com';
 
 export async function facebook(videoUrl) {
 	const gifted = await import('gifted-downs');
