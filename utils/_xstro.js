@@ -54,55 +54,60 @@ const XSTRO = {
 	},
 	facts: async () => {
 		const res = `${API_ID}/api/facts`;
-		return await getJson(res.fact);
+		const data = await getJson(res);
+		return data.fact;
 	},
 	quotes: async () => {
 		const res = `${API_ID}/api/quotes`;
-		return await getJson(res.quote);
+		const data = (await getJson(res)).quote;
+		return `Quote: ${data.quote}\n\nAuthor: ${data.author}`;
 	},
 	advice: async () => {
 		const res = `${API_ID}/api/advice`;
-		return await getJson(res.advice);
+		const data = await getJson(res);
+		return data.advice;
 	},
 	rizz: async () => {
 		const res = `${API_ID}/api/rizz`;
-		return await getJson(res.text);
+		const data = await getJson(res);
+		return data.text;
 	},
 	bible: async verse => {
 		const res = `${API_ID}/api/bible?verse=${verse}`;
-		return await getJson(res.text);
+		const data = await getJson(res);
+		return data.text;
 	},
 	fancy: async text => {
-		const res = `${API_ID}/api/fancy?text=${text}`;
-		return await getJson(res.result);
+		const res = await getJson(`${API_ID}/api/fancy?text=${text}`);
+		return res.result;
 	},
 	short: async url => {
-		const res = `${API_ID}/api/tinyurl?url=${url}`;
-		return await getJson(res.result);
+		const res = await getJson(`${API_ID}/api/tinyurl?url=${url}`);
+		return res.result;
 	},
 	generatePdf: async content => {
 		const res = `${API_ID}/api/getpdf?content=${content}`;
 		return await getBuffer(res);
 	},
 	maths: async expression => {
-		const res = `${API_ID}/api/solveMath?expression=${expression}`;
-		return await getJson(res.result);
+		const res = await getJson(`${API_ID}/api/solveMath?expression=${expression}`);
+		return res.result;
 	},
 	searchSticker: async query => {
-		const res = `${API_ID}/api/ssticker?query=${query}`;
-		return await getJson(res.sticker);
+		const res = await getJson(`${API_ID}/api/ssticker?query=${query}`);
+		return res.sticker;
 	},
 	obfuscate: async code => {
-		const res = `${API_ID}/api/obfuscate?code=${code}`;
-		return await getJson(res.result);
+		const res = await getJson(`${API_ID}/api/obfuscate?code=${code}`);
+		return res.result;
 	},
 	ttp: async text => {
-		const res = `${API_ID}/api/ttp?text=${text}`;
+		const res = await getJson(`${API_ID}/api/ttp?text=${text}`);
 		return await getBuffer(res[0].url);
 	},
 	gitstalk: async username => {
-		const res = `${API_ID}/api/gitstalk?username=${username}`;
-		return await getJson(res);
+		const res = await getJson(`${API_ID}/api/gitstalk?username=${username}`);
+		return res;
 	},
 };
 
