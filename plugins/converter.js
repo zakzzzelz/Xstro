@@ -1,6 +1,10 @@
 import config from '#config';
-import { bot, convertToOpus, flipMedia, generatePdf, StickerToPhoto, toBlackVideo, toSticker } from '#lib';
+import { bot, generatePdf } from '#lib';
+import { uploadFile } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
+import Xstro from '../utils/_xstro.js';
+
+const { filpMedia, blackVideo, makeSticker, opus } = new Xstro();
 
 bot(
 	{
@@ -12,8 +16,9 @@ bot(
 		const media = message.reply_message?.video || message.reply_message?.image;
 		if (!media) return message.send('_Reply with an Image or Video!_');
 		const msg = await message.download();
-		const stickerBuffer = await toSticker(msg);
-		await message.send(stickerBuffer, { type: 'sticker' });
+		const { rawUrl } = await uploadFile(msg);
+		const sticker = await makeSticker(rawUrl);
+		return await message.send(sticker, { type: 'sticker' });
 	},
 );
 
@@ -26,8 +31,9 @@ bot(
 	async message => {
 		if (!message.reply_message?.sticker) return message.send('_Reply Sticker_');
 		const msg = await message.download();
-		const buff = await toSticker(msg);
-		return await message.send(buff, { type: 'sticker' });
+		const { rawUrl } = await uploadFile(msg);
+		const sticker = await makeSticker(rawUrl);
+		return await message.send(sticker, { type: 'sticker' });
 	},
 );
 
@@ -42,8 +48,9 @@ bot(
 		const options = ['left', 'right', 'vertical', 'horizontal'];
 		if (!options.includes(match)) return message.send('_Choose a valid option:_ ' + message.prefix + 'flip left, right, vertical, or horizontal');
 		const buff = await message.download();
-		const flippedMedia = await flipMedia(buff, match);
-		return await message.send(flippedMedia, { caption: '_Flipped successfully_' });
+		const { rawUrl } = await uploadFile(buff);
+		const media = await filpMedia(rawUrl, match);
+		return await message.send(media, { caption: '_Flipped successfully_' });
 	},
 );
 
@@ -56,8 +63,9 @@ bot(
 	async message => {
 		if (!message.reply_message?.audio) return message.send('_Reply An Audio_');
 		const buff = await message.download();
-		const res = await toBlackVideo(buff);
-		return await message.send(res);
+		const { rawUrl } = await uploadFile(buff);
+		const video = await blackVideo(rawUrl);
+		return await message.send(video);
 	},
 );
 
@@ -70,8 +78,9 @@ bot(
 	async message => {
 		if (!message.reply_message?.audio) return message.send('_Reply An Audio_');
 		const media = await message.download();
-		const buff = await convertToOpus(media);
-		return await message.send(buff);
+		const { rawUrl } = await uploadFile(media);
+		const audio = await opus(rawUrl);
+		return await message.send(audio);
 	},
 );
 
