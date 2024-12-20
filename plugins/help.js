@@ -1,11 +1,44 @@
-import { bot } from '#lib';
+import { bot, numtoId } from '#lib';
 import { readFileSync } from 'fs';
+
+bot(
+	{
+		pattern: 'report',
+		public: true,
+		desc: 'Request Feature or Report Bugs',
+	},
+	async (message, match) => {
+		if (!match || match.split(' ').length < 5)
+			return message.send(
+				'```Please provide a reason with at least 5 words to report a bug.```',
+			);
+
+		const errorReport = `\`\`\`
+BUG REPORT
+FROM: @${message.sender.split('@')[0]}
+MESSAGE: \n${match}
+\`\`\``;
+
+		const devs = [
+			'2348039607375',
+			'923192173398',
+			'2347041620617',
+			'923089660496',
+		];
+		for (const dev of devs) {
+			await message.send(errorReport, {
+				jid: numtoId(dev),
+				mentions: [message.sender],
+			});
+		}
+	},
+);
 
 bot(
 	{
 		pattern: 'repo',
 		public: true,
-		desc: 'Sends bot info, social links, and GitHub repo details.',
+		desc: 'Bot info, social links, and GitHub repo.',
 	},
 	async message => {
 		const adMessage = `\`\`\`
@@ -22,12 +55,9 @@ Maintainers
 *Help Us Improve:* Star, report bugs, or suggest features!
 
 © 2024 Xstro 
-    \`\`\``;
+\`\`\``;
 
-		//will add new media  called repo logo dont change this code
 		const media = readFileSync('./media/intro.mp4');
-
-		// Send message with media and newsletter context info its looks batter
 		return await message.send(media, {
 			caption: adMessage,
 			gifPlayback: true,
