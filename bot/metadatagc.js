@@ -7,7 +7,7 @@ export const updateGroupMetadata = async msg => {
 			const groups = await conn.groupFetchAllParticipating();
 			if (!groups) return;
 			for (const jid of Object.keys(groups)) await saveGroupMetadata(jid, conn);
-		}, 100000);
+		}, 150000);
 	} catch {
 		console.log('Rate Limit Hit');
 	}
