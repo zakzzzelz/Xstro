@@ -1,5 +1,6 @@
 import { bot } from '#lib';
-import { remini, uploadFile } from '#utils';
+import { remini, uploadFile, upload, XSTRO } from '#utils';
+import { getBuffer } from 'xstro-utils';
 
 bot(
 	{
@@ -25,7 +26,12 @@ bot(
 		const bioDetails = await message.client.fetchStatus(jid);
 		const { status, setAt } = bioDetails;
 		if (status && setAt) {
-			await message.send(`\`\`\`@${jid.split('@')[0]} bio's\n\nBio: ${status}\n\nSetAt: ${setAt}\`\`\``, { mentions: [jid] });
+			await message.send(
+				`\`\`\`@${
+					jid.split('@')[0]
+				} bio's\n\nBio: ${status}\n\nSetAt: ${setAt}\`\`\``,
+				{ mentions: [jid] },
+			);
 		} else {
 			message.send('_Unable to Get user bio_');
 		}
@@ -39,7 +45,8 @@ bot(
 		desc: 'Enahnces An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image) return message.send('_Reply An Image_');
+		if (!message.reply_message?.image)
+			return message.send('_Reply An Image_');
 		const img = await message.download();
 		const enhancedImg = await remini(img, 'enhance');
 		await message.send(enhancedImg);
@@ -53,7 +60,8 @@ bot(
 		desc: 'Recolors An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image) return message.send('_Reply An Image_');
+		if (!message.reply_message?.image)
+			return message.send('_Reply An Image_');
 		const img = await message.download();
 		const recoloredImg = await remini(img, 'recolor');
 		await message.send(recoloredImg);
@@ -67,7 +75,8 @@ bot(
 		desc: 'Dehazes An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image) return message.send('_Reply An Image_');
+		if (!message.reply_message?.image)
+			return message.send('_Reply An Image_');
 		const img = await message.download();
 		const dehazedImg = await remini(img, 'dehaze');
 		await message.send(dehazedImg);
@@ -81,11 +90,63 @@ bot(
 		desc: 'Uploads A File',
 	},
 	async message => {
-		if (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker && !message.reply_message.document) {
+		if (
+			!message.reply_message.image &&
+			!message.reply_message.video &&
+			!message.reply_message.audio &&
+			!message.reply_message.sticker &&
+			!message.reply_message.document
+		) {
 			return message.send('_Reply A File_');
 		}
 		const data = await message.download();
 		const url = await uploadFile(data);
 		await message.send(`_Uploaded File:\n${url}_`);
+	},
+);
+
+bot(
+	{
+		pattern: 'getsticker',
+		public: true,
+		desc: 'Get A Sticker',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide A Query_');
+		const stickers = await XSTRO.searchSticker(match);
+		for (const sticker of stickers) {
+			const buffer = await getBuffer(sticker);
+			const url = await upload(buffer);
+			const stickerUrl = await XSTRO.makeSticker(url.rawUrl);
+			await message.send(stickerUrl, { type: 'sticker' });
+		}
+	},
+);
+
+bot(
+	{
+		pattern: 'obfuscate',
+		public: true,
+		desc: 'Obfuscates A Code',
+	},
+	async (message, match) => {
+		const obfuscatedCode = await XSTRO.obfuscate(
+			match || message.reply_message.text,
+		);
+		await message.send(obfuscatedCode);
+	},
+);
+
+bot(
+	{
+		pattern: 'pdf',
+		public: true,
+		desc: 'Generate Pdf Documents From text',
+	},
+	async (message, match) => {
+		const pdfDoc = await XSTRO.generatePdf(
+			match || message.reply_message?.text,
+		);
+		return await message.send(pdfDoc, { fileName: 'Converted Document' });
 	},
 );

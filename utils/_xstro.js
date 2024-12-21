@@ -86,11 +86,13 @@ const XSTRO = {
 		return res.result;
 	},
 	generatePdf: async content => {
-		const res = `${API_ID}/api/getpdf?content=${content}`;
-		return await getBuffer(res);
+		if (!content) return '_No content provided_';
+		return await getBuffer(`${API_ID}/api/textToPdf?content=${encodeURIComponent(content)}`);
 	},
 	maths: async expression => {
-		const res = await getJson(`${API_ID}/api/solveMath?expression=${expression}`);
+		const res = await getJson(
+			`${API_ID}/api/solveMath?expression=${expression}`,
+		);
 		return res.result;
 	},
 	searchSticker: async query => {
@@ -98,6 +100,7 @@ const XSTRO = {
 		return res.sticker;
 	},
 	obfuscate: async code => {
+		if (!code) return 'Provide a code to obfuscate';
 		const res = await getJson(`${API_ID}/api/obfuscate?code=${code}`);
 		return res.result;
 	},
@@ -106,8 +109,34 @@ const XSTRO = {
 		return await getBuffer(res[0].url);
 	},
 	gitstalk: async username => {
-		const res = await getJson(`${API_ID}/api/gitstalk?username=${username}`);
+		const res = await getJson(
+			`${API_ID}/api/gitstalk?username=${username}`,
+		);
 		return res;
+	},
+	makeSticker: async (
+		url,
+		pack = config.STICKER_PACK.split(';')[0],
+		author = config.STICKER_PACK.split(';')[1],
+	) => {
+		return fetch(
+			`${API_ID}/api/sticker?url=${encodeURIComponent(
+				url,
+			)}&packname=${pack}&author=${author}`,
+		)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error(
+						`Failed to fetch sticker: ${response.statusText}`,
+					);
+				}
+				return response.arrayBuffer();
+			})
+			.then(buffer => Buffer.from(buffer))
+			.catch(error => {
+				console.error('Error creating sticker:', error.message);
+				throw error;
+			});
 	},
 };
 
