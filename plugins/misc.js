@@ -1,6 +1,7 @@
 import { extractUrlFromString, getJson } from 'xstro-utils';
 import { bot, getUsers } from '#lib';
 import config from '#config';
+import { XSTRO } from '#utils';
 
 bot(
 	{
@@ -150,5 +151,35 @@ bot(
 				},
 			},
 		});
+	},
+);
+
+bot(
+	{
+		pattern: 'math',
+		public: true,
+		desc: 'Solve A Maths Expression',
+	},
+	async (message, match) => {
+		const msg = await message.send('*Calcuating*');
+		const res = await XSTRO.maths(match);
+		return await msg.edit(res);
+	},
+);
+
+bot(
+	{
+		pattern: 'link',
+		public: true,
+		desc: 'Shortens a url',
+	},
+	async (message, match) => {
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
+			return message.send('*Please provide a valid URL*');
+		const msg = await message.send('*Shortening URL...*');
+		const url = extractUrlFromString(match);
+		const res = await XSTRO.short(url);
+		if (!res) return await msg.edit('*Failed to shorten URL*');
+		return await msg.edit(`*Shortened URL:* ${res}`);
 	},
 );

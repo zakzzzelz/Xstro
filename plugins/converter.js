@@ -81,3 +81,18 @@ bot(
 		return await message.send(video);
 	},
 );
+
+bot(
+	{
+		pattern: 'ttp',
+		public: true,
+		desc: 'Designs ttp Stickers',
+	},
+	async (message, match, { prefix }) => {
+		if (!match) return message.send(`_Usage: ${prefix}ttp Astro_`);
+		const buff = await XSTRO.ttp(match);
+		const { rawUrl } = await upload(buff);
+		const sticker = await XSTRO.makeSticker(rawUrl);
+		return await message.send(sticker, { type: 'sticker' });
+	},
+);

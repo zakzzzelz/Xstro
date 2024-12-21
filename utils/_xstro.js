@@ -49,8 +49,9 @@ const XSTRO = {
 		};
 	},
 	chatbot: async text => {
-		const res = `${API_ID}/api/hericai?query=${text}`;
-		return await getJson(res.answer);
+		if (!text) return `_How can I help you today?_`;
+		const res = await getJson(`${API_ID}/api/hericai?query=${text}`);
+		return res.answer;
 	},
 	facts: async () => {
 		const res = `${API_ID}/api/facts`;
