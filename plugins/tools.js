@@ -164,3 +164,58 @@ bot(
 		return await message.send(buff);
 	},
 );
+
+bot(
+	{
+		pattern: 'gitstalk',
+		public: true,
+		desc: 'Stalk A Git User',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide A GitUserName_');
+		const res = await XSTRO.gitstalk(match);
+		const {
+			username,
+			bio,
+			profile_pic,
+			email,
+			company,
+			created_at,
+			followers,
+			following,
+		} = res;
+		return await message.send(
+			`\`\`\`${username} Details:
+
+Bio: ${bio || 'Not Set'}
+Email: ${email || 'Not Set'}
+Company: ${company || 'Not Set'}
+Created At: ${created_at || 'Not Available'}
+Followers: ${followers || 0}
+Following: ${following || 0}\`\`\``,
+			{ image: profile_pic },
+		);
+	},
+);
+
+bot(
+	{
+		pattern: 'git',
+		public: true,
+		desc: 'Downloads a GitHub repository as ZIP',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide a GitHub repository URL_');
+		const repoUrl = match.endsWith('.git') ? match : `${match}.git`;
+		const zipUrl = repoUrl.replace(
+			'.git',
+			'/archive/refs/heads/main.zip',
+		);
+		const buffer = await getBuffer(zipUrl);
+		return await message.sendMessage(buffer, {
+			type: 'document',
+			mimetype: 'application/zip',
+			fileName: 'repo.zip',
+		});
+	},
+);

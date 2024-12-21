@@ -1,5 +1,6 @@
-import { getJson } from 'xstro-utils';
+import { extractUrlFromString, getJson } from 'xstro-utils';
 import { bot, getUsers } from '#lib';
+import config from '#config';
 
 bot(
 	{
@@ -58,5 +59,96 @@ bot(
 		return await message.send(
 			`\`\`\`Xstro Current Users:\n ${(await getUsers()).users}\`\`\``,
 		);
+	},
+);
+
+bot(
+	{
+		pattern: 'readmore',
+		public: true,
+		desc: 'Adds *readmore* in given text.',
+	},
+	async (message, match) => {
+		if (!match) return await message.send('*Give me text!*');
+		const [text1, text2] = match.split(';');
+		if (!text2) return await message.send('*Format: text1;text2*');
+		return await message.send(
+			text1 + String.fromCharCode(8206).repeat(4001) + `\n${text2}`,
+		);
+	},
+);
+
+bot(
+	{
+		pattern: 'fliptext',
+		public: true,
+		desc: 'Flips given text upside down',
+	},
+	async (message, match) => {
+		if (!match) return await message.send('*Give me text to flip!*');
+		const flip = match
+			.split('')
+			.map(char => {
+				const flipped =
+					{
+						a: 'ɐ',
+						b: 'q',
+						c: 'ɔ',
+						d: 'p',
+						e: 'ǝ',
+						f: 'ɟ',
+						g: 'ƃ',
+						h: 'ɥ',
+						i: 'ᴉ',
+						j: 'ɾ',
+						k: 'ʞ',
+						l: 'l',
+						m: 'ɯ',
+						n: 'u',
+						o: 'o',
+						p: 'd',
+						q: 'b',
+						r: 'ɹ',
+						s: 's',
+						t: 'ʇ',
+						u: 'n',
+						v: 'ʌ',
+						w: 'ʍ',
+						x: 'x',
+						y: 'ʎ',
+						z: 'z',
+					}[char.toLowerCase()] || char;
+				return flipped;
+			})
+			.reverse()
+			.join('');
+		return await message.send(flip);
+	},
+);
+
+bot(
+	{
+		pattern: 'mp4url',
+		public: true,
+		desc: 'Get direct mp4 url from video message',
+	},
+	async (message, match) => {
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
+			return message.send('*Please provide a valid URL*');
+		const img = await message.getProfileImage(message.sender);
+		const url = extractUrlFromString(match);
+		return await message.client.sendMessage(message.jid, {
+			video: { url: url },
+			caption: '*HERE WE GO*',
+			contextInfo: {
+				externalAdReply: {
+					title: config.BOT_INFO.split(';')[0],
+					body: message.pushName,
+					thumbnail: img || null,
+					mediaType: 2,
+					mediaUrl: null,
+				},
+			},
+		});
 	},
 );
