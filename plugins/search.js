@@ -1,4 +1,5 @@
 import { bot } from '#lib';
+import { XSTRO } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
@@ -176,5 +177,18 @@ bot(
 		return message.send(
 			`*Date:* ${date}\n*Horoscope:* ${horoscope_data}`,
 		);
+	},
+);
+
+bot(
+	{
+		pattern: 'google',
+		public: true,
+		desc: 'Perform Google Search',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide Search Query_');
+		const res = await XSTRO.google(match);
+		return message.send(`\`\`\`${res}\`\`\``);
 	},
 );

@@ -135,3 +135,43 @@ export async function apkDl(query) {
 		link: app.file.path,
 	};
 }
+
+/**
+ * Uploads a file to Uguu.se hosting service
+ * @param {(Buffer|string)} input - The file to upload, either as a Buffer or file path string
+ * @returns {Promise<string>} A promise that resolves to the URL of the uploaded file
+ * @throws {Error} Will throw an error if the input type is invalid or if the upload fails
+ * @async
+ */
+export async function UguuUpload(input) {
+	return new Promise(async (resolve, reject) => {
+		const form = new FormData();
+		let fileStream;
+
+		if (Buffer.isBuffer(input)) {
+			fileStream = input;
+			form.append('files[]', fileStream, 'uploaded-file.jpg');
+		} else if (typeof input === 'string') {
+			fileStream = createReadStream(input);
+			form.append('files[]', fileStream);
+		} else {
+			return reject(new Error('Invalid input type'));
+		}
+
+		try {
+			const response = await axios({
+				url: 'https://uguu.se/upload.php',
+				method: 'POST',
+				headers: {
+					'User-Agent':
+						'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+					...form.getHeaders(),
+				},
+				data: form,
+			});
+			resolve(response.data.files[0].url);
+		} catch (error) {
+			reject(error);
+		}
+	});
+}

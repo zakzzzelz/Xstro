@@ -159,6 +159,12 @@ const XSTRO = {
 		const res = await getBuffer(`${API_ID}/api/mp3?url=${url}`);
 		return res;
 	},
+	google: async (query) => {
+		const res = await getJson(
+			`${API_ID}/api/google?query=${query}`,
+		);
+		return res.result;
+	}
 };
 
 export { XSTRO };
