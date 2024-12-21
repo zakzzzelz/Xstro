@@ -151,6 +151,9 @@ const XSTRO = {
 		const res = await getBuffer(`${API_ID}/api/blackvideo?url=${url}`);
 		return res;
 	},
+	photo: async url => {
+		const res = await getBuffer(`${API_ID}/api/photo`)
+	}
 };
 
 export { XSTRO };
