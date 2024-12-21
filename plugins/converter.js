@@ -96,3 +96,33 @@ bot(
 		return await message.send(sticker, { type: 'sticker' });
 	},
 );
+
+bot(
+	{
+		pattern: 'photo',
+		public: true,
+		desc: 'Convert Sticker to Photo',
+	},
+	async message => {
+		if (!message.reply_message.sticker)
+			return message.send('_Reply Sticker_');
+		const { rawUrl } = await upload(await message.download());
+		const img = await XSTRO.photo(rawUrl);
+		return await message.send(img);
+	},
+);
+
+bot(
+	{
+		pattern: 'mp3',
+		public: true,
+		desc: 'Convert Video to Audio',
+	},
+	async message => {
+		if (!message.reply_message.video)
+			return message.send('_Reply Video_');
+		const { rawUrl } = await upload(await message.download());
+		const mp3 = await XSTRO.mp3(rawUrl);
+		return await message.send(mp3);
+	},
+);

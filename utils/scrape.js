@@ -108,3 +108,30 @@ export async function removeBg(buffer) {
 	unlinkSync(inputPath);
 	return data;
 }
+
+/**
+ * Searches and retrieves APK download information from Aptoide API
+ * @param {string} query - The search query for the app
+ * @returns {Promise<Object>} Object containing app details:
+ * - img: App icon URL
+ * - developer: Developer/store name
+ * - appname: Application name
+ * - link: APK file download path
+ * @async
+ */
+export async function apkDl(query) {
+	const res = await axios.get('http://ws75.aptoide.com/api/7/apps/search', {
+		params: {
+			query,
+			limit: 1,
+		},
+	});
+	const app = res.data.datalist.list[0];
+
+	return {
+		img: app.icon,
+		developer: app.store.name,
+		appname: app.name,
+		link: app.file.path,
+	};
+}

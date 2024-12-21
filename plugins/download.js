@@ -1,6 +1,25 @@
 import { bot } from '#lib';
-import { XSTRO } from '#utils';
-import { extractUrlFromString } from 'xstro-utils';
+import { apkDl, XSTRO } from '#utils';
+import { extractUrlFromString, getBuffer } from 'xstro-utils';
+
+bot(
+	{
+		pattern: 'apk',
+		public: true,
+		desc: 'Downloads Apk',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide Apk to Download_');
+		const res = await apkDl(match);
+		const { appname, link } = res;
+		const buff = await getBuffer(link);
+		return await message.sendMessage(buff, {
+			type: 'document',
+			mimetype: 'application/vnd.android.package-archive',
+			fileName: appname + '.apk',
+		});
+	},
+);
 
 bot(
 	{

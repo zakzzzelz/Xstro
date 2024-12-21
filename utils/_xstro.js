@@ -152,8 +152,13 @@ const XSTRO = {
 		return res;
 	},
 	photo: async url => {
-		const res = await getBuffer(`${API_ID}/api/photo`)
-	}
+		const res = await getBuffer(`${API_ID}/api/photo?url=${url}`);
+		return res;
+	},
+	mp3: async url => {
+		const res = await getBuffer(`${API_ID}/api/mp3?url=${url}`);
+		return res;
+	},
 };
 
 export { XSTRO };
