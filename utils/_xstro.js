@@ -169,6 +169,14 @@ const XSTRO = {
 		);
 		return res.result;
 	},
+	wallpaper: async query => {
+		const res = await getJson(`${API_ID}/api/wallpaper?query=${query}`);
+		return res;
+	},
+	wikipedia: async query => {
+		const res = await getJson(`${API_ID}/api/wikipedia?query=${query}`);
+		return res;
+	}
 };
 
 export { XSTRO };

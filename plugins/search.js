@@ -192,3 +192,35 @@ bot(
 		return message.send(`\`\`\`${res}\`\`\``);
 	},
 );
+
+bot(
+	{
+		pattern: 'wallpaper',
+		public: true,
+		desc: 'Get Wallpapers',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Give me something to search for_');
+
+		const res = await XSTRO.wallpaper(match);
+		for (const item of res) {
+			if (item.image) {
+				await message.send(item.image);
+			}
+		}
+	},
+);
+
+bot(
+	{
+		pattern: 'wikipedia',
+		public: true,
+		desc: 'Search wikipedia for information',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Search a term like elon musk_');
+		const res = await XSTRO.wikipedia(match);
+		const { title, extract } = res;
+		return await message.send(`\`\`\`${title}:\n\n${extract}\`\`\``);
+	},
+);
