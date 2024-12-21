@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { remini, uploadFile, upload, XSTRO } from '#utils';
+import { remini, uploadFile, upload, XSTRO, removeBg } from '#utils';
 import { getBuffer } from 'xstro-utils';
 
 bot(
@@ -148,5 +148,19 @@ bot(
 			match || message.reply_message?.text,
 		);
 		return await message.send(pdfDoc, { fileName: 'Converted Document' });
+	},
+);
+
+bot(
+	{
+		pattern: 'rmbg',
+		public: true,
+		desc: 'Removes background Image from photo',
+	},
+	async message => {
+		if (!message.reply_message?.image)
+			return message.send('_Reply an image_');
+		const buff = await removeBg(await message.download());
+		return await message.send(buff);
 	},
 );

@@ -87,7 +87,9 @@ const XSTRO = {
 	},
 	generatePdf: async content => {
 		if (!content) return '_No content provided_';
-		return await getBuffer(`${API_ID}/api/textToPdf?content=${encodeURIComponent(content)}`);
+		return await getBuffer(
+			`${API_ID}/api/textToPdf?content=${encodeURIComponent(content)}`,
+		);
 	},
 	maths: async expression => {
 		const res = await getJson(
@@ -137,6 +139,16 @@ const XSTRO = {
 				console.error('Error creating sticker:', error.message);
 				throw error;
 			});
+	},
+	flipMedia: async (url, direction) => {
+		const res = await getBuffer(
+			`${API_ID}/api/flip?url=${url}&direction=${direction}`,
+		);
+		return res;
+	},
+	blackvideo: async url => {
+		const res = await getBuffer(`${API_ID}/api/blackvideo?url${url}`);
+		return res;
 	},
 };
 
