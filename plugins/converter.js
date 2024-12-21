@@ -59,7 +59,6 @@ bot(
 
 		const media = await message.download();
 		const { rawUrl } = await upload(media);
-		console.log(rawUrl);
 		const flipped = await XSTRO.flipMedia(rawUrl, match);
 
 		return message.send(flipped, { caption: '_Flipped successfully_' });
@@ -78,7 +77,7 @@ bot(
 			return message.send('_Reply Audio_');
 		media = await message.download();
 		const url = await upload(media);
-		const video = await XSTRO.blackvideo(url);
+		const video = await XSTRO.blackvideo(url.rawUrl);
 		return await message.send(video);
 	},
 );
