@@ -1,6 +1,10 @@
 import { bot } from '#lib';
 import { apkDl, XSTRO } from '#utils';
-import { extractUrlFromString, getBuffer } from 'xstro-utils';
+import {
+	extractUrlFromString,
+	FileTypeFromBuffer,
+	getBuffer,
+} from 'xstro-utils';
 
 bot(
 	{
@@ -111,5 +115,26 @@ bot(
 		url = extractUrlFromString(url);
 		const media = await XSTRO.tiktok(url);
 		return await message.send(media.url, { caption: media.title });
+	},
+);
+
+bot(
+	{
+		pattern: 'mediafire',
+		public: true,
+		desc: 'Downloads Mediafire files from url',
+	},
+	async (message, match) => {
+		let url = match || message.reply_message?.text;
+		if (!url) return message.send('_Provide Mediafire link_');
+		url = extractUrlFromString(url);
+		const media = await XSTRO.mediafire(url);
+		const buff = await getBuffer(media.link);
+		const type = await FileTypeFromBuffer(buff);
+		return await message.sendMessage(buff, {
+			type: 'document',
+			mimetype: res.mime[0],
+			fileName: 'file' + type,
+		});
 	},
 );

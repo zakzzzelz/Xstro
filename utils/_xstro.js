@@ -176,7 +176,11 @@ const XSTRO = {
 	wikipedia: async query => {
 		const res = await getJson(`${API_ID}/api/wikipedia?query=${query}`);
 		return res;
-	}
+	},
+	mediafire: async url => {
+		const res = await getJson(`${API_ID}/api/mediafire?url=${url}`);
+		return res;
+	},
 };
 
 export { XSTRO };

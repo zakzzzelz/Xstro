@@ -175,3 +175,36 @@ export async function UguuUpload(input) {
 		}
 	});
 }
+
+/**
+ * Scrapes Pinterest for images based on a search query.
+ * @param {string} query - The search term to look for on Pinterest.
+ * @returns {Promise<{status: number, url: string}>} A promise that resolves to an object containing:
+ *   - status: HTTP status code (200 if successful)
+ *   - url: URL of a randomly selected image from the search results
+ * @throws {Error} If the Pinterest request fails
+ */
+export function pinterest(query) {
+	return new Promise((resolve, reject) => {
+		axios(
+			`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`,
+		)
+			.then(data => {
+				const random =
+					data.data.resource_response.data.results[
+						Math.floor(
+							Math.random() *
+								data.data.resource_response.data.results
+									.length,
+						)
+					];
+				var result = [];
+				result = {
+					status: 200,
+					url: random.images.orig.url,
+				};
+				resolve(result);
+			})
+			.catch(reject);
+	});
+}

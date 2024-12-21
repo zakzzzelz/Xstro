@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { XSTRO } from '#utils';
+import { pinterest, XSTRO } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
@@ -222,5 +222,18 @@ bot(
 		const res = await XSTRO.wikipedia(match);
 		const { title, extract } = res;
 		return await message.send(`\`\`\`${title}:\n\n${extract}\`\`\``);
+	},
+);
+
+bot(
+	{
+		pattern: 'pinterest',
+		public: true,
+		desc: 'Search images from Pinterest',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Give me something to search for_');
+		const res = await pinterest(match);
+		return await message.send(res.url);
 	},
 );
