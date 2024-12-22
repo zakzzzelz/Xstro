@@ -181,6 +181,13 @@ const XSTRO = {
 		const res = await getJson(`${API_ID}/api/mediafire?url=${url}`);
 		return res;
 	},
+	bing: async query => {
+		const res = await getJson(`${API_ID}/api/bing?query=${query}`);
+		return res.result;
+	},
+	news: async () => {
+		return await getJson(`${API_ID}/api/technews`);
+	},
 };
 
 export { XSTRO };

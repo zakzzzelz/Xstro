@@ -237,3 +237,45 @@ bot(
 		return await message.send(res.url);
 	},
 );
+
+bot(
+	{
+		pattern: 'bing',
+		public: true,
+		desc: 'Search Bing',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Give Me Query_');
+		const results = await XSTRO.bing(match);
+		const data = results
+			.map(
+				(item, index) =>
+					`${index + 1}. *${item.title}*\n${item.description}\n${
+						item.link
+					}`,
+			)
+			.join('\n\n');
+		return await message.send(`*Search Results:*\n\n${data}`);
+	},
+);
+
+bot(
+	{
+		pattern: 'technews',
+		public: true,
+		desc: 'Get Tech latest news',
+	},
+	async (message, match) => {
+		const news = await XSTRO.news();
+		if (!news?.length) return message.send('No news found');
+		const formattedNews = news
+			.map(
+				(article, index) =>
+					`*${index + 1}. ${article.title}*\n${
+						article.description || ''
+					}\n${article.link}`,
+			)
+			.join('\n\n');
+		return message.send(`*Latest Tech News:*\n\n${formattedNews}`);
+	},
+);
