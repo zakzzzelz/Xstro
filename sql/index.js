@@ -7,7 +7,6 @@ export * from './antispam.js';
 export * from './antivv.js';
 export * from './antiword.js';
 export * from './areact.js';
-export * from './autobio.js';
 export * from './ban.js';
 export * from './config.js';
 export * from './filters.js';
