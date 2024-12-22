@@ -5,6 +5,7 @@ import {
 	deleteBgm,
 	getBgmList,
 	loadMessage,
+	saveMessage,
 } from '#sql';
 
 bot(
@@ -43,6 +44,9 @@ bot(
 			return message.send('_Please reply to an audio message_');
 		const word = match.trim().toLowerCase();
 		await addBgm(word, message.reply_message.key.id);
+		if (!(await loadMessage(message.reply_message.key.id))) {
+			await saveMessage(message.reply_message);
+		}
 		return message.send(`_BGM added for ${word}_`);
 	},
 );
