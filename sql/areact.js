@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import { DATABASE } from '#lib';
 
-export const AutoReact =  DATABASE.define(
+export const AutoReact = DATABASE.define(
 	'AReact',
 	{
 		status: {
