@@ -2,7 +2,6 @@ import { DataTypes } from 'sequelize';
 import config from '#config';
 import { runtime } from '#lib';
 import { DATABASE } from '#lib';
-import { placeholderService } from './autobio.js';
 
 const AliveDB = DATABASE.define(
 	'AliveDB',
@@ -71,8 +70,6 @@ const aliveMessage = async message => {
 		.replace(/&runtime/g, runtime(process.uptime()))
 		.replace(/&user/g, message.pushName || 'user')
 		.replace(/@user/g, `@${message.sender.split('@')[0]}`)
-		.replace(/&quotes/g, await placeholderService.quotes())
-		.replace(/&facts/g, await placeholderService.facts())
 		.replace(/&owner/g, config.BOT_INFO.split(';')[0])
 		.replace(/&botname/g, config.BOT_INFO.split(';')[1]);
 };
