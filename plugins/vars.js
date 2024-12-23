@@ -5,6 +5,7 @@ bot(
 	{
 		pattern: 'setvar',
 		public: false,
+		type: "system",
 		desc: 'Set system var',
 	},
 	async (message, match) => {
@@ -21,6 +22,7 @@ bot(
 	{
 		pattern: 'delvar',
 		public: false,
+		type: "system",
 		desc: 'Delete system var',
 	},
 	async (message, match) => {
@@ -35,6 +37,7 @@ bot(
 	{
 		pattern: 'getvar',
 		public: false,
+		type: "system",
 		desc: 'Get system vars',
 	},
 	async message => {
