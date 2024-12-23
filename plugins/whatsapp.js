@@ -375,3 +375,44 @@ bot(
 		message.send(`Group JID: ${message.jid}`);
 	},
 );
+
+
+
+//======================================================
+
+bot({
+    pattern: 'gforward',
+    public: false,
+    type: 'whatsapp',
+    desc: 'Forwards a replied message to multiple groups',
+},
+async (message, match) => {
+    if (!message.reply_message) return message.send('_Reply to a message to forward it!_');
+    if (!match) return message.send('_Provide a comma-separated list of group JIDs._');
+
+    const groupJids = match.split(',').map(jid => jid.trim()).filter(isJidGroup);
+
+    if (groupJids.length === 0) {
+        return message.send('_You must provide valid group JIDs._');
+    }
+
+    const msg = message.data?.quoted;
+    let successfulForwards = 0;
+    let failedForwards = 0;
+
+    for (const jid of groupJids) {
+        try {
+            await message.forward(jid, msg, { quoted: msg });
+            successfulForwards++;
+        } catch (error) {
+            console.error(`Failed to forward to ${jid}:`, error);
+            failedForwards++;
+        }
+    }
+
+    return message.send(
+        `_Message forwarded to ${successfulForwards} group(s). Failed to forward to ${failedForwards} group(s)._`
+    );
+});
+
+
