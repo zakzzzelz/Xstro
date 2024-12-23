@@ -195,6 +195,12 @@ const XSTRO = {
 	yahoo: async query => {
 		const res = await getJson(`${API_ID}/api/yahoo?query=${query}`);
 		return res.result;
+	},
+	animenews: async () => {
+		return await getJson(`${API_ID}/api/animenews`);
+	},
+	footballnews: async () => {
+		return await getJson(`${API_ID}/api/footballnews`);
 	}
 };
 
