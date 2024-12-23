@@ -8,6 +8,7 @@ bot(
 	{
 		pattern: 'vv',
 		public: false,
+		type: "whatsapp",
 		desc: 'Download ViewOnce Messages',
 	},
 	async message => {
@@ -21,6 +22,7 @@ bot(
 	{
 		pattern: 'myname',
 		public: false,
+		type: "whatsapp",
 		desc: 'Changes your WhatsApp Name',
 	},
 	async (message, match) => {
@@ -34,6 +36,7 @@ bot(
 	{
 		pattern: 'setpp',
 		public: false,
+		type: "whatsapp",
 		desc: 'Set Your Profile Picture',
 	},
 	async message => {
@@ -48,6 +51,7 @@ bot(
 	{
 		pattern: 'quoted',
 		public: false,
+		type: "whatsapp",
 		desc: 'quoted message',
 	},
 	async message => {
@@ -65,6 +69,7 @@ bot(
 	{
 		pattern: 'dlt',
 		public: false,
+		type: "whatsapp",
 		desc: 'Deletes Message',
 	},
 	async message => {
@@ -77,6 +82,7 @@ bot(
 	{
 		pattern: 'archive',
 		public: false,
+		type: "whatsapp",
 		desc: 'archive whatsapp chat',
 	},
 	async message => {
@@ -89,6 +95,7 @@ bot(
 	{
 		pattern: 'unarchive',
 		public: false,
+		type: "whatsapp",
 		desc: 'unarchive whatsapp chat',
 	},
 	async message => {
@@ -101,6 +108,7 @@ bot(
 	{
 		pattern: 'blocklist',
 		public: false,
+		type: "whatsapp",
 		desc: 'Fetches BlockList',
 	},
 	async message => {
@@ -119,6 +127,7 @@ bot(
 	{
 		pattern: 'clear ?(.*)',
 		public: false,
+		type: "whatsapp",
 		desc: 'delete whatsapp chat',
 	},
 	async message => {
@@ -131,6 +140,7 @@ bot(
 	{
 		pattern: 'rpp',
 		public: false,
+		type: "whatsapp",
 		desc: 'Removes Profile Picture',
 	},
 	async message => {
@@ -143,6 +153,7 @@ bot(
 	{
 		pattern: 'pin',
 		public: false,
+		type: "whatsapp",
 		desc: 'pin a chat',
 	},
 	async message => {
@@ -155,6 +166,7 @@ bot(
 	{
 		pattern: 'unpin ?(.*)',
 		public: false,
+		type: "whatsapp",
 		desc: 'unpin a msg',
 	},
 	async message => {
@@ -167,6 +179,7 @@ bot(
 	{
 		pattern: 'save',
 		public: false,
+		type: "whatsapp",
 		desc: 'Saves Status',
 	},
 	async message => {
@@ -180,6 +193,7 @@ bot(
 	{
 		pattern: 'forward',
 		public: false,
+		type: "whatsapp",
 		desc: 'Forwards A Replied Message',
 	},
 	async (message, match) => {
@@ -205,6 +219,7 @@ bot(
 	{
 		pattern: 'block',
 		public: false,
+		type: "whatsapp",
 		desc: 'Blocks A Person',
 	},
 	async (message, match) => {
@@ -217,6 +232,7 @@ bot(
 	{
 		pattern: 'unblock',
 		public: false,
+		type: "whatsapp",
 		desc: 'Unblocks A Person',
 	},
 	async (message, match) => {
@@ -229,6 +245,7 @@ bot(
 	{
 		pattern: 'edit',
 		public: false,
+		type: "whatsapp",
 		desc: 'Edits A Sent Message',
 	},
 	async (message, match, { prefix }) => {
@@ -242,6 +259,7 @@ bot(
 	{
 		pattern: 'jid',
 		public: true,
+		type: "whatsapp",
 		desc: 'Get Jid of Current Chat',
 	},
 	async message => {
@@ -254,6 +272,7 @@ bot(
 	{
 		pattern: 'bio',
 		public: true,
+		type: "whatsapp",
 		desc: 'Change your whatsapp bio',
 	},
 	async (message, match, { prefix }) => {
@@ -267,6 +286,7 @@ bot(
 	{
 		pattern: 'react',
 		public: false,
+		type: "whatsapp",
 		desc: 'React to A Message',
 	},
 	async (message, match) => {
@@ -281,6 +301,7 @@ bot(
 	{
 		pattern: 'star',
 		public: false,
+		type: "whatsapp",
 		desc: 'Stars or Unstars a Message',
 	},
 	async message => {
@@ -297,6 +318,7 @@ bot(
 	{
 		pattern: 'unstar',
 		public: false,
+		type: "whatsapp",
 		desc: 'Stars or Unstars a Message',
 	},
 	async message => {
@@ -313,6 +335,7 @@ bot(
 	{
 		pattern: 'owner',
 		public: true,
+		type: "whatsapp",
 		desc: 'Get Bot Owner',
 	},
 	async message => {
@@ -344,6 +367,7 @@ bot(
 	{
 		pattern: 'gjid',
 		public: true,
+		type: "whatsapp",
 		isGroup: true,
 		desc: 'Get JID of the Current Group',
 	},
