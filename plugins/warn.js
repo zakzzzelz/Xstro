@@ -8,6 +8,7 @@ bot(
 	{
 		pattern: 'warn',
 		public: false,
+		type: "group",
 		desc: 'Warn a user for violating rules',
 	},
 	async (message, match) => {
@@ -34,6 +35,7 @@ bot(
 	{
 		pattern: 'getwarn',
 		public: false,
+		type: "group",
 		desc: 'Check warnings of a user',
 	},
 	async (message, match) => {
@@ -47,6 +49,7 @@ bot(
 	{
 		pattern: 'resetwarn',
 		public: false,
+		type: "group",
 		desc: 'Reset warnings of a user',
 	},
 	async (message, match) => {
