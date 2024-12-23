@@ -6,6 +6,7 @@ bot(
 		pattern: 'filters',
 		public: false,
 		desc: 'Displays Available Filter Commands and how to use them',
+		type: 'filters',
 	},
 	async message => {
 		const Msg = `
@@ -28,12 +29,19 @@ bot(
 		pattern: 'pfilter',
 		public: false,
 		desc: 'Set up DM filters',
+		type: 'filters',
 	},
 	async (message, match) => {
-		if (!match.includes(';')) return await message.send('Use the format: pfilter <text>;<response>');
+		if (!match.includes(';'))
+			return await message.send(
+				'Use the format: pfilter <text>;<response>',
+			);
 
 		const [text, response] = match.split(';');
-		if (!text || !response) return await message.send('Both text and response are required.');
+		if (!text || !response)
+			return await message.send(
+				'Both text and response are required.',
+			);
 
 		const result = await addFilter('dm', text.trim(), response.trim());
 		return await message.send(`\`\`\`${result}\`\`\``);
@@ -45,12 +53,19 @@ bot(
 		pattern: 'gfilter',
 		public: false,
 		desc: 'Set up group chat filters',
+		type: 'filters',
 	},
 	async (message, match) => {
-		if (!match.includes(';')) return await message.send('Use the format: gfilter <text>;<response>');
+		if (!match.includes(';'))
+			return await message.send(
+				'Use the format: gfilter <text>;<response>',
+			);
 
 		const [text, response] = match.split(';');
-		if (!text || !response) return await message.send('Both text and response are required.');
+		if (!text || !response)
+			return await message.send(
+				'Both text and response are required.',
+			);
 
 		const result = await addFilter('gc', text.trim(), response.trim());
 		return await message.send(`\`\`\`${result}\`\`\``);
@@ -62,10 +77,13 @@ bot(
 		pattern: 'delfilter',
 		public: false,
 		desc: 'Delete filters (DM or group)',
+		type: 'filters',
 	},
 	async (message, match) => {
 		if (!match.startsWith('gc ') && !match.startsWith('dm ')) {
-			return await message.send('Use the format: delfilter <gc/dm> <text>');
+			return await message.send(
+				'Use the format: delfilter <gc/dm> <text>',
+			);
 		}
 
 		const [type, ...textParts] = match.split(' ');
@@ -82,16 +100,25 @@ bot(
 		pattern: 'getfilters',
 		public: false,
 		desc: 'List all filters',
+		type: 'filters',
 	},
 	async message => {
 		const dmFilters = await getFilters('dm');
 		const gcFilters = await getFilters('gc');
 
 		let response = 'Available Filters:\n\nDirect Message Filters:\n';
-		response += dmFilters.length ? dmFilters.map(filter => `• ${filter.word}: ${filter.response}`).join('\n') : 'None';
+		response += dmFilters.length
+			? dmFilters
+					.map(filter => `• ${filter.word}: ${filter.response}`)
+					.join('\n')
+			: 'None';
 
 		response += '\n\nGroup Chat Filters:\n';
-		response += gcFilters.length ? gcFilters.map(filter => `• ${filter.word}: ${filter.response}`).join('\n') : 'None';
+		response += gcFilters.length
+			? gcFilters
+					.map(filter => `• ${filter.word}: ${filter.response}`)
+					.join('\n')
+			: 'None';
 
 		return await message.send(`\`\`\`${response}\`\`\``);
 	},

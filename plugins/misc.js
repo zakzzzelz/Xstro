@@ -8,6 +8,7 @@ bot(
 		pattern: 'pair',
 		public: true,
 		desc: 'Get Your Pairing Code Now',
+		type: 'help',
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
@@ -33,6 +34,7 @@ bot(
 		pattern: 'support',
 		public: true,
 		desc: 'Sends developer support information ',
+		type: 'help',
 	},
 	async message => {
 		const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  
@@ -55,6 +57,7 @@ bot(
 		pattern: 'users',
 		public: true,
 		desc: 'Get Total Users',
+		type: 'help',
 	},
 	async message => {
 		return await message.send(
@@ -68,6 +71,7 @@ bot(
 		pattern: 'readmore',
 		public: true,
 		desc: 'Adds *readmore* in given text.',
+		type: 'tools'
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Give me text!*');
@@ -84,6 +88,7 @@ bot(
 		pattern: 'fliptext',
 		public: true,
 		desc: 'Flips given text upside down',
+		type: 'misc',
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Give me text to flip!*');
@@ -132,6 +137,7 @@ bot(
 		pattern: 'mp4url',
 		public: true,
 		desc: 'Get direct mp4 url from video message',
+		type: 'misc',
 	},
 	async (message, match) => {
 		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
@@ -159,6 +165,7 @@ bot(
 		pattern: 'math',
 		public: true,
 		desc: 'Solve A Maths Expression',
+		type: 'misc',
 	},
 	async (message, match) => {
 		const msg = await message.send('*Calcuating*');
@@ -172,6 +179,7 @@ bot(
 		pattern: 'link',
 		public: true,
 		desc: 'Shortens a url',
+		type: 'tools',
 	},
 	async (message, match) => {
 		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))

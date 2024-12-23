@@ -44,6 +44,7 @@ bot(
 		pattern: 'eval ?(.*)',
 		public: false,
 		desc: 'Evaluate code',
+		type: 'system'
 	},
 	async (message, match) => {
 		const src_code = match || message.reply_message?.text;

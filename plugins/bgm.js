@@ -12,6 +12,7 @@ bot(
 	{
 		pattern: 'bgm',
 		desc: 'Show BGM command menu',
+		type: 'bgm',
 	},
 	async message => {
 		const menuText = `\`\`\`
@@ -36,6 +37,7 @@ bot(
 		public: false,
 		desc: 'Add a new BGM entry',
 		usage: '.addbgm word (reply to audio)',
+		type: 'bgm',
 	},
 	async (message, match) => {
 		if (!match)
@@ -56,6 +58,7 @@ bot(
 		pattern: 'getbgm',
 		desc: 'Get a BGM by word',
 		usage: '.getbgm word',
+		type: 'bgm',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Example: .getbgm hello_');
@@ -77,6 +80,7 @@ bot(
 		pattern: 'delbgm',
 		public: false,
 		desc: 'Delete a BGM entry',
+		type: 'bgm',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Example: .delbgm hello_');
@@ -93,6 +97,7 @@ bot(
 		pattern: 'listbgm',
 		public: false,
 		desc: 'List all available BGMs',
+		type: 'bgm',
 	},
 	async message => {
 		const bgmList = await getBgmList();

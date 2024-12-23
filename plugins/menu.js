@@ -35,18 +35,34 @@ bot(
 		})}
 ╰─────────────\`\`\`\n${READ_MORE}`;
 
-		let nums = 1;
-		const allCommands = commands
+		const commandsByType = commands
 			.filter(cmd => cmd.pattern && !cmd.dontAddCommandList)
-			.map(cmd => cmd.pattern.toString().toUpperCase().split(/\W+/)[2])
-			.sort();
+			.reduce((acc, cmd) => {
+				const type = cmd.type || 'Misc';
+				if (!acc[type]) {
+					acc[type] = [];
+				}
+				acc[type].push(
+					cmd.pattern.toString().toUpperCase().split(/\W+/)[2],
+				);
+				return acc;
+			}, {});
 
-		let menuText = `\n\n${`\`\`\`XSTRO PATCH V${config.VERSION}\`\`\``} \n\n╭─────────\n`;
-		allCommands.forEach(cmd => {
-			menuText += `│\`\`\`${nums}· ${cmd}\`\`\`\n`;
-			nums++;
+		const sortedTypes = Object.keys(commandsByType).sort();
+
+		let menuText = `\n\n${`\`\`\`XSTRO PATCH V${config.VERSION}\`\`\``}\n\n`;
+		let totalCommands = 1;
+
+		sortedTypes.forEach(type => {
+			const sortedCommands = commandsByType[type].sort();
+			menuText += `\`\`\`╭──── ${type.toUpperCase()} ────\`\`\`\n`;
+			sortedCommands.forEach(cmd => {
+				menuText += `│\`\`\`${totalCommands}· ${cmd}\`\`\`\n`;
+				totalCommands++;
+			});
+			menuText += `╰────────────\n\n`;
 		});
-		menuText += `╰───────────\n`;
+
 		const image = readFileSync('./media/intro.mp4');
 		return await message.send(image, {
 			caption: intro + menuText,

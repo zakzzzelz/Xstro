@@ -7,6 +7,7 @@ bot(
 		pattern: 'alive',
 		public: true,
 		desc: 'Is Bot Alive?',
+		type: 'user',
 	},
 	async (message, match) => {
 		if (match) {
@@ -21,6 +22,8 @@ bot(
 				mentionedJid: [message.sender],
 			},
 		};
-		return botInfo ? message.send(botInfo, { ...mentionData, caption: msg }) : message.send(msg, mentionData);
+		return botInfo
+			? message.send(botInfo, { ...mentionData, caption: msg })
+			: message.send(msg, mentionData);
 	},
 );

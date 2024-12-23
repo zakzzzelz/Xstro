@@ -7,6 +7,7 @@ bot(
 		pattern: 'lyrics',
 		public: true,
 		desc: 'Search Lyrics',
+		type: 'search'
 	},
 	async (message, match) => {
 		const req = match || message.reply_message?.text;
@@ -27,6 +28,7 @@ bot(
 		pattern: 'imdb',
 		public: true,
 		desc: 'Sends info of a movie or series.',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Name a Series or movie._');
@@ -64,6 +66,7 @@ bot(
 		pattern: 'weather ?(.*)',
 		public: true,
 		desc: 'weather info',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Example : weather delhi*');
@@ -121,6 +124,7 @@ bot(
 		pattern: 'define',
 		public: true,
 		desc: 'Define A Word',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('```Provide A Word to Define```');
@@ -143,6 +147,7 @@ bot(
 		pattern: 'horo',
 		public: true,
 		desc: 'Gives horoscope info of user.',
+		type: 'search'
 	},
 	async (message, match) => {
 		const signs = [
@@ -185,6 +190,7 @@ bot(
 		pattern: 'google',
 		public: true,
 		desc: 'Perform Google Search',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide Search Query_');
@@ -198,6 +204,7 @@ bot(
 		pattern: 'wallpaper',
 		public: true,
 		desc: 'Get Wallpapers',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -216,6 +223,7 @@ bot(
 		pattern: 'wikipedia',
 		public: true,
 		desc: 'Search wikipedia for information',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Search a term like elon musk_');
@@ -230,6 +238,7 @@ bot(
 		pattern: 'pinterest',
 		public: true,
 		desc: 'Search images from Pinterest',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -243,6 +252,7 @@ bot(
 		pattern: 'bing',
 		public: true,
 		desc: 'Search Bing',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give Me Query_');
@@ -264,6 +274,7 @@ bot(
 		pattern: 'technews',
 		public: true,
 		desc: 'Get Tech latest news',
+		type: 'search'
 	},
 	async (message, match) => {
 		const news = await XSTRO.news();
@@ -285,6 +296,7 @@ bot(
 		pattern: 'yahoo',
 		public: true,
 		desc: 'Search Yahooooooo',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -307,6 +319,7 @@ bot(
 		pattern: 'npm',
 		public: true,
 		desc: 'Search for NPM packages',
+		type: 'search'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide package name to search_');
@@ -331,6 +344,7 @@ bot(
 		pattern: 'fxmajor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Majors',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -358,6 +372,7 @@ bot(
 		pattern: 'fxminor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Minors',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxminor');
@@ -385,6 +400,7 @@ bot(
 		pattern: 'fxexotic',
 		public: true,
 		desc: 'Get Current Market Details for Forex Exotic',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxexotic');
@@ -412,6 +428,7 @@ bot(
 		pattern: 'fxamericas',
 		public: true,
 		desc: 'Get Current Market Details for Forex Americans',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxamericas');
@@ -439,6 +456,7 @@ bot(
 		pattern: 'fxeurope',
 		public: true,
 		desc: 'Get Current Market Details for Forex Europe',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxeurope');
@@ -466,6 +484,7 @@ bot(
 		pattern: 'fxasia',
 		public: true,
 		desc: 'Get Current Market Details for Forex Asia',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -493,6 +512,7 @@ bot(
 		pattern: 'fxpacific',
 		public: true,
 		desc: 'Get Current Market Details for Forex Pacific',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -520,6 +540,7 @@ bot(
 		pattern: 'fxeast',
 		public: true,
 		desc: 'Get Current Market Details for Forex Middle East',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmiddle-east');
@@ -547,6 +568,7 @@ bot(
 		pattern: 'fxafrica',
 		public: true,
 		desc: 'Get Current Market Details for Forex Africa',
+		type: 'search'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxafrica');
@@ -574,6 +596,7 @@ bot(
         pattern: 'animenews',
         public: true,
         desc: "Get's Latest Anime News",
+		type: 'search'
     },
     async message => {
         const res = await XSTRO.animenews();

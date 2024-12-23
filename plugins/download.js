@@ -11,6 +11,7 @@ bot(
 		pattern: 'apk',
 		public: true,
 		desc: 'Downloads Apk',
+		type: 'download',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide Apk to Download_');
@@ -30,6 +31,7 @@ bot(
 		pattern: 'facebook',
 		public: true,
 		desc: 'Download Facebook Video',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -45,6 +47,7 @@ bot(
 		pattern: 'instagram',
 		public: true,
 		desc: 'Download Instagram Video',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -60,6 +63,7 @@ bot(
 		pattern: 'twitter',
 		public: true,
 		desc: 'Download Twitter Video',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -75,6 +79,7 @@ bot(
 		pattern: 'yta',
 		public: true,
 		desc: 'Download Youtube Audio',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -90,6 +95,7 @@ bot(
 		pattern: 'ytv',
 		public: true,
 		desc: 'Download Youtube Video',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -108,6 +114,7 @@ bot(
 		pattern: 'tiktok',
 		public: true,
 		desc: 'Download Tiktok Video',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -123,6 +130,7 @@ bot(
 		pattern: 'mediafire',
 		public: true,
 		desc: 'Downloads Mediafire files from url',
+		type: 'download',
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;

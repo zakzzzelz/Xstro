@@ -6,6 +6,7 @@ bot(
 		pattern: 'andrew',
 		public: true,
 		desc: 'Fake Andrew Tate Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');
@@ -19,6 +20,7 @@ bot(
 		pattern: 'elonmusk',
 		public: true,
 		desc: 'Fake Elon Musk Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');
@@ -32,6 +34,7 @@ bot(
 		pattern: 'messi',
 		public: true,
 		desc: 'Fake Messi Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');
@@ -45,6 +48,7 @@ bot(
 		pattern: 'obama',
 		public: true,
 		desc: 'Fake Obama Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');
@@ -58,6 +62,7 @@ bot(
 		pattern: 'ronaldo',
 		public: true,
 		desc: 'Fake Ronaldo Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');
@@ -71,6 +76,7 @@ bot(
 		pattern: 'trump',
 		public: true,
 		desc: 'Fake Trump Tweet',
+		type: 'memes',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me words_');

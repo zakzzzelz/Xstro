@@ -5,7 +5,7 @@ bot(
 	{
 		pattern: 'trt',
 		public: true,
-		type: "general",
+		type: 'tools',
 		desc: 'Translate a text from one language to another with ease',
 	},
 	async (message, match) => {
@@ -16,7 +16,9 @@ bot(
 
 		if (!targetLang)
 			return await message.send(
-				`\`\`\`Supported Languages:\n\nUsage: ${message.prefix}trt en\n\n\n${languages.join('\n')}\`\`\``,
+				`\`\`\`Supported Languages:\n\nUsage: ${
+					message.prefix
+				}trt en\n\n\n${languages.join('\n')}\`\`\``,
 			);
 
 		if (!message.reply_message?.text)

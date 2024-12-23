@@ -6,6 +6,7 @@ bot(
 		pattern: 'sticker',
 		public: true,
 		desc: 'Converts Images and Videos to Sticker',
+		type: 'converter',
 	},
 	async message => {
 		let media;
@@ -26,6 +27,7 @@ bot(
 		pattern: 'take',
 		public: true,
 		desc: 'rebrands a sticker to bot',
+		type: 'converter',
 	},
 	async message => {
 		let media;
@@ -43,6 +45,7 @@ bot(
 		pattern: 'flip',
 		public: true,
 		desc: 'Flip media left/right/vertical/horizontal',
+		type: 'converter',
 	},
 	async (message, match) => {
 		const { reply_message } = message;
@@ -70,6 +73,7 @@ bot(
 		pattern: 'black',
 		public: true,
 		desc: 'Converts Audio to Black Video',
+		type: 'converter',
 	},
 	async message => {
 		let media;
@@ -87,6 +91,7 @@ bot(
 		pattern: 'ttp',
 		public: true,
 		desc: 'Designs ttp Stickers',
+		type: 'converter',
 	},
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`_Usage: ${prefix}ttp Astro_`);
@@ -102,6 +107,7 @@ bot(
 		pattern: 'photo',
 		public: true,
 		desc: 'Convert Sticker to Photo',
+		type: 'converter',
 	},
 	async message => {
 		if (!message.reply_message.sticker)
@@ -117,6 +123,7 @@ bot(
 		pattern: 'mp3',
 		public: true,
 		desc: 'Convert Video to Audio',
+		type: 'converter',
 	},
 	async message => {
 		if (!message.reply_message.video)

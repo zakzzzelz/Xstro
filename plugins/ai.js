@@ -6,6 +6,7 @@ bot(
 		pattern: 'ai',
 		public: true,
 		desc: 'Chat with an AI Bot',
+		type: 'ai',
 	},
 	async (message, match) => {
 		const msg = await message.send('*Thinking*');

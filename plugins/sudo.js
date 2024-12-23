@@ -6,6 +6,7 @@ bot(
 		pattern: 'setsudo',
 		public: false,
 		desc: 'Add User to Sudo list',
+		type: 'settings'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
@@ -20,6 +21,7 @@ bot(
 		pattern: 'delsudo',
 		public: false,
 		desc: 'Remove User from Sudo',
+		type: 'settings'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
@@ -33,6 +35,7 @@ bot(
 		pattern: 'getsudo',
 		public: false,
 		desc: 'Get Sudo Users',
+		type: 'settings'
 	},
 	async message => {
 		const sudoList = await getSudo();

@@ -6,6 +6,7 @@ bot(
 		pattern: 'report',
 		public: true,
 		desc: 'Request Feature or Report Bugs',
+		type: 'help',
 	},
 	async (message, match) => {
 		if (!match || match.split(' ').length < 5)
@@ -39,6 +40,7 @@ bot(
 		pattern: 'repo',
 		public: true,
 		desc: 'Bot info, social links, and GitHub repo.',
+		type: 'help'
 	},
 	async message => {
 		const adMessage = `\`\`\`
