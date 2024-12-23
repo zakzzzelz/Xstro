@@ -10,6 +10,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 bot({
     pattern: 'rainbow',
     public: false,
+    type : "fun",
     desc: 'Sends a sequence of rainbow-colored hearts',
 },
 async (message) => {
@@ -34,6 +35,7 @@ const sadEmojis = [
 bot({
     pattern: 'sad',
     public: false,
+    type: "fun",
     desc: 'Sends a sequence of sad emojis',
 },
 async (message) => {
@@ -178,4 +180,68 @@ bot(
       }
     }
   );
+
+
+
+
+bot(
+    {
+      pattern: "hand",
+      type: "fun",
+      desc: "Hand practice edits, 18+",
+      
+    },
+    async (message, match) => {
+      const handFrames = [
+        "8✊️===D", "8=✊️==D", "8==✊️=D", "8===✊️D", "8==✊️=D", "8=✊️==D", "8✊️===D", 
+        "8=✊️==D", "8==✊️=D", "8===✊️D", "8==✊️=D", "8=✊️==D", "8✊️===D", "8=✊️==D", 
+        "8==✊️=D", "8===✊️D", "8==✊️=D", "8=✊️==D", "8✊️===D", "8=✊️==D", "8==✊️=D", 
+        "8===✊️D 💦", "8==✊️=D💦 💦", "8=✊️==D 💦💦 💦"
+      ];
+  
+      // Send the initial frame and store the message key for editing
+      const { key: editKey } = await message.send(handFrames[0]);
+  
+      // Loop through the remaining frames
+      for (let i = 1; i < handFrames.length; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 300)); 
+        await message.send(handFrames[i], { edit: editKey }); 
+      }
+    }
+  );
+  
+
+
+  bot(
+    {
+      pattern: "nikal",
+      type: "fun",
+      info: "show loduu edits",
+      
+    },
+    async (message, match) => {
+      // ASCII art frames for the "nikal" animation
+      const nikalFrames = [
+        "⠀⠀⠀⣠⣶⡾⠏⠉⠙⠳⢦⡀⠀⠀⠀⢠⠞⠉⠙⠲⡀⠀\n ⠀⣴⠿⠏⠀⠀⠀⠀⠀     ⢳⡀⠀⡏⠀⠀⠀   ⠀  ⢷\n⢠⣟⣋⡀⢀⣀⣀⡀⠀⣀⡀   ⣧⠀⢸⠀⠀⠀  ⠀    ⡇\n⢸⣯⡭⠁⠸⣛⣟⠆⡴⣻⡲     ⣿  ⣸   get   ⡇\n ⣟⣿⡭⠀⠀⠀⠀⠀⢱⠀⠀      ⣿  ⢹⠀          ⡇\n  ⠙⢿⣯⠄⠀⠀⠀__⠀   ⠀   ⡿ ⠀⡇⠀⠀⠀⠀    ⡼\n⠀⠀⠀⠹⣶⠆⠀⠀⠀⠀⠀⡴⠃⠀   ⠘⠤⣄⣠⠞⠀\n⠀⠀⠀⠀⢸⣷⡦⢤⡤⢤⣞⣁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⢀⣤⣴⣿⣏⠁⠀⠀⠸⣏⢯⣷⣖⣦⡀⠀⠀⠀⠀⠀⠀\n⢀⣾⣽⣿⣿⣿⣿⠛⢲⣶⣾⢉⡷⣿⣿⠵⣿⠀⠀⠀⠀⠀⠀\n⣼⣿⠍⠉⣿⡭⠉⠙⢺⣇⣼⡏⠀⠀ ⠀⣄⢸⠀⠀⠀⠀⠀⠀",
+        "⠀⠀⠀⣠⣶⡾⠏⠉⠙⠳⢦⡀⠀⠀⠀⢠⠞⠉⠙⠲⡀⠀\n ⠀⣴⠿⠏⠀⠀⠀⠀⠀  ⠀  ⢳⡀⠀⡏⠀⠀⠀   ⠀  ⢷\n⢠⣟⣋⡀⢀⣀⣀⡀⠀⣀⡀   ⣧⠀⢸⠀⠀⠀       ⡇\n⢸⣯⡭⠁⠸⣛⣟⠆⡴⣻⡲     ⣿  ⣸   out   ⡇\n ⣟⣿⡭⠀⠀⠀⠀⠀⢱⠀⠀      ⣿  ⢹⠀          ⡇\n  ⠙⢿⣯⠄⠀⠀|__|⠀⠀   ⡿ ⠀⡇⠀⠀⠀⠀    ⡼\n⠀⠀⠀⠹⣶⠆⠀⠀⠀⠀⠀⡴⠃⠀   ⠘⠤⣄⣠⠞⠀\n⠀⠀⠀⠀⢸⣷⡦⢤⡤⢤⣞⣁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⢀⣤⣴⣿⣏⠁⠀⠀⠸⣏⢯⣷⣖⣦⡀⠀⠀⠀⠀⠀⠀\n⢀⣾⣽⣿⣿⣿⣿⠛⢲⣶⣾⢉⡷⣿⣿⠵⣿⠀⠀⠀⠀⠀⠀\n⣼⣿⠍⠉⣿⡭⠉⠙⢺⣇⣼⡏⠀⠀ ⠀⣄⢸⠀⠀⠀⠀⠀⠀",
+        // Add the rest of the frames here
+      ];
+  
+    
+      const { key: editKey } = await message.send(`\n${nikalFrames[0]}\n`);
+      for (let i = 0; i < nikalFrames.length; i++) {
+        for (let j = 0; j < nikalFrames.length; j++) {
+          await new Promise((resolve) => setTimeout(resolve, 500)); 
+          await message.send(
+            `\n${nikalFrames[j]}\n`,
+            {
+              edit: editKey, 
+            }
+          );
+        }
+      }
+    }
+  );
+  
+
   
