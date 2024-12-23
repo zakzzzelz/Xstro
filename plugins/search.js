@@ -570,20 +570,17 @@ Rating: ${item.Rating}
 );
 
 bot(
-	{
-		pattern: 'animenews',
-		public: true,
-		desc: "Get's Latest Anime News",
-	},
-	async message => {
-		const res = await XSTRO.animenews();
-		const data = res.map(items => {
-			return `\`\`\`
-Title: ${items.title}
-Description: ${items.description}
-link: ${items.link}
-\`\`\``.trim();
-		});
-		return await message.send(data);
-	},
+    {
+        pattern: 'animenews',
+        public: true,
+        desc: "Get's Latest Anime News",
+    },
+    async message => {
+        const res = await XSTRO.animenews();
+        let data = '';
+        for (const items of res) {
+            data += `\`\`\`Title: ${items.title}\nDescription: ${items.description}\nlink: ${items.link}\`\`\`\n\n`;
+        }
+        return await message.send(data);
+    }
 );
