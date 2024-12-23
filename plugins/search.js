@@ -568,3 +568,22 @@ Rating: ${item.Rating}
 		await message.send(data);
 	},
 );
+
+bot(
+	{
+		pattern: 'animenews',
+		public: true,
+		desc: "Get's Latest Anime News",
+	},
+	async message => {
+		const res = await XSTRO.animenews();
+		const data = res.map(items => {
+			return `\`\`\`
+Title: ${items.title}
+Description: ${items.description}
+link: ${items.link}
+\`\`\``.trim();
+		});
+		return await message.send(data);
+	},
+);
