@@ -268,21 +268,24 @@ const getGroupMetadata = async jid => {
 };
 
 const saveMessageCount = async message => {
-	const jid = message.key.remoteJid;
-	const sender = message.key.participant || message.sender;
-	if (!jid || !sender) return;
-	if (!isJidGroup(jid)) return;
-	const [record, created] = await messageCountDb.findOrCreate({
-		where: { jid, sender },
-		defaults: { count: 1 },
-	});
-
-	if (!created) {
-		await messageCountDb.increment('count', {
-			by: 1,
+	if (!message) return;
+	try {
+		const jid = message.key.remoteJid;
+		const sender = message.key.participant || message.sender;
+		if (!jid || !sender) return;
+		if (!isJidGroup(jid)) return;
+		const [record, created] = await messageCountDb.findOrCreate({
 			where: { jid, sender },
+			defaults: { count: 1 },
 		});
-	}
+
+		if (!created) {
+			await messageCountDb.increment('count', {
+				by: 1,
+				where: { jid, sender },
+			});
+		}
+	} catch {}
 };
 
 const getInactiveGroupMembers = async jid => {
