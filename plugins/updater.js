@@ -5,6 +5,7 @@ bot(
 	{
 		pattern: 'update',
 		public: false,
+		type: "system",
 		desc: 'Updates Bot',
 	},
 	async (message, match) => {
