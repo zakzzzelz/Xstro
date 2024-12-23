@@ -304,6 +304,30 @@ bot(
 
 bot(
 	{
+		pattern: 'npm',
+		public: true,
+		desc: 'Search for NPM packages',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Provide package name to search_');
+		const res = await getJson(`https://api.npms.io/v2/search?q=${match}`);
+		if (!res.results.length) return message.send('No packages found');
+		const pkg = res.results[0].package;
+		const info =
+			`*${pkg.name}*\n\n` +
+			`Description: ${pkg.description || 'No description'}\n` +
+			`Version: ${pkg.version}\n` +
+			`Author: ${pkg.author?.name || 'Unknown'}\n` +
+			`License: ${pkg.license || 'Not specified'}\n` +
+			`Homepage: ${pkg.links.homepage || 'None'}\n` +
+			`NPM: ${pkg.links.npm}\n` +
+			`Repository: ${pkg.links.repository || 'None'}`;
+		return message.send(info);
+	},
+);
+
+bot(
+	{
 		pattern: 'fxmajor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Majors',
