@@ -5,6 +5,7 @@ bot(
 	{
 		pattern: 'trt',
 		public: true,
+		type: "general",
 		desc: 'Translate a text from one language to another with ease',
 	},
 	async (message, match) => {
