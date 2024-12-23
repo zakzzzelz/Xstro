@@ -201,7 +201,13 @@ const XSTRO = {
 	},
 	footballnews: async () => {
 		return await getJson(`${API_ID}/api/footballnews`);
-	}
+	},
+	meme: async (text, type) => {
+		const res = await getBuffer(
+			`${API_ID}/api/meme/${type}?text=${encodeURIComponent(text)}`,
+		);
+		return res;
+	},
 };
 
 export { XSTRO };
