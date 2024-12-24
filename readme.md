@@ -205,6 +205,6 @@ Want to help? Fork the repo and create a pull request. Don’t break anything.
 
 ## Disclaimer
 
-I just started leaning Javascript a few months ago and this is my first project. It may have security issues and many bugs. I recommend using it only on local network.
+I just started leaning Javascript a few months ago and this is my first project. It may have many bugs.
 
 This project is not affiliated, associated, authorized, endorsed by, or in any way officially connected with WhatsApp or any of its subsidiaries or its affiliates. The official WhatsApp website can be found at https://whatsapp.com. "WhatsApp" as well as related names, marks, emblems and images are registered trademarks of their respective owners.
