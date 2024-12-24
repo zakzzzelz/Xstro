@@ -7,7 +7,7 @@ bot(
 		pattern: 'lyrics',
 		public: true,
 		desc: 'Search Lyrics',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		const req = match || message.reply_message?.text;
@@ -28,7 +28,7 @@ bot(
 		pattern: 'imdb',
 		public: true,
 		desc: 'Sends info of a movie or series.',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Name a Series or movie._');
@@ -66,7 +66,7 @@ bot(
 		pattern: 'weather ?(.*)',
 		public: true,
 		desc: 'weather info',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Example : weather delhi*');
@@ -124,7 +124,7 @@ bot(
 		pattern: 'define',
 		public: true,
 		desc: 'Define A Word',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('```Provide A Word to Define```');
@@ -147,7 +147,7 @@ bot(
 		pattern: 'horo',
 		public: true,
 		desc: 'Gives horoscope info of user.',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		const signs = [
@@ -190,7 +190,7 @@ bot(
 		pattern: 'google',
 		public: true,
 		desc: 'Perform Google Search',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide Search Query_');
@@ -204,7 +204,7 @@ bot(
 		pattern: 'wallpaper',
 		public: true,
 		desc: 'Get Wallpapers',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -223,7 +223,7 @@ bot(
 		pattern: 'wikipedia',
 		public: true,
 		desc: 'Search wikipedia for information',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Search a term like elon musk_');
@@ -238,7 +238,7 @@ bot(
 		pattern: 'pinterest',
 		public: true,
 		desc: 'Search images from Pinterest',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -252,7 +252,7 @@ bot(
 		pattern: 'bing',
 		public: true,
 		desc: 'Search Bing',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give Me Query_');
@@ -274,7 +274,7 @@ bot(
 		pattern: 'technews',
 		public: true,
 		desc: 'Get Tech latest news',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		const news = await XSTRO.news();
@@ -296,7 +296,7 @@ bot(
 		pattern: 'yahoo',
 		public: true,
 		desc: 'Search Yahooooooo',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me something to search for_');
@@ -319,7 +319,7 @@ bot(
 		pattern: 'npm',
 		public: true,
 		desc: 'Search for NPM packages',
-		type: 'search'
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide package name to search_');
@@ -344,7 +344,7 @@ bot(
 		pattern: 'fxmajor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Majors',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -372,7 +372,7 @@ bot(
 		pattern: 'fxminor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Minors',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxminor');
@@ -400,7 +400,7 @@ bot(
 		pattern: 'fxexotic',
 		public: true,
 		desc: 'Get Current Market Details for Forex Exotic',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxexotic');
@@ -428,7 +428,7 @@ bot(
 		pattern: 'fxamericas',
 		public: true,
 		desc: 'Get Current Market Details for Forex Americans',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxamericas');
@@ -456,7 +456,7 @@ bot(
 		pattern: 'fxeurope',
 		public: true,
 		desc: 'Get Current Market Details for Forex Europe',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxeurope');
@@ -484,7 +484,7 @@ bot(
 		pattern: 'fxasia',
 		public: true,
 		desc: 'Get Current Market Details for Forex Asia',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -512,7 +512,7 @@ bot(
 		pattern: 'fxpacific',
 		public: true,
 		desc: 'Get Current Market Details for Forex Pacific',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -540,7 +540,7 @@ bot(
 		pattern: 'fxeast',
 		public: true,
 		desc: 'Get Current Market Details for Forex Middle East',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmiddle-east');
@@ -568,7 +568,7 @@ bot(
 		pattern: 'fxafrica',
 		public: true,
 		desc: 'Get Current Market Details for Forex Africa',
-		type: 'search'
+		type: 'search',
 	},
 	async message => {
 		const res = await XSTRO.forex('fxafrica');
@@ -592,18 +592,59 @@ Rating: ${item.Rating}
 );
 
 bot(
-    {
-        pattern: 'animenews',
-        public: true,
-        desc: "Get's Latest Anime News",
-		type: 'search'
-    },
-    async message => {
-        const res = await XSTRO.animenews();
-        let data = '';
-        for (const items of res) {
-            data += `\`\`\`Title: ${items.title}\nDescription: ${items.description}\nlink: ${items.link}\`\`\`\n\n`;
-        }
-        return await message.send(data);
-    }
+	{
+		pattern: 'animenews',
+		public: true,
+		desc: "Get's Latest Anime News",
+		type: 'search',
+	},
+	async message => {
+		const res = await XSTRO.animenews();
+		let data = '';
+		for (const items of res) {
+			data += `\`\`\`Title: ${items.title}\nDescription: ${items.description}\nlink: ${items.link}\`\`\`\n\n`;
+		}
+		return await message.send(data);
+	},
+);
+
+bot(
+	{
+		pattern: 'airquality',
+		public: true,
+		desc: 'Get Air Quality of a City',
+	},
+	async (message, match) => {
+		if (!match)
+			return message.send(
+				'_Give me country and city, e.g. nigeria;fct/abuja, india;delhi, pakistan;lahore_',
+			);
+		const [country, city] = match.split(';');
+		const res = await XSTRO.airquality(country, city);
+		const { current, forecast, dailyForecastTitle, airQualitySubtitle } =
+			res;
+		let forecastMessage = forecast
+			.map(day =>
+				`
+${day.day}:
+- AQI: ${day.aqi} (${day.aqi > 150 ? 'Unhealthy' : 'Moderate'})
+- Max Temp: ${day.maxTemp}
+- Min Temp: ${day.minTemp}
+- Wind Speed: ${day.windSpeed} km/h
+- Humidity: ${day.humidity}
+`.trim(),
+			)
+			.join('\n');
+
+		return message.send(
+			`\`\`\`
+${airQualitySubtitle}
+- Current AQI: ${current.aqiValue} (${current.aqiStatus})
+- Main Pollutant: ${current.mainPollutant} (${current.mainPollutantValue})
+\n
+${dailyForecastTitle}:
+${forecastMessage}
+\`\`\``.trim(),
+		);
+	},
 );
