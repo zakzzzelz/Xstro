@@ -1,9 +1,5 @@
 import { bot } from '#lib';
-
-const heartEmojis = ['❤️', '🧡', '💛', '💚', '💙', '💜', '🤎', '🖤', '🤍'];
-
-//  sleep function
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+import { delay } from 'baileys';
 
 bot(
 	{
@@ -13,36 +9,24 @@ bot(
 		desc: 'Sends a sequence of rainbow-colored hearts',
 	},
 	async message => {
-		const initialMessage = await message.send('❤️');
-
+		const heartEmojis = [
+			'❤️',
+			'🧡',
+			'💛',
+			'💚',
+			'💙',
+			'💜',
+			'🤎',
+			'🖤',
+			'🤍',
+		];
+		const msg = await message.send('❤️');
 		for (const emoji of heartEmojis) {
-			await sleep(800); // Pause for 800ms between updates
-			await message.send(emoji, {
-				edit: initialMessage.key, // Edit the original message with the new emoji
-			});
+			await delay(800);
+			await msg.edit(emoji);
 		}
 	},
 );
-
-const sadEmojis = [
-	'🥺',
-	'😟',
-	'😕',
-	'😖',
-	'😫',
-	'🙁',
-	'😩',
-	'😥',
-	'😓',
-	'😪',
-	'😢',
-	'😔',
-	'😞',
-	'😭',
-	'💔',
-	'😭',
-	'😿',
-];
 
 bot(
 	{
@@ -52,24 +36,38 @@ bot(
 		desc: 'Sends a sequence of sad emojis',
 	},
 	async message => {
-		// Send the initial sad emojiiiiiiiiiii
-		const initialMessage = await message.send('🥺');
-
-		// Loop through the sad emojis and update the messageeeeeeeeeee
+		const sadEmojis = [
+			'🥺',
+			'😟',
+			'😕',
+			'😖',
+			'😫',
+			'🙁',
+			'😩',
+			'😥',
+			'😓',
+			'😪',
+			'😢',
+			'😔',
+			'😞',
+			'😭',
+			'💔',
+			'😭',
+			'😿',
+		];
+		const msg = await message.send('🥺');
 		for (const emoji of sadEmojis) {
-			await sleep(700); // Pause for 700ms between updatessssssssss
-			await message.send(emoji, {
-				edit: initialMessage.key, // Edit the original message with the new emojiiiiiiiii
-			});
+			await delay(700);
+			await msg.edit(emoji);
 		}
 	},
 );
+
 bot(
 	{
 		pattern: 'world',
-		type: 'fun',
 		desc: 'send world emojis with your text',
-		use: '<text> #world',
+		type: 'fun',
 	},
 	async (message, match) => {
 		const regix = /#world/g;
@@ -78,7 +76,6 @@ bot(
 				'*_Please provide text with #world_*\n> Example: `world of wasi , #xstro`',
 			);
 		}
-
 		const worldEmojis = ['🌏', '🌍', '🌎'];
 		let msg = await message.send(match.replace(regix, worldEmojis[0]));
 
@@ -107,9 +104,8 @@ bot(
 		];
 
 		let msg = await message.send(frames[0]);
-
 		for (const frame of frames) {
-			await new Promise(resolve => setTimeout(resolve, 500)); // Sleep for 500ms
+			await new Promise(resolve => setTimeout(resolve, 500));
 			await msg.edit(frame);
 		}
 	},
@@ -148,10 +144,10 @@ bot(
 			'◻️◻️◻️◻️◻️\n◻️◻️◻️◻️◻️\n◻️◼️◼️◻️◻️\n◻️◻️◻️◻️◻️\n◻️◻️◻️◻️◻️',
 			'◻️◻️◻️◻️◻️\n◻️◻️◻️◻️◻️\n◻️◻️◼️◻️◻️\n◻️◻️◻️◻️◻️\n◻️◻️◻️◻️◻️',
 		];
-
+		const msg = await message.send('◼️');
 		for (const frame of snakeFrames) {
 			await new Promise(resolve => setTimeout(resolve, 250));
-			await message.send(frame);
+			await msg.edit(frame);
 		}
 	},
 );
@@ -179,14 +175,10 @@ bot(
 			'---------------\n------------✈-\n---------------',
 			'---------------\n-------------✈\n---------------',
 		];
-
-		// Send the initial frame and store the message key for editinggg..
 		const { key: editKey } = await message.send(planeFrames[0]);
-
-		// Loop through the remaining framees
 		for (let i = 1; i < planeFrames.length; i++) {
-			await new Promise(resolve => setTimeout(resolve, 700)); // Pause for animation effecttt
-			await message.send(planeFrames[i], { edit: editKey }); // Edit the existing message with the next frameee
+			await new Promise(resolve => setTimeout(resolve, 700));
+			await message.send(planeFrames[i], { edit: editKey });
 		}
 	},
 );
@@ -224,11 +216,7 @@ bot(
 			'8==✊️=D💦 💦',
 			'8=✊️==D 💦💦 💦',
 		];
-
-		// Send the initial frame and store the message key for editing
 		const { key: editKey } = await message.send(handFrames[0]);
-
-		// Loop through the remaining frames
 		for (let i = 1; i < handFrames.length; i++) {
 			await new Promise(resolve => setTimeout(resolve, 300));
 			await message.send(handFrames[i], { edit: editKey });
@@ -243,11 +231,9 @@ bot(
 		info: 'show loduu edits',
 	},
 	async (message, match) => {
-		// ASCII art frames for the "nikal" animation
 		const nikalFrames = [
 			'⠀⠀⠀⣠⣶⡾⠏⠉⠙⠳⢦⡀⠀⠀⠀⢠⠞⠉⠙⠲⡀⠀\n ⠀⣴⠿⠏⠀⠀⠀⠀⠀     ⢳⡀⠀⡏⠀⠀⠀   ⠀  ⢷\n⢠⣟⣋⡀⢀⣀⣀⡀⠀⣀⡀   ⣧⠀⢸⠀⠀⠀  ⠀    ⡇\n⢸⣯⡭⠁⠸⣛⣟⠆⡴⣻⡲     ⣿  ⣸   get   ⡇\n ⣟⣿⡭⠀⠀⠀⠀⠀⢱⠀⠀      ⣿  ⢹⠀          ⡇\n  ⠙⢿⣯⠄⠀⠀⠀__⠀   ⠀   ⡿ ⠀⡇⠀⠀⠀⠀    ⡼\n⠀⠀⠀⠹⣶⠆⠀⠀⠀⠀⠀⡴⠃⠀   ⠘⠤⣄⣠⠞⠀\n⠀⠀⠀⠀⢸⣷⡦⢤⡤⢤⣞⣁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⢀⣤⣴⣿⣏⠁⠀⠀⠸⣏⢯⣷⣖⣦⡀⠀⠀⠀⠀⠀⠀\n⢀⣾⣽⣿⣿⣿⣿⠛⢲⣶⣾⢉⡷⣿⣿⠵⣿⠀⠀⠀⠀⠀⠀\n⣼⣿⠍⠉⣿⡭⠉⠙⢺⣇⣼⡏⠀⠀ ⠀⣄⢸⠀⠀⠀⠀⠀⠀',
 			'⠀⠀⠀⣠⣶⡾⠏⠉⠙⠳⢦⡀⠀⠀⠀⢠⠞⠉⠙⠲⡀⠀\n ⠀⣴⠿⠏⠀⠀⠀⠀⠀  ⠀  ⢳⡀⠀⡏⠀⠀⠀   ⠀  ⢷\n⢠⣟⣋⡀⢀⣀⣀⡀⠀⣀⡀   ⣧⠀⢸⠀⠀⠀       ⡇\n⢸⣯⡭⠁⠸⣛⣟⠆⡴⣻⡲     ⣿  ⣸   out   ⡇\n ⣟⣿⡭⠀⠀⠀⠀⠀⢱⠀⠀      ⣿  ⢹⠀          ⡇\n  ⠙⢿⣯⠄⠀⠀|__|⠀⠀   ⡿ ⠀⡇⠀⠀⠀⠀    ⡼\n⠀⠀⠀⠹⣶⠆⠀⠀⠀⠀⠀⡴⠃⠀   ⠘⠤⣄⣠⠞⠀\n⠀⠀⠀⠀⢸⣷⡦⢤⡤⢤⣞⣁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n⠀⢀⣤⣴⣿⣏⠁⠀⠀⠸⣏⢯⣷⣖⣦⡀⠀⠀⠀⠀⠀⠀\n⢀⣾⣽⣿⣿⣿⣿⠛⢲⣶⣾⢉⡷⣿⣿⠵⣿⠀⠀⠀⠀⠀⠀\n⣼⣿⠍⠉⣿⡭⠉⠙⢺⣇⣼⡏⠀⠀ ⠀⣄⢸⠀⠀⠀⠀⠀⠀',
-			// Add the rest of the frames here
 		];
 
 		const { key: editKey } = await message.send(`\n${nikalFrames[0]}\n`);
