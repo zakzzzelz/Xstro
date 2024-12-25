@@ -661,7 +661,7 @@ bot(
 		const res = await XSTRO.footballnews();
 		let data = '';
 		for (const items of res) {
-			data += `\`\`\`Title: ${items.title}\nlink: ${items.link}\`\`\`\n\n`;
+			data += `\`\`\`Title: ${items.title}\nlink: ${items.url}\`\`\`\n\n`;
 		}
 		return await message.send(data);
 	},
