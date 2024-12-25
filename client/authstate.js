@@ -6,7 +6,6 @@
  *
  * Author: Zaid (GitHub: hacxk)
  */
-
 import { initAuthCreds } from 'baileys';
 import pkg from 'baileys';
 import { AuthState } from '#sql';
