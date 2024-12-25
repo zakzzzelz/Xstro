@@ -8,7 +8,6 @@ import {
 	getUsers,
 } from '#lib';
 import { platform, totalmem, freemem } from 'os';
-import { readFileSync } from 'fs';
 
 bot(
 	{
@@ -62,11 +61,7 @@ bot(
 			});
 			menuText += `╰────────────\n\n`;
 		});
-
-		const image = readFileSync('./media/intro.mp4');
-		return await message.send(image, {
-			caption: intro + menuText,
-			gifPlayback: true,
+		return await message.send(intro + menuText, {
 			contextInfo: {
 				forwardingScore: 1,
 				isForwarded: true,
