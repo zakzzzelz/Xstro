@@ -613,6 +613,7 @@ bot(
 		pattern: 'airquality',
 		public: true,
 		desc: 'Get Air Quality of a City',
+		type: 'search',
 	},
 	async (message, match) => {
 		if (!match)
@@ -646,5 +647,22 @@ ${dailyForecastTitle}:
 ${forecastMessage}
 \`\`\``.trim(),
 		);
+	},
+);
+
+bot(
+	{
+		pattern: 'footballnews',
+		public: true,
+		desc: 'Get Latest Football News',
+		type: 'search',
+	},
+	async message => {
+		const res = await XSTRO.footballnews();
+		let data = '';
+		for (const items of res) {
+			data += `\`\`\`Title: ${items.title}\nlink: ${items.link}\`\`\`\n\n`;
+		}
+		return await message.send(data);
 	},
 );
