@@ -1,7 +1,9 @@
 import { initAuthCreds } from 'baileys';
-import * as proto from 'baileys';
+import pkg from 'baileys';
 import { AuthState } from '#sql';
 import { jsonToBuffer, bufferToJSON, profile } from '#utils';
+
+const { proto } = pkg;
 
 export const SessionState = async (sessionId, logger) => {
 	const writeData = async (key, data) => {
@@ -51,7 +53,7 @@ export const SessionState = async (sessionId, logger) => {
 							);
 							if (type === 'app-state-sync-key') {
 								value =
-									proto.proto.Message.AppStateSyncKeyData.fromObject(
+									proto.Message.AppStateSyncKeyData.fromObject(
 										value,
 									);
 							}
