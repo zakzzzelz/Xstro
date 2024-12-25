@@ -1,3 +1,12 @@
+/**
+ * @file SQLite Authentication State Management for Baileys
+ * @license MIT
+ *
+ * Use and modify this code freely under the MIT license. If you use this in your projects, attribution would be appreciated.
+ *
+ * Author: Zaid (GitHub: hacxk)
+ */
+
 import { initAuthCreds } from 'baileys';
 import pkg from 'baileys';
 import { AuthState } from '#sql';
