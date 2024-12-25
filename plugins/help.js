@@ -1,4 +1,5 @@
-import { bot, numtoId } from '#lib';
+import { bot } from '#lib';
+import { numtoId } from '#utils';
 import { readFileSync } from 'fs';
 
 bot(
@@ -40,7 +41,7 @@ bot(
 		pattern: 'repo',
 		public: true,
 		desc: 'Bot info, social links, and GitHub repo.',
-		type: 'help'
+		type: 'help',
 	},
 	async message => {
 		const adMessage = `\`\`\`

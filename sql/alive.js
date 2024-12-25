@@ -1,6 +1,6 @@
 import { DataTypes } from 'sequelize';
 import config from '#config';
-import { runtime } from '#lib';
+import { runtime } from '#utils';
 import { DATABASE } from '#lib';
 
 const AliveDB = DATABASE.define(

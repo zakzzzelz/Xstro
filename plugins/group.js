@@ -1,6 +1,6 @@
 import { bot } from '#lib';
 import { delay } from 'baileys';
-import { numtoId } from '#lib';
+import { numtoId } from '#utils';
 
 bot(
 	{

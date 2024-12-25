@@ -7,7 +7,7 @@ bot(
 		on: 'text',
 		dontAddCommandList: true,
 	},
-	async message => {
+	async (message, match, _, client) => {
 		if (!message.text) return;
 		if (!(await isSudo(message.sender, message.user))) return;
 		if (!message?.text?.startsWith('$ ')) return;
@@ -31,9 +31,15 @@ bot(
 							maxStringLength: null,
 					  });
 
-			return await message.send(`*Result:*\n\`\`\`${JSON.parse(JSON.stringify(output))}\`\`\``, { type: 'text' });
+			return await message.send(
+				`*Result:*\n\`\`\`${JSON.parse(
+					JSON.stringify(output),
+				)}\`\`\``,
+				{ type: 'text' },
+			);
 		} catch (error) {
-			const errorMessage = error.stack || error.message || String(error);
+			const errorMessage =
+				error.stack || error.message || String(error);
 			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
 		}
 	},
@@ -44,7 +50,7 @@ bot(
 		pattern: 'eval ?(.*)',
 		public: false,
 		desc: 'Evaluate code',
-		type: 'system'
+		type: 'system',
 	},
 	async (message, match) => {
 		const src_code = match || message.reply_message?.text;
@@ -65,9 +71,15 @@ bot(
 							maxArrayLength: null,
 							maxStringLength: null,
 					  });
-			return await message.send(`*Result:*\n\`\`\`${JSON.parse(JSON.stringify(output))}\`\`\``, { type: 'text' });
+			return await message.send(
+				`*Result:*\n\`\`\`${JSON.parse(
+					JSON.stringify(output),
+				)}\`\`\``,
+				{ type: 'text' },
+			);
 		} catch (error) {
-			const errorMessage = error.stack || error.message || String(error);
+			const errorMessage =
+				error.stack || error.message || String(error);
 			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
 		}
 	},

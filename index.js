@@ -2,7 +2,8 @@ import express from 'express';
 import WebSocket from 'ws';
 import { config } from 'dotenv';
 import { DATABASE } from '#database';
-import { envlogger, loadFiles, getSession, connect } from '#lib';
+import { getSession } from '#client';
+import { client, logger, loadPlugins } from '#lib';
 import { config as ws } from '#config';
 
 config();
@@ -20,14 +21,14 @@ class XstroBot {
 	}
 
 	async setupComponents() {
-		envlogger();
-		await loadFiles();
+		logger();
 		await getSession();
-		await connect();
-		new WebSocket(ws.API_ID);
+		await loadPlugins();
+		return await client();
 	}
 
 	async startServer() {
+		new WebSocket(ws.API_ID);
 		this.app.get('/', (_, r) => r.json({ alive: true }));
 		this.app.listen(process.env.PORT || 8000);
 	}

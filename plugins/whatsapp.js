@@ -1,6 +1,7 @@
 import config from '#config';
 import { getName, loadMessage } from '#sql';
-import { bot, numtoId, smsg } from '#lib';
+import { bot, serialize } from '#lib';
+import { numtoId } from '#utils';
 import { getBuffer } from 'xstro-utils';
 import { downloadMediaMessage, isJidGroup } from 'baileys';
 
@@ -76,7 +77,7 @@ bot(
 			return await message.send(
 				'```Xstro will not quoted Bot Message```',
 			);
-		msg = await smsg(
+		msg = await serialize(
 			JSON.parse(JSON.stringify(msg.message)),
 			message.client,
 		);

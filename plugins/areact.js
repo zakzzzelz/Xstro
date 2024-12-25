@@ -1,4 +1,5 @@
-import { bot, getRandom } from '#lib';
+import { bot } from '#lib';
+import { getRandom } from '#utils';
 import { AutoReact } from '#sql';
 
 bot(
@@ -6,7 +7,7 @@ bot(
 		pattern: 'areact',
 		public: false,
 		desc: 'Toggle Auto React On/Off',
-		type: 'user'
+		type: 'user',
 	},
 	async (message, match) => {
 		const status = match;
