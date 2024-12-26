@@ -3,33 +3,7 @@ import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
 import { numtoId } from '#utils';
 import { getBuffer } from 'xstro-utils';
-import { downloadMediaMessage, isJidGroup } from 'baileys';
-
-bot(
-	{
-		pattern: 'vv',
-		public: false,
-		type: 'whatsapp',
-		desc: 'Download ViewOnce Messages',
-	},
-	async message => {
-		if (!message.reply_message)
-			return message.send('_Reply A Viewonce Message_');
-		const m = await loadMessage(message.reply_message.id);
-		if (!m.message.viewonce)
-			return message.send('_Reply A Viewonce Message_');
-		const media = await downloadMediaMessage(
-			{ key: m.message.key, message: m.message.message },
-			'buffer',
-			{},
-			{
-				logger: console,
-				reuploadRequest: message.client.updateMediaMessage,
-			},
-		);
-		return await message.send(media);
-	},
-);
+import { isJidGroup } from 'baileys';
 
 bot(
 	{
@@ -233,7 +207,9 @@ bot(
 		if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (isJidGroup(match)) {
-			jid = match;
+			return message.send(
+				'_Use Gforward command to forward to groups_',
+			);
 		} else if (!isJidGroup(match)) {
 			jid = numtoId(match);
 		}
@@ -444,8 +420,6 @@ bot(
 	},
 );
 
-//======================================================
-
 bot(
 	{
 		pattern: 'gforward',
@@ -472,20 +446,14 @@ bot(
 
 		const msg = message.data?.quoted;
 		let successfulForwards = 0;
-		let failedForwards = 0;
 
 		for (const jid of groupJids) {
-			try {
-				await message.forward(jid, msg, { quoted: msg });
-				successfulForwards++;
-			} catch (error) {
-				console.error(`Failed to forward to ${jid}:`, error);
-				failedForwards++;
-			}
+			await message.forward(jid, msg, { quoted: msg });
+			successfulForwards++;
 		}
 
 		return message.send(
-			`_Message forwarded to ${successfulForwards} group(s). Failed to forward to ${failedForwards} group(s)._`,
+			`_Message forwarded to ${successfulForwards} group(s).`,
 		);
 	},
 );
