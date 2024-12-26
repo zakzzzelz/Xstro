@@ -56,7 +56,8 @@ bot(
 			menuText += `╰────────────\n`;
 		});
 		return await message.send(intro + menuText);
-
+	}
+)
 bot(
 	{
 		pattern: 'list',
