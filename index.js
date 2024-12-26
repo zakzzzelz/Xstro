@@ -1,40 +1,51 @@
-import express from 'express';
-import WebSocket from 'ws';
-import { config } from 'dotenv';
-import { DATABASE } from '#database';
-import { getSession } from '#client';
-import { client, logger, loadPlugins } from '#lib';
-import { config as ws } from '#config';
+import { fork } from 'child_process';
 
-config();
+const SCRIPT_PATH = './client/app.js';
 
-class XstroBot {
-	constructor() {
-		this.app = express();
-	}
+let app;
 
-	async initialize() {
-		console.log('XSTRO MD');
-		await DATABASE.sync();
-		await this.setupComponents();
-		await this.startServer();
-	}
+const startApp = () => {
+	console.log('Starting application...');
+	app = fork(SCRIPT_PATH);
 
-	async setupComponents() {
-		logger();
-		await getSession();
-		await loadPlugins();
-		return await client();
-	}
+	app.on('message', message => {
+		if (message === 'app.kill') {
+			console.log('Received app.kill signal. Shutting down...');
+			app.kill();
+			process.exit(0);
+		}
+	});
 
-	async startServer() {
-		new WebSocket(ws.API_ID);
-		this.app.get('/', (_, r) => r.json({ alive: true }));
-		this.app.listen(process.env.PORT || 8000);
-	}
-}
+	app.on('exit', code => {
+		if (code === 0) {
+			console.log('Application exited normally. Restarting...');
+			startApp();
+		} else {
+			console.log(
+				`Application crashed with code ${code}. Restarting...`,
+			);
+			startApp();
+		}
+	});
 
-const bot = new XstroBot();
-bot.initialize();
+	app.on('error', error => {
+		console.error('Error occurred in the child process:', error);
+		startApp();
+	});
+};
 
-export default XstroBot;
+const handleUnhandledRejections = () => {
+	process.on('unhandledRejection', (reason, promise) => {
+		console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+		startApp();
+	});
+};
+
+startApp();
+handleUnhandledRejections();
+
+process.on('SIGINT', () => {
+	console.log('Received SIGINT. Terminating...');
+	if (app) app.kill();
+	process.exit(0);
+});
