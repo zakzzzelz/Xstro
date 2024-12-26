@@ -13,6 +13,7 @@ bot(
 		if (!res || !Array.isArray(res) || res.length === 0) {
 			return await message.send('No news available at the moment.');
 		}
+        console.log(res)
 		let data = '';
 		for (const item of res) {
 			data += `\`\`\`Title: ${
