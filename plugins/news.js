@@ -10,19 +10,11 @@ bot(
 	},
 	async message => {
 		const res = await XSTRO.news();
-		if (!res || !Array.isArray(res) || res.length === 0) {
-			return await message.send('No news available at the moment.');
-		}
-        console.log(res)
 		let data = '';
-		for (const item of res) {
-			data += `\`\`\`Title: ${
-				item.title || 'No Title'
-			}\n\nDescription: ${
-				item.description || 'No Description'
-			}\n\nLink: ${item.url || 'No URL'}\`\`\`\n\n`;
+		for (const items of res) {
+			data += `\`\`\`Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.link}\`\`\`\n\n`;
 		}
-		return await message.send(data.trim());
+		return await message.send(data);
 	},
 );
 
