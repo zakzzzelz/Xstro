@@ -12,7 +12,7 @@ bot(
 		const res = await XSTRO.news();
 		let data = '';
 		for (const items of res) {
-			data += `\`\`\`Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.link}\`\`\`\n\n`;
+			data += `\`\`\`Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.url}\`\`\`\n\n`;
 		}
 		return await message.send(data);
 	},
@@ -60,7 +60,7 @@ bot(
 		type: 'news',
 	},
 	async (message, match) => {
-		const news = await XSTRO.news();
+		const news = await XSTRO.technews();
 		if (!news?.length) return message.send('No news found');
 		const formattedNews = news
 			.map(

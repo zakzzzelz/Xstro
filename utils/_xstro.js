@@ -185,8 +185,11 @@ const XSTRO = {
 		const res = await getJson(`${API_ID}/api/bing?query=${query}`);
 		return res.result;
 	},
-	news: async () => {
+	technews: async () => {
 		return await getJson(`${API_ID}/api/technews`);
+	},
+	news: async () => {
+		return await getJson(`${API_ID}/api/news`);
 	},
 	forex: async type => {
 		const res = await getJson(`${API_ID}/api/${type}`);
