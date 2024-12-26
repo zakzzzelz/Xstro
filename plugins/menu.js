@@ -53,7 +53,7 @@ bot(
 				menuText += `│\`\`\`${totalCommands}· ${cmd}\`\`\`\n`;
 				totalCommands++;
 			});
-			menuText += `╰────────────\n\n`;
+			menuText += `╰────────────\n`;
 		});
 		return await message.send(intro + menuText, {
 			contextInfo: {

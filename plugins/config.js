@@ -6,7 +6,7 @@ bot(
 		pattern: 'config',
 		public: false,
 		desc: 'Get Database configurations',
-		type: 'user',
+		type: 'settings',
 	},
 	async message => {
 		const db_list = await getConfig();
@@ -24,7 +24,7 @@ bot(
 		pattern: 'autoread',
 		public: false,
 		desc: 'Set bot to automatically read messages',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match) => {
 		const newValue =
@@ -49,7 +49,7 @@ bot(
 		pattern: 'autostatus',
 		public: false,
 		desc: 'Set bot to automatically read status',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match) => {
 		const newValue =
@@ -76,7 +76,7 @@ bot(
 		pattern: 'mode',
 		public: false,
 		desc: 'Set bot Mode private or public',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match) => {
 		const newValue =
@@ -103,7 +103,7 @@ bot(
 		pattern: 'cmdreact',
 		public: false,
 		desc: 'Set bot to react to Cmds',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match) => {
 		const newValue =
@@ -128,7 +128,7 @@ bot(
 		pattern: 'cmdread',
 		public: false,
 		desc: 'Set bot to read cmds',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match) => {
 		const newValue =
@@ -153,7 +153,7 @@ bot(
 		pattern: 'setprefix',
 		public: false,
 		desc: 'Setup bot prefix',
-		type: 'user',
+		type: 'settings',
 	},
 	async (message, match, { prefix }) => {
 		const newValue = match;
