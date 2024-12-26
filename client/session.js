@@ -1,3 +1,27 @@
+/**
+ * @file session.js - Session management utility for Xstro client
+ * @author AstroX11
+ * @license MIT - Free to use and modify, see https://opensource.org/licenses/MIT
+ * 
+ * @async
+ * @function getSession
+ * @description Retrieves and manages session data by connecting to remote API and handling local SQLite databases
+ * @throws {Error} If session data cannot be retrieved or database operations fail
+ * @returns {Promise<void>} Resolves when session is connected or logs appropriate messages
+ * 
+ * The function performs the following operations:
+ * 1. Checks for SESSION_ID in config
+ * 2. Downloads session data from remote API
+ * 3. Manages temporary and main SQLite databases
+ * 4. Syncs session data between databases
+ * 5. Performs cleanup operations
+ * 
+ * @requires path
+ * @requires config
+ * @requires fs
+ * @requires xstro-utils
+ * @requires sequelize
+ */
 import path from 'path';
 import config from '#config';
 import { promises as fs } from 'fs';
@@ -67,7 +91,7 @@ export async function getSession() {
 
 		console.log('Session connected');
 	} catch {
-		console.log('No Session Data\nGenerating QR');
+		console.log('No Session Data');
 	} finally {
 		await Promise.all([
 			db?.main?.close(),
