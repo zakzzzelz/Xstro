@@ -55,18 +55,7 @@ bot(
 			});
 			menuText += `╰────────────\n`;
 		});
-		return await message.send(intro + menuText, {
-			contextInfo: {
-				forwardingScore: 1,
-				isForwarded: true,
-				forwardedNewsletterMessageInfo: {
-					newsletterJid: '120363376441437991@newsletter',
-					newsletterName: 'xsᴛʀᴏ ᴍᴅ',
-				},
-			},
-		});
-	},
-);
+		return await message.send(intro + menuText);
 
 bot(
 	{
