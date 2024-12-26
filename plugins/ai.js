@@ -1,6 +1,6 @@
 import { bot } from '#lib';
 import { XSTRO } from '#utils';
-import { getJson } from 'xstro-utils';
+import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
 	{
@@ -32,5 +32,23 @@ bot(
 			)
 		).response.response;
 		return await msg.edit(res);
+	},
+);
+
+bot(
+	{
+		pattern: 'genimg',
+		public: true,
+		desc: 'Generate Images with Ai',
+		type: 'ai',
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Give me a prompt!_');
+		const res = await getBuffer(
+			`https://api.gurusensei.workers.dev/dream?prompt=${match}`,
+		);
+		return await message.send(res, {
+			caption: `_Here is your image for:_ ${match}`,
+		});
 	},
 );
