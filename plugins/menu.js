@@ -30,6 +30,7 @@ bot(
 │ Date: ${new Date().toLocaleTimeString('en-US', {
 			timeZone: config.TIME_ZONE,
 		})}
+│ Version: ${config.VERSION}
 ╰─────────────\`\`\`\n`;
 
 		const commandsByType = commands
@@ -47,7 +48,7 @@ bot(
 
 		const sortedTypes = Object.keys(commandsByType).sort();
 
-		let menuText = `\n\n${`\`\`\`XSTRO PATCH V${config.VERSION}\`\`\``}\n\n`;
+		let menuText = ``;
 		let totalCommands = 1;
 
 		sortedTypes.forEach(type => {
