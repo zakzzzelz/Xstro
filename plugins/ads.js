@@ -11,32 +11,33 @@ bot(
 	},
 	async (message, match) => {
 		const adMsg = match || message.reply_message?.text;
-		if (!adMsg) return message.send('_I need text to advertise!_');
+		if (!adMsg) {
+			return message.send('_I need a Message to Advertise_');
+		}
+
 		const groups = await message.client.groupFetchAllParticipating();
-		const groupDetails = Object.values(groups);
-		const groupIds = groupDetails.map(group => group.id);
+		const groupIds = Object.values(groups).map(group => group.id);
+
 		await message.send(
-			`_Broadcasting to ${
-				groupIds.length
-			} groups. Estimated completion in ${
-				groupIds.length * 1.5
-			} seconds_`,
+			`\`\`\`Advertising to ${groupIds.length} groups.\`\`\``,
 		);
-		const broadcastMessage =
-			`\`\`\`*Broadcast*\n\n*Message:*\`\`\`` + adMsg;
+
+		const broadcastMessage = `\`\`\`ADVERTSIMENT\n\nINFO:\n\n${adMsg}\`\`\``;
 		const messageOptions = {
 			forwardingScore: 9999999,
 			isForwarded: true,
 		};
+
 		for (const groupId of groupIds) {
 			await delay(1500);
-			await message.client.sendMessage(groupId, {
-				text: broadcastMessage,
+			await message.send(broadcastMessage, {
+				jid: groupId,
 				contextInfo: messageOptions,
 			});
 		}
+
 		return await message.send(
-			`_Advertised Message to ${groupIds.length} Groups_`,
+			'```Shared to ' + groupIds.length + ' Groups.```',
 		);
 	},
 );
