@@ -12,11 +12,15 @@ bot(
 	},
 	async message => {
 		const { mode, PREFIX } = await getConfigValues();
-		const long = String.fromCharCode(8206);
-		const READ_MORE = long.repeat(4000);
+		const cmds = commands.filter(
+			cmd =>
+				cmd.pattern &&
+				!cmd.dontAddCommandList &&
+				!cmd.pattern.toString().includes('undefined'),
+		).length;
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Prefix: ${PREFIX}
-│ Users: ${(await getUsers()).users}
+│ Plugins: ${cmds}
 │ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}
 │ Platform: ${platform()}
@@ -26,7 +30,7 @@ bot(
 │ Date: ${new Date().toLocaleTimeString('en-US', {
 			timeZone: config.TIME_ZONE,
 		})}
-╰─────────────\`\`\`\n${READ_MORE}`;
+╰─────────────\`\`\`\n`;
 
 		const commandsByType = commands
 			.filter(cmd => cmd.pattern && !cmd.dontAddCommandList)
@@ -56,8 +60,9 @@ bot(
 			menuText += `╰────────────\n`;
 		});
 		return await message.send(intro + menuText);
-	}
-)
+	},
+);
+
 bot(
 	{
 		pattern: 'list',
@@ -66,7 +71,7 @@ bot(
 		dontAddCommandList: true,
 	},
 	async message => {
-		let menu = 'XSTRO HELP LIST\n\n';
+		let menu = 'Commnad Help\n\n';
 		let cmdList = [];
 		let cmd, desc;
 		commands.map(command => {
@@ -82,6 +87,6 @@ bot(
 			if (desc) menu += `${desc}\n\n`;
 		});
 
-		return await message.sendPaymentMessage(`\`\`\`${menu}\`\`\``);
+		return await message.send(`\`\`\`${menu}\`\`\``);
 	},
 );

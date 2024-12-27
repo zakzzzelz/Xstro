@@ -5,7 +5,7 @@ import { join } from 'path';
 export function manageProcess(type) {
 	if (type === 'restart') {
 		process.exit();
-	} else {
+	} else if (type === 'stop') {
 		process.send('app.kill');
 	}
 }

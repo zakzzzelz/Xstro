@@ -15,7 +15,7 @@ bot(
 		const start = performance.now();
 		const msg = await message.send('Testing Speed...');
 		const end = performance.now();
-		await msg.edit(`\`\`\`LATEANCY ${(end - start).toFixed(2)}MS\`\`\``);
+		await msg.edit(`\`\`\`SPEED\n ${(end - start).toFixed(2)}MS\`\`\``);
 	},
 );
 
@@ -55,7 +55,7 @@ bot(
 	},
 	async message => {
 		await message.send('```Shutting down bot```');
-		manageProcess();
+		manageProcess('stop');
 	},
 );
 
