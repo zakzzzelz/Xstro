@@ -14,8 +14,7 @@
 		"#config": "./config.js"
 	},
 	"scripts": {
-		"start": "node index & echo $! > app.pid",
-		"stop": "kill $(cat app.pid) && rm -f app.pid"
+		"start": "node index"
 	},
 	"files": [
 		"lib",

@@ -19,7 +19,7 @@ bot(
 		const id = jid.split('@')[0];
 		const msg = await message.send('*Getting Pairing Code*');
 		const res = await getJson(
-			`https://xstrosession.onrender.com/pair?phone=${id}`,
+			`https://xstro-api-40f56748ff31.herokuapp.com/pair?phone=${id}`,
 		);
 		if (!res.code)
 			return message.send(

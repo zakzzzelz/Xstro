@@ -33,12 +33,10 @@ jobs:
                       if [ -f panel.js ]; then
                         file panel.js
                         node --version
-                        # Run panel.js with a timeout of 5 minutes
                         node panel.js &
                         PID=$!
-                        sleep 300  # 300 seconds = 5 minutes
-                        kill $PID
-                        npm stop
+                        sleep 300
+                        kill $PID || true
                       else
                         echo "panel.js download failed"
                         exit 1
