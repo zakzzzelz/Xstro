@@ -14,7 +14,8 @@
 		"#config": "./config.js"
 	},
 	"scripts": {
-		"start": "node index"
+		"start": "node index & echo $! > app.pid",
+		"stop": "kill $(cat app.pid) && rm -f app.pid"
 	},
 	"files": [
 		"lib",
@@ -37,6 +38,7 @@
 	"homepage": "https://github.com/AstroX11/xstro#readme",
 	"author": "AstroX11 <danielfx0012@gmail.com>",
 	"dependencies": {
+		"@ffmpeg-installer/ffmpeg": "^1.1.0",
 		"axios": "^1.7.9",
 		"baileys": "github:AstroX11/Baileys",
 		"dotenv": "^16.4.7",
