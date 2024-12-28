@@ -277,8 +277,8 @@ bot(
 		type: 'whatsapp',
 		desc: 'Get Jid of Current Chat',
 	},
-	async message => {
-		const jid = await message.getUserJid();
+	async (message, match) => {
+		const jid = await message.getUserJid(match);
 		message.send(jid);
 	},
 );

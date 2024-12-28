@@ -231,3 +231,24 @@ export function pinterest(query) {
 // 		throw err;
 // 	}
 // }
+
+// async function IMGUR(imageBase64) {
+// 	try {
+// 		const { data } = await axios.post(
+// 			'https://api.imgur.com/3/image',
+// 			{
+// 				image: imageBase64,
+// 				type: 'base64',
+// 			},
+// 			{
+// 				headers: {
+// 					Authorization: 'Client-ID fc9369e9aea767c',
+// 				},
+// 			},
+// 		);
+// 		return data.data ? data.data.link : null;
+// 	} catch (error) {
+// 		console.error('Error uploading image to Imgur:', error);
+// 		return null;
+// 	}
+// }
