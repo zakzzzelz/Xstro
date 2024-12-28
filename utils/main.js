@@ -100,3 +100,26 @@ export const getRandomProxy = async () => {
 		return null;
 	}
 };
+
+export function isJSON(input) {
+	if (typeof input !== 'string') return false;
+
+	try {
+		const parsed = JSON.parse(input);
+		return (
+			parsed !== null &&
+			typeof parsed === 'object' &&
+			!Array.isArray(parsed)
+		);
+	} catch (error) {
+		return false;
+	}
+}
+
+export function isObject(value) {
+	return value !== null && typeof value === 'object';
+}
+
+export function isArray(value) {
+	return Array.isArray(value);
+}

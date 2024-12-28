@@ -7,6 +7,21 @@ import { isJidGroup } from 'baileys';
 
 bot(
 	{
+		pattern: 'vv',
+		public: false,
+		desc: 'Downloads A Viewonce Message',
+		type: 'whatsapp',
+	},
+	async message => {
+		if (!message.reply_message.viewonce)
+			return message.send('_Reply A Viewonce Message_');
+		const msg = await message.download();
+		return message.send(msg);
+	},
+);
+
+bot(
+	{
 		pattern: 'myname',
 		public: false,
 		type: 'whatsapp',
