@@ -23,6 +23,7 @@ bot(
 			added
 				? `_User added to auto-kick list._ @${jid.split('@')[0]}`
 				: `_User is already on the list._ @${jid.split('@')[0]}`,
+			{ mentions: [jid] },
 		);
 	},
 );
@@ -51,6 +52,7 @@ bot(
 						jid.split('@')[0]
 				  }`
 				: `_User was not on the list._ @${jid.split('@')[0]}`,
+			{ mentions: [jid] },
 		);
 	},
 );
