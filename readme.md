@@ -1,163 +1,55 @@
-## WhatsApp Bot In Javascript Baileys Web API
+## XSTRO WHATSAPP BOT & JAVASCRIPT
 
-<p>Xstro is a simple WhatsApp bot I made to make using WhatsApp faster and easier. It fully depends on the XSTRO API where all the functionality is processed. I used Axios to keep it lightweight and fast. All you need is a decent internet connection from your server.  
-Powered By Baileys Open Source WhatsApp Web API.</p>
+Xstro WhatsApp Bot is powered by the open-source [WhatsApp Web API](https://github.com/WhiskeySockets/Baileys), which allows for automated interactions with WhatsApp. This bot enables you to send and receive messages, manage contacts, and perform various actions directly through Baileys to simplify tasks.
 
-![npm](https://img.shields.io/npm/dm/xstro)
+![npm](https://img.shields.io/npm/dm/xstro-utils)
 
----
-
-## SETUP
-
-### Fork the Repo
-
-First, fork your own copy of the repo to your GitHub account.
-
-[![FORK REPO](https://img.shields.io/badge/FORK_REPO-100000?style=for-the-badge&logo=github&logoColor=white&labelColor=black&color=black)](https://github.com/AstroX11/Xstro/fork)
-
-### Get a Session
-
-Get the Session ID from the render server.
-
-[![GET SESSION](https://img.shields.io/badge/GET_SESSION-100000?style=for-the-badge&logo=render&logoColor=white&labelColor=black&color=black)](https://bit.ly/41mQBbY)
-
----
-
-### NOTICE
+### Warning
 
 I’m not responsible for you messing around and getting your account banned. As long as you don’t modify the source code to fit your idiotic needs, you’re fine. Seriously, don’t spam others—I'm tired of repeating this.
 
----
+### SETUP
 
-## NODE JS DEPLOYMENT PLATFORMS
+**_[Fork Repository](https://github.com/AstroX11/Xstro/fork)_**
 
-### Render Support
+**_[Get Session](https://bit.ly/41mQBbY)_**
 
-#### 1. Account Setup and BetterStack
+### Deployments
 
-Xstro fully supports Render. To deploy Xstro on Render without errors and timeouts:  
-- **Register a [Render Account](https://dashboard.render.com/register)**.  
-- **Use [BetterStack](https://betterstack.com)** for monitoring.  
+#### Render Support
 
-BetterStack ensures the bot stays alive. Don’t ask, *“Why is my bot dead after 5 mins on Render?”*—this is why.
+##### 1. Create A Render and BetterStack Account.
 
-#### 2. Database URL Setup (Optional)
+-    [Create a Render Account](https://dashboard.render.com/register)
+-    [Create a BetterStack](https://betterstack.com)
 
-PostgreSQL Database (Optional):  
-- Useful if you prefer a faster database instead of local `Sqlite3`.  
-- Prevents loss of session and configurations on redeployment.  
-- Acquire the database URL from the [Render Dashboard](https://dashboard.render.com/new/database).
+BetterStack ensures the bot stays alive. Don’t ask, _“Why is my bot dead after 5 mins on Render?”_—this is why.
 
-#### 3. Blueprint Deployment on Render
+##### 2. Blueprint Deployment on Render
 
-Thanks to GitHub Actions, all Docker builds are tested and successful.  
-- Use **PORT:8000** to avoid crashes.  
-- [Deploy BluePrint](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
+-    [Tap here to Deploy on Render](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
 
----
+-    Fill in the Varaiable Such as `SESSION_ID` `BOT_NAME` `SUDO` and `PORT` as `8000`
 
-### Heroku Support, Deployments, Dynos & Warnings
+#### Heroku Support
 
-#### 1. Create a Heroku Account
+##### 1. Create a Heroku Account
 
 [Create a Heroku Account](https://signup.heroku.com/) and add your credit card details. Use **eco dynos** to save money.
 
-#### 2. Xstro App Setup
+##### 2. Enviroment Setup
 
-Ensure Xstro is built as a [Heroku Container](https://devcenter.heroku.com/articles/container-registry-and-runtime).  
-- [Deploy to Heroku](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro).  
-- Fill variables correctly. **Wrong configs = runtime failure. Don’t blame me.**
+-    [Tap here to Deploy on Heroku](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro).
+-    Fill in the Varaiable Such as `SESSION_ID` `BOT_NAME` `SUDO`
 
-#### 3. Important
+-    Once your app has finished build, navigate to **_Resources_** tab and start your worker.
 
-Choose **worker** as the runtime. If you pick web, the application **will crash**—Heroku’s issue, not mine.
+#### WINDOWS SUPPORT
 
----
+##### 1. [Download Node JS](https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi)
 
-### Koyeb Deployment
 
-I have no idea—Koyeb banned me.
-
----
-
-### Official Panel Support
-
-Xstro now supports panel deployment.  
-- Create an `index.js` file at the root of your panel.  
-- Add variables in the correct format (`SESSION_ID: 'Xstro_something'`).  
-- Run the script below to install and start Xstro:
-
-```javascript
-const { existsSync, writeFileSync } = require('node:fs');
-const { spawnSync } = require('node:child_process');
-const path = require('node:path');
-
-const CONFIG = {
-	SESSION_ID: '', // Put your Session ID Here kid!
-	PROJECT_DIR: 'Xstro',
-	REPO_URL: 'https://github.com/AstroX11/Xstro.git',
-	APP_NAME: 'Xstro',
-	MAIN_SCRIPT: 'index.js',
-};
-
-function handleError(message, error) {
-	console.error(message, error);
-	process.exit(1);
-}
-
-function cloneRepository() {
-	console.log('Cloning repository...');
-	const cloneResult = spawnSync('git', ['clone', CONFIG.REPO_URL, CONFIG.PROJECT_DIR], { stdio: 'inherit', shell: true });
-	if (cloneResult.error || cloneResult.status !== 0) handleError('Failed to clone repository.', cloneResult.error);
-}
-
-function writeEnvFile() {
-	try {
-		writeFileSync(path.join(CONFIG.PROJECT_DIR, '.env'), `SESSION_ID=${CONFIG.SESSION_ID}`);
-	} catch (error) {
-		handleError('Failed to write .env file', error);
-	}
-}
-
-function installDependencies() {
-	console.log('Installing dependencies...');
-	const installResult = spawnSync('yarn', ['install'], { cwd: path.resolve(CONFIG.PROJECT_DIR), stdio: 'inherit', shell: true });
-	if (installResult.error || installResult.status !== 0) handleError('Failed to install dependencies.', installResult.error);
-}
-
-function startApplication() {
-	console.log('Starting application...');
-	const startResult = spawnSync('pm2', ['start', CONFIG.MAIN_SCRIPT, '--name', CONFIG.APP_NAME, '--attach'], {
-		cwd: path.resolve(CONFIG.PROJECT_DIR),
-		stdio: 'inherit',
-		shell: true,
-	});
-	if (startResult.error || startResult.status !== 0) handleError('Failed to start the application.', startResult.error);
-}
-
-function XstroPanel() {
-	if (!existsSync(CONFIG.PROJECT_DIR)) cloneRepository();
-	writeEnvFile();
-	installDependencies();
-	startApplication();
-}
-
-XstroPanel();
-```
-
-**Warning**: Don’t change any code—just add your Session ID and run the bot.
-
----
-
-## WINDOWS SUPPORT
-
-### 1. Install Node.js
-
-Download Node.js v22.12.0 [here](https://nodejs.org/dist/v22.12.0/node-v22.12.0-x64.msi). Restart your PC after installation.
-
-### 2. Installation
-
-Install Git, then paste the following commands in PowerShell:
+#### 2. [Install Git](https://git-scm.com/download/win)
 
 ```bash
 npm i -g pm2 yarn
@@ -166,36 +58,21 @@ cd Xstro
 yarn install
 ```
 
-### 3. Configuration
+#### 3. Create a `.env` file
 
-If you don’t trust the terminal, create a `.env` file manually and paste:
-
-```bash
-SESSION_ID=null
-CMD_REACT=true
+```
+SESSION_ID=''
 BOT_INFO=Astro;Xstro-Md;
-MODE=private
-AUTO_STATUS_READ=false
-AUTO_READ=false
 STICKER_PACK=Astro;Xstro
-PREFIX=./,
 ```
 
-### 4. Start the Bot
+#### 4. Start the Bot
 
 ```bash
 npm start
 ```
 
-### 5. Stop the Bot
-
-```bash
-npm stop
-```
-
----
-
-## CONTRIBUTING
+### CONTRIBUTING
 
 Want to help? Fork the repo and create a pull request. Don’t break anything.
 
