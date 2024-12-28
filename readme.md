@@ -22,9 +22,9 @@ I’m not responsible for you messing around and getting your account banned. As
 
 #### **_[Windows/Linux/MacOs](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip)_**
 
-#### ***[Panel Deploy](https://github.com/AstroX11/Xstro/wiki/Panel-Support)***
+#### **_[Panel Deploy](https://github.com/AstroX11/Xstro/wiki/Panel-Support)_**
 
-### Wiki
+### Wiki Support
 
 #### **_[External Plugins](https://github.com/AstroX11/Xstro/wiki/External-Plugins)_**
 
@@ -35,6 +35,8 @@ I’m not responsible for you messing around and getting your account banned. As
 #### **_[Windows Support](https://github.com/AstroX11/Xstro/wiki/Windows-Setup)_**
 
 #### **_[Plugin Creation](https://github.com/AstroX11/Xstro/wiki/Plugin-Creation)_**
+
+#### **_[Listeners Events](https://github.com/AstroX11/Xstro/wiki/Create-Custom-Listener)_**
 
 ### CONTRIBUTING
 
