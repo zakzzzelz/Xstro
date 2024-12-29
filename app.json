@@ -12,16 +12,16 @@
 	],
 	"env": {
 		"SESSION_ID": {
-			"description": "Session ID for authentication or tracking.",
+			"description": "Session ID to Run Bot",
 			"required": true
 		},
 		"SUDO": {
-			"description": "User ID with sudo permissions for the bot.",
+			"description": "Phone Number for Admin Users",
 			"value": "2348039607375",
 			"required": false
 		},
 		"BOT_INFO": {
-			"description": "Information about the bot, such as version or ID.",
+			"description": "Info Such as Owner Name and Bot Name",
 			"value": "Astro;Xstro-Md;",
 			"required": false
 		},
