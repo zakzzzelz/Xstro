@@ -70,16 +70,12 @@ bot(
 		if (message.mention?.includes(message.user)) {
 			let reply = await getMention(message.jid);
 			if (!reply) return;
-			try {
-				reply = JSON.parse(reply);
-				return await message.client.relayMessage(
-					message.jid,
-					reply.message,
-					{},
-				);
-			} catch {
-				return message.send(reply);
-			}
+			await message.client.relayMessage(
+				message.jid,
+				reply.message,
+				{},
+			);
+			if (!JSON.parse(reply)) return message.send(reply);
 		}
 	},
 );
