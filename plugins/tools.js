@@ -1,12 +1,19 @@
 import { bot } from '#lib';
-import { remini, uploadFile, upload, XSTRO, removeBg } from '#utils';
+import {
+	remini,
+	uploadFile,
+	upload,
+	XSTRO,
+	removeBg,
+	UploadFileUgu,
+} from '#utils';
 import { getBuffer } from 'xstro-utils';
 
 bot(
 	{
 		pattern: 'getpp',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Get Another Person Profile Image',
 	},
 	async (message, match) => {
@@ -20,7 +27,7 @@ bot(
 	{
 		pattern: 'getbio',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Get the WhatsApp Bio of a User',
 	},
 	async (message, match) => {
@@ -44,7 +51,7 @@ bot(
 	{
 		pattern: 'enhance',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Enahnces An Image',
 	},
 	async message => {
@@ -60,7 +67,7 @@ bot(
 	{
 		pattern: 'recolor',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Recolors An Image',
 	},
 	async message => {
@@ -76,7 +83,7 @@ bot(
 	{
 		pattern: 'dehaze',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Dehazes An Image',
 	},
 	async message => {
@@ -92,7 +99,7 @@ bot(
 	{
 		pattern: 'upload',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Uploads A File',
 	},
 	async message => {
@@ -107,7 +114,7 @@ bot(
 		}
 		const data = await message.download();
 		const url = await uploadFile(data);
-		await message.send(`_Uploaded File:\n${url}_`);
+		await message.send(`*${url}*`);
 	},
 );
 
@@ -115,7 +122,7 @@ bot(
 	{
 		pattern: 'getsticker',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Get A Sticker',
 	},
 	async (message, match) => {
@@ -134,7 +141,7 @@ bot(
 	{
 		pattern: 'obfuscate',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Obfuscates A Code',
 	},
 	async (message, match) => {
@@ -149,7 +156,7 @@ bot(
 	{
 		pattern: 'pdf',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Generate Pdf Documents From text',
 	},
 	async (message, match) => {
@@ -164,7 +171,7 @@ bot(
 	{
 		pattern: 'rmbg',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Removes background Image from photo',
 	},
 	async message => {
@@ -179,7 +186,7 @@ bot(
 	{
 		pattern: 'gitstalk',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Stalk A Git User',
 	},
 	async (message, match) => {
@@ -213,7 +220,7 @@ bot(
 	{
 		pattern: 'git',
 		public: true,
-		type: "tools",
+		type: 'tools',
 		desc: 'Downloads a GitHub repository as ZIP',
 	},
 	async (message, match) => {
@@ -229,5 +236,25 @@ bot(
 			mimetype: 'application/zip',
 			fileName: 'repo.zip',
 		});
+	},
+);
+
+bot(
+	{
+		pattern: 'upload2',
+		public: true,
+		desc: 'Uploads Any File to Ugg',
+		type: 'tools',
+	},
+	async message => {
+		if (
+			!message.reply_message.image &&
+			!message.reply_message.video &&
+			!message.reply_message.document
+		)
+			return message.send('_Reply Image/Video/Document_');
+		const media = await message.download(true);
+		const res = await UploadFileUgu(media);
+		return message.send(`*${res.url}*`);
 	},
 );

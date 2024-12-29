@@ -1,5 +1,5 @@
 import config from '#config';
-import { bot, commands, getConfigValues, getUsers } from '#lib';
+import { bot, commands, getConfigValues } from '#lib';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';
 

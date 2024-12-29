@@ -75,7 +75,9 @@ bot(
 				reply.message,
 				{},
 			);
-			if (!JSON.parse(reply)) return message.send(reply);
+			try {
+				if (!JSON.parse(reply)) return message.send(reply);
+			} catch {}
 		}
 	},
 );
