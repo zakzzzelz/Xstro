@@ -1,10 +1,11 @@
 import { execSync } from 'child_process';
+import { manageProcess } from '#utils';
 
 export async function updateBot() {
 	try {
 		execSync('git stash');
 		execSync('git pull origin');
-		execSync('npm start');
+		manageProcess('restart');
 		return { success: true };
 	} catch {
 		return false;
