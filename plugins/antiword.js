@@ -7,7 +7,7 @@ bot(
 		public: true,
 		isGroup: true,
 		desc: 'Set Antiword Management for Group Chats',
-		type: 'group'
+		type: 'group',
 	},
 	async (message, match) => {
 		const jid = message.jid;

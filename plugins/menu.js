@@ -12,12 +12,7 @@ bot(
 	},
 	async message => {
 		const { mode, PREFIX } = await getConfigValues();
-		const cmds = commands.filter(
-			cmd =>
-				cmd.pattern &&
-				!cmd.dontAddCommandList &&
-				!cmd.pattern.toString().includes('undefined'),
-		).length;
+		const cmds = commands.filter(cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')).length;
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Prefix: ${PREFIX}
 │ Plugins: ${cmds}
@@ -40,9 +35,7 @@ bot(
 				if (!acc[type]) {
 					acc[type] = [];
 				}
-				acc[type].push(
-					cmd.pattern.toString().toUpperCase().split(/\W+/)[2],
-				);
+				acc[type].push(cmd.pattern.toString().toUpperCase().split(/\W+/)[2]);
 				return acc;
 			}, {});
 
@@ -76,11 +69,9 @@ bot(
 		let cmdList = [];
 		let cmd, desc;
 		commands.map(command => {
-			if (command.pattern)
-				cmd = command.pattern.toString().split(/\W+/)[2];
+			if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[2];
 			desc = command.desc || false;
-			if (!command.dontAddCommandList && cmd !== undefined)
-				cmdList.push({ cmd, desc });
+			if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
 		});
 		cmdList.sort((a, b) => a.cmd.localeCompare(b.cmd));
 		cmdList.forEach(({ cmd, desc }, num) => {

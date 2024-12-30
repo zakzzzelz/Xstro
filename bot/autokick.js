@@ -18,16 +18,10 @@ export async function AutoKick(msg) {
 			const kicks = await getKicks(groupId, wanted);
 			if (kicks.length > 0) {
 				await msg.client.sendMessage(groupId, {
-					text: `\`\`\`@${
-						wanted.split('@')[0]
-					} is detected from AutoKick, now kicking loser.\`\`\``,
+					text: `\`\`\`@${wanted.split('@')[0]} is detected from AutoKick, now kicking loser.\`\`\``,
 					mentions: [wanted],
 				});
-				await msg.client.groupParticipantsUpdate(
-					groupId,
-					[wanted],
-					'remove',
-				);
+				await msg.client.groupParticipantsUpdate(groupId, [wanted], 'remove');
 			}
 		}
 	}, 10000);

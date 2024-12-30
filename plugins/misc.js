@@ -12,19 +12,11 @@ bot(
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
-		if (!jid)
-			return message.send(
-				'_Give me the number that needs pairing code_',
-			);
+		if (!jid) return message.send('_Give me the number that needs pairing code_');
 		const id = jid.split('@')[0];
 		const msg = await message.send('*Getting Pairing Code*');
-		const res = await getJson(
-			`https://xstro-api-40f56748ff31.herokuapp.com/pair?phone=${id}`,
-		);
-		if (!res.code)
-			return message.send(
-				'*unable to get a pairing code, try again!*',
-			);
+		const res = await getJson(`https://xstro-api-40f56748ff31.herokuapp.com/pair?phone=${id}`);
+		if (!res.code) return message.send('*unable to get a pairing code, try again!*');
 		return await msg.edit('```Pairing CODE:\n' + res.code + '```');
 	},
 );
@@ -60,9 +52,7 @@ bot(
 		type: 'help',
 	},
 	async message => {
-		return await message.send(
-			`\`\`\`Xstro Current Users:\n ${(await getUsers()).users}\`\`\``,
-		);
+		return await message.send(`\`\`\`Xstro Current Users:\n ${(await getUsers()).users}\`\`\``);
 	},
 );
 
@@ -71,15 +61,13 @@ bot(
 		pattern: 'readmore',
 		public: true,
 		desc: 'Adds *readmore* in given text.',
-		type: 'tools'
+		type: 'tools',
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Give me text!*');
 		const [text1, text2] = match.split(';');
 		if (!text2) return await message.send('*Format: text1;text2*');
-		return await message.send(
-			text1 + String.fromCharCode(8206).repeat(4001) + `\n${text2}`,
-		);
+		return await message.send(text1 + String.fromCharCode(8206).repeat(4001) + `\n${text2}`);
 	},
 );
 
@@ -140,8 +128,7 @@ bot(
 		type: 'misc',
 	},
 	async (message, match) => {
-		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
-			return message.send('*Please provide a valid URL*');
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match)) return message.send('*Please provide a valid URL*');
 		const img = await message.getProfileImage(message.sender);
 		const url = extractUrlFromString(match);
 		return await message.client.sendMessage(message.jid, {
@@ -182,8 +169,7 @@ bot(
 		type: 'tools',
 	},
 	async (message, match) => {
-		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
-			return message.send('*Please provide a valid URL*');
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match)) return message.send('*Please provide a valid URL*');
 		const msg = await message.send('*Shortening URL...*');
 		const url = extractUrlFromString(match);
 		const res = await XSTRO.short(url);

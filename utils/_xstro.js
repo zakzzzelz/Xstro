@@ -5,9 +5,7 @@ const { API_ID } = config;
 
 const XSTRO = {
 	facebook: async url => {
-		const res = await getJson(
-			`${API_ID}/api/facebook?url=${encodeURIComponent(url)}`,
-		);
+		const res = await getJson(`${API_ID}/api/facebook?url=${encodeURIComponent(url)}`);
 		return res.url;
 	},
 	instagram: async url => {
@@ -88,14 +86,10 @@ const XSTRO = {
 	},
 	generatePdf: async content => {
 		if (!content) return '_No content provided_';
-		return await getBuffer(
-			`${API_ID}/api/textToPdf?content=${encodeURIComponent(content)}`,
-		);
+		return await getBuffer(`${API_ID}/api/textToPdf?content=${encodeURIComponent(content)}`);
 	},
 	maths: async expression => {
-		const res = await getJson(
-			`${API_ID}/api/solveMath?expression=${expression}`,
-		);
+		const res = await getJson(`${API_ID}/api/solveMath?expression=${expression}`);
 		return res.result;
 	},
 	searchSticker: async query => {
@@ -112,26 +106,14 @@ const XSTRO = {
 		return await getBuffer(res[0].url);
 	},
 	gitstalk: async username => {
-		const res = await getJson(
-			`${API_ID}/api/gitstalk?username=${username}`,
-		);
+		const res = await getJson(`${API_ID}/api/gitstalk?username=${username}`);
 		return res;
 	},
-	makeSticker: async (
-		url,
-		pack = config.STICKER_PACK.split(';')[0],
-		author = config.STICKER_PACK.split(';')[1],
-	) => {
-		return fetch(
-			`${API_ID}/api/sticker?url=${encodeURIComponent(
-				url,
-			)}&packname=${pack}&author=${author}`,
-		)
+	makeSticker: async (url, pack = config.STICKER_PACK.split(';')[0], author = config.STICKER_PACK.split(';')[1]) => {
+		return fetch(`${API_ID}/api/sticker?url=${encodeURIComponent(url)}&packname=${pack}&author=${author}`)
 			.then(response => {
 				if (!response.ok) {
-					throw new Error(
-						`Failed to fetch sticker: ${response.statusText}`,
-					);
+					throw new Error(`Failed to fetch sticker: ${response.statusText}`);
 				}
 				return response.arrayBuffer();
 			})
@@ -142,9 +124,7 @@ const XSTRO = {
 			});
 	},
 	flipMedia: async (url, direction) => {
-		const res = await getBuffer(
-			`${API_ID}/api/flip?url=${url}&direction=${direction}`,
-		);
+		const res = await getBuffer(`${API_ID}/api/flip?url=${url}&direction=${direction}`);
 		return res;
 	},
 	blackvideo: async url => {
@@ -164,9 +144,7 @@ const XSTRO = {
 		return res.result;
 	},
 	translate: async (text, lang) => {
-		const res = await getJson(
-			`${API_ID}/api/translate?text=${text}&to=${lang}`,
-		);
+		const res = await getJson(`${API_ID}/api/translate?text=${text}&to=${lang}`);
 		return res.result;
 	},
 	wallpaper: async query => {
@@ -206,17 +184,11 @@ const XSTRO = {
 		return await getJson(`${API_ID}/api/footballnews`);
 	},
 	meme: async (text, type) => {
-		const res = await getBuffer(
-			`${API_ID}/api/meme/${type}?text=${encodeURIComponent(text)}`,
-		);
+		const res = await getBuffer(`${API_ID}/api/meme/${type}?text=${encodeURIComponent(text)}`);
 		return res;
 	},
 	airquality: async (country, city) => {
-		const res = await getJson(
-			`${API_ID}/api/airquality?country=${encodeURIComponent(
-				country,
-			)}&city=${encodeURIComponent(city)}`,
-		);
+		const res = await getJson(`${API_ID}/api/airquality?country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`);
 		return res;
 	},
 };

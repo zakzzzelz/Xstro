@@ -16,9 +16,7 @@ import { FileTypeFromBuffer } from 'xstro-utils';
 
 export const remini = async (image, filterType) => {
 	const availableFilters = ['enhance', 'recolor', 'dehaze'];
-	const selectedFilter = availableFilters.includes(filterType)
-		? filterType
-		: availableFilters[0];
+	const selectedFilter = availableFilters.includes(filterType) ? filterType : availableFilters[0];
 	const apiUrl = `https://inferenceengine.vyro.ai/${selectedFilter}`;
 
 	const form = new FormData();
@@ -50,8 +48,7 @@ export const remini = async (image, filterType) => {
  */
 export const uploadFile = async mediaBuffer => {
 	const fileType = await FileTypeFromBuffer(mediaBuffer);
-	if (!fileType)
-		throw new Error('Unable to determine the file type of the media.');
+	if (!fileType) throw new Error('Unable to determine the file type of the media.');
 	const filename = `file.${fileType}`;
 	const tempPath = path.join(process.cwd(), filename);
 	writeFileSync(tempPath, mediaBuffer);
@@ -63,13 +60,9 @@ export const uploadFile = async mediaBuffer => {
 	});
 	form.append('reqtype', 'fileupload');
 
-	const response = await axios.post(
-		'https://catbox.moe/user/api.php',
-		form,
-		{
-			headers: form.getHeaders(),
-		},
-	);
+	const response = await axios.post('https://catbox.moe/user/api.php', form, {
+		headers: form.getHeaders(),
+	});
 	const url = response.data.trim();
 	unlinkSync(tempPath);
 	return url;
@@ -88,23 +81,15 @@ export async function removeBg(buffer) {
 	const inputPath = path.join(process.cwd(), `temp_image.${type}`);
 	writeFileSync(inputPath, buffer);
 	formData.append('size', 'auto');
-	formData.append(
-		'image_file',
-		createReadStream(inputPath),
-		path.basename(inputPath),
-	);
-	const { status, data } = await axios.post(
-		'https://api.remove.bg/v1.0/removebg',
-		formData,
-		{
-			responseType: 'arraybuffer',
-			headers: {
-				...formData.getHeaders(),
-				'X-Api-Key': 'FjyTadatkyWixWGWUCUDTF7J',
-			},
-			encoding: null,
+	formData.append('image_file', createReadStream(inputPath), path.basename(inputPath));
+	const { status, data } = await axios.post('https://api.remove.bg/v1.0/removebg', formData, {
+		responseType: 'arraybuffer',
+		headers: {
+			...formData.getHeaders(),
+			'X-Api-Key': 'FjyTadatkyWixWGWUCUDTF7J',
 		},
-	);
+		encoding: null,
+	});
 	unlinkSync(inputPath);
 	return data;
 }
@@ -163,8 +148,7 @@ export async function UguuUpload(input) {
 				url: 'https://uguu.se/upload.php',
 				method: 'POST',
 				headers: {
-					'User-Agent':
-						'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
 					...form.getHeaders(),
 				},
 				data: form,
@@ -186,18 +170,9 @@ export async function UguuUpload(input) {
  */
 export function pinterest(query) {
 	return new Promise((resolve, reject) => {
-		axios(
-			`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`,
-		)
+		axios(`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`)
 			.then(data => {
-				const random =
-					data.data.resource_response.data.results[
-						Math.floor(
-							Math.random() *
-								data.data.resource_response.data.results
-									.length,
-						)
-					];
+				const random = data.data.resource_response.data.results[Math.floor(Math.random() * data.data.resource_response.data.results.length)];
 				var result = [];
 				result = {
 					status: 200,
@@ -215,8 +190,7 @@ export async function UploadFileUgu(input) {
 
 	const { data } = await axios.post('https://uguu.se/upload.php', form, {
 		headers: {
-			'User-Agent':
-				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
 			...form.getHeaders(),
 		},
 	});

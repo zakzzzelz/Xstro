@@ -1,12 +1,5 @@
 import { bot } from '#lib';
-import {
-	remini,
-	uploadFile,
-	upload,
-	XSTRO,
-	removeBg,
-	UploadFileUgu,
-} from '#utils';
+import { remini, uploadFile, upload, XSTRO, removeBg, UploadFileUgu } from '#utils';
 import { getBuffer } from 'xstro-utils';
 
 bot(
@@ -35,12 +28,7 @@ bot(
 		const bioDetails = await message.client.fetchStatus(jid);
 		const { status, setAt } = bioDetails;
 		if (status && setAt) {
-			await message.send(
-				`\`\`\`@${
-					jid.split('@')[0]
-				} bio's\n\nBio: ${status}\n\nSetAt: ${setAt}\`\`\``,
-				{ mentions: [jid] },
-			);
+			await message.send(`\`\`\`@${jid.split('@')[0]} bio's\n\nBio: ${status}\n\nSetAt: ${setAt}\`\`\``, { mentions: [jid] });
 		} else {
 			message.send('_Unable to Get user bio_');
 		}
@@ -55,8 +43,7 @@ bot(
 		desc: 'Enahnces An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image)
-			return message.send('_Reply An Image_');
+		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.download();
 		const enhancedImg = await remini(img, 'enhance');
 		await message.send(enhancedImg);
@@ -71,8 +58,7 @@ bot(
 		desc: 'Recolors An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image)
-			return message.send('_Reply An Image_');
+		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.download();
 		const recoloredImg = await remini(img, 'recolor');
 		await message.send(recoloredImg);
@@ -87,8 +73,7 @@ bot(
 		desc: 'Dehazes An Image',
 	},
 	async message => {
-		if (!message.reply_message?.image)
-			return message.send('_Reply An Image_');
+		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.download();
 		const dehazedImg = await remini(img, 'dehaze');
 		await message.send(dehazedImg);
@@ -103,13 +88,7 @@ bot(
 		desc: 'Uploads A File',
 	},
 	async message => {
-		if (
-			!message.reply_message.image &&
-			!message.reply_message.video &&
-			!message.reply_message.audio &&
-			!message.reply_message.sticker &&
-			!message.reply_message.document
-		) {
+		if (!message.reply_message.image && !message.reply_message.video && !message.reply_message.audio && !message.reply_message.sticker && !message.reply_message.document) {
 			return message.send('_Reply A File_');
 		}
 		const data = await message.download();
@@ -145,9 +124,7 @@ bot(
 		desc: 'Obfuscates A Code',
 	},
 	async (message, match) => {
-		const obfuscatedCode = await XSTRO.obfuscate(
-			match || message.reply_message.text,
-		);
+		const obfuscatedCode = await XSTRO.obfuscate(match || message.reply_message.text);
 		await message.send(obfuscatedCode);
 	},
 );
@@ -160,9 +137,7 @@ bot(
 		desc: 'Generate Pdf Documents From text',
 	},
 	async (message, match) => {
-		const pdfDoc = await XSTRO.generatePdf(
-			match || message.reply_message?.text,
-		);
+		const pdfDoc = await XSTRO.generatePdf(match || message.reply_message?.text);
 		return await message.send(pdfDoc, { fileName: 'Converted Document' });
 	},
 );
@@ -175,8 +150,7 @@ bot(
 		desc: 'Removes background Image from photo',
 	},
 	async message => {
-		if (!message.reply_message?.image)
-			return message.send('_Reply an image_');
+		if (!message.reply_message?.image) return message.send('_Reply an image_');
 		const buff = await removeBg(await message.download());
 		return await message.send(buff);
 	},
@@ -192,16 +166,7 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('_Provide A GitUserName_');
 		const res = await XSTRO.gitstalk(match);
-		const {
-			username,
-			bio,
-			profile_pic,
-			email,
-			company,
-			created_at,
-			followers,
-			following,
-		} = res;
+		const { username, bio, profile_pic, email, company, created_at, followers, following } = res;
 		return await message.send(
 			`\`\`\`${username} Details:
 
@@ -226,10 +191,7 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('_Provide a GitHub repository URL_');
 		const repoUrl = match.endsWith('.git') ? match : `${match}.git`;
-		const zipUrl = repoUrl.replace(
-			'.git',
-			'/archive/refs/heads/main.zip',
-		);
+		const zipUrl = repoUrl.replace('.git', '/archive/refs/heads/main.zip');
 		const buffer = await getBuffer(zipUrl);
 		return await message.sendMessage(buffer, {
 			type: 'document',
@@ -247,12 +209,7 @@ bot(
 		type: 'tools',
 	},
 	async message => {
-		if (
-			!message.reply_message.image &&
-			!message.reply_message.video &&
-			!message.reply_message.document
-		)
-			return message.send('_Reply Image/Video/Document_');
+		if (!message.reply_message.image && !message.reply_message.video && !message.reply_message.document) return message.send('_Reply Image/Video/Document_');
 		const media = await message.download(true);
 		const res = await UploadFileUgu(media);
 		return message.send(`*${res.url}*`);

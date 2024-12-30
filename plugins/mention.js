@@ -35,10 +35,7 @@ bot(
 	},
 	async (message, match) => {
 		const replyMsg = match || message.reply_message;
-		if (!replyMsg)
-			return message.send(
-				`_You didn't give me a message to use reply a mention, Eg. ${message.prefix}setmention hello there_`,
-			);
+		if (!replyMsg) return message.send(`_You didn't give me a message to use reply a mention, Eg. ${message.prefix}setmention hello there_`);
 		await setMention(message.jid, replyMsg);
 		return message.send('_Mention has been Updated_');
 	},
@@ -53,8 +50,7 @@ bot(
 		type: 'mentions',
 	},
 	async message => {
-		if (!(await isMention(message.jid)))
-			return message.send('_Mention Alreay off_');
+		if (!(await isMention(message.jid))) return message.send('_Mention Alreay off_');
 		await delMention(message.jid);
 		return message.send('_Mention Deleted for this Group_');
 	},
@@ -70,11 +66,7 @@ bot(
 		if (message.mention?.includes(message.user)) {
 			let reply = await getMention(message.jid);
 			if (!reply) return;
-			await message.client.relayMessage(
-				message.jid,
-				reply.message,
-				{},
-			);
+			await message.client.relayMessage(message.jid, reply.message, {});
 			try {
 				if (!JSON.parse(reply)) return message.send(reply);
 			} catch {}

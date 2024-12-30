@@ -62,14 +62,7 @@ bot(
 	async (message, match) => {
 		const news = await XSTRO.technews();
 		if (!news?.length) return message.send('No news found');
-		const formattedNews = news
-			.map(
-				(article, index) =>
-					`*${index + 1}. ${article.title}*\n${
-						article.description || ''
-					}\n${article.link}`,
-			)
-			.join('\n\n');
+		const formattedNews = news.map((article, index) => `*${index + 1}. ${article.title}*\n${article.description || ''}\n${article.link}`).join('\n\n');
 		return message.send(`*Latest Tech News:*\n\n${formattedNews}`);
 	},
 );

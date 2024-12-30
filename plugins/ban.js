@@ -10,8 +10,7 @@ bot(
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
-		if (await isSudo(jid, message.user))
-			return message.send('_You cannot ban a sudo user_');
+		if (await isSudo(jid, message.user)) return message.send('_You cannot ban a sudo user_');
 		const msg = await addBan(jid);
 		return await message.send(msg, { mentions: [jid] });
 	},
@@ -40,15 +39,8 @@ bot(
 	},
 	async message => {
 		const bannedUsers = await getBanned();
-		if (bannedUsers.length === 0)
-			return message.send('_No banned users._');
+		if (bannedUsers.length === 0) return message.send('_No banned users._');
 		const mentions = bannedUsers.map(jid => `${jid}@s.whatsapp.net`);
-		return message.send(
-			'*_Banned Users:_*\n' +
-				bannedUsers
-					.map((jid, index) => `${index + 1}. @${jid}`)
-					.join('\n'),
-			{ mentions },
-		);
+		return message.send('*_Banned Users:_*\n' + bannedUsers.map((jid, index) => `${index + 1}. @${jid}`).join('\n'), { mentions });
 	},
 );

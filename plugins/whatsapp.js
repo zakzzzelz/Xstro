@@ -13,8 +13,7 @@ bot(
 		type: 'whatsapp',
 	},
 	async message => {
-		if (!message.reply_message.viewonce)
-			return message.send('_Reply A Viewonce Message_');
+		if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
 		const msg = await message.download();
 		return message.send(msg);
 	},
@@ -42,8 +41,7 @@ bot(
 		desc: 'Set Your Profile Picture',
 	},
 	async message => {
-		if (!message.reply_message?.image)
-			return message.send('_Reply An Image_');
+		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.download();
 		await message.updatePP(img);
 		return await message.send('_Profile Picture Updated_');
@@ -58,20 +56,12 @@ bot(
 		desc: 'quoted message',
 	},
 	async message => {
-		if (!message.reply_message)
-			return await message.send('```Reply A Message```');
+		if (!message.reply_message) return await message.send('```Reply A Message```');
 		let key = message.reply_message.key.id;
 		let msg = await loadMessage(key);
-		if (!msg)
-			return await message.send(
-				'```Xstro will not quoted Bot Message```',
-			);
-		msg = await serialize(
-			JSON.parse(JSON.stringify(msg.message)),
-			message.client,
-		);
-		if (!msg.quoted)
-			return await message.send('_No quoted message found_');
+		if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
+		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
+		if (!msg.quoted) return await message.send('_No quoted message found_');
 		await message.forward(message.jid, msg.quoted, {
 			quoted: msg.quoted,
 		});
@@ -128,9 +118,7 @@ bot(
 		const blocklist = await message.client.fetchBlocklist();
 		if (blocklist.length > 0) {
 			const mentions = blocklist.map(number => `${number}`);
-			const formattedList = blocklist
-				.map(number => `• @${number.split('@')[0]}`)
-				.join('\n');
+			const formattedList = blocklist.map(number => `• @${number.split('@')[0]}`).join('\n');
 			await message.send(`*_Blocked contacts:_*\n\n${formattedList}`, {
 				mentions,
 			});
@@ -222,24 +210,16 @@ bot(
 		if (message.mention && message.mention[0]) {
 			jid = message.mention[0];
 		} else if (isJidGroup(match)) {
-			return message.send(
-				'_Use Gforward command to forward to groups_',
-			);
+			return message.send('_Use Gforward command to forward to groups_');
 		} else if (!isJidGroup(match)) {
 			jid = numtoId(match);
 		}
-		if (!jid)
-			return message.send(
-				'_You have to provide a number/tag someone_',
-			);
+		if (!jid) return message.send('_You have to provide a number/tag someone_');
 		const msg = message.data?.quoted;
 		await message.forward(jid, msg, { quoted: msg });
-		return await message.send(
-			`_Message forward to @${jid.split('@')[0]}_`,
-			{
-				mentions: [jid],
-			},
-		);
+		return await message.send(`_Message forward to @${jid.split('@')[0]}_`, {
+			mentions: [jid],
+		});
 	},
 );
 
@@ -277,10 +257,8 @@ bot(
 		desc: 'Edits A Sent Message',
 	},
 	async (message, match, { prefix }) => {
-		if (!message.reply_message)
-			return message.send('_Reply Your Own Message_');
-		if (!match)
-			return await message.send('```' + prefix + 'edit hello```');
+		if (!message.reply_message) return message.send('_Reply Your Own Message_');
+		if (!match) return await message.send('```' + prefix + 'edit hello```');
 		await message.edit(match);
 	},
 );
@@ -306,12 +284,9 @@ bot(
 		desc: 'Change your whatsapp bio',
 	},
 	async (message, match, { prefix }) => {
-		if (!match)
-			return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
+		if (!match) return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
 		await message.client.updateProfileStatus(match);
-		return await message.send(
-			'```WhatsApp bio Updated to "' + match + '"```',
-		);
+		return await message.send('```WhatsApp bio Updated to "' + match + '"```');
 	},
 );
 
@@ -323,10 +298,8 @@ bot(
 		desc: 'React to A Message',
 	},
 	async (message, match) => {
-		if (!message.reply_message)
-			return message.send('```Reply A Message```');
-		if (message.reply_message?.fromMe)
-			return message.send('```Cannot React to yourself Bro```');
+		if (!message.reply_message) return message.send('```Reply A Message```');
+		if (message.reply_message?.fromMe) return message.send('```Cannot React to yourself Bro```');
 		if (!match) return message.send('```react 😊```');
 		return message.client.sendMessage(message.jid, {
 			react: { text: match, key: message.reply_message.key },
@@ -343,12 +316,9 @@ bot(
 	},
 	async message => {
 		const replyMessage = message.reply_message;
-		if (!replyMessage)
-			return message.send('_Reply to a message to star it_');
+		if (!replyMessage) return message.send('_Reply to a message to star it_');
 		const jid = message.jid;
-		const messages = [
-			{ id: replyMessage.id, fromMe: replyMessage.fromMe },
-		];
+		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = true;
 		await message.client.star(jid, messages, star);
 	},
@@ -363,12 +333,9 @@ bot(
 	},
 	async message => {
 		const replyMessage = message.reply_message;
-		if (!replyMessage)
-			return message.send('_Reply to a message to star it_');
+		if (!replyMessage) return message.send('_Reply to a message to star it_');
 		const jid = message.jid;
-		const messages = [
-			{ id: replyMessage.id, fromMe: replyMessage.fromMe },
-		];
+		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = false;
 		await message.client.star(jid, messages, star);
 	},
@@ -383,24 +350,8 @@ bot(
 	},
 	async message => {
 		const name = await getName(message.user);
-		const img = await getBuffer(
-			'https://avatars.githubusercontent.com/u/188756392?v=4',
-		);
-		const vcard =
-			'BEGIN:VCARD\n' +
-			'VERSION:3.0\n' +
-			'FN:' +
-			name +
-			'\n' +
-			'ORG:' +
-			config.BOT_INFO.split(';')[0] +
-			'\n' +
-			'TEL;type=CELL;type=VOICE;waid=' +
-			message.user.split('@')[0] +
-			':' +
-			message.user.split('@')[0] +
-			'\n' +
-			'END:VCARD';
+		const img = await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4');
+		const vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:' + name + '\n' + 'ORG:' + config.BOT_INFO.split(';')[0] + '\n' + 'TEL;type=CELL;type=VOICE;waid=' + message.user.split('@')[0] + ':' + message.user.split('@')[0] + '\n' + 'END:VCARD';
 
 		return await message.client.sendMessage(message.jid, {
 			contacts: {
@@ -443,12 +394,8 @@ bot(
 		desc: 'Forwards a replied message to multiple groups',
 	},
 	async (message, match) => {
-		if (!message.reply_message)
-			return message.send('_Reply to a message to forward it!_');
-		if (!match)
-			return message.send(
-				'_Provide a comma-separated list of group JIDs._',
-			);
+		if (!message.reply_message) return message.send('_Reply to a message to forward it!_');
+		if (!match) return message.send('_Provide a comma-separated list of group JIDs._');
 
 		const groupJids = match
 			.split(',')
@@ -467,8 +414,6 @@ bot(
 			successfulForwards++;
 		}
 
-		return message.send(
-			`_Message forwarded to ${successfulForwards} group(s).`,
-		);
+		return message.send(`_Message forwarded to ${successfulForwards} group(s).`);
 	},
 );

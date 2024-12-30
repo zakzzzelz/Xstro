@@ -57,11 +57,8 @@ bot(
 		type: 'search',
 	},
 	async (message, match) => {
-		if (!match)
-			return await message.send('Please provide a verse:\n.john3:16');
-		return await message.send(
-			`\`\`\`${await XSTRO.bible(match.trim())}\`\`\``,
-		);
+		if (!match) return await message.send('Please provide a verse:\n.john3:16');
+		return await message.send(`\`\`\`${await XSTRO.bible(match.trim())}\`\`\``);
 	},
 );
 

@@ -1,11 +1,6 @@
 import config from '#config';
 import { isJidGroup } from 'baileys';
-import {
-	getAntilink,
-	incrementWarningCount,
-	resetWarningCount,
-	isSudo,
-} from '#sql';
+import { getAntilink, incrementWarningCount, resetWarningCount, isSudo } from '#sql';
 
 const { WARN_COUNT } = config;
 
@@ -34,78 +29,33 @@ export async function Antilink(msg) {
 
 	const sender = msg.sender;
 	if (!sender) return;
-
-	// Ignore admins, owners, and sudo users
-	if (msg.sender === msg.owner || (await isSudo(sender)) || msg.isAdmin)
-		return;
-
-	// Check for URL in the message
+	if (msg.sender === msg.owner || (await isSudo(sender)) || msg.isAdmin) return;
 	if (!containsURL(SenderMessage.trim())) return;
-
 	const antilinkConfig = await getAntilink(jid, 'on');
-
 	if (!antilinkConfig) return;
-
 	const action = antilinkConfig.action;
-
-	// Delete the message first (common to most actions)
 	await msg.client.sendMessage(jid, { delete: msg?.key });
 
 	if (action === 'delete') {
 		await msg.client.sendMessage(jid, { delete: msg?.key });
-		return await msg.send(
-			`\`\`\`@${
-				msg.sender.split('@')[0]
-			} link are not allowed here\`\`\``,
-			{ mentions: [msg.sender] },
-		);
+		return await msg.send(`\`\`\`@${msg.sender.split('@')[0]} link are not allowed here\`\`\``, { mentions: [msg.sender] });
 	} else if (action === 'kick') {
 		await msg.client.sendMessage(jid, { delete: msg?.key });
 		await msg.client.groupParticipantsUpdate(jid, [sender], 'remove');
-		return await msg.send(
-			`\`\`\`@${
-				msg.sender.split('@')[0]
-			} has been kicked for sending links, no link allowed kid\`\`\``,
-			{ mentions: [msg.sender] },
-		);
+		return await msg.send(`\`\`\`@${msg.sender.split('@')[0]} has been kicked for sending links, no link allowed kid\`\`\``, { mentions: [msg.sender] });
 	} else if (action === 'warn') {
 		const warningCount = await incrementWarningCount(jid, 'on');
 		if (warningCount <= WARN_COUNT) {
-			await msg.send(
-				`\`\`\`@${
-					msg.sender.split('@')[0]
-				} no links are allowed in this group! you have been warned.\n${
-					WARN_COUNT - warningCount
-				} warnings left before you could be kicked out.\`\`\``,
-				{ mentions: [msg.sender] },
-			);
+			await msg.send(`\`\`\`@${msg.sender.split('@')[0]} no links are allowed in this group! you have been warned.\n${WARN_COUNT - warningCount} warnings left before you could be kicked out.\`\`\``, { mentions: [msg.sender] });
 			if (warningCount === WARN_COUNT) {
-				await msg.client.groupParticipantsUpdate(
-					jid,
-					[sender],
-					'remove',
-				);
+				await msg.client.groupParticipantsUpdate(jid, [sender], 'remove');
 				await resetWarningCount(jid, 'on');
-				return await msg.send(
-					`\`\`\`@${
-						msg.sender.split('@')[0]
-					} has been kicked for sending links, no link allowed kid\`\`\``,
-					{ mentions: [msg.sender] },
-				);
+				return await msg.send(`\`\`\`@${msg.sender.split('@')[0]} has been kicked for sending links, no link allowed kid\`\`\``, { mentions: [msg.sender] });
 			}
 		} else {
-			await msg.client.groupParticipantsUpdate(
-				jid,
-				[sender],
-				'remove',
-			);
+			await msg.client.groupParticipantsUpdate(jid, [sender], 'remove');
 			await resetWarningCount(jid, 'on');
-			return await msg.send(
-				`\`\`\`@${
-					msg.sender.split('@')[0]
-				} has been kicked for sending links, no link allowed kid\`\`\``,
-				{ mentions: [msg.sender] },
-			);
+			return await msg.send(`\`\`\`@${msg.sender.split('@')[0]} has been kicked for sending links, no link allowed kid\`\`\``, { mentions: [msg.sender] });
 		}
 	}
 }

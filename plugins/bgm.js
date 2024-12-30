@@ -1,12 +1,5 @@
 import { bot } from '#lib';
-import {
-	addBgm,
-	getBgmResponse,
-	deleteBgm,
-	getBgmList,
-	loadMessage,
-	saveMessage,
-} from '#sql';
+import { addBgm, getBgmResponse, deleteBgm, getBgmList, loadMessage, saveMessage } from '#sql';
 
 bot(
 	{
@@ -40,10 +33,8 @@ bot(
 		type: 'bgm',
 	},
 	async (message, match) => {
-		if (!match)
-			return message.send('_Example: .addbgm hello (reply to audio)_');
-		if (!message.reply_message?.audio)
-			return message.send('_Please reply to an audio message_');
+		if (!match) return message.send('_Example: .addbgm hello (reply to audio)_');
+		if (!message.reply_message?.audio) return message.send('_Please reply to an audio message_');
 		const word = match.trim().toLowerCase();
 		await addBgm(word, message.reply_message.key.id);
 		if (!(await loadMessage(message.reply_message.key.id))) {
@@ -65,13 +56,8 @@ bot(
 		const messageId = await getBgmResponse(match.trim().toLowerCase());
 		if (!messageId) return message.send(`_No BGM found for ${match}_`);
 		const audioMessage = await loadMessage(messageId);
-		if (!audioMessage)
-			return message.send('_Failed to load audio message_');
-		return message.client.relayMessage(
-			message.jid,
-			audioMessage.message.message,
-			{},
-		);
+		if (!audioMessage) return message.send('_Failed to load audio message_');
+		return message.client.relayMessage(message.jid, audioMessage.message.message, {});
 	},
 );
 
@@ -114,16 +100,10 @@ bot(
 	},
 	async message => {
 		if (message.sender === message.user) return;
-		const messageId = await getBgmResponse(
-			message.text.trim().toLowerCase(),
-		);
+		const messageId = await getBgmResponse(message.text.trim().toLowerCase());
 		if (!messageId) return;
 		const audioMessage = await loadMessage(messageId);
 		if (!audioMessage) return;
-		return message.client.relayMessage(
-			message.jid,
-			audioMessage.message.message,
-			{},
-		);
+		return message.client.relayMessage(message.jid, audioMessage.message.message, {});
 	},
 );

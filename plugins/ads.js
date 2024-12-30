@@ -18,9 +18,7 @@ bot(
 		const groups = await message.client.groupFetchAllParticipating();
 		const groupIds = Object.values(groups).map(group => group.id);
 
-		await message.send(
-			`\`\`\`Advertising to ${groupIds.length} groups.\`\`\``,
-		);
+		await message.send(`\`\`\`Advertising to ${groupIds.length} groups.\`\`\``);
 
 		const broadcastMessage = `\`\`\`ADVERTSIMENT\n\nINFO:\n\n${adMsg}\`\`\``;
 		const messageOptions = {
@@ -36,8 +34,6 @@ bot(
 			});
 		}
 
-		return await message.send(
-			'```Shared to ' + groupIds.length + ' Groups.```',
-		);
+		return await message.send('```Shared to ' + groupIds.length + ' Groups.```');
 	},
 );

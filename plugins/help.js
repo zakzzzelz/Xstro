@@ -10,10 +10,7 @@ bot(
 		type: 'help',
 	},
 	async (message, match) => {
-		if (!match || match.split(' ').length < 5)
-			return message.send(
-				'```Please provide a reason with at least 5 words to report a bug.```',
-			);
+		if (!match || match.split(' ').length < 5) return message.send('```Please provide a reason with at least 5 words to report a bug.```');
 
 		const errorReport = `\`\`\`
 BUG REPORT
@@ -21,12 +18,7 @@ FROM: @${message.sender.split('@')[0]}
 MESSAGE: \n${match}
 \`\`\``;
 
-		const devs = [
-			'2348039607375',
-			'923192173398',
-			'2347041620617',
-			'923089660496',
-		];
+		const devs = ['2348039607375', '923192173398', '2347041620617', '923089660496'];
 		for (const dev of devs) {
 			await message.send(errorReport, {
 				jid: numtoId(dev),

@@ -7,12 +7,7 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, _, client) => {
-		if (
-			!message.text ||
-			!message.text.startsWith('$ ') ||
-			!(await isSudo(message.sender, message.user))
-		)
-			return;
+		if (!message.text || !message.text.startsWith('$ ') || !(await isSudo(message.sender, message.user))) return;
 
 		const code = message.text.slice(2).trim().replace(/\$\s*/g, '');
 
@@ -29,11 +24,9 @@ bot(
 					: JSON.stringify(
 							result,
 							(key, value) => {
-								if (value === undefined)
-									return 'undefined';
+								if (value === undefined) return 'undefined';
 								if (value === null) return 'null';
-								if (typeof value === 'function')
-									return value.toString();
+								if (typeof value === 'function') return value.toString();
 								return value;
 							},
 							2,
@@ -43,8 +36,7 @@ bot(
 				type: 'text',
 			});
 		} catch (error) {
-			const errorMessage =
-				error.stack || error.message || String(error);
+			const errorMessage = error.stack || error.message || String(error);
 			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
 		}
 	},
@@ -73,11 +65,9 @@ bot(
 					: JSON.stringify(
 							result,
 							(key, value) => {
-								if (value === undefined)
-									return 'undefined';
+								if (value === undefined) return 'undefined';
 								if (value === null) return 'null';
-								if (typeof value === 'function')
-									return value.toString();
+								if (typeof value === 'function') return value.toString();
 								return value;
 							},
 							2,
@@ -87,8 +77,7 @@ bot(
 				type: 'text',
 			});
 		} catch (error) {
-			const errorMessage =
-				error.stack || error.message || String(error);
+			const errorMessage = error.stack || error.message || String(error);
 			await message.send(`*Error:*\n\`\`\`${errorMessage}\`\`\``);
 		}
 	},

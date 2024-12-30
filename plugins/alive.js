@@ -22,8 +22,6 @@ bot(
 				mentionedJid: [message.sender],
 			},
 		};
-		return botInfo
-			? message.send(botInfo, { ...mentionData, caption: msg })
-			: message.send(msg, mentionData);
+		return botInfo ? message.send(botInfo, { ...mentionData, caption: msg }) : message.send(msg, mentionData);
 	},
 );

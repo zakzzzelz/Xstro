@@ -10,11 +10,8 @@ bot(
 		type: 'plugins',
 	},
 	async (message, match) => {
-		const pluginUrl = extractUrlFromString(
-			match || message.reply_message?.text,
-		);
-		if (!pluginUrl.startsWith('https://gist.githubusercontent.com'))
-			return message.send('_Provide a valid Plugin URL_');
+		const pluginUrl = extractUrlFromString(match || message.reply_message?.text);
+		if (!pluginUrl.startsWith('https://gist.githubusercontent.com')) return message.send('_Provide a valid Plugin URL_');
 
 		try {
 			const pluginName = await installPlugin(pluginUrl);
@@ -54,10 +51,7 @@ bot(
 	},
 	async message => {
 		const plugins = await listPlugins();
-		const pluginList =
-			plugins.length > 0
-				? `_Plugins Installed:_\n${plugins.join('\n')}`
-				: '_No plugins installed_';
+		const pluginList = plugins.length > 0 ? `_Plugins Installed:_\n${plugins.join('\n')}` : '_No plugins installed_';
 		message.send(pluginList);
 	},
 );

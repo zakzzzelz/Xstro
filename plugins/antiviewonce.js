@@ -14,29 +14,17 @@ bot(
 		const type = args[1];
 
 		if (!cmd) {
-			return await message.send(
-				`*Anti ViewOnce Settings*\n\n` +
-					`*${message.prefix}antivv on* - Enable\n` +
-					`*${message.prefix}antivv off* - Disable\n` +
-					`*${message.prefix}antivv set* _[gc/dm/all]_ - Set chat type\n` +
-					`*${message.prefix}antivv get* - Check status`,
-			);
+			return await message.send(`*Anti ViewOnce Settings*\n\n` + `*${message.prefix}antivv on* - Enable\n` + `*${message.prefix}antivv off* - Disable\n` + `*${message.prefix}antivv set* _[gc/dm/all]_ - Set chat type\n` + `*${message.prefix}antivv get* - Check status`);
 		}
 
 		if (cmd === 'get') {
 			const settings = await getSettings();
-			return await message.send(
-				`*Anti ViewOnce Status*\n\n` +
-					`*Status:* ${settings.isEnabled ? 'ON' : 'OFF'}\n` +
-					`*Type:* ${settings.type}`,
-			);
+			return await message.send(`*Anti ViewOnce Status*\n\n` + `*Status:* ${settings.isEnabled ? 'ON' : 'OFF'}\n` + `*Type:* ${settings.type}`);
 		}
 
 		if (cmd === 'set') {
 			if (!type || !['gc', 'dm', 'all'].includes(type)) {
-				return await message.send(
-					`*Invalid type*\nUse: gc, dm, or all`,
-				);
+				return await message.send(`*Invalid type*\nUse: gc, dm, or all`);
 			}
 
 			await setViewOnceType(type);
@@ -44,9 +32,7 @@ bot(
 		}
 
 		if (!['on', 'off'].includes(cmd)) {
-			return await message.send(
-				`*Invalid command*\nUse: on, off, set, or get`,
-			);
+			return await message.send(`*Invalid command*\nUse: on, off, set, or get`);
 		}
 
 		await setViewOnce(cmd === 'on');

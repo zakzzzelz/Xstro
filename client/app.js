@@ -17,7 +17,7 @@ class XstroBot {
 	async initialize() {
 		console.log('XSTRO MD');
 		await DATABASE.sync();
-		console.log('Database Synced')
+		console.log('Database Synced');
 		await this.setupComponents();
 		await this.startServer();
 	}

@@ -26,11 +26,7 @@ bot(
 	async (message, match) => {
 		if (!match) return message.send('_How can i help?_');
 		const msg = await message.send('*hmm*');
-		const res = (
-			await getJson(
-				`https://api.gurusensei.workers.dev/llama?prompt=${match}`,
-			)
-		).response.response;
+		const res = (await getJson(`https://api.gurusensei.workers.dev/llama?prompt=${match}`)).response.response;
 		return await msg.edit(res);
 	},
 );
@@ -44,9 +40,7 @@ bot(
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Give me a prompt!_');
-		const res = await getBuffer(
-			`https://api.gurusensei.workers.dev/dream?prompt=${match}`,
-		);
+		const res = await getBuffer(`https://api.gurusensei.workers.dev/dream?prompt=${match}`);
 		return await message.send(res, {
 			caption: `_Here is your image for:_ ${match}`,
 		});

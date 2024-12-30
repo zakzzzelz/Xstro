@@ -37,9 +37,7 @@ export async function getSession() {
 	let db = null;
 
 	try {
-		const { files } = await getJson(
-			`https://xstro-api-40f56748ff31.herokuapp.com/session/${SESSION_ID}`,
-		);
+		const { files } = await getJson(`https://xstro-api-40f56748ff31.herokuapp.com/session/${SESSION_ID}`);
 		await fs.writeFile(TEMP_PATH, await getBuffer(files[0].url));
 
 		db = {
@@ -62,10 +60,7 @@ export async function getSession() {
 				})
 				.then(([result]) => result?.session_id);
 
-		const [mainId, tempId] = await Promise.all([
-			getSessionId(db.main),
-			getSessionId(db.temp),
-		]);
+		const [mainId, tempId] = await Promise.all([getSessionId(db.main), getSessionId(db.temp)]);
 
 		if (mainId === tempId) return console.log('Session connected');
 
@@ -75,28 +70,16 @@ export async function getSession() {
 
 		await db.main.transaction(async t => {
 			await db.main.query('DELETE FROM session', { transaction: t });
-			await db.main.query(
-				'INSERT INTO session (session_id, data_key, data_value) VALUES ' +
-					tempData.map(() => '(?, ?, ?)').join(','),
-				{
-					replacements: tempData.flatMap(row => [
-						row.session_id,
-						row.data_key,
-						row.data_value,
-					]),
-					transaction: t,
-				},
-			);
+			await db.main.query('INSERT INTO session (session_id, data_key, data_value) VALUES ' + tempData.map(() => '(?, ?, ?)').join(','), {
+				replacements: tempData.flatMap(row => [row.session_id, row.data_key, row.data_value]),
+				transaction: t,
+			});
 		});
 
 		console.log('Session connected');
 	} catch {
 		console.log('No Session Data');
 	} finally {
-		await Promise.all([
-			db?.main?.close(),
-			db?.temp?.close(),
-			fs.unlink(TEMP_PATH).catch(() => {}),
-		]);
+		await Promise.all([db?.main?.close(), db?.temp?.close(), fs.unlink(TEMP_PATH).catch(() => {})]);
 	}
 }

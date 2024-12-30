@@ -1,10 +1,5 @@
 import { bot } from '#lib';
-import {
-	getChatSummary,
-	getGroupMembersMessageCount,
-	getGroupMetadata,
-	getInactiveGroupMembers,
-} from '#sql';
+import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInactiveGroupMembers } from '#sql';
 
 bot(
 	{
@@ -15,13 +10,7 @@ bot(
 	},
 	async message => {
 		const allChats = await getChatSummary();
-		const dmChats = allChats.filter(
-			chat =>
-				!chat.jid.endsWith('@g.us') &&
-				!chat.jid.endsWith('@newsletter') &&
-				chat.jid !== 'status@broadcast' &&
-				chat.jid !== message.user,
-		);
+		const dmChats = allChats.filter(chat => !chat.jid.endsWith('@g.us') && !chat.jid.endsWith('@newsletter') && chat.jid !== 'status@broadcast' && chat.jid !== message.user);
 
 		if (dmChats.length === 0) {
 			return message.send('```No direct messages found.```');
@@ -35,10 +24,7 @@ Messages: ${chat.messageCount}
 Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`,
 		);
 
-		message.send(
-			`\`\`\`DM Chats:\n\n${formattedChats.join('\n\n')}\`\`\``,
-			{ mentions: mentionJids },
-		);
+		message.send(`\`\`\`DM Chats:\n\n${formattedChats.join('\n\n')}\`\`\``, { mentions: mentionJids });
 	},
 );
 
@@ -51,9 +37,7 @@ bot(
 	},
 	async message => {
 		const allChats = await getChatSummary();
-		const groupChats = allChats.filter(chat =>
-			chat.jid.endsWith('@g.us'),
-		);
+		const groupChats = allChats.filter(chat => chat.jid.endsWith('@g.us'));
 
 		if (groupChats.length === 0) {
 			return message.send('```No group chats found.```');
@@ -63,9 +47,7 @@ bot(
 			groupChats.map(async (chat, index) => {
 				try {
 					const groupMetadata = await getGroupMetadata(chat.jid);
-					return `GROUP: ${
-						groupMetadata?.subject || 'Unknown Group'
-					}
+					return `GROUP: ${groupMetadata?.subject || 'Unknown Group'}
 Messages: ${chat.messageCount}
 Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`;
 				} catch (error) {
@@ -76,9 +58,7 @@ Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`;
 			}),
 		);
 
-		message.send(
-			`\`\`\`Group Chats:\n\n${formattedChats.join('\n\n')}\`\`\``,
-		);
+		message.send(`\`\`\`Group Chats:\n\n${formattedChats.join('\n\n')}\`\`\``);
 	},
 );
 bot(
@@ -91,8 +71,7 @@ bot(
 	},
 	async message => {
 		const groupData = await getGroupMembersMessageCount(message.jid);
-		if (groupData.length === 0)
-			return await message.send('_No active members found._');
+		if (groupData.length === 0) return await message.send('_No active members found._');
 		let activeMembers = '*Active Group Members*\n\n';
 		groupData.forEach((member, index) => {
 			activeMembers += `*${index + 1}. ${member.name}*\n`;
@@ -113,10 +92,7 @@ bot(
 	},
 	async message => {
 		const groupData = await getInactiveGroupMembers(message.jid);
-		if (groupData.length === 0)
-			return await message.reply(
-				'*📊 Inactive Members:* No inactive members found.',
-			);
+		if (groupData.length === 0) return await message.reply('*📊 Inactive Members:* No inactive members found.');
 		let responseMessage = '📊 Inactive Members:\n\n';
 		responseMessage += `Total Inactive: ${groupData.length}\n\n`;
 		groupData.forEach((jid, index) => {

@@ -1,10 +1,6 @@
 import { bot } from '#lib';
 import { apkDl, XSTRO } from '#utils';
-import {
-	extractUrlFromString,
-	FileTypeFromBuffer,
-	getBuffer,
-} from 'xstro-utils';
+import { extractUrlFromString, FileTypeFromBuffer, getBuffer } from 'xstro-utils';
 
 bot(
 	{

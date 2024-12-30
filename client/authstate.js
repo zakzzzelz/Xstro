@@ -30,9 +30,7 @@ export const SessionState = async (sessionId, logger) => {
 		return record ? jsonToBuffer(JSON.parse(record.data_value)) : null;
 	};
 
-	const creds =
-		(await profile('readCreds', () => readData('creds'), logger)) ||
-		initAuthCreds();
+	const creds = (await profile('readCreds', () => readData('creds'), logger)) || initAuthCreds();
 
 	const state = {
 		creds,
@@ -45,25 +43,16 @@ export const SessionState = async (sessionId, logger) => {
 						const rows = await AuthState.findAll({
 							where: {
 								session_id: sessionId,
-								data_key: ids.map(
-									id => `${type}-${id}`,
-								),
+								data_key: ids.map(id => `${type}-${id}`),
 							},
 						});
 
-						const idMap = Object.fromEntries(
-							ids.map(id => [`${type}-${id}`, id]),
-						);
+						const idMap = Object.fromEntries(ids.map(id => [`${type}-${id}`, id]));
 
 						rows.forEach(row => {
-							let value = jsonToBuffer(
-								JSON.parse(row.data_value),
-							);
+							let value = jsonToBuffer(JSON.parse(row.data_value));
 							if (type === 'app-state-sync-key') {
-								value =
-									proto.Message.AppStateSyncKeyData.fromObject(
-										value,
-									);
+								value = proto.Message.AppStateSyncKeyData.fromObject(value);
 							}
 							const originalId = idMap[row.data_key];
 							if (originalId) {
@@ -81,15 +70,11 @@ export const SessionState = async (sessionId, logger) => {
 					async () => {
 						const entries = [];
 						for (const [type, ids] of Object.entries(data)) {
-							for (const [id, value] of Object.entries(
-								ids || {},
-							)) {
+							for (const [id, value] of Object.entries(ids || {})) {
 								entries.push({
 									session_id: sessionId,
 									data_key: `${type}-${id}`,
-									data_value: JSON.stringify(
-										bufferToJSON(value),
-									),
+									data_value: JSON.stringify(bufferToJSON(value)),
 								});
 							}
 						}
@@ -105,12 +90,7 @@ export const SessionState = async (sessionId, logger) => {
 
 	return {
 		state,
-		saveCreds: () =>
-			profile(
-				'saveCreds',
-				() => writeData('creds', state.creds),
-				logger,
-			),
+		saveCreds: () => profile('saveCreds', () => writeData('creds', state.creds), logger),
 		deleteSession: () =>
 			profile(
 				'deleteSession',

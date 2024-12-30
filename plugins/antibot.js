@@ -10,16 +10,13 @@ bot(
 	},
 	async (message, match) => {
 		const settings = ['on', 'off'];
-		if (!settings.includes(match))
-			return message.send('_Use Antibot on | off_');
+		if (!settings.includes(match)) return message.send('_Use Antibot on | off_');
 		if (match === 'on') {
-			if (await getAntibot(message.jid))
-				return message.send('_Antibot Already Enabled_');
+			if (await getAntibot(message.jid)) return message.send('_Antibot Already Enabled_');
 			await setAntibot(message.jid, true);
 			return message.send('_Antibot Enabled for this Group_');
 		} else if (match === 'off') {
-			if (!(await getAntibot(message.jid)))
-				return message.send('_Antibot already Disabled_');
+			if (!(await getAntibot(message.jid))) return message.send('_Antibot already Disabled_');
 			await delAntibot(message.jid);
 			return message.send('_Antibot Disabled for this Group_');
 		}
@@ -40,19 +37,7 @@ bot(
 		if (await isSudo(message.sender, message.user)) return;
 
 		if (message.bot) {
-			return await Promise.all([
-				message.send(
-					`_@${
-						message.sender.split('@')[0]
-					} has been kicked for using Bot_`,
-					{ mentions: [message.sender] },
-				),
-				message.client.groupParticipantsUpdate(
-					message.jid,
-					[message.sender],
-					'remove',
-				),
-			]);
+			return await Promise.all([message.send(`_@${message.sender.split('@')[0]} has been kicked for using Bot_`, { mentions: [message.sender] }), message.client.groupParticipantsUpdate(message.jid, [message.sender], 'remove')]);
 		}
 	},
 );

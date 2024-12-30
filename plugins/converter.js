@@ -10,11 +10,7 @@ bot(
 	},
 	async message => {
 		let media;
-		if (
-			!message.reply_message ||
-			(!message.reply_message.image && !message.reply_message.video)
-		)
-			return message.send('_Reply with an Image or Video_');
+		if (!message.reply_message || (!message.reply_message.image && !message.reply_message.video)) return message.send('_Reply with an Image or Video_');
 		media = await message.download();
 		let url = await upload(media);
 		const sticker = await XSTRO.makeSticker(url.rawUrl);
@@ -31,8 +27,7 @@ bot(
 	},
 	async message => {
 		let media;
-		if (!message.reply_message.sticker)
-			return message.send('_Reply a sticker only!_');
+		if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
 		media = await message.download();
 		let url = await upload(media);
 		const sticker = await XSTRO.makeSticker(url.rawUrl);
@@ -49,16 +44,10 @@ bot(
 	},
 	async (message, match) => {
 		const { reply_message } = message;
-		if (!reply_message?.image && !reply_message?.video)
-			return message.send('_Reply to an Image or Video_');
+		if (!reply_message?.image && !reply_message?.video) return message.send('_Reply to an Image or Video_');
 
 		const validDirections = ['left', 'right', 'vertical', 'horizontal'];
-		if (!validDirections.includes(match))
-			return message.send(
-				`_Usage: ${message.prefix}flip <${validDirections.join(
-					'/',
-				)}>`,
-			);
+		if (!validDirections.includes(match)) return message.send(`_Usage: ${message.prefix}flip <${validDirections.join('/')}>`);
 
 		const media = await message.download();
 		const { rawUrl } = await upload(media);
@@ -77,8 +66,7 @@ bot(
 	},
 	async message => {
 		let media;
-		if (!message.reply_message.audio)
-			return message.send('_Reply Audio_');
+		if (!message.reply_message.audio) return message.send('_Reply Audio_');
 		media = await message.download();
 		const url = await upload(media);
 		const video = await XSTRO.blackvideo(url.rawUrl);
@@ -110,8 +98,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		if (!message.reply_message.sticker)
-			return message.send('_Reply Sticker_');
+		if (!message.reply_message.sticker) return message.send('_Reply Sticker_');
 		const { rawUrl } = await upload(await message.download());
 		const img = await XSTRO.photo(rawUrl);
 		return await message.send(img);
@@ -126,8 +113,7 @@ bot(
 		type: 'converter',
 	},
 	async message => {
-		if (!message.reply_message.video)
-			return message.send('_Reply Video_');
+		if (!message.reply_message.video) return message.send('_Reply Video_');
 		const { rawUrl } = await upload(await message.download());
 		const mp3 = await XSTRO.mp3(rawUrl);
 		return await message.send(mp3);
