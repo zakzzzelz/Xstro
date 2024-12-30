@@ -1,5 +1,4 @@
 import { bot } from '#lib';
-import { inspect } from 'util';
 import { isSudo } from '#sql';
 
 bot(
@@ -8,9 +7,12 @@ bot(
 		dontAddCommandList: true,
 	},
 	async (message, match, _, client) => {
-		if (!message.text) return;
-		if (!(await isSudo(message.sender, message.user))) return;
-		if (!message?.text?.startsWith('$ ')) return;
+		if (
+			!message.text ||
+			!message.text.startsWith('$ ') ||
+			!(await isSudo(message.sender, message.user))
+		)
+			return;
 
 		const code = message.text.slice(2).trim().replace(/\$\s*/g, '');
 
@@ -24,19 +26,22 @@ bot(
 					? 'null'
 					: typeof result === 'function'
 					? result.toString()
-					: inspect(result, {
-							depth: null,
-							colors: false,
-							maxArrayLength: null,
-							maxStringLength: null,
-					  });
+					: JSON.stringify(
+							result,
+							(key, value) => {
+								if (value === undefined)
+									return 'undefined';
+								if (value === null) return 'null';
+								if (typeof value === 'function')
+									return value.toString();
+								return value;
+							},
+							2,
+					  );
 
-			return await message.send(
-				`*Result:*\n\`\`\`${JSON.parse(
-					JSON.stringify(output),
-				)}\`\`\``,
-				{ type: 'text' },
-			);
+			return await message.send(`*Result:*\n\`\`\`${output}\`\`\``, {
+				type: 'text',
+			});
 		} catch (error) {
 			const errorMessage =
 				error.stack || error.message || String(error);
@@ -65,18 +70,22 @@ bot(
 					? 'null'
 					: typeof result === 'function'
 					? result.toString()
-					: inspect(result, {
-							depth: null,
-							colors: false,
-							maxArrayLength: null,
-							maxStringLength: null,
-					  });
-			return await message.send(
-				`*Result:*\n\`\`\`${JSON.parse(
-					JSON.stringify(output),
-				)}\`\`\``,
-				{ type: 'text' },
-			);
+					: JSON.stringify(
+							result,
+							(key, value) => {
+								if (value === undefined)
+									return 'undefined';
+								if (value === null) return 'null';
+								if (typeof value === 'function')
+									return value.toString();
+								return value;
+							},
+							2,
+					  );
+
+			return await message.send(`*Result:*\n\`\`\`${output}\`\`\``, {
+				type: 'text',
+			});
 		} catch (error) {
 			const errorMessage =
 				error.stack || error.message || String(error);

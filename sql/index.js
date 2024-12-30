@@ -19,3 +19,4 @@ export * from './warn.js';
 export * from './scheduler.js';
 export * from './bgm.js';
 export * from './mention.js';
+export * from './antibot.js';
