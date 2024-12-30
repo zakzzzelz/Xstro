@@ -92,14 +92,14 @@ bot(
 	async message => {
 		const groupData = await getGroupMembersMessageCount(message.jid);
 		if (groupData.length === 0)
-			return await message.send('No active members found.');
-		let responseMessage = '🏆 Most Active Group Members\n\n';
+			return await message.send('_No active members found._');
+		let activeMembers = '*Active Group Members*\n\n';
 		groupData.forEach((member, index) => {
-			responseMessage += `${index + 1}. ${member.name}\n`;
-			responseMessage += `   • Messages: ${member.messageCount}\n`;
+			activeMembers += `*${index + 1}. ${member.name}*\n`;
+			activeMembers += `*   • Messages: ${member.messageCount}*\n`;
 		});
 
-		await message.send(`\`\`\`${responseMessage}\`\`\``);
+		await message.send(activeMembers);
 	},
 );
 
