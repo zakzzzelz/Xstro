@@ -4,7 +4,7 @@ dotenv.config();
 const config = {
 	SESSION_ID: process.env.SESSION_ID || '',
 	SUDO: process.env.SUDO || '',
-	API_ID: process.env.API_ID || 'https://xstro-api1-e3fa63d29cbe.herokuapp.com',
+	API_ID: process.env.API_ID || 'https://xstro-api-4fb28ece11a9.herokuapp.com',
 	BOT_INFO: process.env.BOT_INFO || 'Astro;Xstro_Bot',
 	STICKER_PACK: process.env.STICKER_PACK || 'Xstro;Md',
 	WARN_COUNT: process.env.WARN_COUNT || 3,
