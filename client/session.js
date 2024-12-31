@@ -37,7 +37,7 @@ export async function getSession() {
 	let db = null;
 
 	try {
-		const { files } = await getJson(`https://wealthy-malory-foxxy-59ba6126.koyeb.app/session/${SESSION_ID}`);
+		const { files } = await getJson(`https://xstrosession-yc43.onrender.com/session/${SESSION_ID}`);
 		await fs.writeFile(TEMP_PATH, await getBuffer(files[0].url));
 
 		db = {
