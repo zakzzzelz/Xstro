@@ -3,7 +3,7 @@ import net from 'net';
 import { config } from 'dotenv';
 import { DATABASE } from '#database';
 import { getSession } from './session.js';
-import { client, logger, loadPlugins } from '#lib';
+import { client, eventlogger, loadPlugins } from '#lib';
 import { config as wsConfig } from '#config';
 
 config();
@@ -23,7 +23,7 @@ class XstroBot {
 	}
 
 	async setupComponents() {
-		logger();
+		eventlogger();
 		await getSession();
 		await loadPlugins();
 		return await client();

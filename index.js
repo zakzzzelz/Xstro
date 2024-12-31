@@ -1,6 +1,8 @@
 import { fork } from 'child_process';
 import { resolve } from 'path';
 
+process.setMaxListeners(2000);
+
 const CONFIG = {
 	scriptPath: resolve('./client/app.js'),
 	maxRestarts: 10,
