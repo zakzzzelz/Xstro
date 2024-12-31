@@ -56,8 +56,9 @@ bot(
 	},
 	async (message, match) => {
 		if (!match && !message.reply_message?.text) return message.send('_How can i help?_');
+		const que = match || message.reply_message.text;
 		const msg = await message.send('*Thinkg*');
-		const res = await getJson(`https://bk9.fun/ai/gemini?q=${match || message.reply_message.text}`).BK9;
+		const res = await getJson(`https://bk9.fun/ai/gemini?q=${que}`).BK9;
 		return msg.edit(res);
 	},
 );
