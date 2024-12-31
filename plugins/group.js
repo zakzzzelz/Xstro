@@ -164,6 +164,7 @@ bot(
 	},
 	async message => {
 		await message.send('_Left Group_');
+		await delay(2000);
 		return message.client.groupParticipantsUpdate(message.jid, [message.user], 'remove');
 	},
 );
