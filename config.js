@@ -9,6 +9,7 @@ const config = {
 	STICKER_PACK: process.env.STICKER_PACK || 'Xstro;Md',
 	WARN_COUNT: process.env.WARN_COUNT || 3,
 	TIME_ZONE: process.env.TIME_ZONE || 'Africa/Lagos',
+	DEBUG: process.env.DEBUG || true,
 	VERSION: '1.2.0',
 };
 export { config };

@@ -6,7 +6,6 @@
 	"type": "module",
 	"imports": {
 		"#lib": "./lib/index.js",
-		"#client": "./client/index.js",
 		"#database": "./lib/database.js",
 		"#bot": "./bot/index.js",
 		"#sql": "./sql/index.js",

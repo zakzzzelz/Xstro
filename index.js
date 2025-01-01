@@ -4,7 +4,7 @@ import { resolve } from 'path';
 process.setMaxListeners(2000);
 
 const CONFIG = {
-	scriptPath: resolve('./client/app.js'),
+	scriptPath: resolve('server.js'),
 	maxRestarts: 10,
 	restartDelay: 1000,
 	gracefulTimeout: 5000,
@@ -19,17 +19,18 @@ class ProcessManager {
 	}
 
 	setupLogger() {
+		const blue = '\x1b[34m%s\x1b[0m';
 		return {
-			info: msg => console.log('\x1b[34m%s\x1b[0m', msg),
-			error: msg => console.log('\x1b[31m%s\x1b[0m', msg),
-			warn: msg => console.log('\x1b[33m%s\x1b[0m', msg),
+			info: msg => console.log(blue, msg),
+			error: msg => console.log(blue, `Error: ${msg}`),
+			warn: msg => console.log(blue, `Warning: ${msg}`),
 		};
 	}
 
 	start() {
 		if (this.shutdownInProgress) return;
 
-		this.logger.info(`Starting application from ${CONFIG.scriptPath}...`);
+		this.logger.info('Initializing process');
 
 		this.app = fork(CONFIG.scriptPath, {
 			env: { ...process.env, RESTART_COUNT: this.restartCount },
@@ -50,7 +51,7 @@ class ProcessManager {
 
 	handleMessage(message) {
 		if (message === 'app.kill') {
-			this.logger.info('Received termination signal from child process');
+			this.logger.info('Termination signal received');
 			this.shutdown();
 		}
 	}
@@ -59,30 +60,30 @@ class ProcessManager {
 		if (this.shutdownInProgress) return;
 
 		this.restartCount++;
-		const message = code === 0 ? 'Application exited normally' : `Application crashed with code ${code}`;
+		const message = code === 0 ? 'Process terminated normally' : `Process failed: code ${code}`;
 
 		if (this.restartCount > CONFIG.maxRestarts) {
-			this.logger.error(`Maximum restart attempts (${CONFIG.maxRestarts}) exceeded. Terminating.`);
+			this.logger.error(`Restart limit exceeded: ${CONFIG.maxRestarts}`);
 			this.shutdown();
 			return;
 		}
 
-		this.logger.warn(`${message}. Restart attempt ${this.restartCount}/${CONFIG.maxRestarts}`);
+		this.logger.warn(`${message} | Attempt ${this.restartCount}/${CONFIG.maxRestarts}`);
 		setTimeout(() => this.start(), CONFIG.restartDelay);
 	}
 
 	handleError(error) {
-		this.logger.error(`Child process error: ${error.message}`);
+		this.logger.error(`Process error: ${error.message}`);
 		if (!this.shutdownInProgress) this.start();
 	}
 
 	handleSigInt() {
-		this.logger.info('Received interrupt signal');
+		this.logger.info('Interrupt signal detected');
 		this.shutdown();
 	}
 
 	handleUnhandledRejection(reason, promise) {
-		this.logger.error(`Unhandled Rejection at: ${promise}\nReason: ${reason}`);
+		this.logger.error(`Unhandled rejection at: ${promise} | ${reason}`);
 	}
 
 	async shutdown() {
@@ -90,15 +91,15 @@ class ProcessManager {
 		this.shutdownInProgress = true;
 
 		if (this.app) {
-			this.logger.info('Gracefully shutting down...');
+			this.logger.info('Initiating shutdown');
 			this.app.kill('SIGTERM');
 
 			await new Promise(resolve => setTimeout(resolve, CONFIG.gracefulTimeout));
 
 			if (this.app.killed) {
-				this.logger.info('Shutdown complete');
+				this.logger.info('Process terminated successfully');
 			} else {
-				this.logger.warn('Force killing unresponsive process');
+				this.logger.warn('Force terminating unresponsive process');
 				this.app.kill('SIGKILL');
 			}
 		}

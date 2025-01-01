@@ -1,4 +1,3 @@
 fix notes
 fix warn
-fix state
 fix airquality

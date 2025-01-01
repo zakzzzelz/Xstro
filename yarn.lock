@@ -285,16 +285,16 @@
   integrity sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==
 
 "@thi.ng/bitstream@^2.2.12":
-  version "2.4.6"
-  resolved "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.6.tgz#06c4544a82dd3f33b9123c36c06ca13b8715c034"
-  integrity sha512-DypmlBy74wGZNGNfqH6wGuoyRPlzRtMC0TCSM3QBRcoXWkvrrnIzO7GfU7OFhsZLwgXXJQng9fKRUY5LJIo0SQ==
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.7.tgz#c7976f2a29fb4a5e4cce9151b127c8809f333d85"
+  integrity sha512-2VRx/pLLje/CT85g6uN4j4KkqMUEbQCrW4wceIEz+sh6qp9aW7IO3Db9Xum4wO6QNrPW4Odfezo5bYQULPhc7g==
   dependencies:
-    "@thi.ng/errors" "^2.5.20"
+    "@thi.ng/errors" "^2.5.21"
 
-"@thi.ng/errors@^2.5.20":
-  version "2.5.20"
-  resolved "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.20.tgz#e118042802205d8f6934d6350bce5120cbc6c8f7"
-  integrity sha512-sZnYdMsHQxyHKZYRIg6QwdSgBaNyh8rmD8+6lGlLGxgXhBis4DhjNTNsDSXksFsE9GnSOYpmU4mpf/aemdJStg==
+"@thi.ng/errors@^2.5.21":
+  version "2.5.21"
+  resolved "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.21.tgz#6a35952ff8952149b7f1698783ed68d542eb0d75"
+  integrity sha512-qFIaEw0iUgIkFNYsPi0+iml8xMCNmIzNVPTmRxjwq+9B7dLYez2OU54TFwd4dASehUL1MvXVyYd9fREKsmM1fw==
 
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
@@ -329,9 +329,9 @@
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
 "@types/node@*", "@types/node@>=13.7.0":
-  version "22.10.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.10.2.tgz#a485426e6d1fdafc7b0d4c7b24e2c78182ddabb9"
-  integrity sha512-Xxr6BBRCAOQixvonOye19wnzyDiUtTeqldOOmj3CkeblonbccA12PFwlufvRdrpjXxqnmUaeiU5EOA+7s5diUQ==
+  version "22.10.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.10.3.tgz#cdc2a89bf6e5d5e593fad08e83f74d7348d5dd10"
+  integrity sha512-DifAyw4BkrufCILvD3ucnuN8eydUfc/C1GlyrnI+LK6543w5/L3VeVgf05o3B4fqSXP1dKYLOZsKfutpxPzZrw==
   dependencies:
     undici-types "~6.20.0"
 
@@ -387,9 +387,9 @@ agent-base@^7.1.0, agent-base@^7.1.2:
   integrity sha512-jRR5wdylq8CkOe6hei19GGZnxM6rBGwFl3Bg0YItGDimvjGtAvdZk4Pu6Cl4u4Igsws4a1fd1Vq3ezrhn4KmFw==
 
 agentkeepalive@^4.1.3:
-  version "4.5.0"
-  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.5.0.tgz#2673ad1389b3c418c5a20c5d7364f93ca04be923"
-  integrity sha512-5GG/5IbQQpC9FpkRGsSvZI5QYeSCzlJHdpBQntCsuTOxhKD8lqKhrleg2Yi7yvMIf82Ycmmqln9U8V9qwEiJew==
+  version "4.6.0"
+  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.6.0.tgz#35f73e94b3f40bf65f105219c623ad19c136ea6a"
+  integrity sha512-kja8j7PjmncONqaTsB8fQ+wE2mSU2DJ9D4XKoJ5PFWIdRMa6SLSN1ff4mOr4jCbfRSsxR4keIiySJU0N9T5hIQ==
   dependencies:
     humanize-ms "^1.2.1"
 
@@ -481,21 +481,21 @@ axios@^1.7.9:
 
 "baileys@github:AstroX11/Baileys":
   version "6.7.9"
-  resolved "https://codeload.github.com/AstroX11/Baileys/tar.gz/267db6b77134f47da0f2d5b3071adbd7f776bd6f"
+  resolved "https://codeload.github.com/AstroX11/Baileys/tar.gz/b287b50adfc9e6e8e68181058f8838db99ae1180"
   dependencies:
     "@adiwajshing/keyed-db" "^0.2.4"
     "@hapi/boom" "^10.0.1"
     async-lock "^1.4.1"
     audio-decode "^2.2.2"
     axios "^1.7.9"
-    cache-manager "^6.3.1"
+    cache-manager "^6.3.2"
     futoin-hkdf "^1.5.3"
-    libphonenumber-js "^1.11.16"
+    libphonenumber-js "^1.11.17"
     libsignal "github:WhiskeySockets/libsignal-node"
     lodash "^4.17.21"
     music-metadata "^10.6.4"
     node-cache "^5.1.2"
-    pino "^9.5.0"
+    pino "^9.6.0"
     protobufjs "^7.4.0"
     uuid "^11.0.3"
     ws "^8.18.0"
@@ -579,12 +579,12 @@ cacache@^15.2.0:
     tar "^6.0.2"
     unique-filename "^1.1.1"
 
-cache-manager@^6.3.1:
-  version "6.3.1"
-  resolved "https://registry.yarnpkg.com/cache-manager/-/cache-manager-6.3.1.tgz#723ed91489b28b39e8a2a2f3f98aceea57493fd5"
-  integrity sha512-Q8cTcjGzUaTfw/IBOZcUbu0/IUbybOy/+zQO9uluxqFIkfFb/YBZo2HVK8RLRvugeGABzi1vwVctCHQZV2Q2Ww==
+cache-manager@^6.3.2:
+  version "6.3.2"
+  resolved "https://registry.yarnpkg.com/cache-manager/-/cache-manager-6.3.2.tgz#49275f3f52da07c5f1ff212f706fde0e26f2580b"
+  integrity sha512-VmLouPUrvpm9dfwYB6OE7YVXDZ7BCfbt7hq10EHiBYaW9K9ZthK1bbjDQAtXGDK7d9u8t4G/7dMWSJOwN33msg==
   dependencies:
-    keyv "^5.2.1"
+    keyv "^5.2.3"
 
 chownr@^1.1.1:
   version "1.1.4"
@@ -1044,14 +1044,14 @@ jsbn@1.1.0:
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-1.1.0.tgz#b01307cb29b618a1ed26ec79e911f803c4da0040"
   integrity sha512-4bYVV3aAMtDTTu4+xsDYa6sy9GyJ69/amsu9sYF2zqjiEoZA5xJi3BrfX3uY+/IekIu7MwdObdbDWpoZdBv3/A==
 
-keyv@^5.2.1:
+keyv@^5.2.3:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/keyv/-/keyv-5.2.3.tgz#32db1a4aa8d05e2b8ab82688a57ddc5d2184a25c"
   integrity sha512-AGKecUfzrowabUv0bH1RIR5Vf7w+l4S3xtQAypKaUpTdIR1EbrAcTxHCrpo9Q+IWeUlFE2palRtgIQcgm+PQJw==
   dependencies:
     "@keyv/serialize" "^1.0.2"
 
-libphonenumber-js@^1.11.16:
+libphonenumber-js@^1.11.17:
   version "1.11.17"
   resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.11.17.tgz#37ddbf16dc4dd45c723a150996c253c58dad034b"
   integrity sha512-Jr6v8thd5qRlOlc6CslSTzGzzQW03uiscab7KHQZX1Dfo4R6n6FDhZ0Hri6/X7edLIDv9gl4VMZXhxTjLnl0VQ==
@@ -1415,7 +1415,7 @@ pino-std-serializers@^7.0.0:
   resolved "https://registry.yarnpkg.com/pino-std-serializers/-/pino-std-serializers-7.0.0.tgz#7c625038b13718dbbd84ab446bd673dc52259e3b"
   integrity sha512-e906FRY0+tV27iq4juKzSYPbUj2do2X2JX4EzSca1631EB2QJQUqGbDuERal7LCtOpxl6x3+nvo9NPZcmjkiFA==
 
-pino@^9.5.0:
+pino@^9.6.0:
   version "9.6.0"
   resolved "https://registry.yarnpkg.com/pino/-/pino-9.6.0.tgz#6bc628159ba0cc81806d286718903b7fc6b13169"
   integrity sha512-i85pKRCt4qMjZ1+L7sy2Ag4t1atFcdbEt76+7iRJn1g2BvsnRMGu9p8pivl9fs63M2kF/A0OacFZhTub+m/qMg==

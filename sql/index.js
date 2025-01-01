@@ -12,7 +12,6 @@ export * from './config.js';
 export * from './filters.js';
 export * from './notes.js';
 export * from './plugins.js';
-export * from './session.js';
 export * from './store.js';
 export * from './sudo.js';
 export * from './warn.js';
