@@ -2,7 +2,7 @@ import http from 'http';
 import net from 'net';
 import { config } from 'dotenv';
 import { DATABASE } from '#database';
-import { client, eventlogger, loadPlugins } from '#lib';
+import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import { config as wsConfig } from '#config';
 
 config();
@@ -23,6 +23,8 @@ class XstroBot {
 
 	async setupComponents() {
 		eventlogger();
+		if (!wsConfig.SESSION_ID) console.log('No session ID provided');
+		await initSession(wsConfig.SESSION_ID);
 		await loadPlugins();
 		return await client();
 	}
