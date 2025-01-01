@@ -31,7 +31,7 @@ const AliveDB = DATABASE.define(
  */
 const getAliveMsg = async () => {
 	const msg = await AliveDB.findOne();
-	return msg?.message || `@user ${config.BOT_INFO.split(';')[1]} is alive`;
+	return msg?.message || `@user χѕтяσ мυℓтι ∂єνι¢є ιѕ αℓινє αи∂ α ѕιмρℓє ωнαтѕαρρ вσт мα∂є ωιтн иσ∂є נѕ\n\n*яυитιмє: &runtime*\n\n*νιѕт ωιкι ραgє тσ ¢υѕтσмιzє αℓινє мєѕѕαgє*\n\n`;
 };
 
 /**
@@ -58,8 +58,6 @@ const setAliveMsg = async text => {
  * - &runtime: Current runtime duration
  * - &user: User's push name or 'user'
  * - @user: User's formatted ID
- * - &quotes: Random quote from quote service
- * - &facts: Random fact from fact service
  * - &owner: Bot owner name from config
  * - &botname: Bot name from config
  */
