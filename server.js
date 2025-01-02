@@ -23,7 +23,6 @@ class XstroBot {
 
 	async setupComponents() {
 		eventlogger();
-		if (!wsConfig.SESSION_ID) console.log('No session ID provided');
 		await initSession(wsConfig.SESSION_ID);
 		await loadPlugins();
 		return await client();
