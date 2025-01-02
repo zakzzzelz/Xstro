@@ -1,3 +1,10 @@
 fix notes
 fix warn
 fix airquality
+enable
+disable
+setcmd
+delcmd
+getcmd
+gcoff
+dmoff
