@@ -53,7 +53,7 @@ bot(
 			});
 			menuText += `╰────────────\n`;
 		});
-		return await message.send(intro + menuText);
+		return await message.send(intro + menuText, { contextInfo: { externalAdReply: { showAdAttribution: true } } });
 	},
 );
 
