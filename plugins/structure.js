@@ -12,7 +12,7 @@ function getDirectoryStructure(dir, prefix = '', isLast = true) {
         const stats = fs.statSync(filePath);
         const isDirectory = stats.isDirectory();
         
-        if (file === 'node_modules' || file.startsWith('.git') || file === '.env') return;
+        if (file === 'node_modules' || file.startsWith('.git') || file === '.env' || file === '.npm' || file === 'session') return;
         
         structure += `${prefix}${isLast ? '└── ' : '├── '}${file}${isDirectory ? '/' : ''}\n`;
         
