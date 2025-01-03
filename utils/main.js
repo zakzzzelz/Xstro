@@ -107,3 +107,9 @@ export function isObject(value) {
 export function isArray(value) {
 	return Array.isArray(value);
 }
+
+export function cleanString(inputText) {
+	const ambiguousCharacters = /[^\w\s.,!?'"()\-]/g;
+	const cleanedText = inputText.replace(ambiguousCharacters, '').replace(/\s+/g, ' ').trim();
+	return cleanedText;
+}
