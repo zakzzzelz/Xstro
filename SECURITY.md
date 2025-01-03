@@ -6,8 +6,8 @@ We actively support the latest stable release of this project. Older versions ma
 
 | Version        | Supported |
 | -------------- | --------- |
-| Latest (Main)  | ✔ 1.1.8   |
-| Older versions | ✘ 1.1.7   |
+| Latest (Main)  | ✔ 1.2.1   |
+| Older versions | ✘ 1.2.0   |
 
 ### Reporting a Vulnerability
 
