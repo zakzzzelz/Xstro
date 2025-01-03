@@ -1,5 +1,5 @@
 import config from '#config';
-import { bot, commands, getConfigValues } from '#lib';
+import { bot, commands, getConfigValues, logo } from '#lib';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';
 
@@ -14,6 +14,7 @@ bot(
 		const { mode, PREFIX } = await getConfigValues();
 		const cmds = commands.filter(cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')).length;
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
+│ Owner: ${config.BOT_INFO.split(';')[0]}		
 │ Prefix: ${PREFIX}
 │ Plugins: ${cmds}
 │ Mode: ${mode ? 'private' : 'public'}
@@ -53,7 +54,7 @@ bot(
 			});
 			menuText += `╰────────────\n`;
 		});
-		return await message.send(intro + menuText, { contextInfo: { externalAdReply: { showAdAttribution: true } } });
+		return await message.send(intro + menuText, { contextInfo: { externalAdReply: { title: 'xsᴛʀᴏ ᴍᴅ', body: 'sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ ʙʏ ᴀsᴛʀᴏx𝟷𝟷', thumbnail: logo, showAdAttribution: true, mediaUrl: 'https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6' } } });
 	},
 );
 
