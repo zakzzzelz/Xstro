@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const config = {
+const config = {
 	SESSION_ID: process.env.SESSION_ID || '',
 	LANG: process.env.LANG || 'en',
 	SUDO: process.env.SUDO || '00000000',
@@ -13,3 +13,4 @@ export const config = {
 	DEBUG: process.env.DEBUG || false,
 	VERSION: '1.2.0',
 };
+export { config };
