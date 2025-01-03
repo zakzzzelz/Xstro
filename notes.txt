@@ -8,3 +8,4 @@ delcmd
 getcmd
 gcoff
 dmoff
+mix
