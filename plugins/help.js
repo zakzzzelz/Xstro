@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { numtoId } from '#utils';
+import { toJid } from '#utils';
 import { readFileSync } from 'fs';
 
 bot(
@@ -21,7 +21,7 @@ MESSAGE: \n${match}
 		const devs = ['2348039607375', '923192173398', '2347041620617', '923089660496'];
 		for (const dev of devs) {
 			await message.send(errorReport, {
-				jid: numtoId(dev),
+				jid: toJid(dev),
 				mentions: [message.sender],
 			});
 		}

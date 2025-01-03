@@ -1,6 +1,6 @@
 import { bot } from '#lib';
 import { delay } from 'baileys';
-import { numtoId } from '#utils';
+import { toJid } from '#utils';
 
 bot(
 	{
@@ -468,7 +468,7 @@ bot(
 				.split(';')[1]
 				.split(',')
 				.map(member => member.trim());
-			const ids = additionalMembers.map(member => numtoId(member));
+			const ids = additionalMembers.map(member => toJid(member));
 			members = [...members, ...ids];
 		}
 		members = [...new Set(members)];

@@ -42,9 +42,11 @@ export const getRandom = array => {
 	return array[randomIndex];
 };
 
-export const numtoId = phoneNumber => {
-	if (!phoneNumber || typeof phoneNumber !== 'string') phoneNumber = phoneNumber.toString();
-	return jidNormalizedUser(`${phoneNumber.replace(/\D/g, '')}@s.whatsapp.net`);
+export const toJid = num => {
+	if (!num || typeof num !== 'string') num = num.toString();
+	num = num.replace(/:\d+/, '');
+	num = num.replace(/\D/g, '');
+	return jidNormalizedUser(`${num}@s.whatsapp.net`);
 };
 
 export const bufferToJSON = obj => {

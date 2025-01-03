@@ -1,7 +1,7 @@
 import config from '#config';
 import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
-import { numtoId } from '#utils';
+import { toJid } from '#utils';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';
 
@@ -212,7 +212,7 @@ bot(
 		} else if (isJidGroup(match)) {
 			return message.send('_Use Gforward command to forward to groups_');
 		} else if (!isJidGroup(match)) {
-			jid = numtoId(match);
+			jid = toJid(match);
 		}
 		if (!jid) return message.send('_You have to provide a number/tag someone_');
 		const msg = message.data?.quoted;
