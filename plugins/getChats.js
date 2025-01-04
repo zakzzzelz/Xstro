@@ -3,7 +3,7 @@ import { getChatSummary, getGroupMembersMessageCount, getGroupMetadata, getInact
 
 bot(
 	{
-		pattern: 'chatsdm',
+		pattern: 'listpc',
 		public: false,
 		desc: 'Get direct messages summary',
 		type: 'user',
@@ -30,7 +30,7 @@ Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`,
 
 bot(
 	{
-		pattern: 'chatsgc',
+		pattern: 'listgc',
 		public: false,
 		desc: 'Get group chats summary',
 		type: 'user',
@@ -63,11 +63,11 @@ Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`;
 );
 bot(
 	{
-		pattern: 'gactive',
+		pattern: 'active',
 		public: true,
 		isGroup: true,
 		desc: 'Return the Active Group Members from when the bot started running',
-		type: 'user',
+		type: 'group',
 	},
 	async message => {
 		const groupData = await getGroupMembersMessageCount(message.jid);
@@ -88,7 +88,7 @@ bot(
 		public: true,
 		isGroup: true,
 		desc: 'Get the inactive group members from a group',
-		type: 'user',
+		type: 'group',
 	},
 	async message => {
 		const groupData = await getInactiveGroupMembers(message.jid);

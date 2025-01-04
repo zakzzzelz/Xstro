@@ -1,6 +1,6 @@
 {
 	"name": "xstro",
-	"description": "Simple WhatsApp By Astro",
+	"description": "Simple WhatsApp By AstroX11",
 	"logo": "https://avatars.githubusercontent.com/u/188756392?v=4",
 	"repository": "https://github.com/ASTRO-X10/xstro-md",
 	"stack": "container",
@@ -21,13 +21,23 @@
 			"required": false
 		},
 		"BOT_INFO": {
-			"description": "Info Such as Owner Name and Bot Name",
-			"value": "Astro;Xstro-Md;",
+			"description": "Bot Owner, Bot Name, URL LOGO",
+			"value": "αѕтяσχ11;χѕтяσ м∂;https://avatars.githubusercontent.com/u/188756392?v=4",
 			"required": false
 		},
 		"STICKER_PACK": {
-			"description": "Set the bot sticker meta data",
-			"value": "Astro;Xstro",
+			"description": "Exif Metadata for Sticker Pack",
+			"value": "мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт",
+			"required": false
+		},
+		"TIME_ZONE": {
+			"description": "Time Zone for Bot",
+			"value": "Asia/Kolkata",
+			"required": false
+		},
+		"WARN_COUNT": {
+			"description": "Number of Warnings before Ban",
+			"value": "3",
 			"required": false
 		}
 	}

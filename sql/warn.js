@@ -13,10 +13,6 @@ export const WarnDB = DATABASE.define(
 			type: DataTypes.INTEGER,
 			defaultValue: 0,
 		},
-		reason: {
-			type: DataTypes.TEXT,
-			allowNull: true,
-		},
 	},
 	{
 		tableName: 'warnings',
@@ -31,14 +27,13 @@ export const WarnDB = DATABASE.define(
  * @async
  */
 export const addWarn = async jid => {
-	const [user, created] = await WarnDB.upsert(
-		{ jid, warnings: 1 },
-		{ returning: true }
-	);
-	if (!created) {
-		user.warnings += 1;
-		await user.save();
-	}
+	const [user] = await WarnDB.findOrCreate({
+		where: { jid },
+		defaults: { warnings: 0 },
+	});
+	user.warnings += 1;
+	await user.save();
+
 	return { success: true, warnings: user.warnings };
 };
 
