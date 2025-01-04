@@ -1,5 +1,6 @@
 import { bot } from '#lib';
 import { XSTRO } from '#utils';
+import { getJson } from 'xstro-utils';
 
 bot(
 	{
@@ -72,5 +73,17 @@ bot(
 	async (message, match) => {
 		if (!match) return await message.send('Please provide a text');
 		return await message.send(await XSTRO.fancy(match));
+	},
+);
+
+bot(
+	{
+		pattern: 'insult',
+		public: true,
+		desc: 'Get random insult',
+		type: 'fun',
+	},
+	async message => {
+		return await message.send((await getJson('https://evilinsult.com/generate_insult.php?lang=en&type=json')).insult);
 	},
 );

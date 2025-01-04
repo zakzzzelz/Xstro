@@ -1,10 +1,5 @@
 fix notes
 fix airquality
-enable
-disable
-setcmd
-delcmd
-getcmd
 gcoff
 dmoff
 mix

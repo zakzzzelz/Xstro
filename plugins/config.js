@@ -1,5 +1,5 @@
-import { bot } from '#lib';
-import { getConfig, updateConfig } from '#sql';
+import { bot, commands } from '#lib';
+import { addDisabledCmd, getConfig, isCmdDisabled, removeDisabledCmd, updateConfig } from '#sql';
 
 bot(
 	{
@@ -119,3 +119,40 @@ bot(
 		return await message.send(`_Prefix set to "${newValue}"_`);
 	},
 );
+
+bot(
+	{
+		pattern: 'disable',
+		public: false,
+		desc: 'Disable a command',
+		type: 'settings',
+	},
+	async (message, match) => {
+		if (!match) return await message.send('_Provide a command to disable_');
+		if (match) {
+			if (match === 'restart' || match === 'shutdown' || match === 'enable') return await message.send('_This command cannot be disabled_');
+		}
+		const cmds = commands.filter(cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined'));
+		if (!cmds) return await message.send('_Command not found_');
+		if (await isCmdDisabled(match)) return await message.send('_Command already disabled_');
+		const result = await addDisabledCmd(match);
+		return await message.send(result.message);
+	},
+);
+
+bot(
+	{
+		pattern: 'enable',
+		public: false,
+		desc: 'Enable a command',
+		type: 'settings',
+	},
+	async (message, match) => {
+		if (!match) return await message.send('_Provide a command to enable_');
+		const cmds = commands.filter(cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined'));
+		if (!cmds) return await message.send('_Command not found_');
+		if (!await isCmdDisabled(match)) return await message.send('_Command already enabled_');
+		const result = await removeDisabledCmd(match);
+		return await message.send(result.message);
+	},
+)

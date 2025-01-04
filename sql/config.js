@@ -39,6 +39,11 @@ export const CONFIG_CMDS = DATABASE.define(
 			allowNull: false,
 			defaultValue: '.',
 		},
+		disabledCmds: {
+			type: DataTypes.TEXT,
+			allowNull: false,
+			defaultValue: '',
+		},
 	},
 	{
 		tableName: 'configs',
@@ -46,9 +51,8 @@ export const CONFIG_CMDS = DATABASE.define(
 	},
 );
 
-async function updateConfig(field, value) {
-	const updatedValue = field === 'PREFIX' ? value : !!value; // Treat PREFIX as a string
-	let [config, created] = await CONFIG_CMDS.findOrCreate({
+async function ensureConfigExists() {
+	const [config] = await CONFIG_CMDS.findOrCreate({
 		where: { id: 1 },
 		defaults: {
 			autoRead: false,
@@ -57,35 +61,70 @@ async function updateConfig(field, value) {
 			cmdRead: false,
 			mode: false,
 			PREFIX: '.',
+			disabledCmds: '',
 		},
 	});
+	return config;
+}
 
-	await config.update({ [field]: updatedValue });
+async function updateConfig(field, value) {
+	const config = await ensureConfigExists();
+
+	if (field === 'disabledCmds' && Array.isArray(value)) {
+		const currentCmds = config.disabledCmds ? config.disabledCmds.split(',') : [];
+		const newCmds = [...new Set([...currentCmds, ...value])];
+		await config.update({ [field]: newCmds.join(',') });
+	} else {
+		const updatedValue = field === 'PREFIX' ? value : !!value;
+		await config.update({ [field]: updatedValue });
+	}
 
 	return config;
 }
 
 async function getConfig() {
-	const config = await CONFIG_CMDS.findOne({ where: { id: 1 } });
-	return config
-		? {
-				autoRead: config.autoRead,
-				autoStatusRead: config.autoStatusRead,
-				cmdReact: config.cmdReact,
-				cmdRead: config.cmdRead,
-				mode: config.mode,
-				PREFIX: config.PREFIX,
-		  }
-		: {
-				autoRead: false,
-				autoStatusRead: false,
-				cmdReact: true,
-				cmdRead: false,
-				mode: true,
-				PREFIX: '.',
-		  };
+	const config = await ensureConfigExists();
+	return {
+		autoRead: config.autoRead,
+		autoStatusRead: config.autoStatusRead,
+		cmdReact: config.cmdReact,
+		cmdRead: config.cmdRead,
+		mode: config.mode,
+		PREFIX: config.PREFIX,
+		disabledCmds: config.disabledCmds ? config.disabledCmds.split(',').filter(Boolean) : [],
+	};
 }
 
+async function addDisabledCmd(cmd) {
+	const config = await ensureConfigExists();
+	const currentCmds = config.disabledCmds ? config.disabledCmds.split(',').filter(Boolean) : [];
 
+	if (currentCmds.includes(cmd)) {
+		return { success: false, message: '_Command already disabled._' };
+	}
 
-export { updateConfig, getConfig };
+	currentCmds.push(cmd);
+	await config.update({ disabledCmds: currentCmds.join(',') });
+	return { success: true, message: `_${cmd} command disabled_` };
+}
+
+async function removeDisabledCmd(cmd) {
+	const config = await ensureConfigExists();
+	const currentCmds = config.disabledCmds ? config.disabledCmds.split(',').filter(Boolean) : [];
+
+	if (!currentCmds.includes(cmd)) {
+		return { success: false, message: '_Command is not disabled._' };
+	}
+
+	const updatedCmds = currentCmds.filter(disabledCmd => disabledCmd !== cmd);
+	await config.update({ disabledCmds: updatedCmds.join(',') });
+	return { success: true, message: `_${cmd} command enabled_` };
+}
+
+async function isCmdDisabled(cmd) {
+	const config = await ensureConfigExists();
+	const currentCmds = config.disabledCmds ? config.disabledCmds.split(',').filter(Boolean) : [];
+	return currentCmds.includes(cmd);
+}
+
+export { updateConfig, getConfig, addDisabledCmd, removeDisabledCmd, isCmdDisabled };
