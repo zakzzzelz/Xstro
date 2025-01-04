@@ -7,3 +7,4 @@ export * from './autokick.js';
 export * from './antiviewonce.js';
 export * from './schedule.js';
 export * from './metadatagc.js';
+export * from './chatbot.js';
