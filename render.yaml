@@ -1,29 +1,26 @@
-# Updated on 05/01/2025
+# Exported from Render on 2025-01-05T06:26:54Z
 services:
      - type: web
-       name: xstro
+       name: Xstro
        runtime: docker
        repo: https://github.com/AstroX11/Xstro
        plan: free
        envVars:
-            - key: PORT
-              value: '8000'
-            - key: SESSION_ID
-              sync: true
-            - key: SUDO
-              sync: true
-            - key: BOT_INFO
-              sync: true
-            - key: STICKER_PACK
-              sync: true
-            - key: WARN_COUNT
-              sync: true
-            - key: TIME_ZONE
-              sync: true
             - key: DEBUG
-              value: 'false'
+              sync: false
+            - key: TIME_ZONE
+              sync: false
+            - key: WARN_COUNT
+              sync: false
+            - key: STICKER_PACK
+              sync: false
+            - key: BOT_INFO
+              sync: false
+            - key: SUDO
+              sync: false
+            - key: SESSION_ID
+              sync: false
        region: oregon
-       healthCheckPath: /
        dockerContext: .
        dockerfilePath: ./Dockerfile
 version: '1'
