@@ -8,28 +8,20 @@ services:
        envVars:
             - key: PORT
               value: '8000'
-              sync: false
             - key: SESSION_ID
               value: null
-              sync: false
             - key: SUDO
               value: null
-              sync: false
             - key: BOT_INFO
               value: 'αѕтяσχ11;χѕтяσ м∂'
-              sync: false
             - key: STICKER_PACK
               value: 'мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт'
-              sync: false
             - key: WARN_COUNT
               value: '3'
-              sync: false
             - key: TIME_ZONE
               value: 'Africa/Lagos'
-              sync: false
             - key: DEBUG
               value: 'false'
-              sync: false
        region: oregon
        healthCheckPath: /
        dockerContext: .
