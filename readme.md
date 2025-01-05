@@ -18,7 +18,7 @@ I’m not responsible for you messing around and getting your account banned. As
 
 #### **_[Heroku Deploy](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)_**
 
-#### **_[Koyeb Deploy](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=Xstro&env[SESSION_ID]=&env[SUDO]=&env[BOT_INFO]=&env[STICKER_PACK]=)_**
+#### **_[Koyeb Deploy](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20ву;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos&env%5BDEBUG%5D=false)_**
 
 #### **_[Render Deploy](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)_**
 
