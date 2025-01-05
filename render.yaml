@@ -9,17 +9,11 @@ services:
             - key: PORT
               value: '8000'
             - key: SESSION_ID
-              value: null
             - key: SUDO
-              value: null
             - key: BOT_INFO
-              value: 'αѕтяσχ11;χѕтяσ м∂'
             - key: STICKER_PACK
-              value: 'мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт'
             - key: WARN_COUNT
-              value: '3'
             - key: TIME_ZONE
-              value: 'Africa/Lagos'
             - key: DEBUG
               value: 'false'
        region: oregon
