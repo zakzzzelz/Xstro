@@ -46,6 +46,9 @@ Maintainers
 - Paradoxical (Beta Testers)
 - Emperor (Beta Testers)
 
+
+- for tutorrials visit 
+https://youtube.com/@wasitech1
 Help Us Improve: Star, report bugs, or suggest features!
 © 2024 Xstro 
 \`\`\``;
