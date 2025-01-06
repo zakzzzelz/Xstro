@@ -1,6 +1,7 @@
 import { performance } from 'perf_hooks';
-import { jidNormalizedUser } from 'baileys';
+import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { join } from 'path';
+import { loadMessage } from '#sql';
 
 export function manageProcess(type) {
 	if (type === 'restart') {
@@ -112,4 +113,35 @@ export function cleanString(inputText) {
 	const ambiguousCharacters = /[^\w\s.,!?'"()\-]/g;
 	const cleanedText = inputText.replace(ambiguousCharacters, '').replace(/\s+/g, ' ').trim();
 	return cleanedText;
+}
+
+export function isUrl(string) {
+	const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9.-]+)(\.[a-zA-Z]{2,})(\/\S*)?$/;
+	return urlRegex.test(string);
+}
+
+export async function ModifyViewOnceMessage(messageId) {
+	try {
+		const msg = await loadMessage(messageId);
+		const type = getContentType(msg.message.message);
+		const content = normalizeMessageContent(msg.message.message?.[type]?.contextInfo?.quotedMessage);
+
+		function modifyViewOnceProperty(obj) {
+			if (typeof obj !== 'object' || obj === null) return;
+
+			for (const key in obj) {
+				if (key === 'viewOnce' && typeof obj[key] === 'boolean') {
+					obj[key] = false;
+				} else if (typeof obj[key] === 'object') {
+					modifyViewOnceProperty(obj[key]);
+				}
+			}
+		}
+
+		modifyViewOnceProperty(content);
+
+		return { message: content };
+	} catch {
+		return null;
+	}
 }

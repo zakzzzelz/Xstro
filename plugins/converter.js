@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { upload, XSTRO } from '#utils';
+import { audioToBlackVideo, convertToMp3, createSticker, flipMedia, upload, webpToImage, XSTRO } from '#utils';
 
 bot(
 	{
@@ -10,11 +10,12 @@ bot(
 	},
 	async message => {
 		let media;
-		if (!message.reply_message || (!message.reply_message.image && !message.reply_message.video)) return message.send('_Reply with an Image or Video_');
+		if (!message.reply_message.image && !message.reply_message.video) {
+			return message.send('_Reply with an Image or Video_');
+		}
 		media = await message.download();
-		let url = await upload(media);
-		const sticker = await XSTRO.makeSticker(url.rawUrl);
-		return await message.send(sticker, { type: 'sticker' });
+		media = await createSticker(media);
+		return message.send(media, { type: 'sticker' });
 	},
 );
 
@@ -29,9 +30,9 @@ bot(
 		let media;
 		if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
 		media = await message.download();
-		let url = await upload(media);
-		const sticker = await XSTRO.makeSticker(url.rawUrl);
-		return await message.send(sticker, { type: 'sticker' });
+		media = await message.download();
+		media = await createSticker(media);
+		return message.send(media, { type: 'sticker' });
 	},
 );
 
@@ -42,18 +43,15 @@ bot(
 		desc: 'Flip media left/right/vertical/horizontal',
 		type: 'converter',
 	},
-	async (message, match) => {
-		const { reply_message } = message;
-		if (!reply_message?.image && !reply_message?.video) return message.send('_Reply to an Image or Video_');
-
-		const validDirections = ['left', 'right', 'vertical', 'horizontal'];
-		if (!validDirections.includes(match)) return message.send(`_Usage: ${message.prefix}flip <${validDirections.join('/')}>`);
-
-		const media = await message.download();
-		const { rawUrl } = await upload(media);
-		const flipped = await XSTRO.flipMedia(rawUrl, match);
-
-		return message.send(flipped, { caption: '_Flipped successfully_' });
+	async (message, match, { prefix }) => {
+		let media;
+		if (!message.reply_message?.image && !message.reply_message?.video) return message.send('_Reply to an Image or Video_');
+		if (!['left', 'right', 'vertical', 'horizontal'].includes(match)) {
+			return message.send(`_Usage: ${prefix}flip <${validDirections.join('/')}>`);
+		}
+		media = await message.download(true);
+		media = await flipMedia(media, match);
+		return message.send(media, { caption: `_Flipped to ${match}_` });
 	},
 );
 
@@ -67,10 +65,9 @@ bot(
 	async message => {
 		let media;
 		if (!message.reply_message.audio) return message.send('_Reply Audio_');
-		media = await message.download();
-		const url = await upload(media);
-		const video = await XSTRO.blackvideo(url.rawUrl);
-		return await message.send(video);
+		media = await message.download(true);
+		media = await audioToBlackVideo(media);
+		return await message.send(media);
 	},
 );
 
@@ -98,10 +95,11 @@ bot(
 		type: 'converter',
 	},
 	async message => {
+		let media;
 		if (!message.reply_message.sticker) return message.send('_Reply Sticker_');
-		const { rawUrl } = await upload(await message.download());
-		const img = await XSTRO.photo(rawUrl);
-		return await message.send(img);
+		media = await message.download(true);
+		media = await webpToImage(media);
+		return message.send(media);
 	},
 );
 
@@ -113,9 +111,13 @@ bot(
 		type: 'converter',
 	},
 	async message => {
+		let media;
 		if (!message.reply_message.video) return message.send('_Reply Video_');
-		const { rawUrl } = await upload(await message.download());
-		const mp3 = await XSTRO.mp3(rawUrl);
-		return await message.send(mp3);
+		media = await message.download(true);
+		media = await convertToMp3(media);
+		return await message.send(media, {
+			mimetype: 'audio/mpeg',
+			ptt: false,
+		});
 	},
 );

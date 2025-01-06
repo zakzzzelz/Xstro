@@ -109,36 +109,6 @@ const XSTRO = {
 		const res = await getJson(`${API_ID}/api/gitstalk?username=${username}`);
 		return res;
 	},
-	makeSticker: async (url, pack = config.STICKER_PACK.split(';')[0], author = config.STICKER_PACK.split(';')[1]) => {
-		return fetch(`${API_ID}/api/sticker?url=${encodeURIComponent(url)}&packname=${pack}&author=${author}`)
-			.then(response => {
-				if (!response.ok) {
-					throw new Error(`Failed to fetch sticker: ${response.statusText}`);
-				}
-				return response.arrayBuffer();
-			})
-			.then(buffer => Buffer.from(buffer))
-			.catch(error => {
-				console.error('Error creating sticker:', error.message);
-				throw error;
-			});
-	},
-	flipMedia: async (url, direction) => {
-		const res = await getBuffer(`${API_ID}/api/flip?url=${url}&direction=${direction}`);
-		return res;
-	},
-	blackvideo: async url => {
-		const res = await getBuffer(`${API_ID}/api/blackvideo?url=${url}`);
-		return res;
-	},
-	photo: async url => {
-		const res = await getBuffer(`${API_ID}/api/photo?url=${url}`);
-		return res;
-	},
-	mp3: async url => {
-		const res = await getBuffer(`${API_ID}/api/mp3?url=${url}`);
-		return res;
-	},
 	google: async query => {
 		const res = await getJson(`${API_ID}/api/google?query=${query}`);
 		return res.result;

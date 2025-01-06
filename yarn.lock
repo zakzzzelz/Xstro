@@ -285,16 +285,16 @@
   integrity sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==
 
 "@thi.ng/bitstream@^2.2.12":
-  version "2.4.7"
-  resolved "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.7.tgz#c7976f2a29fb4a5e4cce9151b127c8809f333d85"
-  integrity sha512-2VRx/pLLje/CT85g6uN4j4KkqMUEbQCrW4wceIEz+sh6qp9aW7IO3Db9Xum4wO6QNrPW4Odfezo5bYQULPhc7g==
+  version "2.4.8"
+  resolved "https://registry.yarnpkg.com/@thi.ng/bitstream/-/bitstream-2.4.8.tgz#eb55773e81e4f57ab62f98121f0b6851ffa617a2"
+  integrity sha512-952h5EgVHDfQJDGydNCKCLQvtwEHbK4grl3I9N/1yWEDS05EGvwYwSaJxFBKM5kNGrE5Uxf6i4pUl0KHvsIKIg==
   dependencies:
-    "@thi.ng/errors" "^2.5.21"
+    "@thi.ng/errors" "^2.5.22"
 
-"@thi.ng/errors@^2.5.21":
-  version "2.5.21"
-  resolved "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.21.tgz#6a35952ff8952149b7f1698783ed68d542eb0d75"
-  integrity sha512-qFIaEw0iUgIkFNYsPi0+iml8xMCNmIzNVPTmRxjwq+9B7dLYez2OU54TFwd4dASehUL1MvXVyYd9fREKsmM1fw==
+"@thi.ng/errors@^2.5.22":
+  version "2.5.22"
+  resolved "https://registry.yarnpkg.com/@thi.ng/errors/-/errors-2.5.22.tgz#5ef558fcee4ba3a45ccd3df4da9b2499ae9d3ab7"
+  integrity sha512-O7Vrdn6mlzfm9iKhGiVs1TibrNXhNjkwguTpFkkU2awZG/5ssOYidXU6RVZMqOFOvW6IQfN0nDbhvtqoNYse/w==
 
 "@tokenizer/token@^0.3.0":
   version "0.3.0"
@@ -676,7 +676,7 @@ data-uri-to-buffer@^6.0.2:
   resolved "https://registry.yarnpkg.com/data-uri-to-buffer/-/data-uri-to-buffer-6.0.2.tgz#8a58bb67384b261a38ef18bea1810cb01badd28b"
   integrity sha512-7hvf7/GW8e86rW0ptuwS3OcBGDjIi6SZva7hCyWC0yYry2cOPmLIjXAUHI6DK2HsnwJd9ifmt57i8eV2n4YNpw==
 
-debug@4, debug@^4.3.3, debug@^4.3.4, debug@^4.3.7:
+debug@4, debug@^4.3.3, debug@^4.3.4, debug@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.4.0.tgz#2b3f2aea2ffeb776477460267377dc8710faba8a"
   integrity sha512-6WTZ/IxCY/T6BALoZHaE4ctp9xm+Z5kY/pzYaCHRFeyVhojxlrm+46y68HA6hr0TcwEssoxNiDEUJQjfPZ/RYA==
@@ -1245,13 +1245,13 @@ ms@^2.0.0, ms@^2.1.3:
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 music-metadata@^10.6.4:
-  version "10.6.4"
-  resolved "https://registry.yarnpkg.com/music-metadata/-/music-metadata-10.6.4.tgz#0aa628ac02c4c2bb795a134d5277b28422418874"
-  integrity sha512-42ekQ5CRic4Pvw/85FfzMKegeRDHyWBpCjSSI1B9PTGqaevZ17ASA4v4W6MRq1ELC5THn5rD8S+82iPQ6gv6lw==
+  version "10.6.5"
+  resolved "https://registry.yarnpkg.com/music-metadata/-/music-metadata-10.6.5.tgz#3959fa0743bc26bf6cb0b40a92ac70f181df5d94"
+  integrity sha512-mcBVcjfG+ybyRNDU/llqwtoNZzjoFWjWoazlN6yxBdkzu5YI8mF5SE67fX4OPao19YNholBYFetLUc/qnkLiSg==
   dependencies:
     "@tokenizer/token" "^0.3.0"
     content-type "^1.0.5"
-    debug "^4.3.7"
+    debug "^4.4.0"
     file-type "^19.6.0"
     link "^2.1.1"
     media-typer "^1.1.0"
@@ -1313,6 +1313,11 @@ node-wav@^0.0.2:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/node-wav/-/node-wav-0.0.2.tgz#89cb63cf8cd66ec8ab455f5ba4864e5fcb4605e8"
   integrity sha512-M6Rm/bbG6De/gKGxOpeOobx/dnGuP0dz40adqx38boqHhlWssBJZgLCPBNtb9NkrmnKYiV04xELq+R6PFOnoLA==
+
+node-webpmux@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/node-webpmux/-/node-webpmux-3.2.0.tgz#a11dcb5a1dfbb626d6bee3a7c191fa22931ad913"
+  integrity sha512-Rmc7MIS7zxDRPkfC9B15malsd1uStX2N6mYqHZNZeCJAVRDjmnxxTsyDh6POvWdNC7nmAYBW6CcHVY62DlnzRg==
 
 nopt@^5.0.0:
   version "5.0.0"
@@ -1965,10 +1970,10 @@ ws@^8.18.0:
   resolved "https://registry.yarnpkg.com/ws/-/ws-8.18.0.tgz#0d7505a6eafe2b0e712d232b42279f53bc289bbc"
   integrity sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==
 
-xstro-utils@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/xstro-utils/-/xstro-utils-1.0.2.tgz#41dc83d703b606de8191ee4dbef6c1116061251e"
-  integrity sha512-HNAAE630IWLPu4PG6Tavo540Rfb4F3e6axEMBTe0ZIU4pw20Llzv6iwhIZvVM//w2l5sRl1kzrSKIKvCGmuGEg==
+xstro-utils@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/xstro-utils/-/xstro-utils-1.0.4.tgz#27eba6d9cdcee66ad7354ba3ab06948997957362"
+  integrity sha512-vpCMj025upAxxZf/RKZVKRDyHdakpxfVeKuyOsVQjMe2degmH6r/+Rw3372QINkFVoihWa3Z+V+Ur5QUxYkY8g==
   dependencies:
     axios "^1.7.9"
     file-type "^19.6.0"

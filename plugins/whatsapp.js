@@ -1,7 +1,7 @@
 import config from '#config';
 import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
-import { toJid } from '#utils';
+import { ModifyViewOnceMessage, toJid } from '#utils';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';
 
@@ -14,8 +14,8 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
-		const msg = await message.download();
-		return message.send(msg);
+		const res = await ModifyViewOnceMessage(message.id);
+		return message.client.relayMessage(message.jid, res.message, {});
 	},
 );
 

@@ -4,18 +4,14 @@ import os from 'os';
 import ffmpeg from 'fluent-ffmpeg';
 import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
 
-const { writeFileSync, unlinkSync, existsSync, readFileSync, mkdirSync } = fs;
+const { writeFileSync, existsSync, readFileSync, mkdirSync } = fs;
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 const tempDir = path.join(os.tmpdir(), 'media-temp');
 if (!existsSync(tempDir)) mkdirSync(tempDir, { recursive: true });
 
-function createTempPath(ext) {
+function temp(ext) {
 	return path.join(tempDir, `${Date.now()}.${ext}`);
-}
-
-function cleanUp(paths = []) {
-	paths.forEach(file => existsSync(file) && unlinkSync(file));
 }
 
 export const GIFBufferToVideoBuffer = async image => {
@@ -33,8 +29,7 @@ export const GIFBufferToVideoBuffer = async image => {
 };
 
 export async function audioToBlackVideo(input) {
-	const audio = createTempPath('mp3');
-	const video = createTempPath('mp4');
+	const video = temp('mp4');
 
 	return new Promise((resolve, reject) => {
 		ffmpeg()
@@ -43,43 +38,47 @@ export async function audioToBlackVideo(input) {
 			.input(input)
 			.outputOptions(['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k', '-map', '0:v', '-map', '1:a', '-shortest'])
 			.output(video)
-			.on('end', () => {
-				const videoBuffer = readFileSync(video);
-				cleanUp([audio, video]);
-				resolve(videoBuffer);
-			})
-			.on('error', err => {
-				cleanUp([audio, video]);
-				reject(err);
-			})
+			.on('end', () => resolve(fs.readFileSync(video)))
+			.on('error', reject)
 			.run();
 	});
 }
 
-export async function flipMedia(file, direction = 'horizontal') {
-	const validDirections = ['left', 'right', 'vertical', 'horizontal'];
-	if (!validDirections.includes(direction?.toLowerCase())) {
-		throw new Error('Invalid direction. Use: left, right, vertical, or horizontal');
-	}
+export async function flipMedia(file, direction) {
+	const outputFile = path.join(tempDir, `flipped_${path.basename(file)}`);
+	const validDirections = { left: 'transpose=2', right: 'transpose=1', vertical: 'vflip', horizontal: 'hflip' };
 
-	const command = ffmpeg(file);
-
-	switch (direction.toLowerCase()) {
-		case 'left':
-			command.videoFilters('transpose=2');
-			break;
-		case 'right':
-			command.videoFilters('transpose=1');
-			break;
-		case 'vertical':
-			command.videoFilters('vflip');
-			break;
-		case 'horizontal':
-			command.videoFilters('hflip');
-			break;
-	}
-	await new Promise((resolve, reject) => {
-		command.on('end', resolve).on('error', reject).save(tempDir);
+	return new Promise((resolve, reject) => {
+		ffmpeg(file)
+			.videoFilters(validDirections[direction])
+			.on('end', () => resolve(fs.readFileSync(outputFile)))
+			.on('error', reject)
+			.save(outputFile);
 	});
-	return readFileSync(tempDir);
+}
+
+export async function webpToImage(input) {
+	const outputImage = temp('jpg');
+
+	return new Promise((resolve, reject) => {
+		ffmpeg(input)
+			.output(outputImage)
+			.on('end', () => resolve(fs.readFileSync(outputImage)))
+			.on('error', reject)
+			.run();
+	});
+}
+
+export function convertToMp3(input) {
+	const outputAudio = temp('mp3');
+
+	return new Promise((resolve, reject) => {
+		ffmpeg(input)
+			.toFormat('mp3')
+			.audioCodec('libmp3lame')
+			.audioBitrate(192)
+			.on('end', () => resolve(readFileSync(outputAudio)))
+			.on('error', reject)
+			.save(outputAudio);
+	});
 }

@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { isLatest, updateBot } from '#utils';
+import { isLatest, updateBot, getCommitDetails } from '#utils';
 
 bot(
 	{
@@ -9,15 +9,20 @@ bot(
 		desc: 'Updates Bot',
 	},
 	async (message, match) => {
-		const updated = await isLatest();
-		if (updated.latest) {
-			return message.send('```You are on the Latest Update```');
+		if (await isLatest()) return message.send('_Already UptoDate_');
+		if (!match) {
+			const { commits, behindCount } = await getCommitDetails();
+			const formattedCommits = commits.map((commit, index) => `${index + 1}. ${commit}`).join('\n');
+			return message.send(`\`\`\`\nCommits: ${behindCount}\nDetails:\n${formattedCommits}\n\`\`\``);
 		}
-		await message.send(`\`\`\`Old Patch: ${updated.localCommit}\n\nLatest Patch: ${updated.remoteCommit}\`\`\``);
-		if (match.toString().toLowerCase() === 'now') {
+		if (match === 'now') {
 			await message.send('```Updating Bot```');
-			await updateBot();
-			await message.send('```Bot Updated```');
+			const updateResult = await updateBot();
+			if (updateResult.success) {
+				await message.send('```Bot Updated```');
+			} else {
+				await message.send('```Update Failed```');
+			}
 		}
 	},
 );
