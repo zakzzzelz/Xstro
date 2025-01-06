@@ -20,3 +20,4 @@ export * from './bgm.js';
 export * from './mention.js';
 export * from './antibot.js';
 export * from './stickercmd.js';
+export * from './anticall.js';
