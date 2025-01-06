@@ -24,14 +24,14 @@ export async function Greetings(update = {}, client) {
 			let message;
 
 			if (!welcomesettings.message) {
-				message = `@${newMember.split('@')[0]} welcome to ${groupInfo.subject}, Nice to meet you, we have ${groupInfo.size} group members now, @${groupInfo.owner.split('@')[0]} created this group on ${new Date(groupInfo.creation).toLocaleString('en-US', dateOptions)}, ${groupInfo.desc ? 'Read Group Description:\n\n' + groupInfo.desc : ''}`;
+				message = `@${newMember.split('@')[0]} welcome to ${groupInfo.subject}, Nice to meet you, we have ${groupInfo.size} group members now, @${groupInfo.subjectOwner.split('@')[0]} created this group on ${new Date(groupInfo.creation).toLocaleString('en-US', dateOptions)}, ${groupInfo.desc ? 'Read Group Description:\n\n' + groupInfo.desc : ''}`;
 			} else {
 				const facts = await XSTRO.facts();
 				const quotes = await XSTRO.quotes();
 				const advice = await XSTRO.advice();
 
 				message = welcomesettings.message
-					.replace('@owner', `@${groupInfo.owner.split('@')[0]}`)
+					.replace('@owner', `@${groupInfo.subjectOwner.split('@')[0]}`)
 					.replace('@gname', groupInfo.subject)
 					.replace('@created', new Date(groupInfo.creation * 1000).toLocaleString())
 					.replace('@user', `@${newMember.split('@')[0]}`)
@@ -73,7 +73,7 @@ export async function Greetings(update = {}, client) {
 				const advice = await XSTRO.advice();
 
 				message = goodbyesettings.message
-					.replace('@owner', `@${groupInfo.owner.split('@')[0]}`)
+					.replace('@owner', `@${groupInfo.subjectOwner.split('@')[0]}`)
 					.replace('@gname', groupInfo.subject)
 					.replace('@created', new Date(groupInfo.creation * 1000).toLocaleString())
 					.replace('@user', `@${leftMember.split('@')[0]}`)
@@ -89,7 +89,7 @@ export async function Greetings(update = {}, client) {
 				? {
 						image: await getBuffer(pp),
 						caption: message,
-						mentions: [leftMember, groupInfo.owner],
+						mentions: [leftMember, groupInfo.subjectOwner],
 				  }
 				: {
 						text: message,
