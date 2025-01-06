@@ -35,7 +35,7 @@ bot(
     async message => {
         const projectRoot = process.cwd();
         const structureText = `
-Directory structure:
+AstroX11/Xstro:
 ${getDirectoryStructure(projectRoot)}`.trim();
         
         return await message.send(`\`\`\`${structureText}\`\`\``);
