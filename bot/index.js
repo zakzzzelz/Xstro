@@ -10,3 +10,4 @@ export * from './metadatagc.js';
 export * from './chatbot.js';
 export * from './anticall.js';
 export * from './greetings.js';
+export * from './group_events.js';

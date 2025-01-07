@@ -22,3 +22,4 @@ export * from './antibot.js';
 export * from './stickercmd.js';
 export * from './anticall.js';
 export * from './greetings.js';
+export * from './group_event.js';

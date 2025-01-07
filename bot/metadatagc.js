@@ -16,7 +16,7 @@ const CONFIG = {
 	RATE_LIMIT_DELAY: 900000,
 	MAX_CONCURRENT: 1,
 	RETRY_DELAY: 180000,
-	MAX_RETRIES: 3,
+	MAX_RETRIES: 3
 };
 
 /**
@@ -52,18 +52,14 @@ class RateLimitHandler {
 				await this.delay(CONFIG.PROCESS_DELAY - timeSinceLastProcess);
 			}
 
-			console.log(`Processing group: ${jid}`);
 			await saveGroupMetadata(jid, conn);
 			this.lastProcessTime = Date.now();
-			console.log(`Successfully processed group: ${jid}`);
 
 			return true;
 		} catch (error) {
 			if (error?.data === 429) {
-				console.log(`Rate limit hit for group: ${jid}`);
 				throw error;
 			}
-			console.log(`Error processing group ${jid}: ${error.message}`);
 			return false;
 		}
 	}
@@ -74,17 +70,14 @@ class RateLimitHandler {
 	 */
 	async processQueue(conn) {
 		if (this.processing) {
-			console.log('Queue is already being processed');
 			return;
 		}
 
 		this.processing = true;
-		console.log('Starting queue processing');
 
 		try {
 			for (const [jid, retries] of this.queue.entries()) {
 				if (retries >= CONFIG.MAX_RETRIES) {
-					console.log(`Max retries reached for group: ${jid}`);
 					this.queue.delete(jid);
 					continue;
 				}
@@ -94,7 +87,6 @@ class RateLimitHandler {
 					this.queue.delete(jid);
 				} catch (error) {
 					if (error?.data === 429) {
-						console.log(`Rate limit encountered, pausing for ${CONFIG.RATE_LIMIT_DELAY / 1000}s`);
 						await this.delay(CONFIG.RATE_LIMIT_DELAY);
 						this.queue.set(jid, retries + 1);
 						break;
@@ -105,7 +97,6 @@ class RateLimitHandler {
 			}
 		} finally {
 			this.processing = false;
-			console.log('Queue processing completed');
 		}
 	}
 }
@@ -120,16 +111,13 @@ export const updateGroupMetadata = async msg => {
 
 	const updateGroups = async () => {
 		try {
-			console.log('Fetching participating groups');
 			const groups = await conn.groupFetchAllParticipating();
 
 			if (!groups) {
-				console.log('No groups found');
 				return;
 			}
 
 			const groupIds = Object.keys(groups);
-			console.log(`Found ${groupIds.length} groups`);
 
 			for (const jid of groupIds) {
 				if (!handler.queue.has(jid)) {
@@ -139,7 +127,6 @@ export const updateGroupMetadata = async msg => {
 
 			await handler.processQueue(conn);
 		} catch (error) {
-			console.log(`Error in updateGroups: ${error.message}`);
 			if (error?.data === 429) {
 				await handler.delay(CONFIG.RATE_LIMIT_DELAY);
 			}
