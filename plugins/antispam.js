@@ -7,7 +7,7 @@ bot(
 		pattern: 'antispam',
 		public: false,
 		desc: 'Simple Antispam Setup',
-		type: 'user',
+		type: 'user'
 	},
 	async (message, match) => {
 		const jid = message.jid;
@@ -15,7 +15,11 @@ bot(
 		const prefix = message.prefix;
 
 		if (!match) {
-			return message.send(`Usage:\n${prefix}antispam on\n${isGroup ? `${prefix}antispam set [kick|delete]\n` : ''}${prefix}antispam off`);
+			return message.send(
+				`Usage:\n${prefix}antispam on\n${
+					isGroup ? `${prefix}antispam set [kick|delete]\n` : ''
+				}${prefix}antispam off`
+			);
 		}
 
 		const [command, action] = match.toLowerCase().split(' ');
@@ -23,10 +27,16 @@ bot(
 		if (command === 'on') {
 			const currentMode = await getAntiSpamMode(jid);
 			if (currentMode !== 'off') {
-				return message.send(isGroup ? '_Antispam is already enabled for this group._' : '_Dm antispam is already enabled._');
+				return message.send(
+					isGroup
+						? '_Antispam is already enabled for this group._'
+						: '_Dm antispam is already enabled._'
+				);
 			}
 			await setAntiSpam(jid, isGroup ? 'off' : 'block');
-			return message.send(isGroup ? '_Antispam enabled. Use `antispam set` to configure._' : '_Dm antispam enabled._');
+			return message.send(
+				isGroup ? '_Antispam enabled. Use `antispam set` to configure._' : '_Dm antispam enabled._'
+			);
 		}
 
 		if (command === 'set') {
@@ -41,12 +51,22 @@ bot(
 		if (command === 'off') {
 			const currentMode = await getAntiSpamMode(jid);
 			if (currentMode === 'off') {
-				return message.send(isGroup ? '_Antispam is already disabled for this group._' : '_Dm antispam is already disabled._');
+				return message.send(
+					isGroup
+						? '_Antispam is already disabled for this group._'
+						: '_Dm antispam is already disabled._'
+				);
 			}
 			await setAntiSpam(jid, 'off');
-			return message.send(isGroup ? '_Antispam disabled for this group._' : '_Dm antispam disabled._');
+			return message.send(
+				isGroup ? '_Antispam disabled for this group._' : '_Dm antispam disabled._'
+			);
 		}
 
-		return message.send(`Usage:\n${prefix}antispam on\n${isGroup ? `${prefix}antispam set [kick|delete]\n` : ''}${prefix}antispam off`);
-	},
+		return message.send(
+			`Usage:\n${prefix}antispam on\n${
+				isGroup ? `${prefix}antispam set [kick|delete]\n` : ''
+			}${prefix}antispam off`
+		);
+	}
 );

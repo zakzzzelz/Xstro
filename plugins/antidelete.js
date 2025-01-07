@@ -7,7 +7,7 @@ bot(
 		pattern: 'antidelete',
 		public: false,
 		desc: 'Setup Antidelete',
-		type: 'user',
+		type: 'user'
 	},
 	async (message, match) => {
 		const command = match?.toLowerCase();
@@ -15,7 +15,9 @@ bot(
 		if (command === 'on') {
 			await setAnti('gc', false);
 			await setAnti('dm', false);
-			return await message.send('_AntiDelete is now off for Group Chats and Direct Messages by default. Use "set gc" or "set dm" to enable._');
+			return await message.send(
+				'_AntiDelete is now off for Group Chats and Direct Messages by default. Use "set gc" or "set dm" to enable._'
+			);
 		}
 
 		if (command === 'off gc') {
@@ -32,14 +34,18 @@ bot(
 			const currentStatus = await getAnti('gc');
 			const newStatus = !currentStatus;
 			await setAnti('gc', newStatus);
-			return await message.send(`_AntiDelete for Group Chats ${newStatus ? 'enabled' : 'disabled'}_`);
+			return await message.send(
+				`_AntiDelete for Group Chats ${newStatus ? 'enabled' : 'disabled'}_`
+			);
 		}
 
 		if (command === 'set dm') {
 			const currentStatus = await getAnti('dm');
 			const newStatus = !currentStatus;
 			await setAnti('dm', newStatus);
-			return await message.send(`_AntiDelete for Direct Messages ${newStatus ? 'enabled' : 'disabled'}_`);
+			return await message.send(
+				`_AntiDelete for Direct Messages ${newStatus ? 'enabled' : 'disabled'}_`
+			);
 		}
 
 		if (command === 'set all') {
@@ -67,5 +73,5 @@ bot(
 • \`\`.antidelete set all\`\` - Enable AntiDelete for all chats
 • \`\`.antidelete status\`\` - Check current AntiDelete status`;
 		return await message.send(helpMessage);
-	},
+	}
 );

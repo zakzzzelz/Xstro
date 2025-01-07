@@ -6,10 +6,15 @@ bot(
 		pattern: 'anticall',
 		public: false,
 		desc: 'Setup Anticall',
-		type: 'user',
+		type: 'user'
 	},
 	async (message, match, { prefix, pushName }) => {
-		const anticallConfig = (await getAntiCall()) || { on: false, action: 'reject', jid: [], type: null };
+		const anticallConfig = (await getAntiCall()) || {
+			on: false,
+			action: 'reject',
+			jid: [],
+			type: null
+		};
 
 		if (!match) {
 			return message.send(
@@ -26,7 +31,7 @@ _${prefix}anticall set,234803456789,123456789_
 _Sets specific numbers for AntiCall to Reject or Block Calls from._
 
 _${prefix}anticall action,block | reject_
-_Chooses whether to Block the caller or just Reject their Call._`,
+_Chooses whether to Block the caller or just Reject their Call._`
 			);
 		}
 
@@ -41,7 +46,8 @@ _Chooses whether to Block the caller or just Reject their Call._`,
 
 		if (mode === 'action') {
 			const newAction = match[1]?.trim();
-			if (!['block', 'reject'].includes(newAction)) return message.send('_Invalid action. Use "block" or "reject"._');
+			if (!['block', 'reject'].includes(newAction))
+				return message.send('_Invalid action. Use "block" or "reject"._');
 			if (newAction === anticallConfig.action) return message.send(`_Already Set to ${newAction}_`);
 			await editSpecificAntiCall(null, newAction, null, null);
 			return message.send(`_AntiCall action updated to "${newAction}"._`);
@@ -58,7 +64,9 @@ _Chooses whether to Block the caller or just Reject their Call._`,
 
 			if (numbersToAdd.length > 0) {
 				await editSpecificAntiCall(null, null, numbersToAdd);
-				return message.send(`_${numbersToAdd.length} number(s) has been added to list to Reject Calls._`);
+				return message.send(
+					`_${numbersToAdd.length} number(s) has been added to list to Reject Calls._`
+				);
 			} else {
 				await addAntiCall(mode, anticallConfig.type, match.slice(1));
 				return message.send('_AntiCall for Specific Numbers Set_');
@@ -76,9 +84,13 @@ _Chooses whether to Block the caller or just Reject their Call._`,
 				await addAntiCall('all', anticallConfig.action, uniqueCountryCodes);
 				return message.send(`_AntiCall is now set to handle calls from the specified countries._`);
 			}
-			return message.send('_No valid country codes provided. Ensure codes do not exceed 4 characters._');
+			return message.send(
+				'_No valid country codes provided. Ensure codes do not exceed 4 characters._'
+			);
 		}
 
-		return message.send(`\`\`\`${pushName} that's invaild, use ${prefix}anticall to see help\`\`\``);
-	},
+		return message.send(
+			`\`\`\`${pushName} that's invaild, use ${prefix}anticall to see help\`\`\``
+		);
+	}
 );

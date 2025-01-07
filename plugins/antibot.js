@@ -6,7 +6,7 @@ bot(
 		pattern: 'antibot',
 		public: true,
 		isGroup: true,
-		type: 'group',
+		type: 'group'
 	},
 	async (message, match) => {
 		const settings = ['on', 'off'];
@@ -20,13 +20,13 @@ bot(
 			await delAntibot(message.jid);
 			return message.send('_Antibot Disabled for this Group_');
 		}
-	},
+	}
 );
 
 bot(
 	{
 		on: 'group-chat',
-		dontAddCommandList: true,
+		dontAddCommandList: true
 	},
 	async message => {
 		if (!message.isGroup) return;
@@ -37,7 +37,12 @@ bot(
 		if (await isSudo(message.sender, message.user)) return;
 
 		if (message.bot) {
-			return await Promise.all([message.send(`_@${message.sender.split('@')[0]} has been kicked for using Bot_`, { mentions: [message.sender] }), message.client.groupParticipantsUpdate(message.jid, [message.sender], 'remove')]);
+			return await Promise.all([
+				message.send(`_@${message.sender.split('@')[0]} has been kicked for using Bot_`, {
+					mentions: [message.sender]
+				}),
+				message.client.groupParticipantsUpdate(message.jid, [message.sender], 'remove')
+			]);
 		}
-	},
+	}
 );
