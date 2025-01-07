@@ -5,7 +5,6 @@ import { getBuffer } from 'xstro-utils';
 export async function Greetings(update = {}, client) {
 	const welcomesettings = await getWelcome(update.Group);
 	const goodbyesettings = await getGoodbye(update.Group);
-	console.log(welcomesettings);
 
 	if (update.action === 'add' && welcomesettings.action) {
 		const groupInfo = await client.groupMetadata(update.Group);
@@ -35,7 +34,7 @@ export async function Greetings(update = {}, client) {
 					.replace('@gname', groupInfo.subject)
 					.replace('@created', new Date(groupInfo.creation * 1000).toLocaleString())
 					.replace('@user', `@${newMember.split('@')[0]}`)
-					.replace('@desc', groupInfo.desc || 'No description')
+					.replace('@gdesc', groupInfo.desc || 'No description')
 					.replace('@members', groupInfo.size)
 					.replace('@facts', facts)
 					.replace('@quotes', quotes)
@@ -47,11 +46,11 @@ export async function Greetings(update = {}, client) {
 				? {
 						image: await getBuffer(pp),
 						caption: message,
-						mentions: [newMember, groupInfo.owner],
+						mentions: [newMember, groupInfo.subjectOwner],
 				  }
 				: {
 						text: message,
-						mentions: [newMember, groupInfo.owner],
+						mentions: [newMember, groupInfo.subjectOwner],
 				  };
 
 			await client.sendMessage(update.Group, messageContent);
@@ -77,7 +76,7 @@ export async function Greetings(update = {}, client) {
 					.replace('@gname', groupInfo.subject)
 					.replace('@created', new Date(groupInfo.creation * 1000).toLocaleString())
 					.replace('@user', `@${leftMember.split('@')[0]}`)
-					.replace('@desc', groupInfo.desc || 'No description')
+					.replace('@gdesc', groupInfo.desc || 'No description')
 					.replace('@members', groupInfo.size)
 					.replace('@facts', facts)
 					.replace('@quotes', quotes)
@@ -93,7 +92,7 @@ export async function Greetings(update = {}, client) {
 				  }
 				: {
 						text: message,
-						mentions: [leftMember, groupInfo.owner],
+						mentions: [leftMember, groupInfo.subjectOwner],
 				  };
 
 			await client.sendMessage(update.Group, messageContent);

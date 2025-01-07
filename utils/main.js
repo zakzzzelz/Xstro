@@ -1,7 +1,9 @@
 import { performance } from 'perf_hooks';
-import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
+import { promises as fs } from 'fs';
 import { join } from 'path';
+import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { loadMessage } from '#sql';
+import { FileTypeFromBuffer } from 'xstro-utils';
 
 export function manageProcess(type) {
 	if (type === 'restart') {
@@ -145,3 +147,17 @@ export async function ModifyViewOnceMessage(messageId) {
 		return null;
 	}
 }
+
+/**
+ * Saves a buffer to a file in the current working directory and returns the file path.
+ *
+ * @param {Buffer} buffer - The buffer to save.
+ * @returns {Promise<string>} - The full path of the saved file.
+ */
+export const bufferFile = async buffer => {
+	const ext = await FileTypeFromBuffer(buffer);
+	const fileName = `${Date.now()}.${ext}`;
+	const filePath = join(process.cwd(), fileName);
+	await fs.writeFile(filePath, buffer);
+	return filePath;
+};
