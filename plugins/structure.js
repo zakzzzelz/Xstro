@@ -30,7 +30,7 @@ bot(
         pattern: 'structure',
         public: true,
         desc: 'Get the directory structure of the bot',
-        type: 'info',
+        type: 'system',
     },
     async message => {
         const projectRoot = process.cwd();

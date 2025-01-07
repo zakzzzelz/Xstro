@@ -1,7 +1,7 @@
 import config from '#config';
 import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
-import { ModifyViewOnceMessage, toJid } from '#utils';
+import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
 import { getBuffer } from 'xstro-utils';
 import { isJidGroup } from 'baileys';
 
@@ -10,13 +10,32 @@ bot(
 		pattern: 'vv',
 		public: false,
 		desc: 'Downloads A Viewonce Message',
-		type: 'whatsapp',
+		type: 'whatsapp'
 	},
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
 		const res = await ModifyViewOnceMessage(message.id);
 		return message.client.relayMessage(message.jid, res.message, {});
+	}
+);
+
+bot(
+	{
+		pattern: 'tovv',
+		public: true,
+		desc: 'Converts A Normal Media Message to ViewOnce',
+		type: 'whatsapp'
 	},
+	async message => {
+		if (
+			!message.reply_message.video &&
+			!message.reply_message.audio &&
+			!message.reply_message.image
+		)
+			return message.send('_Reply an Image | Video | Audio_');
+		const viewonceMessage = await convertNormalMessageToViewOnce(message.data.quoted.message);
+		return message.client.relayMessage(message.jid, viewonceMessage, {});
+	}
 );
 
 bot(
@@ -24,13 +43,13 @@ bot(
 		pattern: 'myname',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Changes your WhatsApp Name',
+		desc: 'Changes your WhatsApp Name'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide A New Name_');
 		await message.updateName(match.toString());
 		return message.send('_WhatsApp Name Updated!_');
-	},
+	}
 );
 
 bot(
@@ -38,14 +57,14 @@ bot(
 		pattern: 'setpp',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Set Your Profile Picture',
+		desc: 'Set Your Profile Picture'
 	},
 	async message => {
 		if (!message.reply_message?.image) return message.send('_Reply An Image_');
 		const img = await message.download();
 		await message.updatePP(img);
 		return await message.send('_Profile Picture Updated_');
-	},
+	}
 );
 
 bot(
@@ -53,7 +72,7 @@ bot(
 		pattern: 'quoted',
 		public: false,
 		type: 'whatsapp',
-		desc: 'quoted message',
+		desc: 'quoted message'
 	},
 	async message => {
 		if (!message.reply_message) return await message.send('```Reply A Message```');
@@ -63,9 +82,9 @@ bot(
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
 		if (!msg.quoted) return await message.send('_No quoted message found_');
 		await message.forward(message.jid, msg.quoted, {
-			quoted: msg.quoted,
+			quoted: msg.quoted
 		});
-	},
+	}
 );
 
 bot(
@@ -73,12 +92,12 @@ bot(
 		pattern: 'dlt',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Deletes Message',
+		desc: 'Deletes Message'
 	},
 	async message => {
 		if (!message.reply_message) return message.send('_Reply A Message_');
 		return await message.delete();
-	},
+	}
 );
 
 bot(
@@ -86,12 +105,12 @@ bot(
 		pattern: 'archive',
 		public: false,
 		type: 'whatsapp',
-		desc: 'archive whatsapp chat',
+		desc: 'archive whatsapp chat'
 	},
 	async message => {
 		await message.archiveChat(true);
 		await message.send('_Archived_');
-	},
+	}
 );
 
 bot(
@@ -99,12 +118,12 @@ bot(
 		pattern: 'unarchive',
 		public: false,
 		type: 'whatsapp',
-		desc: 'unarchive whatsapp chat',
+		desc: 'unarchive whatsapp chat'
 	},
 	async message => {
 		await message.archiveChat(false);
 		await message.send('_Unarchived_');
-	},
+	}
 );
 
 bot(
@@ -112,7 +131,7 @@ bot(
 		pattern: 'blocklist',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Fetches BlockList',
+		desc: 'Fetches BlockList'
 	},
 	async message => {
 		const blocklist = await message.client.fetchBlocklist();
@@ -120,12 +139,12 @@ bot(
 			const mentions = blocklist.map(number => `${number}`);
 			const formattedList = blocklist.map(number => `• @${number.split('@')[0]}`).join('\n');
 			await message.send(`*_Blocked contacts:_*\n\n${formattedList}`, {
-				mentions,
+				mentions
 			});
 		} else {
 			await message.send('_No blocked Numbers!_');
 		}
-	},
+	}
 );
 
 bot(
@@ -133,12 +152,12 @@ bot(
 		pattern: 'clear ?(.*)',
 		public: false,
 		type: 'whatsapp',
-		desc: 'delete whatsapp chat',
+		desc: 'delete whatsapp chat'
 	},
 	async message => {
 		await message.clearChat();
 		await message.send('_Cleared_');
-	},
+	}
 );
 
 bot(
@@ -146,12 +165,12 @@ bot(
 		pattern: 'rpp',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Removes Profile Picture',
+		desc: 'Removes Profile Picture'
 	},
 	async message => {
 		await message.rPP();
 		return message.send('_Profile Picture Removed!_');
-	},
+	}
 );
 
 bot(
@@ -159,12 +178,12 @@ bot(
 		pattern: 'pin',
 		public: false,
 		type: 'whatsapp',
-		desc: 'pin a chat',
+		desc: 'pin a chat'
 	},
 	async message => {
 		await message.client.chatModify({ pin: true }, message.jid);
 		return message.send('_Pined.._');
-	},
+	}
 );
 
 bot(
@@ -172,12 +191,12 @@ bot(
 		pattern: 'unpin ?(.*)',
 		public: false,
 		type: 'whatsapp',
-		desc: 'unpin a msg',
+		desc: 'unpin a msg'
 	},
 	async message => {
 		await message.client.chatModify({ pin: false }, message.jid);
 		return message.send('_Unpined.._');
-	},
+	}
 );
 
 bot(
@@ -185,16 +204,16 @@ bot(
 		pattern: 'save',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Saves Status',
+		desc: 'Saves Status'
 	},
 	async message => {
 		if (!message.reply_message) return message.send('_Reply A Status_');
 		const msg = await message.data?.quoted;
 		await message.forward(message.user, msg, {
 			force: false,
-			quoted: msg,
+			quoted: msg
 		});
-	},
+	}
 );
 
 bot(
@@ -202,7 +221,7 @@ bot(
 		pattern: 'forward',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Forwards A Replied Message',
+		desc: 'Forwards A Replied Message'
 	},
 	async (message, match) => {
 		if (!message.reply_message) return message.send('_Reply A Message!_');
@@ -218,9 +237,9 @@ bot(
 		const msg = message.data?.quoted;
 		await message.forward(jid, msg, { quoted: msg });
 		return await message.send(`_Message forward to @${jid.split('@')[0]}_`, {
-			mentions: [jid],
+			mentions: [jid]
 		});
-	},
+	}
 );
 
 bot(
@@ -228,12 +247,12 @@ bot(
 		pattern: 'block',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Blocks A Person',
+		desc: 'Blocks A Person'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
 		await message.Block(jid);
-	},
+	}
 );
 
 bot(
@@ -241,12 +260,12 @@ bot(
 		pattern: 'unblock',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Unblocks A Person',
+		desc: 'Unblocks A Person'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
 		await message.Unblock(jid);
-	},
+	}
 );
 
 bot(
@@ -254,13 +273,13 @@ bot(
 		pattern: 'edit',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Edits A Sent Message',
+		desc: 'Edits A Sent Message'
 	},
 	async (message, match, { prefix }) => {
 		if (!message.reply_message) return message.send('_Reply Your Own Message_');
 		if (!match) return await message.send('```' + prefix + 'edit hello```');
 		await message.edit(match);
-	},
+	}
 );
 
 bot(
@@ -268,12 +287,12 @@ bot(
 		pattern: 'jid',
 		public: true,
 		type: 'whatsapp',
-		desc: 'Get Jid of Current Chat',
+		desc: 'Get Jid of Current Chat'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
 		message.send(jid);
-	},
+	}
 );
 
 bot(
@@ -281,13 +300,13 @@ bot(
 		pattern: 'bio',
 		public: true,
 		type: 'whatsapp',
-		desc: 'Change your whatsapp bio',
+		desc: 'Change your whatsapp bio'
 	},
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
 		await message.client.updateProfileStatus(match);
 		return await message.send('```WhatsApp bio Updated to "' + match + '"```');
-	},
+	}
 );
 
 bot(
@@ -295,16 +314,16 @@ bot(
 		pattern: 'react',
 		public: false,
 		type: 'whatsapp',
-		desc: 'React to A Message',
+		desc: 'React to A Message'
 	},
 	async (message, match) => {
 		if (!message.reply_message) return message.send('```Reply A Message```');
 		if (message.reply_message?.fromMe) return message.send('```Cannot React to yourself Bro```');
 		if (!match) return message.send('```react 😊```');
 		return message.client.sendMessage(message.jid, {
-			react: { text: match, key: message.reply_message.key },
+			react: { text: match, key: message.reply_message.key }
 		});
-	},
+	}
 );
 
 bot(
@@ -312,7 +331,7 @@ bot(
 		pattern: 'star',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Stars or Unstars a Message',
+		desc: 'Stars or Unstars a Message'
 	},
 	async message => {
 		const replyMessage = message.reply_message;
@@ -321,7 +340,7 @@ bot(
 		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = true;
 		await message.client.star(jid, messages, star);
-	},
+	}
 );
 
 bot(
@@ -329,7 +348,7 @@ bot(
 		pattern: 'unstar',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Stars or Unstars a Message',
+		desc: 'Stars or Unstars a Message'
 	},
 	async message => {
 		const replyMessage = message.reply_message;
@@ -338,7 +357,7 @@ bot(
 		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
 		const star = false;
 		await message.client.star(jid, messages, star);
-	},
+	}
 );
 
 bot(
@@ -346,17 +365,31 @@ bot(
 		pattern: 'owner',
 		public: true,
 		type: 'whatsapp',
-		desc: 'Get Bot Owner',
+		desc: 'Get Bot Owner'
 	},
 	async message => {
 		const name = await getName(message.user);
 		const img = await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4');
-		const vcard = 'BEGIN:VCARD\n' + 'VERSION:3.0\n' + 'FN:' + name + '\n' + 'ORG:' + config.BOT_INFO.split(';')[0] + '\n' + 'TEL;type=CELL;type=VOICE;waid=' + message.user.split('@')[0] + ':' + message.user.split('@')[0] + '\n' + 'END:VCARD';
+		const vcard =
+			'BEGIN:VCARD\n' +
+			'VERSION:3.0\n' +
+			'FN:' +
+			name +
+			'\n' +
+			'ORG:' +
+			config.BOT_INFO.split(';')[0] +
+			'\n' +
+			'TEL;type=CELL;type=VOICE;waid=' +
+			message.user.split('@')[0] +
+			':' +
+			message.user.split('@')[0] +
+			'\n' +
+			'END:VCARD';
 
 		return await message.client.sendMessage(message.jid, {
 			contacts: {
 				displayName: name,
-				contacts: [{ vcard }],
+				contacts: [{ vcard }]
 			},
 			contextInfo: {
 				forwardingScore: 999,
@@ -367,11 +400,11 @@ bot(
 					mediaType: 1,
 					thumbnail: img,
 					sourceUrl: 'https://github.com/AstroX11/Xstro',
-					renderLargerThumbnail: true,
-				},
-			},
+					renderLargerThumbnail: true
+				}
+			}
 		});
-	},
+	}
 );
 bot(
 	{
@@ -379,11 +412,11 @@ bot(
 		public: true,
 		type: 'whatsapp',
 		isGroup: true,
-		desc: 'Get JID of the Current Group',
+		desc: 'Get JID of the Current Group'
 	},
 	async message => {
 		message.send(`Group JID: ${message.jid}`);
-	},
+	}
 );
 
 bot(
@@ -391,7 +424,7 @@ bot(
 		pattern: 'gforward',
 		public: false,
 		type: 'whatsapp',
-		desc: 'Forwards a replied message to multiple groups',
+		desc: 'Forwards a replied message to multiple groups'
 	},
 	async (message, match) => {
 		if (!message.reply_message) return message.send('_Reply to a message to forward it!_');
@@ -415,5 +448,5 @@ bot(
 		}
 
 		return message.send(`_Message forwarded to ${successfulForwards} group(s).`);
-	},
+	}
 );

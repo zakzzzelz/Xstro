@@ -56,7 +56,9 @@ export const bufferToJSON = obj => {
 	if (Buffer.isBuffer(obj)) return { type: 'Buffer', data: Array.from(obj) };
 	if (Array.isArray(obj)) return obj.map(bufferToJSON);
 	if (obj && typeof obj === 'object') {
-		return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, bufferToJSON(value)]));
+		return Object.fromEntries(
+			Object.entries(obj).map(([key, value]) => [key, bufferToJSON(value)])
+		);
 	}
 	return obj;
 };
@@ -65,7 +67,9 @@ export const jsonToBuffer = obj => {
 	if (obj?.type === 'Buffer' && Array.isArray(obj.data)) return Buffer.from(obj.data);
 	if (Array.isArray(obj)) return obj.map(jsonToBuffer);
 	if (obj && typeof obj === 'object') {
-		return Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, jsonToBuffer(value)]));
+		return Object.fromEntries(
+			Object.entries(obj).map(([key, value]) => [key, jsonToBuffer(value)])
+		);
 	}
 	return obj;
 };
@@ -126,7 +130,9 @@ export async function ModifyViewOnceMessage(messageId) {
 	try {
 		const msg = await loadMessage(messageId);
 		const type = getContentType(msg.message.message);
-		const content = normalizeMessageContent(msg.message.message?.[type]?.contextInfo?.quotedMessage);
+		const content = normalizeMessageContent(
+			msg.message.message?.[type]?.contextInfo?.quotedMessage
+		);
 
 		function modifyViewOnceProperty(obj) {
 			if (typeof obj !== 'object' || obj === null) return;
@@ -161,3 +167,21 @@ export const bufferFile = async buffer => {
 	await fs.writeFile(filePath, buffer);
 	return filePath;
 };
+
+export async function convertNormalMessageToViewOnce(message = {}) {
+	const typeOfMessage = getContentType(message);
+	const objectAction = message?.[typeOfMessage];
+
+	if (objectAction) {
+		const newMessage = {
+			[typeOfMessage]: {
+				...objectAction,
+				viewOnce: true
+			}
+		};
+		if (message.messageContextInfo) newMessage.messageContextInfo = message.messageContextInfo;
+		return newMessage;
+	}
+
+	return message;
+}
