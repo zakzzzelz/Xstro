@@ -87,7 +87,14 @@ bot(
 		return await message.client.sendMessage(message.jid, {
 			audio: audio,
 			mimetype: 'audio/ogg; codecs=opus',
-			ptt: true
+			ptt: true,
+			contextInfo: {
+				externalAdReply: {
+					title: media.title,
+					body: 'xsᴛʀᴏ ʏᴛᴀ ᴅʟ',
+					showAdAttribution: true
+				}
+			}
 		});
 	}
 );
@@ -104,8 +111,7 @@ bot(
 		if (!url) return message.send('_Provide Youtube link_');
 		url = extractUrlFromString(url);
 		const media = await XSTRO.youtube(url, { mp4: true });
-		return await message.send(media.url, {
-			type: 'video',
+		return await message.sendFromUrl(media.url, {
 			caption: media.title
 		});
 	}
@@ -123,7 +129,7 @@ bot(
 		if (!url) return message.send('_Provide Tiktok link_');
 		url = extractUrlFromString(url);
 		const media = await XSTRO.tiktok(url);
-		return await message.send(media.url, { caption: media.title });
+		return await message.sendFromUrl(media.url, { caption: media.title });
 	}
 );
 

@@ -208,7 +208,16 @@ export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJ
 }
 
 export async function getFileAndSave(url) {
-	url = await getBuffer(url);
-	url = await bufferFile(url);
-	return url;
+	let attempts = 0;
+	let data;
+
+	while (attempts < 3) {
+		try {
+			data = await getBuffer(url);
+			data = await bufferFile(data);
+			return data;
+		} catch {
+			return false;
+		}
+	}
 }
