@@ -11,3 +11,4 @@ export * from './chatbot.js';
 export * from './anticall.js';
 export * from './greetings.js';
 export * from './group_events.js';
+export * from './stickercmd.js';

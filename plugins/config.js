@@ -189,3 +189,49 @@ bot(
 		return await message.send(result.message);
 	}
 );
+
+bot(
+	{
+		pattern: 'disablegc',
+		public: false,
+		desc: "Turn off the bot's ability to send messages in group chats",
+		type: 'settings'
+	},
+	async (message, match) => {
+		const newValue = match === 'on' ? true : match === 'off' ? false : null;
+		if (newValue === null) return await message.send('_Please use "on" or "off"_');
+		const dbConfig = await getConfig();
+		if (dbConfig.disablegc === newValue)
+			return await message.send(`_Group messaging is already set to ${newValue ? 'on' : 'off'}._`);
+
+		await updateConfig('disablegc', newValue);
+		return await message.send(
+			`\`\`\`Group messaging is now ${
+				newValue ? 'enabled' : 'disabled'
+			}.\nThe bot will no longer function in group chats.\`\`\``
+		);
+	}
+);
+
+bot(
+	{
+		pattern: 'disabledm',
+		public: false,
+		desc: "Turn off the bot's ability to send messages in direct/private chats (except yours)",
+		type: 'settings'
+	},
+	async (message, match) => {
+		const newValue = match === 'on' ? true : match === 'off' ? false : null;
+		if (newValue === null) return await message.send('_Please use "on" or "off"_');
+		const dbConfig = await getConfig();
+		if (dbConfig.disabledm === newValue)
+			return await message.send(`_Direct messaging is already set to ${newValue ? 'on' : 'off'}._`);
+
+		await updateConfig('disabledm', newValue);
+		return await message.send(
+			`\`\`\`Direct messaging is now ${
+				newValue ? 'enabled' : 'disabled'
+			}.\nThe bot will no longer function in personal chats, except yours.\`\`\``
+		);
+	}
+);
