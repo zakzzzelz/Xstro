@@ -3,10 +3,27 @@ import { XSTRO } from '#utils';
 
 bot(
 	{
+		pattern: 'forex',
+		public: true,
+		desc: 'Get Forex Data for Pair',
+		type: 'forex'
+	},
+	async (message, match) => {
+		if (!match) return message.send('_Give me a symbol, EURUSD_');
+		const res = await XSTRO.forex(match);
+		if (!res) return message.send('_Invaild Forex Pair_');
+		return message.send(
+			`\`\`\`${match}\n\nLastPrice: ${res.lastPrice}\nCurrency: ${res.currency}\nChangeValue: ${res.changeValue}\nLastUpdate: ${res.lastUpdate}`
+		);
+	}
+);
+
+bot(
+	{
 		pattern: 'fxmajor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Majors',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -26,7 +43,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -34,7 +51,7 @@ bot(
 		pattern: 'fxminor',
 		public: true,
 		desc: 'Get Current Market Details for Forex Minors',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxminor');
@@ -54,7 +71,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -62,7 +79,7 @@ bot(
 		pattern: 'fxexotic',
 		public: true,
 		desc: 'Get Current Market Details for Forex Exotic',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxexotic');
@@ -82,7 +99,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -90,7 +107,7 @@ bot(
 		pattern: 'fxamericas',
 		public: true,
 		desc: 'Get Current Market Details for Forex Americans',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxamericas');
@@ -110,7 +127,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -118,7 +135,7 @@ bot(
 		pattern: 'fxeurope',
 		public: true,
 		desc: 'Get Current Market Details for Forex Europe',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxeurope');
@@ -138,7 +155,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -146,7 +163,7 @@ bot(
 		pattern: 'fxasia',
 		public: true,
 		desc: 'Get Current Market Details for Forex Asia',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -166,7 +183,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -174,7 +191,7 @@ bot(
 		pattern: 'fxpacific',
 		public: true,
 		desc: 'Get Current Market Details for Forex Pacific',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmajor');
@@ -194,7 +211,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -202,7 +219,7 @@ bot(
 		pattern: 'fxeast',
 		public: true,
 		desc: 'Get Current Market Details for Forex Middle East',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxmiddle-east');
@@ -222,7 +239,7 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );
 
 bot(
@@ -230,7 +247,7 @@ bot(
 		pattern: 'fxafrica',
 		public: true,
 		desc: 'Get Current Market Details for Forex Africa',
-		type: 'forex',
+		type: 'forex'
 	},
 	async message => {
 		const res = await XSTRO.forex('fxafrica');
@@ -250,5 +267,5 @@ Rating: ${item.Rating}
 			})
 			.join('\n\n');
 		await message.send(data);
-	},
+	}
 );

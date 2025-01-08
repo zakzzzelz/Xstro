@@ -27,14 +27,14 @@ const XSTRO = {
 			return {
 				title: data.title,
 				thumb: data.thumbnail,
-				url: data.url,
+				url: data.url
 			};
 		} else if (type.mp3) {
 			const res = await getJson(`${API_ID}/api/ytmp3?url=${url}`);
 			return {
 				title: res.title,
 				thumb: res.thumbnail,
-				url: res.link,
+				url: res.link
 			};
 		}
 	},
@@ -43,7 +43,7 @@ const XSTRO = {
 		const data = await getJson(res);
 		return {
 			title: data.title,
-			url: data.url,
+			url: data.url
 		};
 	},
 	chatbot: async text => {
@@ -158,9 +158,25 @@ const XSTRO = {
 		return res;
 	},
 	airquality: async (country, city) => {
-		const res = await getJson(`${API_ID}/api/airquality?country=${encodeURIComponent(country)}&city=${encodeURIComponent(city)}`);
+		const res = await getJson(
+			`${API_ID}/api/airquality?country=${encodeURIComponent(country)}&city=${encodeURIComponent(
+				city
+			)}`
+		);
 		return res;
 	},
+	forex: async symbol => {
+		try {
+			const currency = symbol.toUpperCase();
+			const res = await getJson(`${API_ID}/api/forex?symbol=${currency}`);
+			return res;
+		} catch {
+			return false;
+		}
+	},
+	wabeta: async () => {
+		return await getJson(`${API_ID}/api/wabeta`);
+	}
 };
 
 export { XSTRO };
