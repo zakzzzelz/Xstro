@@ -41,11 +41,7 @@ export const AntiCall = async (calls, client) => {
 
 		if (antiCallConfig.type === 'all' && whyCalled === 'offer') {
 			const bannedCountryCodes = antiCallConfig.jid; // Assuming this is an array of country codes
-			const callerNumber = caller.split('@')[0]; // Extract the number portion of the caller
-
-			console.log(bannedCountryCodes);
-
-			// Check if the caller's number starts with any banned country code
+			const callerNumber = caller.split('@')[0]; 
 			const isBannedCountry = bannedCountryCodes.some(code => callerNumber.startsWith(code));
 
 			if (isBannedCountry) {

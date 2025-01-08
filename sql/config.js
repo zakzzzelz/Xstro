@@ -44,6 +44,21 @@ export const CONFIG_CMDS = DATABASE.define(
 			allowNull: false,
 			defaultValue: '',
 		},
+		autolikestatus: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		disablegc: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
+		disabledm: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
 	},
 	{
 		tableName: 'configs',
@@ -62,6 +77,9 @@ async function ensureConfigExists() {
 			mode: false,
 			PREFIX: '.',
 			disabledCmds: '',
+			autolikestatus: false,
+			disablegc: false,
+			disabledm: false,
 		},
 	});
 	return config;
@@ -92,6 +110,9 @@ async function getConfig() {
 		mode: config.mode,
 		PREFIX: config.PREFIX,
 		disabledCmds: config.disabledCmds ? config.disabledCmds.split(',').filter(Boolean) : [],
+		autolikestatus: config.autolikestatus,
+		disablegc: config.disablegc,
+		disabledm: config.disabledm,
 	};
 }
 

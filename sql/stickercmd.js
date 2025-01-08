@@ -7,28 +7,28 @@ const StickerDB = DATABASE.define(
 		uid: {
 			type: DataTypes.INTEGER,
 			primaryKey: true,
-			autoIncrement: true,
+			autoIncrement: true
 		},
 		cmd: {
 			type: DataTypes.STRING,
 			allowNull: false,
-			unique: true,
+			unique: true
 		},
 		id: {
 			type: DataTypes.STRING,
-			allowNull: false,
-		},
+			allowNull: false
+		}
 	},
 	{
 		tableName: 'stickercmd',
-		timestamps: false,
-	},
+		timestamps: false
+	}
 );
 
 async function setcmd(cmd, id) {
 	const [stickerCmd, created] = await StickerDB.findOrCreate({
 		where: { cmd },
-		defaults: { id },
+		defaults: { id }
 	});
 	if (!created) await stickerCmd.update({ id });
 	return true;
@@ -36,7 +36,7 @@ async function setcmd(cmd, id) {
 
 async function delcmd(cmd) {
 	const deleted = await StickerDB.destroy({
-		where: { cmd },
+		where: { cmd }
 	});
 	return deleted > 0;
 }
@@ -45,13 +45,13 @@ async function getcmd() {
 	const commands = await StickerDB.findAll();
 	return commands.map(cmd => ({
 		cmd: cmd.cmd,
-		id: cmd.id,
+		id: cmd.id
 	}));
 }
 
 async function isStickerCmd(id) {
 	const stickerCmd = await StickerDB.findOne({
-		where: { id },
+		where: { id }
 	});
 
 	if (stickerCmd) {
@@ -59,14 +59,14 @@ async function isStickerCmd(id) {
 			exists: true,
 			command: {
 				cmd: stickerCmd.cmd,
-				id: stickerCmd.id,
-			},
+				id: stickerCmd.id
+			}
 		};
 	}
 
 	return {
 		exists: false,
-		command: null,
+		command: null
 	};
 }
 

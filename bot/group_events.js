@@ -59,7 +59,8 @@ export async function GroupEventPartial(update, client) {
 	// Group name change
 	if (update.subject) {
 		return await client.sendMessage(update.id, {
-			text: `\`\`\`GROUP NAME WAS UPDATED\n\nBY: @${update.author.split('@')[0]}\nNEW NAME: ${
+			text: `\`\`\`GROUP NAME WAS UPDATED\n\nBY: @${update?.author ? update.author.split('@')[0] : 'Unknown'}
+\nNEW NAME: ${
 				update.subject
 			}\`\`\``,
 			mentions: [update.author]
@@ -69,7 +70,7 @@ export async function GroupEventPartial(update, client) {
 	// Group description update
 	if (update.desc) {
 		return await client.sendMessage(update.id, {
-			text: `\`\`\`GROUP DESCRIPTION UPDATED\n\nBY: @${update.author.split('@')[0]}\nNEW DESC: ${
+			text: `\`\`\`GROUP DESCRIPTION UPDATED\n\nBY: @${update?.author ? update.author.split('@')[0] : 'Unknown'}\nNEW DESC: ${
 				update.desc
 			}\`\`\``,
 			mentions: [update.author]
@@ -95,7 +96,7 @@ export async function GroupEventPartial(update, client) {
 		let duration = '';
 		if (!update.ephemeralDuration) {
 			return await client.sendMessage(update.id, {
-				text: `\`\`\`@${update.author.split('@')[0]} has disabled disappearing messages\`\`\``,
+				text: `\`\`\`@${update?.author ? update.author.split('@')[0] : 'Unknown'} has disabled disappearing messages\`\`\``,
 				mentions: [update.author]
 			});
 		}
