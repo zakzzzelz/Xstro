@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { apkDl, XSTRO } from '#utils';
+import { apkDl, getFileAndSave, toPTT, XSTRO } from '#utils';
 import { extractUrlFromString, FileTypeFromBuffer, getBuffer } from 'xstro-utils';
 
 bot(
@@ -7,7 +7,7 @@ bot(
 		pattern: 'apk',
 		public: true,
 		desc: 'Downloads Apk',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Provide Apk to Download_');
@@ -17,9 +17,9 @@ bot(
 		return await message.sendMessage(buff, {
 			type: 'document',
 			mimetype: 'application/vnd.android.package-archive',
-			fileName: appname + '.apk',
+			fileName: appname + '.apk'
 		});
-	},
+	}
 );
 
 bot(
@@ -27,7 +27,7 @@ bot(
 		pattern: 'facebook',
 		public: true,
 		desc: 'Download Facebook Video',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -35,7 +35,7 @@ bot(
 		url = extractUrlFromString(url);
 		const media = await XSTRO.facebook(url);
 		return await message.send(media);
-	},
+	}
 );
 
 bot(
@@ -43,7 +43,7 @@ bot(
 		pattern: 'instagram',
 		public: true,
 		desc: 'Download Instagram Video',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -51,7 +51,7 @@ bot(
 		url = extractUrlFromString(url);
 		const media = await XSTRO.instagram(url);
 		return await message.send(media, { type: 'video' });
-	},
+	}
 );
 
 bot(
@@ -59,7 +59,7 @@ bot(
 		pattern: 'twitter',
 		public: true,
 		desc: 'Download Twitter Video',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -67,7 +67,7 @@ bot(
 		url = extractUrlFromString(url);
 		const media = await XSTRO.twitter(url);
 		return await message.send(media, { type: 'video' });
-	},
+	}
 );
 
 bot(
@@ -75,15 +75,21 @@ bot(
 		pattern: 'yta',
 		public: true,
 		desc: 'Download Youtube Audio',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
 		if (!url) return message.send('_Provide Youtube link_');
 		url = extractUrlFromString(url);
 		const media = await XSTRO.youtube(url, { mp3: true });
-		return await message.send(media.url);
-	},
+		const data = await getFileAndSave(media.url);
+		const audio = await toPTT(data);
+		return await message.client.sendMessage(message.jid, {
+			audio: audio,
+			mimetype: 'audio/ogg; codecs=opus',
+			ptt: true
+		});
+	}
 );
 
 bot(
@@ -91,7 +97,7 @@ bot(
 		pattern: 'ytv',
 		public: true,
 		desc: 'Download Youtube Video',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -100,9 +106,9 @@ bot(
 		const media = await XSTRO.youtube(url, { mp4: true });
 		return await message.send(media.url, {
 			type: 'video',
-			caption: media.title,
+			caption: media.title
 		});
-	},
+	}
 );
 
 bot(
@@ -110,7 +116,7 @@ bot(
 		pattern: 'tiktok',
 		public: true,
 		desc: 'Download Tiktok Video',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -118,7 +124,7 @@ bot(
 		url = extractUrlFromString(url);
 		const media = await XSTRO.tiktok(url);
 		return await message.send(media.url, { caption: media.title });
-	},
+	}
 );
 
 bot(
@@ -126,7 +132,7 @@ bot(
 		pattern: 'mediafire',
 		public: true,
 		desc: 'Downloads Mediafire files from url',
-		type: 'download',
+		type: 'download'
 	},
 	async (message, match) => {
 		let url = match || message.reply_message?.text;
@@ -138,7 +144,7 @@ bot(
 		return await message.sendMessage(buff, {
 			type: 'document',
 			mimetype: res.mime[0],
-			fileName: 'file' + type,
+			fileName: 'file' + type
 		});
-	},
+	}
 );

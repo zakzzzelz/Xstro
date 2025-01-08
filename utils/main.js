@@ -3,7 +3,7 @@ import { promises as fs } from 'fs';
 import { join } from 'path';
 import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { loadMessage } from '#sql';
-import { FileTypeFromBuffer } from 'xstro-utils';
+import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
 
 export function manageProcess(type) {
 	if (type === 'restart') {
@@ -184,4 +184,31 @@ export async function convertNormalMessageToViewOnce(message = {}) {
 	}
 
 	return message;
+}
+
+export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJidParam = []) {
+	console.log(JSON.parse(JSON.stringify(message, null, 2)));
+	const typeOfMessage = getContentType(message);
+	const objectAction = message?.[typeOfMessage];
+
+	if (objectAction) {
+		const newMessage = {
+			[typeOfMessage]: {
+				...objectAction,
+				contextInfo: {
+					...message.contextInfo,
+					mentionedJid: message.contextInfo?.mentionedJid || mentionedJidParam
+				}
+			}
+		};
+		return newMessage;
+	}
+
+	return message;
+}
+
+export async function getFileAndSave(url) {
+	url = await getBuffer(url);
+	url = await bufferFile(url);
+	return url;
 }

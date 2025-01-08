@@ -20,7 +20,17 @@ export const GIFBufferToVideoBuffer = async image => {
 	const mp4Path = `./${filename}.mp4`;
 	writeFileSync(gifPath, image);
 	await new Promise((resolve, reject) => {
-		ffmpeg().input(gifPath).outputOptions(['-movflags faststart', '-pix_fmt yuv420p', '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2']).toFormat('mp4').save(mp4Path).on('end', resolve).on('error', reject);
+		ffmpeg()
+			.input(gifPath)
+			.outputOptions([
+				'-movflags faststart',
+				'-pix_fmt yuv420p',
+				'-vf scale=trunc(iw/2)*2:trunc(ih/2)*2'
+			])
+			.toFormat('mp4')
+			.save(mp4Path)
+			.on('end', resolve)
+			.on('error', reject);
 	});
 	const buffer = readFileSync(mp4Path);
 	await Promise.all([fs.unlink(mp4Path), fs.unlink(gifPath)]);
@@ -36,7 +46,23 @@ export async function audioToBlackVideo(input) {
 			.input(`color=black:s=1920x1080:r=30`)
 			.inputOptions(['-f', 'lavfi'])
 			.input(input)
-			.outputOptions(['-c:v', 'libx264', '-preset', 'ultrafast', '-crf', '23', '-c:a', 'aac', '-b:a', '128k', '-map', '0:v', '-map', '1:a', '-shortest'])
+			.outputOptions([
+				'-c:v',
+				'libx264',
+				'-preset',
+				'ultrafast',
+				'-crf',
+				'23',
+				'-c:a',
+				'aac',
+				'-b:a',
+				'128k',
+				'-map',
+				'0:v',
+				'-map',
+				'1:a',
+				'-shortest'
+			])
 			.output(video)
 			.on('end', () => resolve(fs.readFileSync(video)))
 			.on('error', reject)
@@ -46,7 +72,12 @@ export async function audioToBlackVideo(input) {
 
 export async function flipMedia(file, direction) {
 	const outputFile = path.join(tempDir, `flipped_${path.basename(file)}`);
-	const validDirections = { left: 'transpose=2', right: 'transpose=1', vertical: 'vflip', horizontal: 'hflip' };
+	const validDirections = {
+		left: 'transpose=2',
+		right: 'transpose=1',
+		vertical: 'vflip',
+		horizontal: 'hflip'
+	};
 
 	return new Promise((resolve, reject) => {
 		ffmpeg(file)
@@ -80,5 +111,45 @@ export function convertToMp3(input) {
 			.on('end', () => resolve(readFileSync(outputAudio)))
 			.on('error', reject)
 			.save(outputAudio);
+	});
+}
+
+export function toPTT(input) {
+	const outputAudio = temp('opus');
+
+	return new Promise((resolve, reject) => {
+		ffmpeg(input)
+			.toFormat('opus')
+			.audioCodec('libopus')
+			.audioChannels(1) // Mono audio
+			.audioFrequency(48000) // Standard Opus sample rate
+			.audioBitrate('128k')
+			.outputOptions([
+				'-application voip' // Optimize for voice
+			])
+			.on('end', () => resolve(readFileSync(outputAudio)))
+			.on('error', (err, stdout, stderr) => {
+				reject(new Error(`FFmpeg error: ${err.message}\n${stderr}`));
+			})
+			.save(outputAudio);
+	});
+}
+
+export function toVideo(input) {
+	const outputVideo = temp('mp4');
+
+	return new Promise((resolve, reject) => {
+		ffmpeg(input)
+			.videoCodec('libx264')
+			.audioCodec('aac')
+			.audioBitrate(128)
+			.audioFrequency(44100)
+			.outputOptions([
+				'-crf 32',
+				'-preset slow'
+			])
+			.on('end', () => resolve(readFileSync(outputVideo)))
+			.on('error', reject)
+			.save(outputVideo);
 	});
 }

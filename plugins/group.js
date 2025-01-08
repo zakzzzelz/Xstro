@@ -228,49 +228,6 @@ bot(
 
 bot(
 	{
-		pattern: 'tag',
-		public: true,
-		isGroup: true,
-		desc: 'Tag all participants in the group with an optional message',
-		type: 'group'
-	},
-	async (message, match) => {
-		const msg = match || message.reply_message?.text;
-		const text = msg || '';
-		const participants = await message.client.groupMetadata(message.jid);
-		const participantJids = participants.participants.map(p => p.id);
-		let taggedMessage = text ? `*${text}*` : '';
-		await message.client.sendMessage(message.jid, {
-			text: taggedMessage,
-			mentions: participantJids
-		});
-	}
-);
-
-bot(
-	{
-		pattern: 'tagall',
-		public: true,
-		isGroup: true,
-		desc: 'Tag all participants in the group',
-		type: 'group'
-	},
-	async (message, match) => {
-		const msg = match || message.reply_message?.text;
-		if (!msg) return message.send('_You must provide a reason for tagging everyone._');
-		const participants = await message.client.groupMetadata(message.jid);
-		const participantJids = participants.participants.map(p => p.id);
-		const tagMsg =
-			`*Reason:* ${msg}\n\n` + participantJids.map(jid => `@${jid.split('@')[0]}`).join('\n');
-		await message.client.sendMessage(message.jid, {
-			text: tagMsg,
-			mentions: participantJids
-		});
-	}
-);
-
-bot(
-	{
 		pattern: 'mute',
 		public: true,
 		isGroup: true,
