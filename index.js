@@ -3,7 +3,8 @@ import { config } from 'dotenv';
 import { DATABASE } from '#database';
 import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import cluster from 'cluster';
- 
+import { config as data } from '#config';
+
 config();
 
 if (cluster.isMaster) {
@@ -46,7 +47,7 @@ if (cluster.isMaster) {
 		console.log('STARTING XSTRO...');
 		await DATABASE.sync();
 		eventlogger();
-		await initSession();
+		await initSession(data.SESSION_ID);
 		await loadPlugins();
 		await client();
 
