@@ -164,7 +164,8 @@ bot(
 	},
 	async message => {
 		let media;
-		if (!message.reply_message.video) return message.send('_Reply Video_');
+		if (!message.reply_message.video && !message.reply_message.sticker)
+			return message.send('_Reply Video_');
 		media = await message.download(true);
 		media = await toVideo(media);
 		return await message.client.sendMessage(message.jid, {

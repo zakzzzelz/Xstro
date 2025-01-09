@@ -13,7 +13,7 @@ bot(
 		const res = await XSTRO.forex(match);
 		if (!res) return message.send('_Invaild Forex Pair_');
 		return message.send(
-			`\`\`\`${match}\n\nLastPrice: ${res.lastPrice}\nCurrency: ${res.currency}\nChangeValue: ${res.changeValue}\nLastUpdate: ${res.lastUpdate}`
+			`\`\`\`${match}\n\nLastPrice: ${res.lastPrice}\nCurrency: ${res.currency}\nChangeValue: ${res.changeValue}\nLastUpdate: ${res.lastUpdate}\`\`\``
 		);
 	}
 );
