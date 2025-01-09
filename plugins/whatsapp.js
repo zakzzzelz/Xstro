@@ -3,7 +3,7 @@ import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
 import { getBuffer } from 'xstro-utils';
-import { isJidGroup } from 'baileys';
+import { delay, isJidGroup } from 'baileys';
 
 bot(
 	{
@@ -156,6 +156,7 @@ bot(
 	},
 	async message => {
 		await message.clearChat();
+		await delay(2000)
 		await message.send('_Cleared_');
 	}
 );

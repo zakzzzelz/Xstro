@@ -4,6 +4,7 @@ import { join } from 'path';
 import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { loadMessage } from '#sql';
 import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
+import { getConfigValues } from '#lib';
 
 export function manageProcess(type) {
 	if (type === 'restart') {
@@ -221,3 +222,15 @@ export async function getFileAndSave(url) {
 		}
 	}
 }
+
+export const isPrefix = async userInput => {
+	const configValues = await getConfigValues();
+	const prefix = configValues.PREFIX || ',./^!#&$%';
+	const prefixRegex = new RegExp(
+		`^(${prefix
+			.split('')
+			.map(char => `\\${char}`)
+			.join('|')})$`
+	);
+	return !prefix || prefixRegex.test(userInput);
+};

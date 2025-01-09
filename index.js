@@ -2,6 +2,7 @@ import { fork } from 'child_process';
 import { resolve } from 'path';
 
 let app = null;
+let shouldRestart = true;
 
 const start = () => {
 	app = fork(resolve('server.js'), [], {
@@ -10,12 +11,35 @@ const start = () => {
 	});
 
 	app.on('message', msg => {
-		if (msg === 'app.kill') app.kill('SIGTERM');
+		if (msg === 'app.kill') {
+			shouldRestart = false;
+			app.kill('SIGTERM');
+		}
 	});
-	app.on('exit', () => start());
+
+	app.on('exit', () => {
+		if (shouldRestart) {
+			start();
+		} else {
+			process.exit(0);
+		}
+	});
 };
 
-process.on('SIGINT', () => app && app.kill('SIGTERM'));
-process.on('SIGTERM', () => app && app.kill('SIGTERM'));
+process.on('SIGINT', () => {
+	if (app) {
+		shouldRestart = false;
+		app.kill('SIGTERM');
+	}
+	process.exit(0);
+});
+
+process.on('SIGTERM', () => {
+	if (app) {
+		shouldRestart = false;
+		app.kill('SIGTERM');
+	}
+	process.exit(0);
+});
 
 start();
