@@ -6,7 +6,7 @@ bot(
 		pattern: 'addnote',
 		public: true,
 		desc: 'Create Notes',
-		type: 'notes',
+		type: 'notes'
 	},
 	async (message, match) => {
 		const text = match.trim() || message.reply_message?.text;
@@ -18,7 +18,7 @@ bot(
 		const newNote = await addNote(title, content || '').catch(() => null);
 		if (!newNote) return await message.send('*Unable to perform action*');
 		return await message.send(`*Note added*\n\n*ID*: ${newNote.id}`);
-	},
+	}
 );
 
 bot(
@@ -26,7 +26,7 @@ bot(
 		pattern: 'delnote',
 		public: true,
 		desc: 'Delete a Note',
-		type: 'notes',
+		type: 'notes'
 	},
 	async (message, match) => {
 		const noteId = parseInt(match.trim());
@@ -34,7 +34,7 @@ bot(
 		const deleted = await removeNote(noteId).catch(() => null);
 		if (!deleted) return await message.send('*Unable to perform action*');
 		return await message.send(`*Note deleted*`);
-	},
+	}
 );
 
 bot(
@@ -42,7 +42,7 @@ bot(
 		pattern: 'editnote',
 		public: true,
 		desc: 'Update an Existing Note',
-		type: 'notes',
+		type: 'notes'
 	},
 	async (message, match) => {
 		const text = match.trim() || message.reply_message?.text;
@@ -52,12 +52,12 @@ bot(
 		const [title, newContent] = content.split('|');
 		const updates = {
 			title: title.trim(),
-			content: newContent?.trim() || '',
+			content: newContent?.trim() || ''
 		};
 		const updatedNote = await updateNote(parseInt(id), updates).catch(() => null);
 		if (!updatedNote) return await message.send('*Unable to perform action*');
 		return await message.send('*Note updated*');
-	},
+	}
 );
 
 bot(
@@ -65,7 +65,7 @@ bot(
 		pattern: 'getnotes',
 		public: true,
 		desc: 'List all Notes',
-		type: 'notes',
+		type: 'notes'
 	},
 	async message => {
 		const notes = await getNotes().catch(() => null);
@@ -73,7 +73,7 @@ bot(
 		if (notes.length === 0) return await message.send('*No notes found*');
 		const notesList = notes.map((note, index) => `${index + 1}. ${note.title}`).join('\n');
 		return await message.send(`*_Notes:_*\n\n${notesList}`);
-	},
+	}
 );
 
 bot(
@@ -81,7 +81,7 @@ bot(
 		pattern: 'cnote',
 		public: true,
 		desc: 'Get Note Content',
-		type: 'notes',
+		type: 'notes'
 	},
 	async (message, match) => {
 		const noteId = parseInt(match.trim());
@@ -91,5 +91,5 @@ bot(
 		const note = notes.find(n => n.id === noteId);
 		if (!note) return await message.send('*Note not found*');
 		return await message.send(`*Title*: ${note.title}\n*Content*: ${note.content}`);
-	},
+	}
 );
