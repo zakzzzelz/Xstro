@@ -83,10 +83,10 @@ export const profile = async (name, fn, logger) => {
 	return result;
 };
 
-const proxyFilePath = join('proxy.txt');
+const proxyFilePath = join('./utils/proxy.txt');
 export const getRandomProxy = async () => {
 	try {
-		const data = await fs.promises.readFile(proxyFilePath, 'utf8');
+		const data = await fs.readFile(proxyFilePath, 'utf8');
 		const proxies = data.split('\n').filter(line => line.trim() !== '');
 		if (proxies.length === 0) return null;
 		const randomIndex = Math.floor(Math.random() * proxies.length);
