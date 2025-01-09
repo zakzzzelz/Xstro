@@ -114,7 +114,6 @@ export async function apkDl(query) {
 	const app = res.data.datalist.list[0];
 
 	return {
-		img: app.icon,
 		developer: app.store.name,
 		appname: app.name,
 		link: app.file.path,
