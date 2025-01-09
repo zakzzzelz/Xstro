@@ -18,20 +18,20 @@ bot(
 		const commits = await git.log([`master..origin/master`]);
 		if (match === 'now') {
 			if (commits.total === 0) {
-				return await message.send(message.jid, '```No changes in the latest commit```');
+				return await message.send('```No changes in the latest commit```');
 			}
-			await message.send(message.jid, '*Updating...*');
+			await message.send('*Updating...*');
 			exec(`git stash && git pull origin master`, async (err, stdout, stderr) => {
 				if (err) {
-					return await message.send(message.jid, '```' + stderr + '```');
+					return await message.send('```' + stderr + '```');
 				}
-				await message.send(message.jid, '*Restarting...*');
+				await message.send('*Restarting...*');
 				const dependency = await updatedDependencies();
 				if (dependency) {
-					await message.send(message.jid, '*Dependencies changed. Installing new dependencies...*');
+					await message.send('*Dependencies changed. Installing new dependencies...*');
 					exec(`npm install`, async (err, stdout, stderr) => {
 						if (err) {
-							return await message.send(message.jid, '```' + stderr + '```');
+							return await message.send('```' + stderr + '```');
 						}
 						process.exit(0); // Exit process for restart
 					});
@@ -41,7 +41,7 @@ bot(
 			});
 		} else {
 			if (commits.total === 0) {
-				return await message.send(message.jid, '```No changes in the latest commit```');
+				return await message.send('```No changes in the latest commit```');
 			} else {
 				let changes = '_New update available!_\n\n';
 				changes += `*Commits:* \`\`\`${commits.total}\`\`\`\n`;
@@ -51,7 +51,7 @@ bot(
 					changes += `\`\`\`${index + 1}. ${commit.message}\`\`\`\n`;
 				});
 				changes += `\n*To update, use* \`\`\`${prefix}update now\`\`\``;
-				await message.send(message.jid, changes);
+				await message.send(changes);
 			}
 		}
 	}

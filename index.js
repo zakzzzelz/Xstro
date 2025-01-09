@@ -1,45 +1,61 @@
-import { fork } from 'child_process';
-import { resolve } from 'path';
+import http from 'http';
+import { config } from 'dotenv';
+import { DATABASE } from '#database';
+import { client, eventlogger, initSession, loadPlugins } from '#lib';
+import cluster from 'cluster';
+ 
+config();
 
-let app = null;
-let shouldRestart = true;
+if (cluster.isMaster) {
+	let isRestarting = false;
 
-const start = () => {
-	app = fork(resolve('server.js'), [], {
-		stdio: ['inherit', 'inherit', 'inherit', 'ipc'],
-		env: process.env
-	});
+	const createWorker = () => {
+		const worker = cluster.fork();
 
-	app.on('message', msg => {
-		if (msg === 'app.kill') {
-			shouldRestart = false;
-			app.kill('SIGTERM');
-		}
-	});
+		worker.on('message', message => {
+			if (message === 'app.kill') {
+				console.log('Shutting down Xstro...');
+				worker.kill();
+				process.exit(0);
+			} else if (message === 'restart') {
+				console.log('Restarting...');
+				isRestarting = true;
+				worker.kill();
+			}
+		});
 
-	app.on('exit', () => {
-		if (shouldRestart) {
-			start();
-		} else {
+		worker.on('exit', () => {
+			if (!isRestarting) console.log('Restarting...');
+			isRestarting = false;
+			createWorker();
+		});
+	};
+
+	createWorker();
+
+	['SIGINT', 'SIGTERM'].forEach(sig => {
+		process.on(sig, () => {
+			for (const id in cluster.workers) {
+				cluster.workers[id].kill();
+			}
 			process.exit(0);
-		}
+		});
 	});
-};
+} else {
+	const startServer = async () => {
+		console.log('STARTING XSTRO...');
+		await DATABASE.sync();
+		eventlogger();
+		await initSession();
+		await loadPlugins();
+		await client();
 
-process.on('SIGINT', () => {
-	if (app) {
-		shouldRestart = false;
-		app.kill('SIGTERM');
-	}
-	process.exit(0);
-});
+		http
+			.createServer((req, res) => res.end(JSON.stringify({ alive: req.url === '/' })))
+			.listen(process.env.PORT || 8000);
+	};
 
-process.on('SIGTERM', () => {
-	if (app) {
-		shouldRestart = false;
-		app.kill('SIGTERM');
-	}
-	process.exit(0);
-});
+	startServer();
 
-start();
+	process.on('exit', () => process.send('restart'));
+}
