@@ -1,5 +1,6 @@
+import { font } from '#bot';
 import { config } from '#config';
-import { bot, commands, getConfigValues, logo } from '#lib';
+import { bot, commands, getConfigValues } from '#lib';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';
 
@@ -15,7 +16,7 @@ bot(
 		const cmds = commands.filter(
 			cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
 		).length;
-		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
+		let menuInfo = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Owner: ${config.BOT_INFO.split(';')[0]}		
 │ Prefix: ${PREFIX}
 │ Plugins: ${cmds}
@@ -44,29 +45,18 @@ bot(
 
 		const sortedTypes = Object.keys(commandsByType).sort();
 
-		let menuText = ``;
 		let totalCommands = 1;
 
 		sortedTypes.forEach(type => {
 			const sortedCommands = commandsByType[type].sort();
-			menuText += `\`\`\`╭──── ${type.toUpperCase()} ────\`\`\`\n`;
+			menuInfo += font.typewriter(`╭──── ${type.toUpperCase()} ────\n`);
 			sortedCommands.forEach(cmd => {
-				menuText += `│\`\`\`${totalCommands}· ${cmd}\`\`\`\n`;
+				menuInfo += font.typewriter(`│${totalCommands}· ${cmd}\n`);
 				totalCommands++;
 			});
-			menuText += `╰────────────\n`;
+			menuInfo += `╰────────────\n`;
 		});
-		return await message.send(intro + menuText, {
-			contextInfo: {
-				externalAdReply: {
-					title: 'xsᴛʀᴏ ᴍᴅ',
-					body: 'sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ ʙʏ ᴀsᴛʀᴏx𝟷𝟷',
-					thumbnail: logo,
-					showAdAttribution: true,
-					mediaUrl: 'https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6'
-				}
-			}
-		});
+		return await message.send(menuInfo);
 	}
 );
 
@@ -78,7 +68,7 @@ bot(
 		dontAddCommandList: true
 	},
 	async message => {
-		let menu = 'Commnad Help\n\n';
+		let cmdsList = 'Command List\n\n';
 		let cmdList = [];
 		let cmd, desc;
 		commands.map(command => {
@@ -88,10 +78,10 @@ bot(
 		});
 		cmdList.sort((a, b) => a.cmd.localeCompare(b.cmd));
 		cmdList.forEach(({ cmd, desc }, num) => {
-			menu += `${(num += 1)} ${cmd.trim()}\n`;
-			if (desc) menu += `${desc}\n\n`;
+			cmdsList += `${(num += 1)} ${cmd.toUpperCase()}\n`;
+			if (desc) cmdsList += `${desc}\n\n`;
 		});
 
-		return await message.send(`\`\`\`${menu}\`\`\``);
+		return await message.send(`\`\`\`${cmdsList}\`\`\``);
 	}
 );

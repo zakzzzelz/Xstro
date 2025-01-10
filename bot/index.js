@@ -12,3 +12,4 @@ export * from './anticall.js';
 export * from './greetings.js';
 export * from './group_events.js';
 export * from './stickercmd.js';
+export * from './font.js';

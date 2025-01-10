@@ -44,7 +44,7 @@ if (cluster.isMaster) {
 	});
 } else {
 	const startServer = async () => {
-		console.log('STARTING XSTRO...');
+		console.log('Starting...');
 		await DATABASE.sync();
 		eventlogger();
 		initSession(sessionData);
