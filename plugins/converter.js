@@ -3,6 +3,7 @@ import {
 	audioToBlackVideo,
 	convertToMp3,
 	createSticker,
+	cropToCircle,
 	flipMedia,
 	toPTT,
 	toVideo,
@@ -172,5 +173,22 @@ bot(
 			video: media,
 			mimetype: 'video/mp4'
 		});
+	}
+);
+
+bot(
+	{
+		pattern: 'crop',
+		public: true,
+		desc: 'Converts Image or Sticker to Cropped Sticker',
+		type: 'converter'
+	},
+	async message => {
+		let media;
+		if (!message.reply_message.image && !message.reply_message.sticker)
+			return message.send('_Reply Sticker/Image_');
+		media = await message.download();
+		media = await cropToCircle(media);
+		return await message.send(media, { type: 'sticker' });
 	}
 );

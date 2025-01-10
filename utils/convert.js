@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import sharp from 'sharp';
 import ffmpeg from 'fluent-ffmpeg';
 import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
 
@@ -144,12 +145,30 @@ export function toVideo(input) {
 			.audioCodec('aac')
 			.audioBitrate(128)
 			.audioFrequency(44100)
-			.outputOptions([
-				'-crf 32',
-				'-preset slow'
-			])
+			.outputOptions(['-crf 32', '-preset slow'])
 			.on('end', () => resolve(readFileSync(outputVideo)))
 			.on('error', reject)
 			.save(outputVideo);
 	});
 }
+
+export const cropToCircle = async input => {
+	try {
+		const image = sharp(input);
+		const { width, height } = await image.metadata();
+		const circleMask = Buffer.from(
+			`<svg width="${width}" height="${height}">
+		<circle cx="${width / 2}" cy="${height / 2}" r="${Math.min(width, height) / 2}" fill="white"/>
+	  </svg>`
+		);
+
+		const croppedImage = await image
+			.composite([{ input: circleMask, blend: 'dest-in' }])
+			.toFormat('webp', { quality: 50 })
+			.toBuffer();
+		return croppedImage;
+	} catch (error) {
+		console.error('Error cropping image to circle:', error);
+		throw error;
+	}
+};
