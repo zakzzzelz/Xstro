@@ -16,7 +16,21 @@ bot(
 		await git.fetch();
 
 		const commits = await git.log([`master..origin/master`]);
-		if (match === 'now') {
+		if (!match) {
+			if (commits.total === 0) {
+				return await message.send('```No update available```');
+			} else {
+				let changes = '```UPDATE FOUND```\n\n';
+				changes += `*Changes:* \`\`\`${commits.total}\`\`\`\n`;
+				changes += '*Updates:*\n';
+				commits.all.forEach((commit, index) => {
+					changes += `\`\`\`${index + 1}. ${commit.message}\`\`\`\n`;
+				});
+				changes += `\n*To update, use* \`\`\`${prefix}update now\`\`\``;
+				await message.send(changes);
+			}
+		}
+		if (match && match === 'now') {
 			if (commits.total === 0) {
 				return await message.send('```No changes in the latest commit```');
 			}
@@ -33,26 +47,12 @@ bot(
 						if (err) {
 							return await message.send('```' + stderr + '```');
 						}
-						process.exit(0); // Exit process for restart
+						process.exit(0);
 					});
 				} else {
-					process.exit(0); // Exit process for restart
+					process.exit(0);
 				}
 			});
-		} else {
-			if (commits.total === 0) {
-				return await message.send('```No changes in the latest commit```');
-			} else {
-				let changes = '_New update available!_\n\n';
-				changes += `*Commits:* \`\`\`${commits.total}\`\`\`\n`;
-				changes += `*Branch:* \`\`\`master\`\`\`\n`;
-				changes += '*Changes:*\n';
-				commits.all.forEach((commit, index) => {
-					changes += `\`\`\`${index + 1}. ${commit.message}\`\`\`\n`;
-				});
-				changes += `\n*To update, use* \`\`\`${prefix}update now\`\`\``;
-				await message.send(changes);
-			}
 		}
 	}
 );
