@@ -10,7 +10,7 @@ const config = {
 	WARN_COUNT: process.env.WARN_COUNT || 3,
 	TIME_ZONE: process.env.TIME_ZONE || 'Africa/Lagos',
 	DEBUG: process.env.DEBUG || false,
-	VERSION: '1.2.1'
+	VERSION: '1.2.2'
 };
 
 const getSessionId = async () =>
