@@ -114,7 +114,7 @@ async function writeExifVid(media, metadata = {}) {
 export const createSticker = async buffer => {
 	const mime = await getMimeType(buffer);
 	let res;
-	const options = { packname: config.STICKER_PACK.split(';')[1] || 'χѕтяσ м∂', author: config.STICKER_PACK.split(';')[0] || 'αѕтяσχ11' };
+	const options = { packname: config.STICKER_PACK.split(';')[0] || 'χѕтяσ м∂', author: config.STICKER_PACK.split(';')[1] || 'αѕтяσχ11' };
 	if (mime.startsWith('image/')) {
 		res = await writeExifImg(buffer, options);
 	} else if (mime.startsWith('video/')) {

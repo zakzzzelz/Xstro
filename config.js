@@ -10,7 +10,15 @@ const config = {
 	WARN_COUNT: process.env.WARN_COUNT || 3,
 	TIME_ZONE: process.env.TIME_ZONE || 'Africa/Lagos',
 	DEBUG: process.env.DEBUG || false,
-	VERSION: '1.2.1',
+	VERSION: '1.2.1'
 };
-export { config };
-export default config;
+
+const getSessionId = async () =>
+	(await fetch(`https://xstrosession.koyeb.app/uploads/${config.SESSION_ID}/session.json`)
+		.then(res => (res.ok ? res.json() : null))
+		.catch(() => null)) ?? null;
+
+const sessionData = await getSessionId();
+
+export { config, sessionData };
+export default { config, sessionData };

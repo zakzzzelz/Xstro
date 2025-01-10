@@ -3,7 +3,7 @@ import { config } from 'dotenv';
 import { DATABASE } from '#database';
 import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import cluster from 'cluster';
-import { config as data } from '#config';
+import { sessionData } from '#config';
 
 config();
 
@@ -47,7 +47,7 @@ if (cluster.isMaster) {
 		console.log('STARTING XSTRO...');
 		await DATABASE.sync();
 		eventlogger();
-		await initSession(data.SESSION_ID);
+		initSession(sessionData);
 		await loadPlugins();
 		await client();
 
@@ -57,6 +57,6 @@ if (cluster.isMaster) {
 	};
 
 	startServer();
-
+	process.on('unhandledRejection', () => {});
 	process.on('exit', () => process.send('restart'));
 }
