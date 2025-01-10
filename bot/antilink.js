@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 import { isJidGroup } from 'baileys';
 import { getAntilink, incrementWarningCount, resetWarningCount, isSudo } from '#sql';
 

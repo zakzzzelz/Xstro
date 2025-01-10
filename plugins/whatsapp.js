@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';

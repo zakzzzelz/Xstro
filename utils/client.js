@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 
 class ApiError extends Error {
 	constructor(message, status, data) {

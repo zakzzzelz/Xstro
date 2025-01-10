@@ -1,5 +1,5 @@
 import { DataTypes } from 'sequelize';
-import config from '#config';
+import { config } from '#config';
 import { runtime } from '#utils';
 import { DATABASE } from '#lib';
 

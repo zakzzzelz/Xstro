@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 import { getBuffer, getJson } from 'xstro-utils';
 
 const { API_ID } = config;

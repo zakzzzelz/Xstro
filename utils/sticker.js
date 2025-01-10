@@ -6,7 +6,7 @@ import Crypto from 'crypto';
 import webp from 'node-webpmux';
 import { tmpdir } from 'os';
 import { getMimeType } from 'xstro-utils';
-import config from '#config';
+import { config } from '#config';
 
 ffmpeg.setFfmpegPath(ffmpegInstaller.path);
 

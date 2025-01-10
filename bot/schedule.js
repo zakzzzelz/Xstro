@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 import { schedule } from '#sql';
 
 const getCurrentTime = () => {

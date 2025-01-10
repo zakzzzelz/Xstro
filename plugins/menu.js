@@ -1,4 +1,4 @@
-import config from '#config';
+import { config } from '#config';
 import { bot, commands, getConfigValues, logo } from '#lib';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';
@@ -8,11 +8,13 @@ bot(
 		pattern: 'menu',
 		public: true,
 		desc: 'Show All Commands',
-		dontAddCommandList: true,
+		dontAddCommandList: true
 	},
 	async message => {
 		const { mode, PREFIX } = await getConfigValues();
-		const cmds = commands.filter(cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')).length;
+		const cmds = commands.filter(
+			cmd => cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
+		).length;
 		let intro = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Owner: ${config.BOT_INFO.split(';')[0]}		
 │ Prefix: ${PREFIX}
@@ -24,7 +26,7 @@ bot(
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}
 │ Date: ${new Date().toLocaleTimeString('en-US', {
-			timeZone: config.TIME_ZONE,
+			timeZone: config.TIME_ZONE
 		})}
 │ Version: ${config.VERSION}
 ╰─────────────\`\`\`\n`;
@@ -54,8 +56,18 @@ bot(
 			});
 			menuText += `╰────────────\n`;
 		});
-		return await message.send(intro + menuText, { contextInfo: { externalAdReply: { title: 'xsᴛʀᴏ ᴍᴅ', body: 'sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ ʙʏ ᴀsᴛʀᴏx𝟷𝟷', thumbnail: logo, showAdAttribution: true, mediaUrl: 'https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6' } } });
-	},
+		return await message.send(intro + menuText, {
+			contextInfo: {
+				externalAdReply: {
+					title: 'xsᴛʀᴏ ᴍᴅ',
+					body: 'sɪᴍᴘʟᴇ ᴡʜᴀᴛsᴀᴘᴘ ʙᴏᴛ ʙʏ ᴀsᴛʀᴏx𝟷𝟷',
+					thumbnail: logo,
+					showAdAttribution: true,
+					mediaUrl: 'https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6'
+				}
+			}
+		});
+	}
 );
 
 bot(
@@ -63,7 +75,7 @@ bot(
 		pattern: 'list',
 		public: true,
 		desc: 'Show All Commands',
-		dontAddCommandList: true,
+		dontAddCommandList: true
 	},
 	async message => {
 		let menu = 'Commnad Help\n\n';
@@ -81,5 +93,5 @@ bot(
 		});
 
 		return await message.send(`\`\`\`${menu}\`\`\``);
-	},
+	}
 );

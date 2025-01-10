@@ -1,6 +1,6 @@
 import { bot } from '#lib';
 import { addWarn, getWarn, resetWarn } from '#sql';
-import config from '#config';
+import { config } from '#config';
 
 const { WARN_COUNT } = config;
 

@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import config from '#config';
+import { config } from '#config';
 import { aliveMessage, setAliveMsg } from '#sql';
 
 bot(

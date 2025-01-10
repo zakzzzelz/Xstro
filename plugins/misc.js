@@ -1,6 +1,6 @@
 import { extractUrlFromString, getJson } from 'xstro-utils';
 import { bot, getUsers } from '#lib';
-import config from '#config';
+import { config } from '#config';
 import { XSTRO } from '#utils';
 
 bot(
