@@ -197,18 +197,35 @@ bot(
 		desc: "Turn off the bot's ability to send messages in group chats",
 		type: 'settings'
 	},
-	async (message, match) => {
-		const newValue = match === 'on' ? true : match === 'off' ? false : null;
-		if (newValue === null) return await message.send('_Please use "on" or "off"_');
+	async message => {
 		const dbConfig = await getConfig();
-		if (dbConfig.disablegc === newValue)
-			return await message.send(`_Group messaging is already set to ${newValue ? 'on' : 'off'}._`);
+		if (dbConfig.disablegc === true) {
+			return await message.send('_Group messaging is already disabled._');
+		}
 
-		await updateConfig('disablegc', newValue);
+		await updateConfig('disablegc', true);
 		return await message.send(
-			`\`\`\`Group messaging is now ${
-				newValue ? 'enabled' : 'disabled'
-			}.\nThe bot will no longer function in group chats.\`\`\``
+			`\`\`\`Group messaging is now disabled.\nThe bot will no longer function in group chats.\`\`\``
+		);
+	}
+);
+
+bot(
+	{
+		pattern: 'enablegc',
+		public: false,
+		desc: "Turn on the bot's ability to send messages in group chats",
+		type: 'settings'
+	},
+	async message => {
+		const dbConfig = await getConfig();
+		if (dbConfig.disablegc === false) {
+			return await message.send('_Group messaging is already enabled._');
+		}
+
+		await updateConfig('disablegc', false);
+		return await message.send(
+			`\`\`\`Group messaging is now enabled.\nThe bot will now function in group chats.\`\`\``
 		);
 	}
 );
@@ -220,18 +237,33 @@ bot(
 		desc: "Turn off the bot's ability to send messages in direct/private chats (except yours)",
 		type: 'settings'
 	},
-	async (message, match) => {
-		const newValue = match === 'on' ? true : match === 'off' ? false : null;
-		if (newValue === null) return await message.send('_Please use "on" or "off"_');
+	async message => {
 		const dbConfig = await getConfig();
-		if (dbConfig.disabledm === newValue)
-			return await message.send(`_Direct messaging is already set to ${newValue ? 'on' : 'off'}._`);
-
-		await updateConfig('disabledm', newValue);
+		if (dbConfig.disabledm === true) {
+			return await message.send('_Direct messaging is already disabled._');
+		}
+		await updateConfig('disabledm', true);
 		return await message.send(
-			`\`\`\`Direct messaging is now ${
-				newValue ? 'enabled' : 'disabled'
-			}.\nThe bot will no longer function in personal chats, except yours.\`\`\``
+			`\`\`\`Direct messaging is now disabled.\nThe bot will no longer function in personal chats, except yours.\`\`\``
+		);
+	}
+);
+
+bot(
+	{
+		pattern: 'enabledm',
+		public: false,
+		desc: "Turn on the bot's ability to send messages in direct/private chats",
+		type: 'settings'
+	},
+	async message => {
+		const dbConfig = await getConfig();
+		if (dbConfig.disabledm === false) {
+			return await message.send('_Direct messaging is already enabled._');
+		}
+		await updateConfig('disabledm', false);
+		return await message.send(
+			`\`\`\`Direct messaging is now enabled.\nThe bot will function in personal chats.\`\`\``
 		);
 	}
 );
