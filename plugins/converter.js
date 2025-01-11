@@ -40,9 +40,6 @@ bot(
 	async message => {
 		let media;
 		if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
-		if (!message.data.quoted.message.stickerMessage.isAnimated)
-			return message.send('_Reply a static Sticker_');
-		media = await message.download();
 		media = await message.download();
 		media = await createSticker(media);
 		return message.send(media, { type: 'sticker' });
