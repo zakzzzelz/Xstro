@@ -156,7 +156,7 @@ bot(
 	},
 	async message => {
 		await message.clearChat();
-		await delay(2000)
+		await delay(2000);
 		await message.send('_Cleared_');
 	}
 );
