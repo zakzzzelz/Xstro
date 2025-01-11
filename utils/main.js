@@ -234,3 +234,11 @@ export const isPrefix = async userInput => {
 	);
 	return !prefix || prefixRegex.test(userInput);
 };
+
+export const extractUrl = str => {
+	const match = str.match(/https?:\/\/[^\s]+/);
+	return match ? match[0] : false;
+};
+
+export const isfacebook = url => /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+/.test(url);
+export const isInsta = (url) => /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+/.test(url);
