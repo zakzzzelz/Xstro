@@ -122,11 +122,6 @@ export function cleanString(inputText) {
 	return cleanedText;
 }
 
-export function isUrl(string) {
-	const urlRegex = /^(https?:\/\/)?([a-zA-Z0-9.-]+)(\.[a-zA-Z]{2,})(\/\S*)?$/;
-	return urlRegex.test(string);
-}
-
 export async function ModifyViewOnceMessage(messageId) {
 	try {
 		const msg = await loadMessage(messageId);
@@ -188,7 +183,6 @@ export async function convertNormalMessageToViewOnce(message = {}) {
 }
 
 export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJidParam = []) {
-	console.log(JSON.parse(JSON.stringify(message, null, 2)));
 	const typeOfMessage = getContentType(message);
 	const objectAction = message?.[typeOfMessage];
 
@@ -197,16 +191,21 @@ export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJ
 			[typeOfMessage]: {
 				...objectAction,
 				contextInfo: {
-					...message.contextInfo,
-					mentionedJid: message.contextInfo?.mentionedJid || mentionedJidParam
+					...objectAction.contextInfo,
+					mentionedJid: objectAction.contextInfo?.mentionedJid || mentionedJidParam
 				}
 			}
 		};
+		if (typeOfMessage === 'conversation' && typeof objectAction === 'string') {
+			newMessage[typeOfMessage] = objectAction;  // Restore it to a string format
+		}
+
 		return newMessage;
 	}
 
 	return message;
 }
+
 
 export async function getFileAndSave(url) {
 	let attempts = 0;
@@ -241,4 +240,25 @@ export const extractUrl = str => {
 };
 
 export const isfacebook = url => /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+/.test(url);
-export const isInsta = (url) => /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+/.test(url);
+export const isInsta = url => /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+/.test(url);
+export const isReddit = url => /^https?:\/\/(www\.)?reddit\.com\/[^\s]*$/.test(url);
+export const isTikTok = url => /^https?:\/\/(www\.)?tiktok\.com\/[^\s]*$/.test(url);
+export const isRumble = url => /^https?:\/\/(www\.)?rumble\.com\/[^\s]*$/.test(url);
+export function toTwitter(url) {
+	if (typeof url !== 'string') return null;
+	const regex = /^https?:\/\/x\.com\/(.+)/;
+	const match = url.match(regex);
+	if (match && match[1]) return `https://twitter.com/${match[1]}`;
+
+	return false;
+}
+export function isUrl(string) {
+	if (typeof string !== 'string') return false;
+
+	try {
+		const url = new URL(string);
+		return url.protocol === 'http:' || url.protocol === 'https:';
+	} catch (error) {
+		return false; // Invalid URL
+	}
+}

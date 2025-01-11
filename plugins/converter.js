@@ -160,7 +160,7 @@ bot(
 
 bot(
 	{
-		pattern: 'video',
+		pattern: 'mp4',
 		public: true,
 		desc: 'Converts Video to playable WhatsApp Video',
 		type: 'converter'
