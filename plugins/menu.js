@@ -39,7 +39,7 @@ bot(
 				if (!acc[type]) {
 					acc[type] = [];
 				}
-				acc[type].push(cmd.pattern.toString().toUpperCase().split(/\W+/)[2]);
+				acc[type].push(cmd.pattern.toString().toUpperCase().split(/\W+/)[1]);
 				return acc;
 			}, {});
 
@@ -72,7 +72,7 @@ bot(
 		let cmdList = [];
 		let cmd, desc;
 		commands.map(command => {
-			if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[2];
+			if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[1];
 			desc = command.desc || false;
 			if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
 		});
