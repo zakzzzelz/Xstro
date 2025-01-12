@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { remini, uploadFile, upload, XSTRO, removeBg, UploadFileUgu } from '#utils';
+import { remini, uploadFile, upload, XSTRO, removeBg, UploadFileUgu, createSticker } from '#utils';
 import { getBuffer } from 'xstro-utils';
 
 bot(
@@ -109,8 +109,7 @@ bot(
 		const stickers = await XSTRO.searchSticker(match);
 		for (const sticker of stickers) {
 			const buffer = await getBuffer(sticker);
-			const url = await upload(buffer);
-			const stickerUrl = await XSTRO.makeSticker(url.rawUrl);
+			const stickerUrl = await createSticker(buffer);
 			await message.send(stickerUrl, { type: 'sticker' });
 		}
 	},
