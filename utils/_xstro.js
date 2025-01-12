@@ -158,12 +158,16 @@ const XSTRO = {
 		return res;
 	},
 	airquality: async (country, city) => {
-		const res = await getJson(
-			`${API_ID}/api/airquality?country=${encodeURIComponent(country)}&city=${encodeURIComponent(
-				city
-			)}`
-		);
-		return res;
+		try {
+			const res = await getJson(
+				`${API_ID}/api/airquality?country=${encodeURIComponent(country)}&city=${encodeURIComponent(
+					city
+				)}`
+			);
+			return res;
+		} catch {
+			return false;
+		}
 	},
 	forex: async symbol => {
 		try {
@@ -176,6 +180,9 @@ const XSTRO = {
 	},
 	wabeta: async () => {
 		return await getJson(`${API_ID}/api/wabeta`);
+	},
+	voxnews: async () => {
+		return await getJson(`${API_ID}/api/voxnews`);
 	}
 };
 

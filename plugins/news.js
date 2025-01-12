@@ -94,3 +94,20 @@ bot(
 		return message.send(news);
 	}
 );
+
+bot(
+	{
+		pattern: 'voxnews',
+		public: true,
+		desc: 'VoxNews',
+		type: 'news'
+	},
+	async message => {
+		const res = await XSTRO.voxnews();
+		if (!res) return message.send('_No News_');
+		const data = res.map(
+			article => `Title: ${article.title}\nURL: ${article.url}\nAuthor: ${article.author}`
+		);
+		return await message.send(data.join('\n'));
+	}
+);
