@@ -142,7 +142,7 @@ bot(
 	},
 	async (message, match, { prefix }) => {
 		const newValue = match;
-		if (!newValue) return await message.send(`${prefix}setprefix ,`);
+		if (!newValue) return await message.send(`Use ${prefix}setprefix ,\n\nTo set a new prefix for the bot!`);
 		await updateConfig('PREFIX', newValue);
 		return await message.send(`_Prefix set to "${newValue}"_`);
 	}

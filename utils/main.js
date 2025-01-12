@@ -197,7 +197,7 @@ export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJ
 			}
 		};
 		if (typeOfMessage === 'conversation' && typeof objectAction === 'string') {
-			newMessage[typeOfMessage] = objectAction;  // Restore it to a string format
+			newMessage[typeOfMessage] = objectAction; // Restore it to a string format
 		}
 
 		return newMessage;
@@ -205,7 +205,6 @@ export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJ
 
 	return message;
 }
-
 
 export async function getFileAndSave(url) {
 	let attempts = 0;
@@ -222,18 +221,6 @@ export async function getFileAndSave(url) {
 	}
 }
 
-export const isPrefix = async userInput => {
-	const configValues = await getConfigValues();
-	const prefix = configValues.PREFIX || ',./^!#&$%';
-	const prefixRegex = new RegExp(
-		`^(${prefix
-			.split('')
-			.map(char => `\\${char}`)
-			.join('|')})$`
-	);
-	return !prefix || prefixRegex.test(userInput);
-};
-
 export const extractUrl = str => {
 	const match = str.match(/https?:\/\/[^\s]+/);
 	return match ? match[0] : false;
@@ -242,7 +229,7 @@ export const extractUrl = str => {
 export const isfacebook = url => /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+/.test(url);
 export const isInsta = url => /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+/.test(url);
 export const isReddit = url => /^https?:\/\/(www\.)?reddit\.com\/[^\s]*$/.test(url);
-export const isTikTok = (url) => /^https?:\/\/([a-z]+\.)?tiktok\.com\/[^\s]*$/.test(url);
+export const isTikTok = url => /^https?:\/\/([a-z]+\.)?tiktok\.com\/[^\s]*$/.test(url);
 export const isRumble = url => /^https?:\/\/(www\.)?rumble\.com\/[^\s]*$/.test(url);
 export function toTwitter(url) {
 	if (typeof url !== 'string') return null;
