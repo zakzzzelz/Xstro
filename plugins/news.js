@@ -106,7 +106,8 @@ bot(
 		const res = await XSTRO.voxnews();
 		if (!res) return message.send('_No News_');
 		const data = res.map(
-			article => `Title: ${article.title}\nURL: ${article.url}\nAuthor: ${article.author}`
+			article =>
+				`*Title:* ${article.title}\n*Author:* ${article.author}\n*Url:* ${article.url}\n\n`
 		);
 		return await message.send(data.join('\n'));
 	}
