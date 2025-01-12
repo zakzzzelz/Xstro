@@ -84,7 +84,7 @@ export const profile = async (name, fn, logger) => {
 };
 
 const proxyFilePath = join('./utils/proxy.txt');
-export const getRandomProxy = async () => {
+export const proxy = async () => {
 	try {
 		const data = await fs.readFile(proxyFilePath, 'utf8');
 		const proxies = data.split('\n').filter(line => line.trim() !== '');
