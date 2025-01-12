@@ -92,8 +92,7 @@ bot(
 	async (message, match, { prefix }) => {
 		if (!match) return message.send(`_Usage: ${prefix}ttp Astro_`);
 		const buff = await XSTRO.ttp(match);
-		const { rawUrl } = await upload(buff);
-		const sticker = await XSTRO.makeSticker(rawUrl);
+		const sticker = await createSticker(buff);
 		return await message.send(sticker, { type: 'sticker' });
 	}
 );
