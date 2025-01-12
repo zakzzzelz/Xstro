@@ -242,7 +242,7 @@ export const extractUrl = str => {
 export const isfacebook = url => /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+/.test(url);
 export const isInsta = url => /^(https?:\/\/)?(www\.)?instagram\.com\/[A-Za-z0-9._-]+/.test(url);
 export const isReddit = url => /^https?:\/\/(www\.)?reddit\.com\/[^\s]*$/.test(url);
-export const isTikTok = url => /^https?:\/\/(www\.)?tiktok\.com\/[^\s]*$/.test(url);
+export const isTikTok = (url) => /^https?:\/\/([a-z]+\.)?tiktok\.com\/[^\s]*$/.test(url);
 export const isRumble = url => /^https?:\/\/(www\.)?rumble\.com\/[^\s]*$/.test(url);
 export function toTwitter(url) {
 	if (typeof url !== 'string') return null;

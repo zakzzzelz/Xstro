@@ -138,7 +138,7 @@ bot(
 		url = match || message.reply_message.text;
 		if (!url) return message.send('_No Tiktok link found!_');
 		url = extractUrl(url);
-		if (!isTikTok(url)) return message.send('_Provide Reddit link!_');
+		if (!isTikTok(url)) return message.send('_Provide Tiktok link!_');
 		const media = await XSTRO.tiktok(url);
 		return await message.sendFromUrl(media.url, { caption: media.title });
 	}
