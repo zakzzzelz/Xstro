@@ -8,6 +8,7 @@ bot(
 	},
 	async message => {
 		const settings = await message.client.fetchPrivacySettings(true);
+		const name = await message.client.getName(message.user);
 
 		const mapPrivacyValue = (value, type) => {
 			const mappings = {
@@ -36,9 +37,7 @@ bot(
 			.map(([key, value]) => `${key}: ${value}`)
 			.join('\n');
 
-		return await message.send(
-			`\`\`\`${message.pushName} WhatsApp Privacy Settings\n\n${privacyText}\`\`\``
-		);
+		return await message.send(`\`\`\`${name} WhatsApp Privacy Settings\n\n${privacyText}\`\`\``);
 	}
 );
 
@@ -186,7 +185,9 @@ bot(
 		};
 		const input = match.trim().toLowerCase();
 		if (!durations[input]) {
-			return await message.send('_To use disappering message, "24hrs", "7days", or "90days" to set the time_');
+			return await message.send(
+				'_To use disappering message, "24hrs", "7days", or "90days" to set the time_'
+			);
 		}
 		const durationInSeconds = durations[input];
 		await message.client.updateDefaultDisappearingMode(durationInSeconds);

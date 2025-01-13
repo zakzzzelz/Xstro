@@ -1,8 +1,6 @@
 import { config } from '#config';
-import { getName, loadMessage } from '#sql';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
-import { getBuffer } from 'xstro-utils';
 import { delay, isJidGroup } from 'baileys';
 
 bot(
@@ -183,7 +181,7 @@ bot(
 	},
 	async message => {
 		await message.client.chatModify({ pin: true }, message.jid);
-		return message.send('_Pined.._');
+		return message.send('_Pined_');
 	}
 );
 
@@ -196,7 +194,7 @@ bot(
 	},
 	async message => {
 		await message.client.chatModify({ pin: false }, message.jid);
-		return message.send('_Unpined.._');
+		return message.send('_Unpined_');
 	}
 );
 
@@ -209,8 +207,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message) return message.send('_Reply A Status_');
-		const msg = await message.data?.quoted;
-		await message.forward(message.user, msg, {
+		await message.forward(message.user, message.data?.quoted, {
 			force: false,
 			quoted: msg
 		});
@@ -318,8 +315,7 @@ bot(
 		desc: 'React to A Message'
 	},
 	async (message, match) => {
-		if (!message.reply_message) return message.send('```Reply A Message```');
-		if (message.reply_message?.fromMe) return message.send('```Cannot React to yourself Bro```');
+		if (!message.reply_message) return message.send('_Reply Message_');
 		if (!match) return message.send('```react 😊```');
 		return message.client.sendMessage(message.jid, {
 			react: { text: match, key: message.reply_message.key }
@@ -335,12 +331,10 @@ bot(
 		desc: 'Stars or Unstars a Message'
 	},
 	async message => {
-		const replyMessage = message.reply_message;
-		if (!replyMessage) return message.send('_Reply to a message to star it_');
-		const jid = message.jid;
-		const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
+		if (!message.reply_message) return message.send('_Reply to a message to star it_');
+		const messages = [{ id: message.reply_message.id, fromMe: message.reply_message.fromMe }];
 		const star = true;
-		await message.client.star(jid, messages, star);
+		return await message.client.star(message.jid, messages, star);
 	}
 );
 
@@ -369,8 +363,7 @@ bot(
 		desc: 'Get Bot Owner'
 	},
 	async message => {
-		const name = await getName(message.user);
-		const img = await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4');
+		const name = await message.client.getName(message.user);
 		const vcard = `
 BEGIN:VCARD
 VERSION:3.0
@@ -384,18 +377,6 @@ END:VCARD
 			contacts: {
 				displayName: name,
 				contacts: [{ vcard }]
-			},
-			contextInfo: {
-				forwardingScore: 999,
-				isForwarded: true,
-				externalAdReply: {
-					title: config.BOT_INFO.split(';')[0],
-					body: config.BOT_INFO.split(';')[1],
-					mediaType: 1,
-					thumbnail: img,
-					sourceUrl: 'https://github.com/AstroX11/Xstro',
-					renderLargerThumbnail: true
-				}
 			}
 		});
 	}
@@ -434,11 +415,17 @@ bot(
 	}
 );
 
-// bot(
-// 	{
-// 		pattern: 'ptv',
-// 		public: true,
-// 		desc: 'Convert video to pvt video note',
-// 		type: ''
-// 	}
-// )
+bot(
+	{
+		pattern: 'ptv',
+		public: true,
+		desc: 'Convert video to pvt video note',
+		type: 'whatsapp'
+	},
+	async message => {
+		let media;
+		if (!message.reply_message.video) return message.send('_Reply A Video_');
+		media = await message.download();
+		return await message.send(media, { ptv: true });
+	}
+);
