@@ -131,6 +131,7 @@ bot(
 	async (message, match) => {
 		if (!(await message.isUserAdmin())) return;
 		const desciption = match || message.reply_message?.text;
+		if (!desciption) return message.send('_please add a new group description_')
 		await message.client.groupUpdateDescription(message.jid, desciption);
 		return message.send('_Group Description Updated_');
 	}
