@@ -1,14 +1,15 @@
 import { extractUrlFromString, getJson } from 'xstro-utils';
-import { bot, getUsers } from '#lib';
+import { bot, devs, getUsers } from '#lib';
 import { config } from '#config';
 import { XSTRO } from '#utils';
+import { evaluate } from 'mathjs';
 
 bot(
 	{
 		pattern: 'pair',
 		public: true,
 		desc: 'Get Your Pairing Code Now',
-		type: 'help',
+		type: 'help'
 	},
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
@@ -18,30 +19,34 @@ bot(
 		const res = await getJson(`https://xstrosession-yc43.onrender.com/pair?phone=${id}`);
 		if (!res.code) return message.send('*unable to get a pairing code, try again!*');
 		return await msg.edit('```Pairing CODE:\n' + res.code + '```');
-	},
+	}
 );
 
 bot(
 	{
 		pattern: 'support',
 		public: true,
-		desc: 'Sends developer support information ',
-		type: 'help',
+		desc: 'Sends developer support information',
+		type: 'help'
 	},
 	async message => {
-		const supportMessage = `╭─── *🔰 DEVS SUPPORT 🔰* ────╮  
-│  
-│ *📱 WhatsApp Channel:* https://whatsapp.com/channel/0029VaDK8ZUDjiOhwFS1cP2j \n
-│ *💬 Testing Group:*   https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6\n
-│ *🐙 GitHub Repository:* https://github.com/AstroX11/Xstro.git \n
-│ *✉️ Support Email:* support@xstrobot  \n
-│  
-│ *⚠️ Note:* Please contact us for any issues. We respond within 24 hours.  
-│  
-╰───────────────────────────╯  
-`;
-		await message.send(supportMessage);
-	},
+		const contacts = devs.map(dev => {
+			return {
+				vcard: `BEGIN:VCARD
+VERSION:3.0
+FN:Developer ${dev}
+ORG:${config.BOT_INFO.split(';')[0]}
+TEL;type=CELL;type=VOICE;waid=${dev}:${dev}
+END:VCARD`
+			};
+		});
+		return await message.client.sendMessage(message.jid, {
+			contacts: {
+				displayName: 'Developer Support',
+				contacts: contacts
+			}
+		});
+	}
 );
 
 bot(
@@ -49,11 +54,11 @@ bot(
 		pattern: 'users',
 		public: true,
 		desc: 'Get Total Users',
-		type: 'help',
+		type: 'help'
 	},
 	async message => {
 		return await message.send(`\`\`\`Xstro Current Users:\n ${(await getUsers()).users}\`\`\``);
-	},
+	}
 );
 
 bot(
@@ -61,14 +66,14 @@ bot(
 		pattern: 'readmore',
 		public: true,
 		desc: 'Adds *readmore* in given text.',
-		type: 'tools',
+		type: 'tools'
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Give me text!*');
 		const [text1, text2] = match.split(';');
 		if (!text2) return await message.send('*Format: text1;text2*');
 		return await message.send(text1 + String.fromCharCode(8206).repeat(4001) + `\n${text2}`);
-	},
+	}
 );
 
 bot(
@@ -76,7 +81,7 @@ bot(
 		pattern: 'fliptext',
 		public: true,
 		desc: 'Flips given text upside down',
-		type: 'misc',
+		type: 'misc'
 	},
 	async (message, match) => {
 		if (!match) return await message.send('*Give me text to flip!*');
@@ -110,14 +115,14 @@ bot(
 						w: 'ʍ',
 						x: 'x',
 						y: 'ʎ',
-						z: 'z',
+						z: 'z'
 					}[char.toLowerCase()] || char;
 				return flipped;
 			})
 			.reverse()
 			.join('');
 		return await message.send(flip);
-	},
+	}
 );
 
 bot(
@@ -125,10 +130,11 @@ bot(
 		pattern: 'mp4url',
 		public: true,
 		desc: 'Get direct mp4 url from video message',
-		type: 'misc',
+		type: 'misc'
 	},
 	async (message, match) => {
-		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match)) return message.send('*Please provide a valid URL*');
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
+			return message.send('*Please provide a valid URL*');
 		const img = await message.getProfileImage(message.sender);
 		const url = extractUrlFromString(match);
 		return await message.client.sendMessage(message.jid, {
@@ -140,25 +146,34 @@ bot(
 					body: message.pushName,
 					thumbnail: img || null,
 					mediaType: 2,
-					mediaUrl: null,
-				},
-			},
+					mediaUrl: null
+				}
+			}
 		});
-	},
+	}
 );
 
 bot(
 	{
 		pattern: 'math',
 		public: true,
-		desc: 'Solve A Maths Expression',
-		type: 'misc',
+		desc: 'Solve a Maths Expression',
+		type: 'misc'
 	},
 	async (message, match) => {
-		const msg = await message.send('*Calcuating*');
-		const res = await XSTRO.maths(match);
-		return await msg.edit(res);
-	},
+		if (!match) {
+			return await message.send(
+				'Please provide a mathematical expression to solve. Example: `.math 2 + 2`'
+			);
+		}
+		const msg = await message.send('*Calculating...*');
+		try {
+			const result = evaluate(match);
+			return await msg.edit(`Result: ${result}`);
+		} catch {
+			return await msg.edit(`_Invaild Math Operation_`);
+		}
+	}
 );
 
 bot(
@@ -166,14 +181,15 @@ bot(
 		pattern: 'link',
 		public: true,
 		desc: 'Shortens a url',
-		type: 'tools',
+		type: 'tools'
 	},
 	async (message, match) => {
-		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match)) return message.send('*Please provide a valid URL*');
+		if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
+			return message.send('*Please provide a valid URL*');
 		const msg = await message.send('*Shortening URL...*');
 		const url = extractUrlFromString(match);
 		const res = await XSTRO.short(url);
 		if (!res) return await msg.edit('*Failed to shorten URL*');
 		return await msg.edit(`*Shortened URL:* ${res}`);
-	},
+	}
 );
