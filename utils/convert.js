@@ -3,7 +3,10 @@ import path from 'path';
 import os from 'os';
 import sharp from 'sharp';
 import ffmpeg from 'fluent-ffmpeg';
+import axios from 'axios';
+import FormData from 'form-data';
 import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
+import { config } from '#config';
 
 const { writeFileSync, existsSync, readFileSync, mkdirSync } = fs;
 ffmpeg.setFfmpegPath(ffmpegPath);
@@ -185,3 +188,46 @@ export async function resizeImage(imageBuffer, width, height) {
 		})
 		.toBuffer();
 }
+
+export const isAnimatedWebp = filePath => {
+	return new Promise((resolve, reject) => {
+		sharp(filePath)
+			.metadata()
+			.then(metadata => {
+				resolve(metadata.pages > 1); // If pages > 1, it's animated
+			})
+			.catch(error => {
+				reject(error);
+			});
+	});
+};
+
+export const convertWebPFile = async input => {
+	try {
+		const form = new FormData();
+		if (Buffer.isBuffer(input)) {
+			form.append('file', input, {
+				filename: `${Date.now()}.webp`,
+				contentType: 'image/webp'
+			});
+		} else {
+			form.append('file', readFileSync(input), {
+				filename: path.basename(input),
+				contentType: 'image/webp'
+			});
+		}
+
+		const { data } = await axios.post(`${config.API_ID}/api/webpmp4`, form, {
+			headers: {
+				...form.getHeaders()
+			},
+			maxBodyLength: Infinity,
+			maxContentLength: Infinity
+		});
+
+		return data.url;
+	} catch (error) {
+		console.error('Error converting file:', error.message);
+		throw error;
+	}
+};

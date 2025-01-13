@@ -25,16 +25,16 @@ export const remini = async (image, filterType) => {
 	const imageBuffer = Buffer.isBuffer(image) ? image : readFileSync(image);
 	form.append('image', imageBuffer, {
 		filename: 'enhance_image_body.jpg',
-		contentType: 'image/jpeg',
+		contentType: 'image/jpeg'
 	});
 	const response = await axios.post(apiUrl, form, {
 		headers: {
 			...form.getHeaders(),
 			'User-Agent': 'okhttp/4.9.3',
 			Connection: 'Keep-Alive',
-			'Accept-Encoding': 'gzip',
+			'Accept-Encoding': 'gzip'
 		},
-		responseType: 'arraybuffer',
+		responseType: 'arraybuffer'
 	});
 	return Buffer.from(response.data);
 };
@@ -56,12 +56,12 @@ export const uploadFile = async mediaBuffer => {
 	const form = new FormData();
 	form.append('fileToUpload', createReadStream(tempPath), {
 		filename,
-		contentType: fileType,
+		contentType: fileType
 	});
 	form.append('reqtype', 'fileupload');
 
 	const response = await axios.post('https://catbox.moe/user/api.php', form, {
-		headers: form.getHeaders(),
+		headers: form.getHeaders()
 	});
 	const url = response.data.trim();
 	unlinkSync(tempPath);
@@ -86,38 +86,12 @@ export async function removeBg(buffer) {
 		responseType: 'arraybuffer',
 		headers: {
 			...formData.getHeaders(),
-			'X-Api-Key': 'FjyTadatkyWixWGWUCUDTF7J',
+			'X-Api-Key': 'FjyTadatkyWixWGWUCUDTF7J'
 		},
-		encoding: null,
+		encoding: null
 	});
 	unlinkSync(inputPath);
 	return data;
-}
-
-/**
- * Searches and retrieves APK download information from Aptoide API
- * @param {string} query - The search query for the app
- * @returns {Promise<Object>} Object containing app details:
- * - img: App icon URL
- * - developer: Developer/store name
- * - appname: Application name
- * - link: APK file download path
- * @async
- */
-export async function apkDl(query) {
-	const res = await axios.get('http://ws75.aptoide.com/api/7/apps/search', {
-		params: {
-			query,
-			limit: 1,
-		},
-	});
-	const app = res.data.datalist.list[0];
-
-	return {
-		developer: app.store.name,
-		appname: app.name,
-		link: app.file.path,
-	};
 }
 
 /**
@@ -147,10 +121,11 @@ export async function UguuUpload(input) {
 				url: 'https://uguu.se/upload.php',
 				method: 'POST',
 				headers: {
-					'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-					...form.getHeaders(),
+					'User-Agent':
+						'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+					...form.getHeaders()
 				},
-				data: form,
+				data: form
 			});
 			resolve(response.data.files[0].url);
 		} catch (error) {
@@ -169,13 +144,18 @@ export async function UguuUpload(input) {
  */
 export function pinterest(query) {
 	return new Promise((resolve, reject) => {
-		axios(`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`)
+		axios(
+			`https://www.pinterest.com/resource/BaseSearchResource/get/?source_url=%2Fsearch%2Fpins%2F%3Fq%3D${query}&data=%7B%22options%22%3A%7B%22isPrefetch%22%3Afalse%2C%22query%22%3A%22${query}%22%2C%22scope%22%3A%22pins%22%2C%22no_fetch_context_on_resource%22%3Afalse%7D%2C%22context%22%3A%7B%7D%7D&_=1619980301559`
+		)
 			.then(data => {
-				const random = data.data.resource_response.data.results[Math.floor(Math.random() * data.data.resource_response.data.results.length)];
+				const random =
+					data.data.resource_response.data.results[
+						Math.floor(Math.random() * data.data.resource_response.data.results.length)
+					];
 				var result = [];
 				result = {
 					status: 200,
-					url: random.images.orig.url,
+					url: random.images.orig.url
 				};
 				resolve(result);
 			})
@@ -189,9 +169,10 @@ export async function UploadFileUgu(input) {
 
 	const { data } = await axios.post('https://uguu.se/upload.php', form, {
 		headers: {
-			'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
-			...form.getHeaders(),
-		},
+			'User-Agent':
+				'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+			...form.getHeaders()
+		}
 	});
 
 	return data.files[0];

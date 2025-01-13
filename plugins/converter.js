@@ -2,9 +2,11 @@ import { bot } from '#lib';
 import {
 	audioToBlackVideo,
 	convertToMp3,
+	convertWebPFile,
 	createSticker,
 	cropToCircle,
 	flipMedia,
+	isAnimatedWebp,
 	resizeImage,
 	toPTT,
 	toVideo,
@@ -12,6 +14,7 @@ import {
 	webpToImage,
 	XSTRO
 } from '#utils';
+import { getBuffer } from 'xstro-utils';
 
 bot(
 	{
@@ -42,8 +45,15 @@ bot(
 		let media;
 		if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
 		media = await message.download();
-		media = await createSticker(media);
-		return message.send(media, { type: 'sticker' });
+		if (await isAnimatedWebp(media)) {
+			media = await convertWebPFile(media);
+			media = await getBuffer(media);
+			media = await createSticker(media);
+			return message.send(media, { type: 'sticker' });
+		} else {
+			media = await createSticker(media);
+			return message.send(media, { type: 'sticker' });
+		}
 	}
 );
 
