@@ -172,3 +172,16 @@ export const cropToCircle = async input => {
 		throw error;
 	}
 };
+
+export async function resizeImage(imageBuffer, width, height) {
+	if (!Buffer.isBuffer(imageBuffer)) {
+		throw new Error('The imageBuffer parameter must be a valid Buffer.');
+	}
+
+	return sharp(imageBuffer)
+		.resize(width, height, {
+			fit: 'inside',
+			withoutEnlargement: true
+		})
+		.toBuffer();
+}

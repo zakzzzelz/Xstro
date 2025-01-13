@@ -39,6 +39,41 @@ bot(
 
 bot(
 	{
+		pattern: 'joinapprove',
+		public: true,
+		isGroup: true,
+		desc: 'Set up groupJoinApprovalMode',
+		type: 'group'
+	},
+	async (message, match) => {
+		if (!(await message.isUserAdmin())) return;
+		if (!['on', 'off'].includes(match))
+			return message.send('_Use on | off to configure how new members can join the group_');
+		await message.client.groupJoinApprovalMode(message.jid, match);
+		return message.send(`\`\`\`GroupJoinApprovalMode is now set to: ${match.toUpperCase()}\`\`\``);
+	}
+);
+
+bot(
+	{
+		pattern: 'memberadd',
+		public: true,
+		isGroup: true,
+		desc: 'Set who can add new members to the group',
+		type: 'group'
+	},
+	async (message, match) => {
+		if (!(await message.isUserAdmin())) return;
+		if (!['on', 'off'].includes(match))
+			return message.send('_Use on | off to configure who can add members to the group_');
+		const mode = match === 'on' ? 'all_member_add' : 'admin_add';
+		await message.client.groupMemberAddMode(message.jid, mode);
+		return message.send(`\`\`\`GroupMemberAddMode is now set to: ${mode.toUpperCase()}\`\`\``);
+	}
+);
+
+bot(
+	{
 		pattern: 'ckick',
 		public: false,
 		isGroup: true,

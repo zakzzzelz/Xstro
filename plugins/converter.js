@@ -5,6 +5,7 @@ import {
 	createSticker,
 	cropToCircle,
 	flipMedia,
+	resizeImage,
 	toPTT,
 	toVideo,
 	upload,
@@ -188,5 +189,26 @@ bot(
 		media = await message.download();
 		media = await cropToCircle(media);
 		return await message.send(media, { type: 'sticker' });
+	}
+);
+
+bot(
+	{
+		pattern: 'resize',
+		public: true,
+		desc: 'Resizes an Image',
+		type: 'converter'
+	},
+	async (message, match, { prefix }) => {
+		let media;
+		if (!message.reply_message.image) return message.send('_Reply An Image to Resize_');
+		if (!match)
+			return message.send(
+				'_Give me dimensions to resize the Image to, ' + prefix + 'resize 800x600_'
+			);
+		match = match.split('x');
+		media = await message.download();
+		const newImage = await resizeImage(media, Number(match[0]), Number(match[1]));
+		return await message.sendFile(newImage, 'resized');
 	}
 );
