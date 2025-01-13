@@ -1,8 +1,9 @@
 import { isJidGroup } from 'baileys';
-import { loadMessage, getAnti } from '#sql';
+import { getAnti } from '#sql';
 
 const DeletedText = async (conn, msg, jid, deleteInfo, isGroup, update) => {
-	const messageContent = msg.message?.conversation || msg.message?.extendedTextMessage?.text || 'Unknown content';
+	const messageContent =
+		msg.message?.conversation || msg.message?.extendedTextMessage?.text || 'Unknown content';
 	deleteInfo += `\n\n*ᴄᴏɴᴛᴇɴᴛ:* ${messageContent}`;
 
 	await conn.sendMessage(
@@ -10,10 +11,12 @@ const DeletedText = async (conn, msg, jid, deleteInfo, isGroup, update) => {
 		{
 			text: deleteInfo,
 			contextInfo: {
-				mentionedJid: isGroup ? [update.key.participant, msg.key.participant] : [update.key.remoteJid],
-			},
+				mentionedJid: isGroup
+					? [update.key.participant, msg.key.participant]
+					: [update.key.remoteJid]
+			}
 		},
-		{ quoted: msg },
+		{ quoted: msg }
 	);
 };
 
@@ -24,7 +27,7 @@ const DeletedMedia = async (conn, msg, jid) => {
 		antideletedMsg[messageType].contextInfo = {
 			stanzaId: msg.key.id,
 			participant: msg.sender,
-			quotedMessage: msg.message,
+			quotedMessage: msg.message
 		};
 	}
 	await conn.relayMessage(jid, antideletedMsg, {});
@@ -33,7 +36,7 @@ const DeletedMedia = async (conn, msg, jid) => {
 export const AntiDelete = async (conn, updates) => {
 	for (const update of updates) {
 		if (update.key && (update.update.deleteMessage || update.update?.message === null)) {
-			const store = await loadMessage(update.key.id);
+			const store = await conn.loadMessage(update.key.id);
 
 			if (store && store.message) {
 				const msg = store.message;
@@ -45,7 +48,7 @@ export const AntiDelete = async (conn, updates) => {
 				const deleteTime = new Date().toLocaleTimeString('en-GB', {
 					hour: '2-digit',
 					minute: '2-digit',
-					second: '2-digit',
+					second: '2-digit'
 				});
 
 				let deleteInfo, jid;

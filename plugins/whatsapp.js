@@ -14,7 +14,7 @@ bot(
 	},
 	async message => {
 		if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
-		const res = await ModifyViewOnceMessage(message.id);
+		const res = await ModifyViewOnceMessage(message.id, message.client);
 		return message.client.relayMessage(message.jid, res.message, {});
 	}
 );
@@ -77,7 +77,7 @@ bot(
 	async message => {
 		if (!message.reply_message) return await message.send('```Reply A Message```');
 		let key = message.reply_message.key.id;
-		let msg = await loadMessage(key);
+		let msg = await message.client.loadMessage(key);
 		if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
 		msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
 		if (!msg.quoted) return await message.send('_No quoted message found_');
@@ -371,21 +371,14 @@ bot(
 	async message => {
 		const name = await getName(message.user);
 		const img = await getBuffer('https://avatars.githubusercontent.com/u/188756392?v=4');
-		const vcard =
-			'BEGIN:VCARD\n' +
-			'VERSION:3.0\n' +
-			'FN:' +
-			name +
-			'\n' +
-			'ORG:' +
-			config.BOT_INFO.split(';')[0] +
-			'\n' +
-			'TEL;type=CELL;type=VOICE;waid=' +
-			message.user.split('@')[0] +
-			':' +
-			message.user.split('@')[0] +
-			'\n' +
-			'END:VCARD';
+		const vcard = `
+BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+ORG:${config.BOT_INFO.split(';')[0]}
+TEL;type=CELL;type=VOICE;waid=${message.user.split('@')[0]}:${message.user.split('@')[0]}
+END:VCARD
+`;
 
 		return await message.client.sendMessage(message.jid, {
 			contacts: {
@@ -430,24 +423,22 @@ bot(
 	async (message, match) => {
 		if (!message.reply_message) return message.send('_Reply to a message to forward it!_');
 		if (!match) return message.send('_Provide a comma-separated list of group JIDs._');
-
 		const groupJids = match
 			.split(',')
 			.map(jid => jid.trim())
 			.filter(isJidGroup);
 
-		if (groupJids.length === 0) {
-			return message.send('_You must provide valid group JIDs._');
-		}
-
 		const msg = message.data?.quoted;
-		let successfulForwards = 0;
-
-		for (const jid of groupJids) {
-			await message.forward(jid, msg, { quoted: msg });
-			successfulForwards++;
-		}
-
-		return message.send(`_Message forwarded to ${successfulForwards} group(s).`);
+		await Promise.all(groupJids.map(jid => message.forward(jid, msg, { quoted: msg })));
+		return message.send(`_Message forwarded to ${groupJids.length} group(s)._`);
 	}
 );
+
+// bot(
+// 	{
+// 		pattern: 'ptv',
+// 		public: true,
+// 		desc: 'Convert video to pvt video note',
+// 		type: ''
+// 	}
+// )

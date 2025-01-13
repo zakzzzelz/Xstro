@@ -2,9 +2,7 @@ import { performance } from 'perf_hooks';
 import { promises as fs } from 'fs';
 import { join } from 'path';
 import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
-import { loadMessage } from '#sql';
 import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
-import { getConfigValues } from '#lib';
 
 export function manageProcess(type) {
 	if (type === 'restart') {
@@ -122,9 +120,9 @@ export function cleanString(inputText) {
 	return cleanedText;
 }
 
-export async function ModifyViewOnceMessage(messageId) {
+export async function ModifyViewOnceMessage(messageId, conn) {
 	try {
-		const msg = await loadMessage(messageId);
+		const msg = await conn.loadMessage(messageId);
 		const type = getContentType(msg.message.message);
 		const content = normalizeMessageContent(
 			msg.message.message?.[type]?.contextInfo?.quotedMessage

@@ -1,11 +1,11 @@
 import { bot } from '#lib';
-import { addBgm, getBgmResponse, deleteBgm, getBgmList, loadMessage, saveMessage } from '#sql';
+import { addBgm, getBgmResponse, deleteBgm, getBgmList, saveMessage } from '#sql';
 
 bot(
 	{
 		pattern: 'bgm',
 		desc: 'Show BGM command menu',
-		type: 'bgm',
+		type: 'bgm'
 	},
 	async message => {
 		const menuText = `\`\`\`
@@ -21,7 +21,7 @@ ${message.prefix}listbgm - Show all BGMs
 Note: Bot plays matching BGMs automatically in chat
 \`\`\``.trim();
 		return message.send(menuText);
-	},
+	}
 );
 
 bot(
@@ -30,18 +30,18 @@ bot(
 		public: false,
 		desc: 'Add a new BGM entry',
 		usage: '.addbgm word (reply to audio)',
-		type: 'bgm',
+		type: 'bgm'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Example: .addbgm hello (reply to audio)_');
 		if (!message.reply_message?.audio) return message.send('_Please reply to an audio message_');
 		const word = match.trim().toLowerCase();
 		await addBgm(word, message.reply_message.key.id);
-		if (!(await loadMessage(message.reply_message.key.id))) {
+		if (!(await message.client.loadMessage(message.reply_message.key.id))) {
 			await saveMessage(message.reply_message);
 		}
 		return message.send(`_BGM added for ${word}_`);
-	},
+	}
 );
 
 bot(
@@ -49,16 +49,16 @@ bot(
 		pattern: 'getbgm',
 		desc: 'Get a BGM by word',
 		usage: '.getbgm word',
-		type: 'bgm',
+		type: 'bgm'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Example: .getbgm hello_');
 		const messageId = await getBgmResponse(match.trim().toLowerCase());
 		if (!messageId) return message.send(`_No BGM found for ${match}_`);
-		const audioMessage = await loadMessage(messageId);
+		const audioMessage = await message.client.loadMessage(messageId);
 		if (!audioMessage) return message.send('_Failed to load audio message_');
 		return message.client.relayMessage(message.jid, audioMessage.message.message, {});
-	},
+	}
 );
 
 bot(
@@ -66,7 +66,7 @@ bot(
 		pattern: 'delbgm',
 		public: false,
 		desc: 'Delete a BGM entry',
-		type: 'bgm',
+		type: 'bgm'
 	},
 	async (message, match) => {
 		if (!match) return message.send('_Example: .delbgm hello_');
@@ -75,7 +75,7 @@ bot(
 		if (!exists) return message.send(`_No BGM found for ${word}_`);
 		await deleteBgm(word);
 		return message.send(`_BGM deleted for ${word}_`);
-	},
+	}
 );
 
 bot(
@@ -83,27 +83,27 @@ bot(
 		pattern: 'listbgm',
 		public: false,
 		desc: 'List all available BGMs',
-		type: 'bgm',
+		type: 'bgm'
 	},
 	async message => {
 		const bgmList = await getBgmList();
 		if (!bgmList.length) return message.send('_No BGMs found_');
 		const formattedList = bgmList.map(bgm => `${bgm.word}`).join('\n');
 		return message.send(`\`\`\`BGM List:\n\n${formattedList}\`\`\``);
-	},
+	}
 );
 
 bot(
 	{
 		on: 'text',
-		dontAddCommandList: true,
+		dontAddCommandList: true
 	},
 	async message => {
 		if (message.sender === message.user) return;
 		const messageId = await getBgmResponse(message.text.trim().toLowerCase());
 		if (!messageId) return;
-		const audioMessage = await loadMessage(messageId);
+		const audioMessage = await message.client.loadMessage(messageId);
 		if (!audioMessage) return;
 		return message.client.relayMessage(message.jid, audioMessage.message.message, {});
-	},
+	}
 );

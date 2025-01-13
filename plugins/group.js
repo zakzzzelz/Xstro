@@ -110,9 +110,8 @@ bot(
 		type: 'group'
 	},
 	async (message, match) => {
-		await message.isUserAdmin();
+		if (!(await message.isUserAdmin())) return;
 		const jid = await message.getUserJid(match);
-		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
 		if (participant.admin)
@@ -137,7 +136,6 @@ bot(
 	async (message, match) => {
 		if (!(await message.isUserAdmin())) return;
 		const jid = await message.getUserJid(match);
-		if (!jid) return message.send('_Reply, tag, or give me the participant number_');
 		const groupMetadata = await message.client.groupMetadata(message.jid);
 		const participant = groupMetadata.participants.find(p => p.id === jid);
 		if (!participant.admin)
