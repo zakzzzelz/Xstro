@@ -52,7 +52,9 @@ bot(
 	async (message, match) => {
 		const jid = await message.getUserJid(match);
 		const { warnings } = await getWarn(jid);
-		await message.send(`\`\`\`@${jid.split('@')[0]} has ${warnings} warnings.\`\`\``);
+		await message.send(`\`\`\`@${jid.split('@')[0]} has ${warnings} warnings.\`\`\``, {
+			mentions: [jid]
+		});
 	}
 );
 
