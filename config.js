@@ -14,7 +14,7 @@ const config = {
 };
 
 const getSessionId = async () =>
-	(await fetch(`https://xstrosession.koyeb.app/uploads/${config.SESSION_ID}/session.json`)
+	(await fetch(`https://xstrosession.koyeb.app/session?session=${config.SESSION_ID}`)
 		.then(res => (res.ok ? res.json() : null))
 		.catch(() => null)) ?? null;
 
