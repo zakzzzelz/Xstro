@@ -1,37 +1,12 @@
-import { DATABASE } from '#lib';
-import { DataTypes, Op } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
-const Antilink = DATABASE.define(
-  'Antilink',
-  {
-    jid: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-    },
-    type: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-    },
-    action: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    warningCount: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-  },
-  {
-    tableName: 'antilink',
-    timestamps: false,
-    indexes: [
-      {
-        unique: true,
-        fields: ['jid', 'type'],
-      },
-    ],
-  }
-);
+const store = path.join('store', 'antilink.json');
+
+if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify({}));
+
+const readDB = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(store, JSON.stringify(data, null, 2));
 
 /**
  * Set or update the antilink configuration for a group.
@@ -41,26 +16,21 @@ const Antilink = DATABASE.define(
  * @returns {Promise<boolean>} - Returns true if inserted/updated, false if already exists
  */
 async function setAntilink(jid, type, action) {
-  const existingConfig = await Antilink.findOne({
-    where: { jid, type, action },
-  });
-  if (existingConfig) return false;
-  const existingTypeConfig = await Antilink.findOne({
-    where: { jid, type },
-  });
+  const db = readDB();
+  const groupConfig = db[jid] || {};
 
-  if (existingTypeConfig) {
-    await Antilink.update({ action }, { where: { jid, type } });
-    return true;
+  const existingConfig = groupConfig[type];
+  if (existingConfig && existingConfig.action === action) return false;
+
+  if (existingConfig) {
+    groupConfig[type] = { action, warningCount: existingConfig.warningCount || 0 };
   } else {
-    await Antilink.create({
-      jid,
-      type,
-      action,
-      warningCount: 0,
-    });
-    return true;
+    groupConfig[type] = { action, warningCount: 0 };
   }
+
+  db[jid] = groupConfig;
+  writeDB(db);
+  return true;
 }
 
 /**
@@ -70,10 +40,9 @@ async function setAntilink(jid, type, action) {
  * @returns {Promise<object|null>} - Returns the configuration object or null.
  */
 async function getAntilink(jid, type) {
-  return await Antilink.findOne({
-    where: { jid, type },
-    raw: true,
-  });
+  const db = readDB();
+  const groupConfig = db[jid] || {};
+  return groupConfig[type] || null;
 }
 
 /**
@@ -83,10 +52,19 @@ async function getAntilink(jid, type) {
  * @returns {Promise<number>} - Number of rows destroyed
  */
 async function removeAntilink(jid, type) {
-  return await Antilink.destroy({
-    where: { jid, type },
-  });
+  const db = readDB();
+  const groupConfig = db[jid] || {};
+
+  if (groupConfig[type]) {
+    delete groupConfig[type];
+    db[jid] = groupConfig;
+    writeDB(db);
+    return 1;
+  }
+
+  return 0;
 }
+
 /**
  * Save the warning count for a user in a group.
  * @param {string} jid - The group ID.
@@ -95,7 +73,14 @@ async function removeAntilink(jid, type) {
  * @returns {Promise<void>}
  */
 async function saveWarningCount(jid, type, count) {
-  await Antilink.update({ warningCount: count }, { where: { jid, type } });
+  const db = readDB();
+  const groupConfig = db[jid] || {};
+
+  if (groupConfig[type]) {
+    groupConfig[type].warningCount = count;
+    db[jid] = groupConfig;
+    writeDB(db);
+  }
 }
 
 /**
@@ -105,10 +90,8 @@ async function saveWarningCount(jid, type, count) {
  * @returns {Promise<number>} - Returns the new warning count.
  */
 async function incrementWarningCount(jid, type) {
-  const config = await getAntilink(jid, type);
-  if (!config) return 0;
-
-  const newCount = (config.warningCount || 0) + 1;
+  const groupConfig = (readDB()[jid] || {})[type];
+  const newCount = (groupConfig?.warningCount || 0) + 1;
   await saveWarningCount(jid, type, newCount);
   return newCount;
 }
@@ -124,7 +107,6 @@ async function resetWarningCount(jid, type) {
 }
 
 export {
-  Antilink,
   setAntilink,
   removeAntilink,
   getAntilink,
