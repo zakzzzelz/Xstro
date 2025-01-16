@@ -1,15 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 
-const dbPath = path.join('store', 'mentions.json');
+const store = path.join('store', 'mentions.json');
 
 // Ensure the mentions file exists
-if (!fs.existsSync(dbPath)) {
-  fs.writeFileSync(dbPath, JSON.stringify([], null, 2));
+if (!fs.existsSync(store)) {
+  fs.writeFileSync(store, JSON.stringify([], null, 2));
 }
 
-const readMentions = () => JSON.parse(fs.readFileSync(dbPath, 'utf8'));
-const writeMentions = (mentions) => fs.writeFileSync(dbPath, JSON.stringify(mentions, null, 2));
+const readMentions = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeMentions = (mentions) => fs.writeFileSync(store, JSON.stringify(mentions, null, 2));
 
 /**
  * Sets a mention message for a specific JID.
