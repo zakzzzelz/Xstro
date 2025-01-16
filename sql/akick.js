@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 
-const autokickStore = path.join('store', 'autokick.json');
+const store = path.join('store', 'autokick.json');
 
-const readDB = () => JSON.parse(fs.readFileSync(autokickStore, 'utf8'));
-const writeDB = (data) => fs.writeFileSync(autokickStore, JSON.stringify(data, null, 2));
+const readDB = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(store, JSON.stringify(data, null, 2));
 
 export const addAKick = async (groupJid, userJid) => {
-  if (!fs.existsSync(autokickStore)) fs.writeFileSync(autokickStore, JSON.stringify([]));
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
   const data = readDB();
   if (data.some((record) => record.groupJid === groupJid && record.userJid === userJid)) {
     return false;
@@ -18,7 +18,7 @@ export const addAKick = async (groupJid, userJid) => {
 };
 
 export const delKick = async (groupJid, userJid) => {
-  if (!fs.existsSync(autokickStore)) fs.writeFileSync(autokickStore, JSON.stringify([]));
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
   const data = readDB();
   const filteredData = data.filter(
     (record) => !(record.groupJid === groupJid && record.userJid === userJid)
@@ -28,7 +28,7 @@ export const delKick = async (groupJid, userJid) => {
 };
 
 export const getKicks = async (groupJid, userJid = null) => {
-  if (!fs.existsSync(autokickStore)) fs.writeFileSync(autokickStore, JSON.stringify([]));
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
   const data = readDB();
   return data.filter(
     (record) => record.groupJid === groupJid && (!userJid || record.userJid === userJid)
