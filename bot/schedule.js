@@ -1,5 +1,5 @@
 import { config } from '#config';
-import { getAllSchedules } from '#sql';
+import { getAllSchedules, addOrUpdateSchedule } from '#sql';
 
 const getCurrentTime = () => {
   const timezone = config.TIME_ZONE;
@@ -22,27 +22,54 @@ const getCurrentTime = () => {
 export const schedules = async (msg) => {
   const client = msg.client;
   setInterval(async () => {
-    const currentTime = getCurrentTime();
+    try {
+      const currentTime = getCurrentTime();
+      const schedules = await getAllSchedules();
 
-    const schedules = await getAllSchedules();
+      for (const schedule of schedules) {
+        if (!schedule.isScheduled) continue;
 
-    for (const scheduleItem of schedules) {
-      if (scheduleItem.muteTime === currentTime && !scheduleItem.isMuted) {
-        await client.groupSettingUpdate(scheduleItem.groupId, 'announcement');
-        scheduleItem.isMuted = true;
-        await scheduleItem.save();
-        await client.sendMessage(scheduleItem.groupId, {
-          text: '```Group has been muted, due to AutoMute```',
-        });
+        if (schedule.muteTime === currentTime && schedule.isMuted) {
+          try {
+            await client.groupSettingUpdate(schedule.groupId, 'announcement');
+            await addOrUpdateSchedule(
+              schedule.groupId,
+              schedule.muteTime,
+              schedule.unmuteTime,
+              false,
+              schedule.isScheduled
+            );
+
+            await client.sendMessage(schedule.groupId, {
+              text: '```Group has been muted, due to AutoMute```',
+            });
+          } catch (error) {
+            console.error(`Failed to mute group ${schedule.groupId}:`, error);
+          }
+        }
+
+        // Handle unmuting
+        if (schedule.unmuteTime === currentTime && !schedule.isMuted) {
+          try {
+            await client.groupSettingUpdate(schedule.groupId, 'not_announcement');
+            await addOrUpdateSchedule(
+              schedule.groupId,
+              schedule.muteTime,
+              schedule.unmuteTime,
+              true,
+              schedule.isScheduled
+            );
+
+            await client.sendMessage(schedule.groupId, {
+              text: '```Group is now unmuted, due to AutoUnMute```',
+            });
+          } catch (error) {
+            console.error(`Failed to unmute group ${schedule.groupId}:`, error);
+          }
+        }
       }
-      if (scheduleItem.unmuteTime === currentTime && scheduleItem.isMuted) {
-        await client.groupSettingUpdate(scheduleItem.groupId, 'not_announcement');
-        scheduleItem.isMuted = false;
-        await scheduleItem.save();
-        await client.sendMessage(scheduleItem.groupId, {
-          text: '```Group is now unmuted, due to AutoUnMute```',
-        });
-      }
+    } catch (error) {
+      console.error('Error in schedule handler:', error);
     }
-  }, 60000);
+  }, 10000);
 };

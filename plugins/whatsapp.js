@@ -1,7 +1,7 @@
 import { config } from '#config';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
-import { delay, isJidGroup } from 'baileys';
+import { delay, isJidBroadcast, isJidGroup } from 'baileys';
 
 bot(
   {
@@ -206,11 +206,8 @@ bot(
     desc: 'Saves Status',
   },
   async (message) => {
-    if (!message.reply_message) return message.send('_Reply A Status_');
-    await message.forward(message.user, message.data?.quoted, {
-      force: false,
-      quoted: msg,
-    });
+    if (!message.isStatus) return message.send('_Reply A Status_');
+    await message.forward(message.data.quoted.message, { jid: message.user });
   }
 );
 

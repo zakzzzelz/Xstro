@@ -17,7 +17,7 @@ bot(
     const start = performance.now();
     const msg = await message.send('Testing Speed...');
     const end = performance.now();
-    await msg.edit(font.tiny(`Pong! ${(end - start).toFixed(2)}`));
+    await msg.edit(font.tiny(`Pong! ${(end - start).toFixed(1)} ms`));
   }
 );
 
