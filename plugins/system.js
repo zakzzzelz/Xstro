@@ -3,6 +3,8 @@ import { bot } from '#lib';
 import { manageProcess, runtime } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
+import { font } from '#bot';
+import { delay } from 'baileys';
 
 bot(
   {
@@ -15,7 +17,7 @@ bot(
     const start = performance.now();
     const msg = await message.send('Testing Speed...');
     const end = performance.now();
-    await msg.edit(`\`\`\`SPEED\n ${(end - start).toFixed(2)}MS\`\`\``);
+    await msg.edit(font.tiny(`Pong! ${(end - start).toFixed(2)}`));
   }
 );
 
@@ -27,7 +29,7 @@ bot(
     type: 'system',
   },
   async (message) => {
-    return await message.send(`\`\`\`Runtime: ${runtime(process.uptime())}\`\`\``);
+    return await message.send(font.tiny(`Uptime: ${runtime(process.uptime())}`));
   }
 );
 
@@ -64,17 +66,10 @@ bot(
     desc: 'End your Xstro Session',
     type: 'system',
   },
-  async (message, match) => {
-    if (!match)
-      return message.send(
-        `*Hello ${message.pushName} this isn't the goo, goo ga ga, this command will logout you out of your Xstro Session, and you will be unable to use this bot until you get a new session*\nAre you sure you want to continue with this decision, then type\n${message.prefix}logout confirm`
-      );
-    if (match === 'confirm') {
-      message.send('_logging out_');
-      await message.client.logout();
-    } else {
-      message.send('_that not right hmm_');
-    }
+  async (message) => {
+    await message.send('_logging out_');
+    await delay(3000);
+    await message.client.logout();
   }
 );
 
@@ -89,8 +84,7 @@ bot(
     if (!match) return message.send('_I need a URL_');
     const [mode, url] = match.split(';');
     if (!url) return message.send('_Use: mode;url_');
-    const data =
-      mode === 'json' ? JSON.stringify(await getJson(url), null, 2) : await getBuffer(url);
+    const data = mode === 'json' ? JSON.stringify(await getJson(url)) : await getBuffer(url);
     return await message.send(data, mode === 'json' ? { type: 'text' } : undefined);
   }
 );

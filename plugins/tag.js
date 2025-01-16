@@ -1,5 +1,4 @@
 import { bot } from '#lib';
-import { ensureContextInfoWithMentionedJid } from '#utils';
 
 bot(
   {
@@ -34,20 +33,34 @@ bot(
   async (message, match) => {
     if (!match && !message.reply_message)
       return message.send('_Reply any Message or Give Me Text_');
+    const participants = await message.client.groupMetadata(message.jid);
+    const participantJids = participants.participants.map((p) => p.id);
     if (match && !message.reply_message) {
-      const participants = await message.client.groupMetadata(message.jid);
-      const participantJids = participants.participants.map((p) => p.id);
       await message.send(match, { mentions: participantJids });
+      return;
     }
     if (!match && message.reply_message) {
-      const participants = await message.client.groupMetadata(message.jid);
-      const participantJids = participants.participants.map((p) => p.id);
-      const taggedMessage = await ensureContextInfoWithMentionedJid(
-        message.data.quoted.message,
-        participantJids
-      );
-      console.log(taggedMessage);
-      await message.client.relayMessage(message.jid, taggedMessage, {});
+      const quotedMessage = message.data.quoted.message;
+      const typeOfMessage = getContentType(quotedMessage);
+      const objectAction = quotedMessage?.[typeOfMessage];
+
+      if (objectAction) {
+        let taggedMessage = {
+          [typeOfMessage]: {
+            ...objectAction,
+            contextInfo: {
+              ...objectAction.contextInfo,
+              mentionedJid: objectAction.contextInfo?.mentionedJid || participantJids,
+            },
+          },
+        };
+        if (typeOfMessage === 'conversation' && typeof objectAction === 'string') {
+          taggedMessage[typeOfMessage] = objectAction;
+        }
+        await message.client.relayMessage(message.jid, taggedMessage, {});
+      } else {
+        await message.client.relayMessage(message.jid, quotedMessage, {});
+      }
     }
   }
 );

@@ -180,30 +180,6 @@ export async function convertNormalMessageToViewOnce(message = {}) {
   return message;
 }
 
-export async function ensureContextInfoWithMentionedJid(message = {}, mentionedJidParam = []) {
-  const typeOfMessage = getContentType(message);
-  const objectAction = message?.[typeOfMessage];
-
-  if (objectAction) {
-    const newMessage = {
-      [typeOfMessage]: {
-        ...objectAction,
-        contextInfo: {
-          ...objectAction.contextInfo,
-          mentionedJid: objectAction.contextInfo?.mentionedJid || mentionedJidParam,
-        },
-      },
-    };
-    if (typeOfMessage === 'conversation' && typeof objectAction === 'string') {
-      newMessage[typeOfMessage] = objectAction; // Restore it to a string format
-    }
-
-    return newMessage;
-  }
-
-  return message;
-}
-
 export async function getFileAndSave(url) {
   let attempts = 0;
   let data;

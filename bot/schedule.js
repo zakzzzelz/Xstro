@@ -1,5 +1,5 @@
 import { config } from '#config';
-import { schedule } from '#sql';
+import { getAllSchedules } from '#sql';
 
 const getCurrentTime = () => {
   const timezone = config.TIME_ZONE;
@@ -24,24 +24,22 @@ export const schedules = async (msg) => {
   setInterval(async () => {
     const currentTime = getCurrentTime();
 
-    const schedules = await schedule.findAll({
-      where: { isScheduled: true },
-    });
+    const schedules = await getAllSchedules();
 
-    for (const schedule of schedules) {
-      if (schedule.muteTime === currentTime && !schedule.isMuted) {
-        await client.groupSettingUpdate(schedule.groupId, 'announcement');
-        schedule.isMuted = true;
-        await schedule.save();
-        await client.sendMessage(schedule.groupId, {
+    for (const scheduleItem of schedules) {
+      if (scheduleItem.muteTime === currentTime && !scheduleItem.isMuted) {
+        await client.groupSettingUpdate(scheduleItem.groupId, 'announcement');
+        scheduleItem.isMuted = true;
+        await scheduleItem.save();
+        await client.sendMessage(scheduleItem.groupId, {
           text: '```Group has been muted, due to AutoMute```',
         });
       }
-      if (schedule.unmuteTime === currentTime && schedule.isMuted) {
-        await client.groupSettingUpdate(schedule.groupId, 'not_announcement');
-        schedule.isMuted = false;
-        await schedule.save();
-        await client.sendMessage(schedule.groupId, {
+      if (scheduleItem.unmuteTime === currentTime && scheduleItem.isMuted) {
+        await client.groupSettingUpdate(scheduleItem.groupId, 'not_announcement');
+        scheduleItem.isMuted = false;
+        await scheduleItem.save();
+        await client.sendMessage(scheduleItem.groupId, {
           text: '```Group is now unmuted, due to AutoUnMute```',
         });
       }

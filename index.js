@@ -1,6 +1,5 @@
 import http from 'http';
 import { config } from 'dotenv';
-import { DATABASE } from '#database';
 import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import cluster from 'cluster';
 import { sessionData } from '#config';
@@ -45,7 +44,6 @@ if (cluster.isMaster) {
 } else {
   const startServer = async () => {
     console.log('Starting...');
-    await DATABASE.sync();
     eventlogger();
     initSession(sessionData);
     await loadPlugins();

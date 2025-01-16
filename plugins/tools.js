@@ -12,7 +12,7 @@ bot(
   async (message, match) => {
     const jid = await message.getUserJid(match);
     const img = await message.getProfileImage(jid);
-    await message.send(img);
+    await message.send(img, { caption: '_Profile Picture_' });
   }
 );
 
@@ -25,13 +25,12 @@ bot(
   },
   async (message, match) => {
     const jid = await message.getUserJid(match);
-    const bioDetails = await message.client.fetchStatus(jid);
-    const { status, setAt } = bioDetails;
+    const { status, setAt } = await message.client.fetchStatus(jid);
+
     if (status && setAt) {
-      await message.send(
-        `\`\`\`@${jid.split('@')[0]} bio's\n\nBio: ${status}\n\nSetAt: ${setAt}\`\`\``,
-        { mentions: [jid] }
-      );
+      await message.send(`*@${jid.split('@')[0]} bio's*\n\nBio: ${status}\n\nSetAt: ${setAt}`, {
+        mentions: [jid],
+      });
     } else {
       message.send('_Unable to Get user bio_');
     }
