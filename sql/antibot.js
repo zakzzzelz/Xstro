@@ -1,42 +1,39 @@
-import { DATABASE } from '#lib';
-import { DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
-const AntiBot = DATABASE.define(
-	'Antibot',
-	{
-		jid: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-		},
-		enabled: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
-		},
-	},
-	{
-		tableName: 'antibot',
-	},
-);
+const antibotStore = path.join('store', 'antibot.json');
+
+const readDB = () => JSON.parse(fs.readFileSync(antibotStore, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(antibotStore, JSON.stringify(data, null, 2));
 
 async function setAntibot(jid, enabled) {
-	const [record] = await AntiBot.upsert({
-		jid,
-		enabled,
-	});
-	return record;
+  if (!fs.existsSync(antibotStore)) fs.writeFileSync(antibotStore, JSON.stringify([]));
+  const data = readDB();
+  const existingRecord = data.find((record) => record.jid === jid);
+
+  if (existingRecord) {
+    existingRecord.enabled = enabled;
+  } else {
+    data.push({ jid, enabled });
+  }
+
+  writeDB(data);
+  return { jid, enabled };
 }
 
 async function delAntibot(jid) {
-	return await AntiBot.destroy({
-		where: { jid },
-	});
+  if (!fs.existsSync(antibotStore)) fs.writeFileSync(antibotStore, JSON.stringify([]));
+  const data = readDB();
+  const filteredData = data.filter((record) => record.jid !== jid);
+  writeDB(filteredData);
+  return data.length !== filteredData.length;
 }
 
 async function getAntibot(jid) {
-	const record = await AntiBot.findByPk(jid);
-	return record ? record.enabled : false;
+  if (!fs.existsSync(antibotStore)) fs.writeFileSync(antibotStore, JSON.stringify([]));
+  const data = readDB();
+  const record = data.find((record) => record.jid === jid);
+  return record ? record.enabled : false;
 }
 
-export { AntiBot, setAntibot, delAntibot, getAntibot };
+export { setAntibot, delAntibot, getAntibot };
