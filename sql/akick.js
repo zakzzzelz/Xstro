@@ -21,7 +21,7 @@ export const delKick = async (groupJid, userJid) => {
   if (!fs.existsSync(autokickStore)) fs.writeFileSync(autokickStore, JSON.stringify([]));
   const data = readDB();
   const filteredData = data.filter(
-    (record) => !(record.groupJid === groupJid && record.userJid === userJid),
+    (record) => !(record.groupJid === groupJid && record.userJid === userJid)
   );
   writeDB(filteredData);
   return data.length !== filteredData.length;
@@ -31,6 +31,6 @@ export const getKicks = async (groupJid, userJid = null) => {
   if (!fs.existsSync(autokickStore)) fs.writeFileSync(autokickStore, JSON.stringify([]));
   const data = readDB();
   return data.filter(
-    (record) => record.groupJid === groupJid && (!userJid || record.userJid === userJid),
+    (record) => record.groupJid === groupJid && (!userJid || record.userJid === userJid)
   );
 };

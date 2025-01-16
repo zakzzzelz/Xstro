@@ -6,7 +6,7 @@ const anticallStore = path.join('store', 'anticall.json');
 if (!fs.existsSync(anticallStore)) {
   fs.writeFileSync(
     anticallStore,
-    JSON.stringify({ id: 1, on: false, type: 'on', action: 'block', jid: null }),
+    JSON.stringify({ id: 1, on: false, type: 'on', action: 'block', jid: null })
   );
 }
 

@@ -1,9 +1,18 @@
 export default {
-  endOfLine: 'auto',
+  printWidth: 100,
+  useTabs: false,
+  tabWidth: 2,
+
   singleQuote: true,
   semi: true,
-  tabWidth: 2,
+  quoteProps: 'as-needed',
+  jsxSingleQuote: false,
   trailingComma: 'es5',
+  bracketSpacing: true,
+  bracketSameLine: false,
   arrowParens: 'always',
-  printWidth: 100,
+  endOfLine: 'auto',
+  proseWrap: 'preserve',
+  embeddedLanguageFormatting: 'auto',
+  vueIndentScriptAndStyle: false,
 };

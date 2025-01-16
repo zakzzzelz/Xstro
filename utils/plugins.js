@@ -9,19 +9,19 @@ import { addPlugin, getPlugins, removePlugin } from '#sql';
  * @returns {Promise<string>} - The name of the installed plugin.
  */
 export async function installPlugin(pluginUrl) {
-	const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
-	const existingPlugins = await getPlugins();
+  const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
+  const existingPlugins = await getPlugins();
 
-	if (existingPlugins.some(plugin => plugin.name === pluginName)) {
-		throw new Error('Plugin already installed');
-	}
+  if (existingPlugins.some((plugin) => plugin.name === pluginName)) {
+    throw new Error('Plugin already installed');
+  }
 
-	const pluginPath = join('plugins', pluginName);
-	const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
-	fs.writeFileSync(pluginPath, response.data);
-	await addPlugin(pluginName);
+  const pluginPath = join('plugins', pluginName);
+  const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
+  fs.writeFileSync(pluginPath, response.data);
+  await addPlugin(pluginName);
 
-	return pluginName;
+  return pluginName;
 }
 
 /**
@@ -30,18 +30,18 @@ export async function installPlugin(pluginUrl) {
  * @returns {Promise<boolean>} - True if the plugin was removed, false otherwise.
  */
 export async function removePluginByName(pluginName) {
-	const deleted = await removePlugin(pluginName);
+  const deleted = await removePlugin(pluginName);
 
-	if (!deleted) {
-		return false;
-	}
+  if (!deleted) {
+    return false;
+  }
 
-	const pluginPath = join('plugins', pluginName);
-	if (fs.existsSync(pluginPath)) {
-		fs.unlinkSync(pluginPath);
-	}
+  const pluginPath = join('plugins', pluginName);
+  if (fs.existsSync(pluginPath)) {
+    fs.unlinkSync(pluginPath);
+  }
 
-	return true;
+  return true;
 }
 
 /**
@@ -49,6 +49,6 @@ export async function removePluginByName(pluginName) {
  * @returns {Promise<string[]>} - List of plugin names.
  */
 export async function listPlugins() {
-	const plugins = await getPlugins();
-	return plugins.map(plugin => plugin.name);
+  const plugins = await getPlugins();
+  return plugins.map((plugin) => plugin.name);
 }

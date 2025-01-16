@@ -2,23 +2,23 @@ import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
 
 const BGMDB = DATABASE.define(
-	'bgm',
-	{
-		word: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			unique: true,
-			primaryKey: true,
-		},
-		response: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-	},
-	{
-		timestamps: false,
-		tableName: 'bgm',
-	},
+  'bgm',
+  {
+    word: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      primaryKey: true,
+    },
+    response: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  {
+    timestamps: false,
+    tableName: 'bgm',
+  }
 );
 
 /**
@@ -29,22 +29,22 @@ const BGMDB = DATABASE.define(
  * @throws {Error} If word already exists or if parameters are invalid
  */
 async function addBgm(word, response) {
-	if (!word || !response) {
-		throw new Error('Both word and response are required');
-	}
+  if (!word || !response) {
+    throw new Error('Both word and response are required');
+  }
 
-	try {
-		const bgmEntry = await BGMDB.create({
-			word: word.toLowerCase(),
-			response: response,
-		});
-		return bgmEntry;
-	} catch (error) {
-		if (error.name === 'SequelizeUniqueConstraintError') {
-			throw new Error(`BGM entry for word "${word}" already exists`);
-		}
-		throw error;
-	}
+  try {
+    const bgmEntry = await BGMDB.create({
+      word: word.toLowerCase(),
+      response: response,
+    });
+    return bgmEntry;
+  } catch (error) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      throw new Error(`BGM entry for word "${word}" already exists`);
+    }
+    throw error;
+  }
 }
 
 /**
@@ -53,17 +53,17 @@ async function addBgm(word, response) {
  * @returns {Promise<string|null>} The response for the word, or null if not found
  */
 async function getBgmResponse(word) {
-	if (!word) {
-		throw new Error('Word parameter is required');
-	}
+  if (!word) {
+    throw new Error('Word parameter is required');
+  }
 
-	const bgmEntry = await BGMDB.findOne({
-		where: {
-			word: word.toLowerCase(),
-		},
-	});
+  const bgmEntry = await BGMDB.findOne({
+    where: {
+      word: word.toLowerCase(),
+    },
+  });
 
-	return bgmEntry ? bgmEntry.response : null;
+  return bgmEntry ? bgmEntry.response : null;
 }
 
 /**
@@ -72,17 +72,17 @@ async function getBgmResponse(word) {
  * @returns {Promise<boolean>} True if deleted successfully, false if entry wasn't found
  */
 async function deleteBgm(word) {
-	if (!word) {
-		throw new Error('Word parameter is required');
-	}
+  if (!word) {
+    throw new Error('Word parameter is required');
+  }
 
-	const deletedCount = await BGMDB.destroy({
-		where: {
-			word: word.toLowerCase(),
-		},
-	});
+  const deletedCount = await BGMDB.destroy({
+    where: {
+      word: word.toLowerCase(),
+    },
+  });
 
-	return deletedCount > 0;
+  return deletedCount > 0;
 }
 
 /**
@@ -93,18 +93,18 @@ async function deleteBgm(word) {
  * @throws {Error} When there is an error retrieving the BGM list from the database
  */
 async function getBgmList() {
-    try {
-        const bgmList = await BGMDB.findAll({
-            attributes: ['word', 'response'],
-            order: [['word', 'ASC']]
-        })
-        return bgmList.map(bgm => ({
-            word: bgm.word,
-            response: bgm.response
-        }))
-    } catch (error) {
-        throw new Error(`Failed to get BGM list: ${error.message}`)
-    }
+  try {
+    const bgmList = await BGMDB.findAll({
+      attributes: ['word', 'response'],
+      order: [['word', 'ASC']],
+    });
+    return bgmList.map((bgm) => ({
+      word: bgm.word,
+      response: bgm.response,
+    }));
+  } catch (error) {
+    throw new Error(`Failed to get BGM list: ${error.message}`);
+  }
 }
 
 export { BGMDB, addBgm, getBgmResponse, deleteBgm, getBgmList };

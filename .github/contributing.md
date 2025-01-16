@@ -8,28 +8,28 @@
 2. **Clone the Forked Repository**
 
    - Download your forked repository to your local machine:
-      ```bash
-      git clone https://github.com/<your-username>/Xstro.git
-      cd Xstro
-      ```
+     ```bash
+     git clone https://github.com/<your-username>/Xstro.git
+     cd Xstro
+     ```
 
 3. **Set Upstream for Updates**
 
    - Add the main Xstro repository as the `upstream` to ensure you can sync changes from the original project:
-      ```bash
-      git remote add upstream https://github.com/AstroX11/Xstro.git
-      ```
+     ```bash
+     git remote add upstream https://github.com/AstroX11/Xstro.git
+     ```
    - Verify the remote repositories:
-      ```bash
-      git remote -v
-      ```
+     ```bash
+     git remote -v
+     ```
 
 4. **Create a New Branch**
 
    - Always create a separate branch for your contributions to keep your work organized:
-      ```bash
-      git checkout -b feature/your-feature-name
-      ```
+     ```bash
+     git checkout -b feature/your-feature-name
+     ```
    - Use a descriptive branch name that reflects your changes, such as `bugfix/issue-12` or `feature/add-auth`.
 
 5. **Make Your Changes**
@@ -45,17 +45,17 @@
 7. **Commit Your Changes**
 
    - Stage your changes and write a clear, concise commit message:
-      ```bash
-      git add .
-      git commit -m "Description of changes, e.g., Fix login issue #12"
-      ```
+     ```bash
+     git add .
+     git commit -m "Description of changes, e.g., Fix login issue #12"
+     ```
 
 8. **Push to Your Fork**
 
    - Push your changes to the branch in your forked repository:
-      ```bash
-      git push origin feature/your-feature-name
-      ```
+     ```bash
+     git push origin feature/your-feature-name
+     ```
 
 9. **Submit a Pull Request**
 
@@ -64,13 +64,13 @@
    - Add a meaningful title and a detailed explanation of your changes.
    - Submit the pull request to the `main` branch of the original Xstro repository.
 
-10.   **Review Process**
+10. **Review Process**
 
-      - The maintainers will review your pull request. If changes are required, they will provide feedback.
-      - Make the requested updates and push them to the same branch to update the pull request.
+    - The maintainers will review your pull request. If changes are required, they will provide feedback.
+    - Make the requested updates and push them to the same branch to update the pull request.
 
-11.   **Merge or Close**
-      - Once your changes are approved, they will be merged into the main repository. If not, the maintainers may explain why the contribution doesn’t fit and provide guidance.
+11. **Merge or Close**
+    - Once your changes are approved, they will be merged into the main repository. If not, the maintainers may explain why the contribution doesn’t fit and provide guidance.
 
 ---
 

@@ -2,23 +2,23 @@ import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
 
 const AntiVV = DATABASE.define(
-	'AntiViewOnce',
-	{
-		type: {
-			type: DataTypes.ENUM('all', 'dm', 'gc'),
-			allowNull: false,
-			defaultValue: 'all',
-		},
-		isEnabled: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
-		},
-	},
-	{
-		tableName: 'antiviewonce',
-		timestamps: false,
-	},
+  'AntiViewOnce',
+  {
+    type: {
+      type: DataTypes.ENUM('all', 'dm', 'gc'),
+      allowNull: false,
+      defaultValue: 'all',
+    },
+    isEnabled: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  {
+    tableName: 'antiviewonce',
+    timestamps: false,
+  }
 );
 
 /**
@@ -28,9 +28,9 @@ const AntiVV = DATABASE.define(
  * @async
  */
 async function setViewOnce(status) {
-	const [setting] = await AntiVV.findOrCreate({ where: {} });
-	await setting.update({ isEnabled: status });
-	return true;
+  const [setting] = await AntiVV.findOrCreate({ where: {} });
+  await setting.update({ isEnabled: status });
+  return true;
 }
 
 /**
@@ -40,8 +40,8 @@ async function setViewOnce(status) {
  * @returns {Promise<boolean>} A promise that resolves to a boolean indicating if ViewOnce is enabled
  */
 async function isViewOnceEnabled() {
-	const [setting] = await AntiVV.findOrCreate({ where: {} });
-	return setting.isEnabled;
+  const [setting] = await AntiVV.findOrCreate({ where: {} });
+  return setting.isEnabled;
 }
 
 /**
@@ -51,9 +51,9 @@ async function isViewOnceEnabled() {
  * @async
  */
 async function setViewOnceType(type) {
-	const [setting] = await AntiVV.findOrCreate({ where: {} });
-	await setting.update({ type });
-	return true;
+  const [setting] = await AntiVV.findOrCreate({ where: {} });
+  await setting.update({ type });
+  return true;
 }
 
 /**
@@ -64,8 +64,8 @@ async function setViewOnceType(type) {
  * @description Finds the first record in the AntiVV table or creates one if none exists
  */
 async function getSettings() {
-	const [setting] = await AntiVV.findOrCreate({ where: {} });
-	return setting;
+  const [setting] = await AntiVV.findOrCreate({ where: {} });
+  return setting;
 }
 
 export { AntiVV, setViewOnce, isViewOnceEnabled, setViewOnceType, getSettings };

@@ -8,55 +8,55 @@ import { sessionData } from '#config';
 config();
 
 if (cluster.isMaster) {
-	let isRestarting = false;
+  let isRestarting = false;
 
-	const createWorker = () => {
-		const worker = cluster.fork();
+  const createWorker = () => {
+    const worker = cluster.fork();
 
-		worker.on('message', message => {
-			if (message === 'app.kill') {
-				console.log('Shutting down Xstro...');
-				worker.kill();
-				process.exit(0);
-			} else if (message === 'restart') {
-				console.log('Restarting...');
-				isRestarting = true;
-				worker.kill();
-			}
-		});
+    worker.on('message', (message) => {
+      if (message === 'app.kill') {
+        console.log('Shutting down Xstro...');
+        worker.kill();
+        process.exit(0);
+      } else if (message === 'restart') {
+        console.log('Restarting...');
+        isRestarting = true;
+        worker.kill();
+      }
+    });
 
-		worker.on('exit', () => {
-			if (!isRestarting) console.log('Restarting...');
-			isRestarting = false;
-			createWorker();
-		});
-	};
+    worker.on('exit', () => {
+      if (!isRestarting) console.log('Restarting...');
+      isRestarting = false;
+      createWorker();
+    });
+  };
 
-	createWorker();
+  createWorker();
 
-	['SIGINT', 'SIGTERM'].forEach(sig => {
-		process.on(sig, () => {
-			for (const id in cluster.workers) {
-				cluster.workers[id].kill();
-			}
-			process.exit(0);
-		});
-	});
+  ['SIGINT', 'SIGTERM'].forEach((sig) => {
+    process.on(sig, () => {
+      for (const id in cluster.workers) {
+        cluster.workers[id].kill();
+      }
+      process.exit(0);
+    });
+  });
 } else {
-	const startServer = async () => {
-		console.log('Starting...');
-		await DATABASE.sync();
-		eventlogger();
-		initSession(sessionData);
-		await loadPlugins();
-		await client();
+  const startServer = async () => {
+    console.log('Starting...');
+    await DATABASE.sync();
+    eventlogger();
+    initSession(sessionData);
+    await loadPlugins();
+    await client();
 
-		http
-			.createServer((req, res) => res.end(JSON.stringify({ alive: req.url === '/' })))
-			.listen(process.env.PORT || 8000);
-	};
+    http
+      .createServer((req, res) => res.end(JSON.stringify({ alive: req.url === '/' })))
+      .listen(process.env.PORT || 8000);
+  };
 
-	startServer();
-	process.on('unhandledRejection', () => {});
-	process.on('exit', () => process.send('restart'));
+  startServer();
+  process.on('unhandledRejection', () => {});
+  process.on('exit', () => process.send('restart'));
 }

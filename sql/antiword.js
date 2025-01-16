@@ -2,28 +2,28 @@ import { DATABASE } from '#lib';
 import { DataTypes } from 'sequelize';
 
 const AntiWord = DATABASE.define(
-	'Antiword',
-	{
-		jid: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			primaryKey: true,
-		},
-		words: {
-			type: DataTypes.JSON,
-			allowNull: true,
-			defaultValue: [],
-		},
-		status: {
-			type: DataTypes.BOOLEAN,
-			allowNull: false,
-			defaultValue: false,
-		},
-	},
-	{
-		tableName: 'antiword',
-		timestamps: false,
-	},
+  'Antiword',
+  {
+    jid: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      primaryKey: true,
+    },
+    words: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: [],
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+  },
+  {
+    tableName: 'antiword',
+    timestamps: false,
+  }
 );
 
 /**
@@ -33,27 +33,25 @@ const AntiWord = DATABASE.define(
  * @returns {Promise<Object>} - Result of the operation
  */
 async function setAntiWordStatus(jid, action) {
-	if (!jid) return;
-	const [record, created] = await AntiWord.findOrCreate({
-		where: { jid },
-		defaults: {
-			jid,
-			status: action,
-			words: [],
-		},
-	});
+  if (!jid) return;
+  const [record, created] = await AntiWord.findOrCreate({
+    where: { jid },
+    defaults: {
+      jid,
+      status: action,
+      words: [],
+    },
+  });
 
-	if (!created) {
-		record.status = action;
-		await record.save();
-	}
+  if (!created) {
+    record.status = action;
+    await record.save();
+  }
 
-	return {
-		success: true,
-		message: `Antiword ${
-			action ? 'enabled' : 'disabled'
-		} for group ${jid}`,
-	};
+  return {
+    success: true,
+    message: `Antiword ${action ? 'enabled' : 'disabled'} for group ${jid}`,
+  };
 }
 
 /**
@@ -63,28 +61,28 @@ async function setAntiWordStatus(jid, action) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function addAntiWords(jid, words) {
-	if (!jid || !words) return;
-	const [record, created] = await AntiWord.findOrCreate({
-		where: { jid },
-		defaults: {
-			jid,
-			status: false,
-			words: words,
-		},
-	});
+  if (!jid || !words) return;
+  const [record, created] = await AntiWord.findOrCreate({
+    where: { jid },
+    defaults: {
+      jid,
+      status: false,
+      words: words,
+    },
+  });
 
-	if (!created) {
-		// Remove duplicates and merge with existing words
-		const uniqueWords = [...new Set([...record.words, ...words])];
-		record.words = uniqueWords;
-		await record.save();
-	}
+  if (!created) {
+    // Remove duplicates and merge with existing words
+    const uniqueWords = [...new Set([...record.words, ...words])];
+    record.words = uniqueWords;
+    await record.save();
+  }
 
-	return {
-		success: true,
-		message: `Added ${words.length} antiwords to group ${jid}`,
-		addedWords: words,
-	};
+  return {
+    success: true,
+    message: `Added ${words.length} antiwords to group ${jid}`,
+    addedWords: words,
+  };
 }
 
 /**
@@ -94,25 +92,25 @@ async function addAntiWords(jid, words) {
  * @returns {Promise<Object>} - Result of the operation
  */
 async function removeAntiWords(jid, words) {
-	if (!jid) return;
-	const record = await AntiWord.findOne({ where: { jid } });
+  if (!jid) return;
+  const record = await AntiWord.findOne({ where: { jid } });
 
-	if (!record) {
-		return {
-			success: false,
-			message: `No antiwords found for group ${jid}`,
-		};
-	}
+  if (!record) {
+    return {
+      success: false,
+      message: `No antiwords found for group ${jid}`,
+    };
+  }
 
-	// Remove specified words from the existing list
-	record.words = record.words.filter(word => !words.includes(word));
-	await record.save();
+  // Remove specified words from the existing list
+  record.words = record.words.filter((word) => !words.includes(word));
+  await record.save();
 
-	return {
-		success: true,
-		message: `Removed ${words.length} antiwords from group ${jid}`,
-		removedWords: words,
-	};
+  return {
+    success: true,
+    message: `Removed ${words.length} antiwords from group ${jid}`,
+    removedWords: words,
+  };
 }
 
 /**
@@ -121,22 +119,22 @@ async function removeAntiWords(jid, words) {
  * @returns {Promise<Object>} - Antiwords and status for the group
  */
 async function getAntiWords(jid) {
-	if (!jid) return;
-	const record = await AntiWord.findOne({ where: { jid } });
+  if (!jid) return;
+  const record = await AntiWord.findOne({ where: { jid } });
 
-	if (!record) {
-		return {
-			success: true,
-			status: false,
-			words: [],
-		};
-	}
+  if (!record) {
+    return {
+      success: true,
+      status: false,
+      words: [],
+    };
+  }
 
-	return {
-		success: true,
-		status: record.status,
-		words: record.words,
-	};
+  return {
+    success: true,
+    status: record.status,
+    words: record.words,
+  };
 }
 
 /**
@@ -145,16 +143,16 @@ async function getAntiWords(jid) {
  * @returns {Promise<boolean>} - True if enabled, false otherwise
  */
 async function isAntiWordEnabled(jid) {
-	if (!jid) return;
-	const record = await AntiWord.findOne({ where: { jid } });
-	return record ? record.status : false;
+  if (!jid) return;
+  const record = await AntiWord.findOne({ where: { jid } });
+  return record ? record.status : false;
 }
 
 export {
-	AntiWord,
-	setAntiWordStatus,
-	addAntiWords,
-	removeAntiWords,
-	getAntiWords,
-	isAntiWordEnabled,
+  AntiWord,
+  setAntiWordStatus,
+  addAntiWords,
+  removeAntiWords,
+  getAntiWords,
+  isAntiWordEnabled,
 };
