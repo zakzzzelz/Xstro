@@ -8,6 +8,7 @@ bot(
     public: false,
     isGroup: true,
     desc: 'Adds a user to the group',
+    type: 'group',
   },
   async (message, match) => {
     await message.send(

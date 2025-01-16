@@ -11,14 +11,17 @@
 
 ## Setup
 
-_[Fork Your Own Copy](https://github.com/AstroX11/Xstro/fork)_
+_[Fork Repo](https://github.com/AstroX11/Xstro/fork)_
 
-_[Get Session ID](https://bit.ly/41mQBbY)_
+> [!Note]
+> Your session ID is created by XstroSession and locked up tight using SessionMaker Crypto. It's saved in an encrypted database on Koyeb, and I can’t access it. Keep your session ID safe and don’t share it with anyone you don’t trust! Only Xstro can unlock it and get the main Baileys session from it. For extra safety, I’ve shared two links to the repositories where these sessions are made. I suggest you create your own for better security. I’m just a student, not a cybersecurity expert, so I can’t promise extra protection!
 
-_I want my Own Session Generator ?_
+_[Get Session](https://bit.ly/41mQBbY)_
 
-- _[Session Generator](https://github.com/AstroX11/XstroSession)_
-- _[Session Encryption & Security](https://github.com/AstroX11/session-maker-crypto)_
+Recommended, for experts and All
+
+- `Session Generator` _[Tap Here](https://github.com/AstroX11/XstroSession)_
+- `Session Encryption` _[Tap Here](https://github.com/AstroX11/session-maker-crypto)_
 
 ### Deployments
 

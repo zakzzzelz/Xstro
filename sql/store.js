@@ -1,118 +1,78 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 import { isJidGroup } from 'baileys';
 
-const messageDb = path.join('store', 'messages.json');
-const messageCountDb = path.join('store', 'message_counts.json');
-const contactDb = path.join('store', 'contacts.json');
-const groupMetadataDb = path.join('store', 'group_metadata.json');
-const groupParticipantsDb = path.join('store', 'group_participants.json');
+const storeDir = path.join(process.cwd(), 'store');
 
-const readJSON = (filePath) => JSON.parse(fs.readFileSync(filePath, 'utf8'));
-const writeJSON = (filePath, data) => fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
-const init = (filePath) => {
-  if (!fs.existsSync(filePath)) {
-    fs.writeFileSync(filePath, JSON.stringify([], null, 2));
+const readJSON = async (file) => {
+  try {
+    const filePath = path.join(storeDir, file);
+    const data = await fs.readFile(filePath, 'utf8');
+    return JSON.parse(data);
+  } catch {
+    return [];
   }
 };
 
-init(messageDb);
-init(messageCountDb);
-init(contactDb);
-init(groupMetadataDb);
-init(groupParticipantsDb);
-
-const findOrCreate = (filePath, query) => {
-  const data = readJSON(filePath);
-  const record = data.find((item) => item.jid === query.jid && item.sender === query.sender);
-  if (record) return { record, created: false };
-  data.push(query);
-  writeJSON(filePath, data);
-  return { record: query, created: true };
+const writeJSON = async (file, data) => {
+  const filePath = path.join(storeDir, file);
+  await fs.mkdir(storeDir, { recursive: true });
+  await fs.writeFile(filePath, JSON.stringify(data, null, 2));
 };
 
-/**
- * Saves or updates a contact in the JSON database.
- * @param {string} jid - The JID of the contact.
- * @param {string} name - The name of the contact.
- */
 const saveContact = async (jid, name) => {
   if (!jid || !name || isJidGroup(jid)) return;
-  const contacts = readJSON(contactDb);
-  const contact = contacts.find((c) => c.jid === jid);
-  if (contact) {
-    if (contact.name !== name) {
-      contact.name = name;
-      writeJSON(contactDb, contacts);
-    }
+  const contacts = await readJSON('contact.json');
+  const index = contacts.findIndex((contact) => contact.jid === jid);
+  if (index > -1) {
+    contacts[index].name = name;
   } else {
     contacts.push({ jid, name });
-    writeJSON(contactDb, contacts);
   }
+  await writeJSON('contact.json', contacts);
 };
 
-/**
- * Saves or updates a message in the JSON database.
- * @param {Object} message - The message object.
- */
 const saveMessage = async (message) => {
   const jid = message.key.remoteJid;
   const id = message.key.id;
-  const msg = message;
-  if (!id || !jid || !msg) return;
+  if (!id || !jid || !message) return;
   await saveContact(message.sender, message.pushName);
-
-  const messages = readJSON(messageDb);
-  let exists = messages.find((msg) => msg.id === id && msg.jid === jid);
-
-  if (exists) {
-    exists.message = msg;
+  const messages = await readJSON('message.json');
+  const index = messages.findIndex((msg) => msg.id === id && msg.jid === jid);
+  const timestamp = message.messageTimestamp ? message.messageTimestamp * 1000 : Date.now();
+  if (index > -1) {
+    messages[index].message = message;
+    messages[index].timestamp = timestamp;
   } else {
-    messages.push({ id, jid, message: msg });
+    messages.push({ id, jid, message, timestamp });
   }
-
-  writeJSON(messageDb, messages);
+  await writeJSON('message.json', messages);
 };
 
-/**
- * Loads a message from the JSON database by ID.
- * @param {string} id - The message ID.
- * @returns {Object|null} - The message data or null if not found.
- */
 const loadMessage = async (id) => {
-  const messages = readJSON(messageDb);
-  const message = messages.find((msg) => msg.id === id);
-  return message || null;
+  if (!id) return null;
+  const messages = await readJSON('message.json');
+  return messages.find((msg) => msg.id === id) || null;
 };
 
-/**
- * Gets the name of a contact from the JSON database.
- * @param {string} jid - The JID of the contact.
- * @returns {string} - The name of the contact.
- */
 const getName = async (jid) => {
-  const contacts = readJSON(contactDb);
-  const contact = contacts.find((c) => c.jid === jid);
+  const contacts = await readJSON('contact.json');
+  const contact = contacts.find((contact) => contact.jid === jid);
   return contact ? contact.name : jid.split('@')[0].replace(/_/g, ' ');
 };
 
-/**
- * Saves or updates group metadata in the JSON database.
- * @param {string} jid - The group JID.
- * @param {Object} client - The client instance to fetch metadata.
- */
 const saveGroupMetadata = async (jid, client) => {
   if (!isJidGroup(jid)) return;
-
   const groupMetadata = await client.groupMetadata(jid);
   const metadata = {
     jid: groupMetadata.id,
     subject: groupMetadata.subject,
     subjectOwner: groupMetadata.subjectOwner,
-    subjectTime: groupMetadata.subjectTime ? new Date(groupMetadata.subjectTime * 1000) : null,
+    subjectTime: groupMetadata.subjectTime
+      ? new Date(groupMetadata.subjectTime * 1000).toISOString()
+      : null,
     size: groupMetadata.size,
-    creation: groupMetadata.creation ? new Date(groupMetadata.creation * 1000) : null,
+    creation: groupMetadata.creation ? new Date(groupMetadata.creation * 1000).toISOString() : null,
     owner: groupMetadata.owner,
     desc: groupMetadata.desc,
     descId: groupMetadata.descId,
@@ -126,122 +86,121 @@ const saveGroupMetadata = async (jid, client) => {
     ephemeralDuration: groupMetadata.ephemeralDuration,
   };
 
-  const groupMetadataData = readJSON(groupMetadataDb);
-  let existingGroup = groupMetadataData.find((group) => group.jid === jid);
-  if (existingGroup) {
-    Object.assign(existingGroup, metadata);
+  const metadataList = await readJSON('metadata.json');
+  const index = metadataList.findIndex((meta) => meta.jid === jid);
+  if (index > -1) {
+    metadataList[index] = metadata;
   } else {
-    groupMetadataData.push(metadata);
+    metadataList.push(metadata);
   }
-  writeJSON(groupMetadataDb, groupMetadataData);
+  await writeJSON('metadata.json', metadataList);
 
-  // Save participants
-  const participants = groupMetadata.participants;
-  const groupParticipants = readJSON(groupParticipantsDb);
-  participants.forEach((participant) => {
-    const existingParticipant = groupParticipants.find(
-      (p) => p.jid === jid && p.participantId === participant.id
-    );
-    if (existingParticipant) {
-      existingParticipant.admin = participant.admin;
-    } else {
-      groupParticipants.push({
-        jid,
-        participantId: participant.id,
-        admin: participant.admin,
-      });
-    }
-  });
-  writeJSON(groupParticipantsDb, groupParticipants);
+  const participants = groupMetadata.participants.map((participant) => ({
+    jid,
+    participantId: participant.id,
+    admin: participant.admin,
+  }));
+  await writeJSON(`${jid}_participants.json`, participants);
 };
 
-/**
- * Gets group metadata from the JSON database.
- * @param {string} jid - The group JID.
- * @returns {Object|null} - The group metadata or null if not found.
- */
 const getGroupMetadata = async (jid) => {
-  const groupMetadata = readJSON(groupMetadataDb);
-  const metadata = groupMetadata.find((group) => group.jid === jid);
+  if (!isJidGroup(jid)) return null;
+  const metadataList = await readJSON('metadata.json');
+  const metadata = metadataList.find((meta) => meta.jid === jid);
   if (!metadata) return null;
 
-  const participants = readJSON(groupParticipantsDb).filter((p) => p.jid === jid);
-  return {
-    ...metadata,
-    participants: participants.map((p) => ({
-      id: p.participantId,
-      admin: p.admin,
-    })),
-  };
+  const participants = await readJSON(`${jid}_participants.json`);
+  return { ...metadata, participants };
 };
-
-/**
- * Saves or updates the message count in the JSON database.
- * @param {Object} message - The message object.
- */
 const saveMessageCount = async (message) => {
+  if (!message) return;
   const jid = message.key.remoteJid;
   const sender = message.key.participant || message.sender;
   if (!jid || !sender || !isJidGroup(jid)) return;
 
-  const { record, created } = findOrCreate(messageCountDb, { jid, sender, count: 1 });
-  if (!created) {
-    record.count += 1;
-    writeJSON(messageCountDb, readJSON(messageCountDb));
+  const messageCounts = await readJSON('message_count.json');
+  const index = messageCounts.findIndex((record) => record.jid === jid && record.sender === sender);
+
+  if (index > -1) {
+    messageCounts[index].count += 1;
+  } else {
+    messageCounts.push({ jid, sender, count: 1 });
   }
+
+  await writeJSON('message_count.json', messageCounts);
 };
 
-/**
- * Gets inactive group members based on message count.
- * @param {string} jid - The group JID.
- * @returns {Array} - List of inactive participant IDs.
- */
 const getInactiveGroupMembers = async (jid) => {
   if (!isJidGroup(jid)) return [];
-
   const groupMetadata = await getGroupMetadata(jid);
   if (!groupMetadata) return [];
 
+  const messageCounts = await readJSON('message_count.json');
   const inactiveMembers = groupMetadata.participants.filter((participant) => {
-    const messageCount = readJSON(messageCountDb).find(
-      (record) => record.jid === jid && record.sender === participant.id
-    );
-    return !messageCount || messageCount.count === 0;
+    const record = messageCounts.find((msg) => msg.jid === jid && msg.sender === participant.id);
+    return !record || record.count === 0;
   });
 
-  return inactiveMembers.map((participant) => participant.id);
+  return inactiveMembers.map((member) => member.id);
 };
 
-/**
- * Gets the message count for group members.
- * @param {string} jid - The group JID.
- * @returns {Array} - List of members and their message counts.
- */
 const getGroupMembersMessageCount = async (jid) => {
   if (!isJidGroup(jid)) return [];
+  const messageCounts = await readJSON('message_count.json');
+  const groupCounts = messageCounts
+    .filter((record) => record.jid === jid && record.count > 0)
+    .sort((a, b) => b.count - a.count);
 
-  const messageCounts = readJSON(messageCountDb).filter(
-    (record) => record.jid === jid && record.count > 0
-  );
-  const rankedMembers = await Promise.all(
-    messageCounts.map(async (record) => ({
+  return Promise.all(
+    groupCounts.map(async (record) => ({
       sender: record.sender,
       name: await getName(record.sender),
       messageCount: record.count,
     }))
   );
+};
 
-  return rankedMembers;
+const getChatSummary = async () => {
+  const messages = await readJSON('message.json');
+  const distinctJids = [...new Set(messages.map((msg) => msg.jid))];
+
+  const summaries = await Promise.all(
+    distinctJids.map(async (jid) => {
+      const chatMessages = messages.filter((msg) => msg.jid === jid);
+      const messageCount = chatMessages.length;
+      const lastMessage = chatMessages.sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      )[0];
+      const chatName = isJidGroup(jid) ? jid : await getName(jid);
+
+      return {
+        jid,
+        name: chatName,
+        messageCount,
+        lastMessageTimestamp: lastMessage ? lastMessage.timestamp : null,
+      };
+    })
+  );
+
+  return summaries.sort(
+    (a, b) => new Date(b.lastMessageTimestamp) - new Date(a.lastMessageTimestamp)
+  );
+};
+
+const saveMessageV1 = saveMessage;
+const saveMessageV2 = (message) => {
+  return Promise.all([saveMessageV1(message), saveMessageCount(message)]);
 };
 
 export {
   saveContact,
   loadMessage,
   getName,
+  getChatSummary,
   saveGroupMetadata,
   getGroupMetadata,
   saveMessageCount,
   getInactiveGroupMembers,
   getGroupMembersMessageCount,
-  saveMessage,
+  saveMessageV2 as saveMessage,
 };
