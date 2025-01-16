@@ -1,70 +1,76 @@
-import { DataTypes } from 'sequelize';
-import { DATABASE } from '#lib';
+import fs from 'fs';
+import path from 'path';
 
-export const PluginDB = DATABASE.define(
-  'PluginsDB',
-  {
-    name: {
-      type: DataTypes.STRING,
-      primaryKey: true,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: false,
-    tableName: 'plugins',
-  }
-);
+const store = path.join('store', 'plugins.json');
 
+// Ensure the plugins file exists
+if (!fs.existsSync(store)) {
+  fs.writeFileSync(store, JSON.stringify([], null, 2));
+}
+
+const readPlugins = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writePlugins = (plugins) => fs.writeFileSync(store, JSON.stringify(plugins, null, 2));
+
+/**
+ * Adds a new plugin to the database.
+ * @param {string} name - The name of the plugin.
+ * @returns {Promise<Object>} - The added plugin.
+ */
 export async function addPlugin(name) {
-  try {
-    const newPlugin = await PluginDB.create({ name });
-    return newPlugin;
-  } catch (error) {
-    console.error('Error adding plugin:', error);
-    throw error;
+  const plugins = readPlugins();
+  const newPlugin = { name };
+
+  // Check if plugin already exists
+  if (plugins.some((plugin) => plugin.name === name)) {
+    throw new Error('Plugin already exists');
   }
+
+  plugins.push(newPlugin);
+  writePlugins(plugins);
+  return newPlugin;
 }
 
+/**
+ * Updates an existing plugin by its name.
+ * @param {string} name - The name of the plugin to update.
+ * @param {string} newName - The new name for the plugin.
+ * @returns {Promise<Object>} - The updated plugin.
+ */
 export async function updatePlugin(name, newName) {
-  try {
-    const [updated] = await PluginDB.update(
-      { name: newName },
-      {
-        where: { name },
-      }
-    );
-    if (updated) {
-      const updatedPlugin = await PluginDB.findOne({
-        where: { name: newName },
-      });
-      return updatedPlugin;
-    }
+  const plugins = readPlugins();
+  const pluginIndex = plugins.findIndex((plugin) => plugin.name === name);
+
+  if (pluginIndex === -1) {
     throw new Error('Plugin not found');
-  } catch (error) {
-    console.error('Error updating plugin:', error);
-    throw error;
   }
+
+  plugins[pluginIndex].name = newName;
+  writePlugins(plugins);
+  return plugins[pluginIndex];
 }
 
+/**
+ * Removes a plugin from the database.
+ * @param {string} name - The name of the plugin to remove.
+ * @returns {Promise<boolean>} - Returns true if the plugin was removed, false otherwise.
+ */
 export async function removePlugin(name) {
-  try {
-    const deleted = await PluginDB.destroy({
-      where: { name },
-    });
-    return deleted;
-  } catch (error) {
-    console.error('Error removing plugin:', error);
-    throw error;
+  const plugins = readPlugins();
+  const pluginIndex = plugins.findIndex((plugin) => plugin.name === name);
+
+  if (pluginIndex === -1) {
+    return false;
   }
+
+  plugins.splice(pluginIndex, 1);
+  writePlugins(plugins);
+  return true;
 }
 
+/**
+ * Retrieves all plugins from the database.
+ * @returns {Promise<Array>} - An array of all plugins.
+ */
 export async function getPlugins() {
-  try {
-    const plugins = await PluginDB.findAll();
-    return plugins;
-  } catch (error) {
-    console.error('Error retrieving plugins:', error);
-    throw error;
-  }
+  return readPlugins();
 }
