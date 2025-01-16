@@ -3,7 +3,6 @@ import path from 'path';
 
 const store = path.join('store', 'mentions.json');
 
-// Ensure the mentions file exists
 if (!fs.existsSync(store)) {
   fs.writeFileSync(store, JSON.stringify([], null, 2));
 }

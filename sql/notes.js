@@ -3,7 +3,6 @@ import path from 'path';
 
 const store = path.join('store', 'notes.json');
 
-// Ensure the notes file exists
 if (!fs.existsSync(store)) {
   fs.writeFileSync(store, JSON.stringify([], null, 2));
 }

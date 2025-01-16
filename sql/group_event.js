@@ -3,7 +3,6 @@ import path from 'path';
 
 const store = path.join('store', 'group_events.json');
 
-// Ensure the group events file exists
 if (!fs.existsSync(store)) {
   fs.writeFileSync(store, JSON.stringify([], null, 2));
 }
