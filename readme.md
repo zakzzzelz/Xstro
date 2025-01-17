@@ -50,13 +50,16 @@ npm start
 ### Heroku Deploy
 
 * [Deploy Now](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
-* Once, you tap the URL Above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
+* Once you tap the URL above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
 * Click on the `Deploy` button to install and deploy the bot to Heroku.
 * Need Help? [Watch Video Tutorial]()
 
 ### Koyeb Deploy
 
-* [Deploy on Koyeb](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20бу;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos&env%5BDEBUG%5D=false)
+* [Deploy Now](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20бу;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos)
+* Once you tap the URL above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
+* If you are not an advanced koyeb user, just tap on the deploy button and aviod any necessary options that "may" or "will" alter the pre and post deployment process.
+* Need Help? [Watch Video Tutorial]()
 
 ### Render Deploy
 
