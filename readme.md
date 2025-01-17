@@ -72,13 +72,126 @@ npm start
 * This keeps the bot Alive by pinging it every 5mins.
 * [Watch Video Tutorial]()
 
-### Windows/Linux/MacOS Deploy
-
-* [Download ZIP](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip)
-
 ### Panel Deploy
 
 * [Panel Deployment](https://github.com/AstroX11/Xstro/wiki/Panel-Support)
+
+### Windows/Linux/MacOS Deploy
+
+## 1. Install Node.js
+
+* **Windows**: [Download](https://nodejs.org/) and install. Verify:
+
+  ```bash
+  node -v
+  npm -v
+  ```
+
+* **Linux**:
+
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+  sudo apt install -y nodejs
+  node -v
+  npm -v
+  ```
+
+* **macOS**:
+
+  ```bash
+  brew install node
+  node -v
+  npm -v
+  ```
+
+## 2. Install FFmpeg
+
+* **Windows**: [Download](https://ffmpeg.org/download.html), extract, and add `bin` to PATH. Verify:
+
+  ```bash
+  ffmpeg -version
+  ```
+
+* **Linux**:
+
+  ```bash
+  sudo apt update && sudo apt install ffmpeg
+  ffmpeg -version
+  ```
+
+* **macOS**:
+
+  ```bash
+  brew install ffmpeg
+  ffmpeg -version
+  ```
+
+## 3. Install Yarn
+
+* Install globally using npm:
+
+  ```bash
+  npm install -g yarn
+  yarn -v
+  ```
+
+## 4. Install Git
+
+* **Windows**: [Download](https://git-scm.com/) and install. Verify:
+
+  ```bash
+  git --version
+  ```
+
+* **Linux**:
+
+  ```bash
+  sudo apt update && sudo apt install git
+  git --version
+  ```
+
+* **macOS**:
+
+  ```bash
+  brew install git
+  git --version
+  ```
+
+## 5. Clone the Repository
+
+1. Open a terminal.
+2. Clone the repo:
+
+   ```bash
+   git clone https://github.com/AstroX11/Xstro.git
+   ```
+
+3. Navigate to the directory:
+
+   ```bash
+   cd Xstro
+   ```
+
+4. Install dependencies:
+
+   ```bash
+   yarn install
+   ```
+
+5. Start the project:
+
+   ```bash
+   npm start
+   ```
+
+## Alternate Option: Download ZIP
+
+1. [Download ZIP](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip).
+2. Extract and follow steps 6.2 and 6.3.
+
+## Verify Setup
+
+Test the application. Check logs for issues if it doesn't work.
 
 ### Guide and Support
 
