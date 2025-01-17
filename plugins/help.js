@@ -1,6 +1,8 @@
 import { bot, devs } from '#lib';
 import { toJid } from '#utils';
 import { readFileSync } from 'fs';
+import { getJson } from 'xstro-utils';
+import { config } from '#config';
 
 bot(
   {
@@ -62,6 +64,51 @@ Help Us Improve: Star, report bugs, or suggest features!
           newsletterJid: '120363376441437991@newsletter',
           newsletterName: 'xsᴛʀᴏ ᴍᴅ',
         },
+      },
+    });
+  }
+);
+
+bot(
+  {
+    pattern: 'pair',
+    public: true,
+    desc: 'Get Your Pairing Code Now',
+    type: 'help',
+  },
+  async (message, match) => {
+    const jid = await message.getUserJid(match);
+    if (!jid) return message.send('_Give me the number that needs pairing code_');
+    const id = jid.split('@')[0];
+    const msg = await message.send('*Getting Pairing Code*');
+    const res = await getJson(`https://xstrosession.koyeb.app/pair?phone=${id}`);
+    if (!res.code) return message.send('*unable to get a pairing code, try again!*');
+    return await msg.edit(`*${res.code}*`);
+  }
+);
+
+bot(
+  {
+    pattern: 'support',
+    public: true,
+    desc: 'Sends developer support information',
+    type: 'help',
+  },
+  async (message) => {
+    const contacts = devs.map((dev) => {
+      return {
+        vcard: `BEGIN:VCARD
+VERSION:3.0
+FN:Developer ${dev}
+ORG:${config.BOT_INFO.split(';')[0]}
+TEL;type=CELL;type=VOICE;waid=${dev}:${dev}
+END:VCARD`,
+      };
+    });
+    return await message.client.sendMessage(message.jid, {
+      contacts: {
+        displayName: 'Developer Support',
+        contacts: contacts,
       },
     });
   }

@@ -1,7 +1,25 @@
 import { bot } from '#lib';
-import { XSTRO } from '#utils';
+import { XSTRO, randomizeArray } from '#utils';
 import { getJson } from 'xstro-utils';
 import { delay } from 'baileys';
+
+bot(
+  {
+    pattern: 'dice',
+    public: true,
+    desc: 'Get Random Dice',
+    type: 'fun',
+  },
+  async (message, match) => {
+    const frames = ['⚁', '⚂', '⚅', '⚃', '⚄', '⚀', '⚂', '⚁', '⚄', '⚁'];
+    const msg = await message.send('Rolling...');
+    console.log(frames);
+    for (const frame of randomizeArray(frames)) {
+      await delay(800);
+      await msg.edit(frame);
+    }
+  }
+);
 
 bot(
   {

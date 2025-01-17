@@ -247,3 +247,33 @@ export const convertTo12Hour = (timeStr) => {
   if (hour === 0) hour = 12;
   return `${hour}:${minutes}${period}`;
 };
+
+export const isMediaMessage = (message) => {
+  const typeOfMessage = getContentType(message);
+  const mediaTypes = [
+    'imageMessage',
+    'videoMessage',
+    'audioMessage',
+    'documentMessage',
+    'stickerMessage',
+  ];
+  return mediaTypes.includes(typeOfMessage);
+};
+
+export const formatTime = (timestamp) => {
+  const date = new Date(timestamp);
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12 || 12; // Convert 0 to 12 for 12-hour format
+  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+  return `${hours}:${formattedMinutes}${ampm}`;
+};
+
+export function randomizeArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}

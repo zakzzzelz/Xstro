@@ -18,27 +18,6 @@ bot(
 
 bot(
   {
-    pattern: 'getbio',
-    public: true,
-    type: 'tools',
-    desc: 'Get the WhatsApp Bio of a User',
-  },
-  async (message, match) => {
-    const jid = await message.getUserJid(match);
-    const { status, setAt } = await message.client.fetchStatus(jid);
-
-    if (status && setAt) {
-      await message.send(`*@${jid.split('@')[0]} bio's*\n\nBio: ${status}\n\nSetAt: ${setAt}`, {
-        mentions: [jid],
-      });
-    } else {
-      message.send('_Unable to Get user bio_');
-    }
-  }
-);
-
-bot(
-  {
     pattern: 'enhance',
     public: true,
     type: 'tools',
@@ -238,5 +217,23 @@ bot(
     const media = await message.download(true);
     const res = await UploadFileUgu(media);
     return message.send(`*${res.url}*`);
+  }
+);
+
+bot(
+  {
+    pattern: 'link',
+    public: true,
+    desc: 'Shortens a url',
+    type: 'tools',
+  },
+  async (message, match) => {
+    if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
+      return message.send('*Please provide a valid URL*');
+    const msg = await message.send('*Shortening URL...*');
+    const url = extractUrlFromString(match);
+    const res = await XSTRO.short(url);
+    if (!res) return await msg.edit('*Failed to shorten URL*');
+    return await msg.edit(`*Shortened URL:* ${res}`);
   }
 );
