@@ -9,7 +9,6 @@ const config = {
   STICKER_PACK: process.env.STICKER_PACK || 'мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт',
   WARN_COUNT: process.env.WARN_COUNT || 3,
   TIME_ZONE: process.env.TIME_ZONE || 'Africa/Lagos',
-  DEBUG: process.env.DEBUG || false,
   VERSION: '1.2.3',
 };
 

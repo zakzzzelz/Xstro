@@ -9,45 +9,80 @@
 > [!Important]
 > If you want to modify the source code, you are free to do so according to the license. However, I will not take responsibility for any unethical actions you take using this software, as it was originally made for educational purposes. I strongly oppose any form of misuse, abuse, or threats.
 
-## Setup
+## Offical Documentation
 
-_[Fork Repo](https://github.com/AstroX11/Xstro/fork)_
+[![Fork Repo](https://img.shields.io/badge/Fork_Repo-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AstroX11/Xstro/fork)  
+
+[![Get Session](https://img.shields.io/badge/Get_Session-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://bit.ly/41mQBbY)
 
 > [!Note]
-> Your session ID is created by XstroSession and locked up tight using SessionMaker Crypto. It's saved in an encrypted database on Koyeb, and I can’t access it. Keep your session ID safe and don’t share it with anyone you don’t trust! Only Xstro can unlock it and get the main Baileys session from it. For extra safety, I’ve shared two links to the repositories where these sessions are made. I suggest you create your own for better security. I’m just a student, not a cybersecurity expert, so I can’t promise extra protection!
+> Session ID created by XstroSession, encrypted with SessionMaker Crypto, and stored on Koyeb. Only Xstro can unlock it. Two repository links provided for creating your own session. Keep your session ID safe. I am not a cybersecurity expert.
 
-_[Get Session](https://bit.ly/41mQBbY)_
+### Custom Session
 
-Recommended, for experts and All
+* [Download & Install Node.js](https://nodejs.org/en)
+* [Download & Install Git](https://git-scm.com/)
+* Run `node -v` on your terminal.
+* Create a folder, and open your terminal on that folder and run the below.
 
-- `Session Generator` _[Tap Here](https://github.com/AstroX11/XstroSession)_
-- `Session Encryption` _[Tap Here](https://github.com/AstroX11/session-maker-crypto)_
+```bash
+npm i -g yarn
+```
 
-### Deployments
+`XstroSession`
 
-- _[Heroku Deploy](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)_
+```bash
+git clone https://github.com/AstroX11/XstroSession
+yarn install
+npm start
+```
 
-- _[Koyeb Deploy](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20бу;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos&env%5BDEBUG%5D=false)_
+`Session Crypto`
 
-- _[Render Deploy](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)_
+```bash
+git clone https://github.com/AstroX11/session-maker-crypto
+yarn install
+npm start
+```
 
-- _[Windows/Linux/MacOS](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip)_
+## Deployments
 
-- _[Panel Deploy](https://github.com/AstroX11/Xstro/wiki/Panel-Support)_
+### Heroku Deploy
+
+* [Deploy Now](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
+* Once, you tap the URL Above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
+* Click on the `Deploy` button to install and deploy the bot to Heroku.
+* Need Help? [Watch Video Tutorial]()
+
+### Koyeb Deploy
+
+* [Deploy on Koyeb](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20бу;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos&env%5BDEBUG%5D=false)
+
+### Render Deploy
+
+* [Deploy on Render](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
+
+### Windows/Linux/MacOS Deploy
+
+* [Download ZIP](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip)
+
+### Panel Deploy
+
+* [Panel Deployment](https://github.com/AstroX11/Xstro/wiki/Panel-Support)
 
 ### Guide and Support
 
-- _[External Plugins](https://github.com/AstroX11/Xstro/wiki/External-Plugins)_
+* _[External Plugins](https://github.com/AstroX11/Xstro/wiki/External-Plugins)_
 
-- _[Render Support](https://github.com/AstroX11/Xstro/wiki/Render-Support)_
+* _[Render Support](https://github.com/AstroX11/Xstro/wiki/Render-Support)_
 
-- _[Heroku Support](https://github.com/AstroX11/Xstro/wiki/Heroku-Support)_
+* _[Heroku Support](https://github.com/AstroX11/Xstro/wiki/Heroku-Support)_
 
-- _[Windows Support](https://github.com/AstroX11/Xstro/wiki/Windows-Setup)_
+* _[Windows Support](https://github.com/AstroX11/Xstro/wiki/Windows-Setup)_
 
-- _[Plugin Creation](https://github.com/AstroX11/Xstro/wiki/Plugin-Creation)_
+* _[Plugin Creation](https://github.com/AstroX11/Xstro/wiki/Plugin-Creation)_
 
-- _[Listener Events](https://github.com/AstroX11/Xstro/wiki/Create-Custom-Listener)_
+* _[Listener Events](https://github.com/AstroX11/Xstro/wiki/Create-Custom-Listener)_
 
 ### Contributing
 
