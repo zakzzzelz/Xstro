@@ -64,6 +64,13 @@ npm start
 ### Render Deploy
 
 * [Deploy Now](https://render.com/deploy?repo=https://github.com/AstroX11/Xstro)
+* Once you tap the URL above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
+* Tap on the `Deploy Blueprint` button, the wait for the bot to deploy and start running.
+* Once you have deployed the bot, copy the `URL` of the deployed blueprint.
+* If you do not have a `betterstack` account then [Create A Better Stack Account](https://betterstack.com/users/sign-up) or [Login if you already have one](https://betterstack.com/users/sign-in#magic).
+* Once you are in, tap on the `create monitor` button and scroll down to the box that say you should put `url to monitor` it could be different and paste the `URL` in the box and tap on `create monitor`.
+* This keeps the bot Alive by pinging it every 5mins.
+* [Watch Video Tutorial]()
 
 ### Windows/Linux/MacOS Deploy
 
