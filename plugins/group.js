@@ -86,17 +86,14 @@ bot(
     if (!countryCode || isNaN(countryCode))
       return message.send('_Please provide a valid country code._');
     const metadata = await message.client.groupMetadata(message.jid);
-    const participants = metadata.participants;
-    const toKick = participants
+    const participants = metadata.participants
       .filter((participant) => participant.id.startsWith(`${countryCode}`) && !participant.admin)
       .map((participant) => participant.id);
-    if (!toKick.length)
+    if (!participants.length)
       return message.send(`_No members found with the country code ${countryCode}._`);
-    for (const jid of toKick) {
+    for (const jid of participants) {
       await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
-      await message.send(`_Kicked member:_ @${jid.split('@')[0]}`, {
-        mentions: [jid],
-      });
+      await message.send(`*_@${jid.split('@')[0]} kicked_*`, { mentions: [jid] });
       await delay(2000);
     }
     await message.send(`_Kicked All Memeber from ${countryCode}._`);
@@ -113,9 +110,8 @@ bot(
   },
   async (message, match) => {
     if (!(await message.isUserAdmin())) return;
-    const subject = match || message.reply_message?.text;
-    if (!subject) return message.send('_Provide A New Name for the Group!_');
-    await message.client.groupUpdateSubject(message.jid, subject);
+    if (!match && message.reply_message?.text) return message.send('_Provide New Group Name_');
+    await message.client.groupUpdateSubject(message.jid, match || message.reply_message?.text);
     return message.send('_Group Name Updated_');
   }
 );
@@ -130,9 +126,9 @@ bot(
   },
   async (message, match) => {
     if (!(await message.isUserAdmin())) return;
-    const desciption = match || message.reply_message?.text;
-    if (!desciption) return message.send('_please add a new group description_');
-    await message.client.groupUpdateDescription(message.jid, desciption);
+    if (!match && message.reply_message?.text)
+      return message.send('_please add a new group description_');
+    await message.client.groupUpdateDescription(message.jid, match || message.reply_message?.text);
     return message.send('_Group Description Updated_');
   }
 );
@@ -151,13 +147,9 @@ bot(
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
     if (participant.admin)
-      return message.send(`_@${jid.replace('@s.whatsapp.net', '')} is already an admin._`, {
-        mentions: [jid],
-      });
+      return message.send(`_@${jid.split('@')[0]} is already an admin._`, { mentions: [jid] });
     await message.client.groupParticipantsUpdate(message.jid, [jid], 'promote');
-    return message.send(`_@${jid.replace('@s.whatsapp.net', '')} is now an admin_`, {
-      mentions: [jid],
-    });
+    return message.send(`*@${jid.split('@')[0]} is now an admin*`, { mentions: [jid] });
   }
 );
 
@@ -175,13 +167,11 @@ bot(
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
     if (!participant.admin)
-      return message.send(`_@${jid.replace('@s.whatsapp.net', '')} is not an admin._`, {
+      return message.send(`_@${jid.split('@')[0]} is not an admin._`, {
         mentions: [jid],
       });
     await message.client.groupParticipantsUpdate(message.jid, [jid], 'demote');
-    return message.send(`_@${jid.replace('@s.whatsapp.net', '')} is no longer an admin_`, {
-      mentions: [jid],
-    });
+    return message.send(`_@${jid.split('@')[0]} is no longer an admin_`, { mentions: [jid] });
   }
 );
 
@@ -196,11 +186,9 @@ bot(
   async (message, match) => {
     if (!(await message.isUserAdmin())) return;
     const jid = await message.getUserJid(match);
-    if (!jid) return message.send('_Reply, tag, or give me the participant number_');
+    if (!jid) return;
     await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
-    return message.send(`_@${jid.split('@')[0]} has been kicked!_`, {
-      mentions: [jid],
-    });
+    return message.send(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });
   }
 );
 
