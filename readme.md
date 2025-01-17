@@ -78,7 +78,7 @@ npm start
 
 ### Windows/Linux/MacOS Deploy
 
-## 1. Install Node.js
+#### 1. Install Node.js
 
 * **Windows**: [Download](https://nodejs.org/) and install. Verify:
 
@@ -104,7 +104,7 @@ npm start
   npm -v
   ```
 
-## 2. Install FFmpeg
+#### 2. Install FFmpeg
 
 * **Windows**: [Download](https://ffmpeg.org/download.html), extract, and add `bin` to PATH. Verify:
 
@@ -126,7 +126,7 @@ npm start
   ffmpeg -version
   ```
 
-## 3. Install Yarn
+#### 3. Install Yarn
 
 * Install globally using npm:
 
@@ -135,7 +135,7 @@ npm start
   yarn -v
   ```
 
-## 4. Install Git
+#### 4. Install Git
 
 * **Windows**: [Download](https://git-scm.com/) and install. Verify:
 
@@ -157,41 +157,17 @@ npm start
   git --version
   ```
 
-## 5. Clone the Repository
+#### 5. Setup
 
 1. Open a terminal.
-2. Clone the repo:
+2. Clone the repo and start:
 
    ```bash
    git clone https://github.com/AstroX11/Xstro.git
-   ```
-
-3. Navigate to the directory:
-
-   ```bash
    cd Xstro
-   ```
-
-4. Install dependencies:
-
-   ```bash
    yarn install
-   ```
-
-5. Start the project:
-
-   ```bash
    npm start
    ```
-
-## Alternate Option: Download ZIP
-
-1. [Download ZIP](https://github.com/AstroX11/Xstro/archive/refs/heads/master.zip).
-2. Extract and follow steps 6.2 and 6.3.
-
-## Verify Setup
-
-Test the application. Check logs for issues if it doesn't work.
 
 ### Guide and Support
 
