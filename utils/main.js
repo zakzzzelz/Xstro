@@ -277,3 +277,21 @@ export function randomizeArray(arr) {
   }
   return arr;
 }
+
+export function deepClone(data) {
+  function traverse(value, depth = 0) {
+    if (Array.isArray(value)) {
+      return value.map((item) => traverse(item, depth + 1));
+    } else if (value && typeof value === 'object' && value !== null) {
+      const result = {};
+      Object.entries(value).forEach(([key, val]) => {
+        result[key] = traverse(val, depth + 1);
+      });
+      return result;
+    } else {
+      return value;
+    }
+  }
+
+  return traverse(data);
+}

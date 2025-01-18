@@ -1,6 +1,7 @@
 import { font } from '#bot';
 import { config } from '#config';
-import { bot, commands, getConfigValues } from '#lib';
+import { bot, commands } from '#lib';
+import { getConfig } from '#sql';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';
 
@@ -12,7 +13,7 @@ bot(
     dontAddCommandList: true,
   },
   async (message) => {
-    const { mode, PREFIX } = await getConfigValues();
+    const { mode, PREFIX } = await getConfig();
     const cmds = commands.filter(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')

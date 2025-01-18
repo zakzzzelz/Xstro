@@ -103,15 +103,14 @@ class RateLimitHandler {
 
 /**
  * Updates group metadata with rate limiting
- * @param {Object} msg - Message object
+ * @param {Object} client - Message object
  */
-export const updateGroupMetadata = async (msg) => {
-  const conn = msg.client;
+export const updateGroupMetadata = async (client) => {
   const handler = new RateLimitHandler();
 
   const updateGroups = async () => {
     try {
-      const groups = await conn.groupFetchAllParticipating();
+      const groups = await client.groupFetchAllParticipating();
 
       if (!groups) {
         return;
@@ -125,7 +124,7 @@ export const updateGroupMetadata = async (msg) => {
         }
       }
 
-      await handler.processQueue(conn);
+      await handler.processQueue(client);
     } catch (error) {
       if (error?.data === 429) {
         await handler.delay(CONFIG.RATE_LIMIT_DELAY);
