@@ -1,0 +1,27 @@
+name: Sync Labels
+
+on:
+  push:
+    paths:
+      - .github/labels.yml
+    branches:
+      - main
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Sync Labels
+        uses: EndBug/label-sync@v2
+        with:
+          # The path to the label configuration file
+          config-file: .github/labels.yml
+          
+          # Whether to delete labels that are not in the config file
+          delete-other-labels: false
+          
+          # The token to use to authenticate with GitHub
+          token: ${{ secrets.GITHUB_TOKEN }}
