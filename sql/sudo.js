@@ -5,11 +5,8 @@ import { toJid } from '#utils';
 
 const store = path.join('store', 'sudo.json');
 
-if (!fs.existsSync(store)) {
-  fs.writeFileSync(store, JSON.stringify([], null, 2));
-}
+if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([], null, 2));
 
-// Helper functions to read/write the JSON file
 const readSudoUsers = () => JSON.parse(fs.readFileSync(store, 'utf8'));
 const writeSudoUsers = (sudoUsers) => fs.writeFileSync(store, JSON.stringify(sudoUsers, null, 2));
 
