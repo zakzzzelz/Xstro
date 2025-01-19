@@ -1,78 +1,60 @@
 import fs from 'fs';
 import path from 'path';
-import { areJidsSameUser } from 'baileys';
-import { toJid } from '#utils';
 
 const store = path.join('store', 'sudo.json');
 
 if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([], null, 2));
 
-const readSudoUsers = () => JSON.parse(fs.readFileSync(store, 'utf8'));
-const writeSudoUsers = (sudoUsers) => fs.writeFileSync(store, JSON.stringify(sudoUsers, null, 2));
+const read = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const write = (users) => fs.writeFileSync(store, JSON.stringify(users, null, 2));
 
-/**
- * Adds a user to the sudo list.
- * @param {string} jid - The user JID to add as sudo.
- * @returns {string} - Success or failure message.
- */
-const addSudo = async (jid) => {
-  const sudoUsers = readSudoUsers();
-  if (sudoUsers.includes(jid)) {
-    return `_@${jid} was already sudo_`;
+function addSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
+
+  let added = false;
+  for (const id of jid) {
+    if (!users.includes(id)) {
+      users.push(id);
+      added = true;
+    }
   }
-  sudoUsers.push(jid);
-  writeSudoUsers(sudoUsers);
-  return `_@${jid} is now a Sudo User_`;
-};
+  if (added) write(users);
+  return added;
+}
 
-/**
- * Removes a user from the sudo list.
- * @param {string} jid - The user JID to remove from sudo.
- * @returns {string} - Success or failure message.
- */
-const delSudo = async (jid) => {
-  const sudoUsers = readSudoUsers();
-  const index = sudoUsers.indexOf(jid);
-  if (index === -1) {
-    return `_@${jid} is not a sudo user_`;
+function delSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
+  let removed = false;
+
+  for (const id of jid) {
+    const index = users.indexOf(id);
+    if (index !== -1) {
+      users.splice(index, 1);
+      removed = true;
+    }
   }
-  sudoUsers.splice(index, 1);
-  writeSudoUsers(sudoUsers);
-  return `_@${jid} is removed from sudo user_`;
-};
 
-/**
- * Retrieves all sudo users.
- * @returns {string} - A string containing the list of all sudo users.
- */
-const getSudo = async () => {
-  const sudoUsers = readSudoUsers();
-  return sudoUsers.length > 0 ? sudoUsers.join('\n') : '_No Sudo Users_';
-};
+  if (removed) write(users);
+  return removed;
+}
 
-/**
- * Checks if the user is a sudo user.
- * @param {string} jid - The JID of the user to check.
- * @param {string} owner - The JID of the owner to check.
- * @returns {boolean} - True if the user is a sudo, false otherwise.
- */
-const isSudo = async (jid, owner) => {
-  if (typeof jid !== 'string') jid = '';
-  const devs = [
-    '923477406362',
-    '2349027862116',
-    '2348060598064',
-    '2348039607375',
-    '923089660496',
-    '2347041620617',
-  ];
-  const devstoJid = devs.map((dev) => toJid(dev.trim()));
-  if (owner && typeof owner !== 'string') owner = owner.toString();
-  if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;
-  const sudoUsers = readSudoUsers();
-  const uId = toJid(jid);
-  if (sudoUsers.includes(uId) || devstoJid.includes(uId)) return true;
+function getSudo() {
+  const users = read();
+  return users.length > 0 ? users : false;
+}
+
+function isSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
+
+  for (const id of jid) {
+    if (users.includes(id)) {
+      return true;
+    }
+  }
   return false;
-};
+}
 
 export { addSudo, delSudo, getSudo, isSudo };
