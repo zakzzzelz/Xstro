@@ -23,7 +23,6 @@ bot(
   },
   async (message) => {
     const autoReactSetting = await getAutoReactStatus();
-    console.log(autoReactSetting);
     if (autoReactSetting) {
       const emoji = getRandom(emojis);
       await message.react(emoji);

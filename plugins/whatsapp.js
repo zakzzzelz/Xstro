@@ -142,7 +142,7 @@ bot(
           },
         ],
       },
-      jid
+      message.jid
     );
   }
 );

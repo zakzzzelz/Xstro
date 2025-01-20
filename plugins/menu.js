@@ -18,7 +18,7 @@ bot(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
     ).length;
-    let menuInfo = `\`\`\`╭─── ${config.BOT_INFO.split(';')[1]} ────
+    let menuInfo = `╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Owner: ${config.BOT_INFO.split(';')[0]}		
 │ Prefix: ${PREFIX}
 │ Plugins: ${cmds}
@@ -32,7 +32,7 @@ bot(
       timeZone: config.TIME_ZONE,
     })}
 │ Version: ${config.VERSION}
-╰─────────────\`\`\`\n`;
+╰─────────────\n`;
 
     const commandsByType = commands
       .filter((cmd) => cmd.pattern && !cmd.dontAddCommandList)
@@ -41,7 +41,7 @@ bot(
         if (!acc[type]) {
           acc[type] = [];
         }
-        acc[type].push(cmd.pattern.toString().toUpperCase().split(/\W+/)[1]);
+        acc[type].push(cmd.pattern.toString().toLowerCase().split(/\W+/)[1]);
         return acc;
       }, {});
 
@@ -51,14 +51,14 @@ bot(
 
     sortedTypes.forEach((type) => {
       const sortedCommands = commandsByType[type].sort();
-      menuInfo += font.typewriter(`╭──── ${type.toUpperCase()} ────\n`);
+      menuInfo += `╭──── *${type}* ────\n`;
       sortedCommands.forEach((cmd) => {
-        menuInfo += font.typewriter(`│${totalCommands}· ${cmd}\n`);
+        menuInfo += `│${totalCommands}· ${cmd}\n`;
         totalCommands++;
       });
       menuInfo += `╰────────────\n`;
     });
-    return await message.send(menuInfo);
+    return await message.send(font.tiny(menuInfo));
   }
 );
 
@@ -84,6 +84,6 @@ bot(
       if (desc) cmdsList += `${desc}\n\n`;
     });
 
-    return await message.send(`\`\`\`${cmdsList}\`\`\``);
+    return await message.send(font.tiny(cmdsList));
   }
 );
