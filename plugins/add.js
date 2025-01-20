@@ -15,10 +15,7 @@ bot(
       `\`\`\`⚠️ Warning: Using this command improperly can lead to your account being banned! Ensure the recipient has saved your contact before proceeding. Misuse of this feature is strictly prohibited by whatsapp\`\`\``
     );
     await delay(3000);
-
-    if (!message.isAdmin) return message.send('```You are not an Admin```');
-    if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-
+    if (!(await message.isUserAdmin())) return;
     const jid = await message.getUserJid(match);
 
     try {
