@@ -14,7 +14,6 @@ async function setAutoReactStatus(status) {
   const db = readDB();
   db.status = status;
   writeDB(db);
-
   return {
     success: true,
     message: `Auto-react is now ${status ? 'enabled' : 'disabled'}`,

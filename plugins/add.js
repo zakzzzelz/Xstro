@@ -11,12 +11,13 @@ bot(
     type: 'group',
   },
   async (message, match) => {
+    if (!(await message.isUserAdmin())) return;
+    const jid = await message.getUserJid(match);
+    await delay(3000);
     await message.send(
       `\`\`\`⚠️ Warning: Using this command improperly can lead to your account being banned! Ensure the recipient has saved your contact before proceeding. Misuse of this feature is strictly prohibited by whatsapp\`\`\``
     );
     await delay(3000);
-    if (!(await message.isUserAdmin())) return;
-    const jid = await message.getUserJid(match);
 
     try {
       const pp = await message.client.profilePictureUrl(message.jid).catch(() => null);

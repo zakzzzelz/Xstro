@@ -1,6 +1,6 @@
 import { bot } from '#lib';
 import { getRandom } from '#utils';
-import { AutoReact } from '#sql';
+import { setAutoReactStatus, getAutoReactStatus } from '#sql';
 
 bot(
   {
@@ -10,15 +10,9 @@ bot(
     type: 'user',
   },
   async (message, match) => {
-    const status = match;
-    const newStatus = status === 'on';
-    const currentSetting = await AutoReact.findOne();
-    if (currentSetting) {
-      await AutoReact.update({ status: newStatus }, { where: {} });
-    } else {
-      await AutoReact.create({ status: newStatus });
-    }
-    await message.send(`_Autoreact set to ${newStatus ? 'ON' : 'OFF'}._`);
+    const status = match === 'on';
+    await setAutoReactStatus(status);
+    await message.send(`_Autoreact turned ${status ? 'on' : 'off'}._`);
   }
 );
 
@@ -28,8 +22,9 @@ bot(
     dontAddCommandList: true,
   },
   async (message) => {
-    const autoReactSetting = await AutoReact.findOne();
-    if (autoReactSetting?.status) {
+    const autoReactSetting = await getAutoReactStatus();
+    console.log(autoReactSetting);
+    if (autoReactSetting) {
       const emoji = getRandom(emojis);
       await message.react(emoji);
     }
