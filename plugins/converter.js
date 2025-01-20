@@ -10,11 +10,9 @@ import {
   resizeImage,
   toPTT,
   toVideo,
-  upload,
   webpToImage,
   XSTRO,
 } from '#utils';
-import { getBuffer } from 'xstro-utils';
 
 bot(
   {
@@ -47,7 +45,6 @@ bot(
     media = await message.download();
     if (await isAnimatedWebp(media)) {
       media = await convertWebPFile(media);
-      media = await getBuffer(media);
       media = await createSticker(media);
       return message.send(media, { type: 'sticker' });
     } else {
@@ -71,7 +68,7 @@ bot(
     if (!['left', 'right', 'vertical', 'horizontal'].includes(match)) {
       return message.send(`_Usage: ${prefix}flip <${validDirections.join('/')}>`);
     }
-    media = await message.download(true);
+    media = await message.download();
     media = await flipMedia(media, match);
     return message.send(media, { caption: `_Flipped to ${match}_` });
   }
@@ -87,7 +84,7 @@ bot(
   async (message) => {
     let media;
     if (!message.reply_message.audio) return message.send('_Reply Audio_');
-    media = await message.download(true);
+    media = await message.download();
     media = await audioToBlackVideo(media);
     return await message.send(media);
   }
@@ -118,7 +115,7 @@ bot(
   async (message) => {
     let media;
     if (!message.reply_message.sticker) return message.send('_Reply Sticker_');
-    media = await message.download(true);
+    media = await message.download();
     media = await webpToImage(media);
     return message.send(media);
   }
@@ -135,7 +132,7 @@ bot(
     let media;
     if (!message.reply_message.video && !message.reply_message.audio)
       return message.send('_Reply Video or Audio_');
-    media = await message.download(true);
+    media = await message.download();
     media = await convertToMp3(media);
     return await message.send(media, {
       mimetype: 'audio/mpeg',
@@ -155,7 +152,7 @@ bot(
     let media;
     if (!message.reply_message.video && !message.reply_message.audio)
       return message.send('_Reply Video or Audio_');
-    media = await message.download(true);
+    media = await message.download();
     media = await toPTT(media);
     return await message.client.sendMessage(message.jid, {
       audio: media,
@@ -176,7 +173,7 @@ bot(
     let media;
     if (!message.reply_message.video && !message.reply_message.sticker)
       return message.send('_Reply Video_');
-    media = await message.download(true);
+    media = await message.download();
     media = await toVideo(media);
     return await message.client.sendMessage(message.jid, {
       video: media,

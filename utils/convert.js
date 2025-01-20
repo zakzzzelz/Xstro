@@ -2,14 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import os from 'os';
 import sharp from 'sharp';
-import ffmpeg from 'fluent-ffmpeg';
-import axios from 'axios';
-import FormData from 'form-data';
-import { path as ffmpegPath } from '@ffmpeg-installer/ffmpeg';
-import { config } from '#config';
+import { exec } from 'child_process';
+import { promisify } from 'util';
+import { FileTypeFromBuffer } from 'xstro-utils';
 
+const execAsync = promisify(exec);
 const { writeFileSync, existsSync, readFileSync, mkdirSync } = fs;
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 const tempDir = path.join(os.tmpdir(), 'media-temp');
 if (!existsSync(tempDir)) mkdirSync(tempDir, { recursive: true });
@@ -18,64 +16,58 @@ function temp(ext) {
   return path.join(tempDir, `${Date.now()}.${ext}`);
 }
 
-export const GIFBufferToVideoBuffer = async (image) => {
-  const filename = `${Date.now()}`;
-  const gifPath = `./${filename}.gif`;
-  const mp4Path = `./${filename}.mp4`;
-  writeFileSync(gifPath, image);
-  await new Promise((resolve, reject) => {
-    ffmpeg()
-      .input(gifPath)
-      .outputOptions([
-        '-movflags faststart',
-        '-pix_fmt yuv420p',
-        '-vf scale=trunc(iw/2)*2:trunc(ih/2)*2',
-      ])
-      .toFormat('mp4')
-      .save(mp4Path)
-      .on('end', resolve)
-      .on('error', reject);
-  });
-  const buffer = readFileSync(mp4Path);
-  await Promise.all([fs.unlink(mp4Path), fs.unlink(gifPath)]);
+async function saveInputFile(buffer) {
+  const fileType = await FileTypeFromBuffer(buffer);
+  if (!fileType) throw new Error('Unknown file type');
+  const inputPath = temp(fileType);
+  writeFileSync(inputPath, buffer);
+  return inputPath;
+}
 
-  return buffer;
+export const GIFBufferToVideoBuffer = async (image) => {
+  const gifPath = temp('gif');
+  const mp4Path = temp('mp4');
+  writeFileSync(gifPath, image);
+
+  try {
+    await execAsync(
+      `ffmpeg -i "${gifPath}" -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -f mp4 "${mp4Path}"`
+    );
+    const buffer = readFileSync(mp4Path);
+    fs.unlinkSync(mp4Path);
+    fs.unlinkSync(gifPath);
+    return buffer;
+  } catch (error) {
+    if (existsSync(mp4Path)) fs.unlinkSync(mp4Path);
+    if (existsSync(gifPath)) fs.unlinkSync(gifPath);
+    throw error;
+  }
 };
 
 export async function audioToBlackVideo(input) {
+  const inputFile = await saveInputFile(input);
   const video = temp('mp4');
 
-  return new Promise((resolve, reject) => {
-    ffmpeg()
-      .input(`color=black:s=1920x1080:r=30`)
-      .inputOptions(['-f', 'lavfi'])
-      .input(input)
-      .outputOptions([
-        '-c:v',
-        'libx264',
-        '-preset',
-        'ultrafast',
-        '-crf',
-        '23',
-        '-c:a',
-        'aac',
-        '-b:a',
-        '128k',
-        '-map',
-        '0:v',
-        '-map',
-        '1:a',
-        '-shortest',
-      ])
-      .output(video)
-      .on('end', () => resolve(fs.readFileSync(video)))
-      .on('error', reject)
-      .run();
-  });
+  try {
+    await execAsync(
+      `ffmpeg -f lavfi -i "color=black:s=1920x1080:r=30" -i "${inputFile}" -c:v libx264 -preset ultrafast -crf 23 -c:a aac -b:a 128k -map 0:v -map 1:a -shortest "${video}"`
+    );
+    const buffer = readFileSync(video);
+    fs.unlinkSync(video);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(video)) fs.unlinkSync(video);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
 
-export async function flipMedia(file, direction) {
-  const outputFile = path.join(tempDir, `flipped_${path.basename(file)}`);
+export async function flipMedia(input, direction) {
+  const inputFile = await saveInputFile(input);
+  const fileType = await FileTypeFromBuffer(input);
+  const outputFile = temp(fileType);
+
   const validDirections = {
     left: 'transpose=2',
     right: 'transpose=1',
@@ -83,78 +75,91 @@ export async function flipMedia(file, direction) {
     horizontal: 'hflip',
   };
 
-  return new Promise((resolve, reject) => {
-    ffmpeg(file)
-      .videoFilters(validDirections[direction])
-      .on('end', () => resolve(fs.readFileSync(outputFile)))
-      .on('error', reject)
-      .save(outputFile);
-  });
+  try {
+    await execAsync(`ffmpeg -i "${inputFile}" -vf "${validDirections[direction]}" "${outputFile}"`);
+    const buffer = readFileSync(outputFile);
+    fs.unlinkSync(outputFile);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputFile)) fs.unlinkSync(outputFile);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
 
 export async function webpToImage(input) {
+  const inputFile = temp('webp');
   const outputImage = temp('jpg');
+  writeFileSync(inputFile, input);
 
-  return new Promise((resolve, reject) => {
-    ffmpeg(input)
-      .output(outputImage)
-      .on('end', () => resolve(fs.readFileSync(outputImage)))
-      .on('error', reject)
-      .run();
-  });
+  try {
+    await execAsync(`ffmpeg -i "${inputFile}" "${outputImage}"`);
+    const buffer = readFileSync(outputImage);
+    fs.unlinkSync(outputImage);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputImage)) fs.unlinkSync(outputImage);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
 
-export function convertToMp3(input) {
+export async function convertToMp3(input) {
+  const inputFile = await saveInputFile(input);
   const outputAudio = temp('mp3');
 
-  return new Promise((resolve, reject) => {
-    ffmpeg(input)
-      .toFormat('mp3')
-      .audioCodec('libmp3lame')
-      .audioBitrate(192)
-      .on('end', () => resolve(readFileSync(outputAudio)))
-      .on('error', reject)
-      .save(outputAudio);
-  });
+  try {
+    await execAsync(`ffmpeg -i "${inputFile}" -c:a libmp3lame -b:a 192k "${outputAudio}"`);
+    const buffer = readFileSync(outputAudio);
+    fs.unlinkSync(outputAudio);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputAudio)) fs.unlinkSync(outputAudio);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
 
-export function toPTT(input) {
+export async function toPTT(input) {
+  const inputFile = await saveInputFile(input);
   const outputAudio = temp('opus');
 
-  return new Promise((resolve, reject) => {
-    ffmpeg(input)
-      .toFormat('opus')
-      .audioCodec('libopus')
-      .audioChannels(1) // Mono audio
-      .audioFrequency(48000) // Standard Opus sample rate
-      .audioBitrate('128k')
-      .outputOptions([
-        '-application voip', // Optimize for voice
-      ])
-      .on('end', () => resolve(readFileSync(outputAudio)))
-      .on('error', (err, stdout, stderr) => {
-        reject(new Error(`FFmpeg error: ${err.message}\n${stderr}`));
-      })
-      .save(outputAudio);
-  });
+  try {
+    await execAsync(
+      `ffmpeg -i "${inputFile}" -c:a libopus -ac 1 -ar 48000 -b:a 128k -application voip "${outputAudio}"`
+    );
+    const buffer = readFileSync(outputAudio);
+    fs.unlinkSync(outputAudio);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputAudio)) fs.unlinkSync(outputAudio);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
 
-export function toVideo(input) {
+export async function toVideo(input) {
+  const inputFile = await saveInputFile(input);
   const outputVideo = temp('mp4');
 
-  return new Promise((resolve, reject) => {
-    ffmpeg(input)
-      .videoCodec('libx264')
-      .audioCodec('aac')
-      .audioBitrate(128)
-      .audioFrequency(44100)
-      .outputOptions(['-crf 32', '-preset slow'])
-      .on('end', () => resolve(readFileSync(outputVideo)))
-      .on('error', reject)
-      .save(outputVideo);
-  });
+  try {
+    await execAsync(
+      `ffmpeg -i "${inputFile}" -c:v libx264 -crf 32 -preset slow -c:a aac -b:a 128k -ar 44100 "${outputVideo}"`
+    );
+    const buffer = readFileSync(outputVideo);
+    fs.unlinkSync(outputVideo);
+    fs.unlinkSync(inputFile);
+    return buffer;
+  } catch (error) {
+    if (existsSync(outputVideo)) fs.unlinkSync(outputVideo);
+    if (existsSync(inputFile)) fs.unlinkSync(inputFile);
+    throw error;
+  }
 }
-
 export const cropToCircle = async (input) => {
   try {
     const image = sharp(input);
@@ -200,34 +205,4 @@ export const isAnimatedWebp = (filePath) => {
         reject(error);
       });
   });
-};
-
-export const convertWebPFile = async (input) => {
-  try {
-    const form = new FormData();
-    if (Buffer.isBuffer(input)) {
-      form.append('file', input, {
-        filename: `${Date.now()}.webp`,
-        contentType: 'image/webp',
-      });
-    } else {
-      form.append('file', readFileSync(input), {
-        filename: path.basename(input),
-        contentType: 'image/webp',
-      });
-    }
-
-    const { data } = await axios.post(`${config.API_ID}/api/webpmp4`, form, {
-      headers: {
-        ...form.getHeaders(),
-      },
-      maxBodyLength: Infinity,
-      maxContentLength: Infinity,
-    });
-
-    return data.url;
-  } catch (error) {
-    console.error('Error converting file:', error.message);
-    throw error;
-  }
 };

@@ -1,7 +1,7 @@
 import { config } from '#config';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
-import { delay, isJidBroadcast, isJidGroup } from 'baileys';
+import { delay, isJidGroup } from 'baileys';
 
 bot(
   {
@@ -121,6 +121,52 @@ bot(
   async (message) => {
     await message.archiveChat(false);
     await message.send('_Unarchived_');
+  }
+);
+
+bot(
+  {
+    pattern: 'delete',
+    public: false,
+    type: 'whatsapp',
+    desc: 'Deletes A chat',
+  },
+  async (message) => {
+    await message.client.chatModify(
+      {
+        delete: true,
+        lastMessages: [
+          {
+            key: message.key,
+            messageTimestamp: Date.now(),
+          },
+        ],
+      },
+      jid
+    );
+  }
+);
+
+bot(
+  {
+    pattern: 'onwa',
+    public: true,
+    type: 'whatsapp',
+    desc: 'Checks if users exist on WhatsApp',
+  },
+  async (message, match) => {
+    if (!match) return message.send('_Provide their numbers, e.g. 121232343,131312424_');
+    match = match.split(',').map((id) => toJid(id.trim()));
+    const res = await message.client.onWhatsApp(...match);
+    if (!res.length) return message.send('_None of the numbers exist on WhatsApp._');
+    const existingNumbers = res.filter((user) => user.exists).map((user) => user.jid.split('@')[0]);
+    const nonExistingNumbers = match
+      .filter((id) => !res.some((user) => user.jid === id && user.exists))
+      .map((id) => id.split('@')[0]);
+    let info = '_Checked numbers:_\n\n';
+    if (existingNumbers.length) info += `*Exists:*\n @${existingNumbers.join('\n@')}\n`;
+    if (nonExistingNumbers.length) info += `\n*Does not exist:*\n ${nonExistingNumbers.join('\n')}`;
+    return message.send(info, { mentions: existingNumbers.map((num) => toJid(num)) });
   }
 );
 
