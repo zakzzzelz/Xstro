@@ -10,7 +10,7 @@ bot(
   },
   async (message, match) => {
     const jid = await message.getUserJid(match);
-    if (await isSudo(jid, message.user)) return message.send('_You cannot ban a sudo user_');
+    if (isSudo(jid)) return message.send('_You cannot ban a sudo user_');
     const msg = await addBan(jid);
     return await message.send(msg, { mentions: [jid] });
   }
