@@ -3,3 +3,4 @@ database.db
 .env
 test.js
 session
+store

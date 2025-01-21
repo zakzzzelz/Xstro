@@ -1,58 +1,60 @@
-import { DataTypes } from 'sequelize';
-import { config } from '#config';
-import { areJidsSameUser } from 'baileys';
-import { toJid } from '#utils';
-import { DATABASE } from '#lib';
+import fs from 'fs';
+import path from 'path';
 
-const SudoDB = DATABASE.define(
-	'Sudo',
-	{
-		userId: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-			unique: true,
-		},
-	},
-	{
-		tableName: 'sudo',
-		timestamps: false,
-	},
-);
+const store = path.join('store', 'sudo.json');
 
-const addSudo = async jid => {
-	const [created] = await SudoDB.findOrCreate({
-		where: { userId: jid },
-		defaults: { userId: jid },
-	});
-	return created ? `_@${jid} is now a Sudo User_` : `_@${jid} was already sudo_`;
-};
+if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([], null, 2));
 
-const delSudo = async jid => {
-	const deleted = await SudoDB.destroy({
-		where: { userId: jid },
-	});
-	return deleted > 0 ? `_@${jid} is removed from sudo user_` : `_@${jid} is a sudo in the db_`;
-};
+const read = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const write = (users) => fs.writeFileSync(store, JSON.stringify(users, null, 2));
 
-const getSudo = async () => {
-	const sudoUsers = await SudoDB.findAll({
-		attributes: ['userId'],
-	});
-	return sudoUsers.length > 0 ? sudoUsers.map(user => `${user.userId}`).join('\n') : '_No Sudo Numbers_';
-};
+function addSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
 
-const isSudo = async (jid, owner) => {
-	if (!jid === 'string') jid = '';
-	const devs = ['923477406362', '2349027862116', '2348060598064', '2348039607375', '923089660496', '2347041620617'];
-	const devstoJid = devs.map(dev => toJid(dev.trim()));
-	if (owner && typeof owner !== 'string') owner = owner.toString();
-	if (owner && typeof jid === 'string' && areJidsSameUser(jid, owner)) return true;
-	const sudoUsers = (config.SUDO ?? '').split(';').map(id => toJid(id.trim()));
-	const uId = toJid(jid);
-	if (sudoUsers.includes(uId) || devstoJid.includes(uId)) return true;
-	const allSudoUsers = await getSudo();
-	return allSudoUsers.includes(uId);
-};
+  let added = false;
+  for (const id of jid) {
+    if (!users.includes(id)) {
+      users.push(id);
+      added = true;
+    }
+  }
+  if (added) write(users);
+  return added;
+}
 
-export { SudoDB, addSudo, delSudo, getSudo, isSudo };
+function delSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
+  let removed = false;
+
+  for (const id of jid) {
+    const index = users.indexOf(id);
+    if (index !== -1) {
+      users.splice(index, 1);
+      removed = true;
+    }
+  }
+
+  if (removed) write(users);
+  return removed;
+}
+
+function getSudo() {
+  const users = read();
+  return users.length > 0 ? users : false;
+}
+
+function isSudo(jid = []) {
+  if (!Array.isArray(jid)) jid = [jid];
+  const users = read();
+
+  for (const id of jid) {
+    if (users.includes(id)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export { addSudo, delSudo, getSudo, isSudo };

@@ -1,79 +1,60 @@
-import { isJidGroup } from 'baileys';
-import { getAnti } from '#sql';
+import { getAntiDelete } from '#sql';
+import { isMediaMessage, formatTime } from '#utils';
 
-const DeletedText = async (conn, msg, jid, deleteInfo, isGroup, update) => {
-	const messageContent =
-		msg.message?.conversation || msg.message?.extendedTextMessage?.text || 'Unknown content';
-	deleteInfo += `\n\n*ᴄᴏɴᴛᴇɴᴛ:* ${messageContent}`;
+export async function AntiDelete(msg) {
+  if (
+    !(await getAntiDelete()) ||
+    msg.type !== 'protocolMessage' ||
+    msg?.message?.protocolMessage?.type !== 'REVOKE'
+  ) {
+    return;
+  }
 
-	await conn.sendMessage(
-		jid,
-		{
-			text: deleteInfo,
-			contextInfo: {
-				mentionedJid: isGroup
-					? [update.key.participant, msg.key.participant]
-					: [update.key.remoteJid]
-			}
-		},
-		{ quoted: msg }
-	);
-};
+  const client = msg.client;
+  const messageId = msg?.message?.protocolMessage?.key.id;
+  const store = await client.loadMessage(messageId);
+  const sender = store.message.sender;
+  const deleted = msg?.sender;
+  const time = formatTime(Date.now());
+  const message = store.message.message;
+  const chat = msg.isGroup ? msg.from : msg.user;
 
-const DeletedMedia = async (conn, msg, jid) => {
-	const antideletedMsg = JSON.parse(JSON.stringify(msg.message));
-	const messageType = Object.keys(antideletedMsg)[0];
-	if (antideletedMsg[messageType]) {
-		antideletedMsg[messageType].contextInfo = {
-			stanzaId: msg.key.id,
-			participant: msg.sender,
-			quotedMessage: msg.message
-		};
-	}
-	await conn.relayMessage(jid, antideletedMsg, {});
-};
+  if (!isMediaMessage(message)) {
+    const content = message.conversation || message.extendedTextMessage?.text;
+    const textContent = {
+      header: '*ᴍᴇssᴀɢᴇ ᴡᴀs ᴅᴇʟᴇᴛᴇᴅ*\n',
+      sender: `*sᴇɴᴅᴇʀ:* @${sender.split('@')[0]}`,
+      deleter: `*ᴅᴇʟᴇᴛᴇᴅ ʙʏ:* @${deleted.split('@')[0]}`,
+      timestamp: `ᴀᴛ: ${time}`,
+      content: `*ʀᴇᴄᴏᴠᴇʀᴇᴅ ᴄᴏɴᴛᴇɴᴛ:*\n${content}`,
+    };
 
-export const AntiDelete = async (conn, updates) => {
-	for (const update of updates) {
-		if (update.key && (update.update.deleteMessage || update.update?.message === null)) {
-			const store = await conn.loadMessage(update.key.id);
+    const groupInfo = msg.isGroup
+      ? `*ɢʀᴏᴜᴘ:* ${(await client.groupMetadata(msg.from)).subject}\n`
+      : '';
 
-			if (store && store.message) {
-				const msg = store.message;
-				const isGroup = isJidGroup(store.jid);
-				const antiDeleteType = isGroup ? 'gc' : 'dm';
-				const antiDeleteStatus = await getAnti(antiDeleteType);
-				if (!antiDeleteStatus) continue;
+    const text = [
+      textContent.header,
+      groupInfo,
+      textContent.sender,
+      textContent.deleter,
+      textContent.timestamp,
+      textContent.content,
+    ].join('\n');
 
-				const deleteTime = new Date().toLocaleTimeString('en-GB', {
-					hour: '2-digit',
-					minute: '2-digit',
-					second: '2-digit'
-				});
-
-				let deleteInfo, jid;
-				if (isGroup) {
-					const groupMetadata = await conn.groupMetadata(store.jid);
-					const groupName = groupMetadata.subject;
-					const sender = msg.key.participant?.split('@')[0];
-					const deleter = update.key.participant?.split('@')[0];
-
-					deleteInfo = `*ᴀɴᴛɪᴅᴇʟᴇᴛᴇ ᴅᴇᴛᴇᴄᴛᴇᴅ*\n\n*ᴛɪᴍᴇ:* ${deleteTime}\n*ɢʀᴏᴜᴘ:* ${groupName}\n*ᴅᴇʟᴇᴛᴇᴅ ʙʏ:* @${deleter}\n*sᴇɴᴅᴇʀ:* @${sender}`;
-					jid = store.jid;
-				} else {
-					const senderNumber = msg.key.remoteJid?.split('@')[0];
-					const deleterNumber = update.key.remoteJid?.split('@')[0];
-
-					deleteInfo = `*ᴀɴᴛɪᴅᴇʟᴇᴛᴇ ᴅᴇᴛᴇᴄᴛᴇᴅ*\n\n*ᴛɪᴍᴇ:* ${deleteTime}\n*ᴅᴇʟᴇᴛᴇᴅ ʙʏ:* @${deleterNumber}\n*sᴇɴᴅᴇʀ:* @${senderNumber}`;
-					jid = conn.user.id;
-				}
-
-				if (msg.message?.conversation || msg.message?.extendedTextMessage) {
-					await DeletedText(conn, msg, jid, deleteInfo, isGroup, update);
-				} else {
-					await DeletedMedia(conn, msg, jid, deleteInfo, isGroup, update);
-				}
-			}
-		}
-	}
-};
+    await client.sendMessage(
+      chat,
+      { text, mentions: [sender, deleted] },
+      { quoted: store.message }
+    );
+  } else {
+    await client.sendMessage(
+      chat,
+      {
+        forward: store.message,
+        contextInfo: { isFowarded: false },
+      },
+      { quoted: store.message }
+    );
+  }
+}

@@ -1,64 +1,36 @@
-import { DATABASE } from '#lib';
-import { DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
-export const AutoKickDB = DATABASE.define(
-	'AutoKick',
-	{
-		groupJid: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		userJid: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-	},
-	{
-		indexes: [
-			{
-				unique: true,
-				fields: ['groupJid', 'userJid'],
-			},
-		],
-		tableName: 'autokick',
-		timestamps: false,
-	},
-);
+const store = path.join('store', 'autokick.json');
 
-/**
- * Adds a user to the AutoKick list.
- * @param {string} groupJid - Group's JID.
- * @param {string} userJid - User's JID.
- * @returns {Promise<boolean>} - True if added successfully, false if already exists.
- */
+const readDB = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(store, JSON.stringify(data, null, 2));
+
 export const addAKick = async (groupJid, userJid) => {
-	await AutoKickDB.create({ groupJid, userJid });
-	return true;
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
+  const data = readDB();
+  if (data.some((record) => record.groupJid === groupJid && record.userJid === userJid)) {
+    return false;
+  }
+  data.push({ groupJid, userJid });
+  writeDB(data);
+  return true;
 };
 
-/**
- * Deletes a user from the AutoKick list.
- * @param {string} groupJid - Group's JID.
- * @param {string} userJid - User's JID.
- * @returns {Promise<number>} - The number of rows deleted.
- */
 export const delKick = async (groupJid, userJid) => {
-	const result = await AutoKickDB.destroy({
-		where: { groupJid, userJid },
-	});
-	return result;
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
+  const data = readDB();
+  const filteredData = data.filter(
+    (record) => !(record.groupJid === groupJid && record.userJid === userJid)
+  );
+  writeDB(filteredData);
+  return data.length !== filteredData.length;
 };
 
-/**
- * Retrieves AutoKick entries for a specific group or user.
- * @param {string} groupJid - Group's JID.
- * @param {string} [userJid] - User's JID (optional).
- * @returns {Promise<Array>} - An array of kick records.
- */
 export const getKicks = async (groupJid, userJid = null) => {
-	const whereClause = { groupJid };
-	if (userJid) whereClause.userJid = userJid;
-
-	const kicks = await AutoKickDB.findAll({ where: whereClause });
-	return kicks.map(kick => kick.get());
+  if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify([]));
+  const data = readDB();
+  return data.filter(
+    (record) => record.groupJid === groupJid && (!userJid || record.userJid === userJid)
+  );
 };

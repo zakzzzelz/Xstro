@@ -1,48 +1,69 @@
-import { DATABASE } from '#lib';
-import { DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
-export const Mention = DATABASE.define(
-	'MentionDB',
-	{
-		jid: {
-			type: DataTypes.STRING,
-			allowNull: false,
-			unique: true,
-		},
-		message: {
-			type: DataTypes.JSON,
-			allowNull: true,
-		},
-	},
-	{ tableName: 'mention' },
-);
+const store = path.join('store', 'mentions.json');
 
+if (!fs.existsSync(store)) {
+  fs.writeFileSync(store, JSON.stringify([], null, 2));
+}
+
+const readMentions = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeMentions = (mentions) => fs.writeFileSync(store, JSON.stringify(mentions, null, 2));
+
+/**
+ * Sets a mention message for a specific JID.
+ * @param {string} jid - The unique identifier (chat ID or JID).
+ * @param {Object} message - The message data to associate with the JID.
+ * @returns {Promise<boolean>} - Always returns true upon success.
+ */
 export async function setMention(jid, message) {
-	const [mention, created] = await Mention.findOrCreate({
-		where: { jid },
-		defaults: { message },
-	});
-	if (!created) await mention.update({ message });
-	return true;
+  const mentions = readMentions();
+  const existingMention = mentions.find((mention) => mention.jid === jid);
+
+  if (existingMention) {
+    existingMention.message = message;
+  } else {
+    mentions.push({ jid, message });
+  }
+
+  writeMentions(mentions);
+  return true;
 }
 
+/**
+ * Deletes a mention for a specific JID.
+ * @param {string} jid - The unique identifier (chat ID or JID).
+ * @returns {Promise<boolean>} - Returns true if deletion was successful, false otherwise.
+ */
 export async function delMention(jid) {
-	const deleted = await Mention.destroy({
-		where: { jid },
-	});
-	return !!deleted;
+  const mentions = readMentions();
+  const updatedMentions = mentions.filter((mention) => mention.jid !== jid);
+
+  if (mentions.length !== updatedMentions.length) {
+    writeMentions(updatedMentions);
+    return true;
+  }
+
+  return false;
 }
 
+/**
+ * Checks if a mention exists for a specific JID.
+ * @param {string} jid - The unique identifier (chat ID or JID).
+ * @returns {Promise<boolean>} - Returns true if a mention exists, false otherwise.
+ */
 export async function isMention(jid) {
-	const mention = await Mention.findOne({
-		where: { jid },
-	});
-	return !!mention;
+  const mentions = readMentions();
+  return mentions.some((mention) => mention.jid === jid);
 }
 
+/**
+ * Retrieves the mention message for a specific JID.
+ * @param {string} jid - The unique identifier (chat ID or JID).
+ * @returns {Promise<Object|null>} - The message data if it exists, otherwise null.
+ */
 export async function getMention(jid) {
-	const mention = await Mention.findOne({
-		where: { jid },
-	});
-	return mention ? mention.message : null;
+  const mentions = readMentions();
+  const mention = mentions.find((mention) => mention.jid === jid);
+  return mention ? mention.message : null;
 }

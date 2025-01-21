@@ -1,104 +1,26 @@
-import { DATABASE } from '#lib';
-import { DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 
-export const AntiDelDB = DATABASE.define(
-	'AntiDelete',
-	{
-		id: {
-			type: DataTypes.INTEGER,
-			primaryKey: true,
-			autoIncrement: false,
-			defaultValue: 1,
-		},
-		gc_status: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-		},
-		dm_status: {
-			type: DataTypes.BOOLEAN,
-			defaultValue: false,
-		},
-	},
-	{
-		tableName: 'antidelete',
-		timestamps: false,
-		hooks: {
-			beforeCreate: record => {
-				record.id = 1; // Force only one row with id 1
-			},
-			beforeBulkCreate: records => {
-				records.forEach(record => {
-					record.id = 1; // Force only one row with id 1
-				});
-			},
-		},
-	},
-);
+const storePath = path.join('store', 'antidelete.json');
 
-export async function initializeAntiDeleteSettings() {
-	try {
-		await AntiDelDB.findOrCreate({
-			where: { id: 1 },
-			defaults: { gc_status: false, dm_status: false },
-		});
-	} catch (error) {
-		console.error('Error initializing anti-delete settings:', error);
-	}
+if (!fs.existsSync(storePath)) {
+  fs.mkdirSync(path.dirname(storePath), { recursive: true });
+  fs.writeFileSync(storePath, JSON.stringify({ antidelete: false }, null, 2));
 }
 
-export async function setAnti(type, status) {
-	try {
-		// Ensure initialization
-		await initializeAntiDeleteSettings();
+const readDB = () => JSON.parse(fs.readFileSync(storePath, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(storePath, JSON.stringify(data, null, 2));
 
-		const record = await AntiDelDB.findByPk(1);
-
-		if (type === 'gc') {
-			record.gc_status = status;
-		} else if (type === 'dm') {
-			record.dm_status = status;
-		}
-
-		await record.save();
-		return true;
-	} catch (error) {
-		console.error('Error setting anti-delete status:', error);
-		return false;
-	}
+export function setAntiDelete(status) {
+  if (typeof status !== 'boolean') {
+    throw new Error('Status must be a boolean.');
+  }
+  const data = readDB();
+  data.antidelete = status;
+  writeDB(data);
 }
 
-export async function getAnti(type) {
-	try {
-		// Ensure initialization
-		await initializeAntiDeleteSettings();
-
-		const record = await AntiDelDB.findByPk(1);
-
-		if (type === 'gc') {
-			return record.gc_status;
-		} else if (type === 'dm') {
-			return record.dm_status;
-		}
-
-		return false;
-	} catch (error) {
-		console.error('Error getting anti-delete status:', error);
-		return false;
-	}
-}
-
-export async function getAllAntiDeleteSettings() {
-	try {
-		await initializeAntiDeleteSettings();
-		const record = await AntiDelDB.findByPk(1);
-		return [
-			{
-				gc_status: record.gc_status,
-				dm_status: record.dm_status,
-			},
-		];
-	} catch (error) {
-		console.error('Error retrieving all anti-delete settings:', error);
-		return [];
-	}
+export function getAntiDelete() {
+  const data = readDB();
+  return data.antidelete;
 }

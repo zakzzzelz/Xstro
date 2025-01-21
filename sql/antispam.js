@@ -1,48 +1,27 @@
-import { DATABASE } from '#lib';
-import { DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 import { isJidGroup } from 'baileys';
 
-const AntiSpam = DATABASE.define(
-	'Antispam',
-	{
-		jid: {
-			type: DataTypes.STRING,
-			primaryKey: true,
-			allowNull: false,
-		},
-		mode: {
-			type: DataTypes.ENUM('off', 'block', 'kick', 'delete'),
-			defaultValue: 'off',
-		},
-	},
-	{
-		tableName: 'antispam',
-		timestamps: true,
-	},
-);
+const store = path.join('store', 'antispam.json');
+
+if (!fs.existsSync(store)) fs.writeFileSync(store, JSON.stringify({}));
+
+const readDB = () => JSON.parse(fs.readFileSync(store, 'utf8'));
+const writeDB = (data) => fs.writeFileSync(store, JSON.stringify(data, null, 2));
 
 async function setAntiSpam(jid, mode) {
-	const normalizedJid = isJidGroup(jid)
-		? jid
-		: jid === 'global'
-		? 'global'
-		: 'global';
-
-	return AntiSpam.upsert({ jid: normalizedJid, mode });
+  const normalizedJid = isJidGroup(jid) ? jid : 'global';
+  const db = readDB();
+  db[normalizedJid] = { mode };
+  writeDB(db);
+  return true;
 }
 
 async function getAntiSpamMode(jid) {
-	const normalizedJid = isJidGroup(jid)
-		? jid
-		: jid === 'global'
-		? 'global'
-		: 'global';
-
-	const setting = await AntiSpam.findOne({
-		where: { jid: normalizedJid },
-	});
-
-	return setting ? setting.mode : 'off';
+  const normalizedJid = isJidGroup(jid) ? jid : 'global';
+  const db = readDB();
+  const setting = db[normalizedJid];
+  return setting ? setting.mode : 'off';
 }
 
-export { AntiSpam, setAntiSpam, getAntiSpamMode };
+export { setAntiSpam, getAntiSpamMode };
