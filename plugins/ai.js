@@ -12,10 +12,9 @@ bot(
   async (message, match, { pushName }) => {
     if (!match && !message.reply_message.text)
       return message.send('_Hello there ' + pushName + '_');
+    const prompt = match || message.reply_message.text;
     const msg = await message.send('*Thinking*');
-    const res = (
-      await getJson(`https://bk9.fun/ai/chataibot?q=${match || message.reply_message.text}`)
-    ).BK9;
+    const res = (await getJson(`https://bk9.fun/ai/chataibot?q=${prompt}`)).BK9;
     return await msg.edit(res);
   }
 );
@@ -29,8 +28,9 @@ bot(
   },
   async (message, match) => {
     if (!match && !message.reply_message?.text) return message.send('_How can i help?_');
+    const que = match || message.reply_message.text;
     const msg = await message.send('*hmm*');
-    const res = (await getJson(`https://bk9.fun/ai/llama?q=${match}`)).BK9;
+    const res = (await getJson(`https://bk9.fun/ai/llama?q=${que}`)).BK9;
     return await msg.edit(res);
   }
 );

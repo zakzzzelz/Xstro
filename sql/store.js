@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { isJidGroup } from 'baileys';
+import { isJidBroadcast, isJidGroup, isJidNewsletter } from 'baileys';
 
 const storeDir = path.join(process.cwd(), 'store');
 
@@ -21,7 +21,7 @@ const writeJSON = async (file, data) => {
 };
 
 const saveContact = async (jid, name) => {
-  if (!jid || !name || isJidGroup(jid)) return;
+  if (!jid || !name || isJidGroup(jid) || isJidBroadcast(jid) || isJidNewsletter(jid)) return;
   const contacts = await readJSON('contact.json');
   const index = contacts.findIndex((contact) => contact.jid === jid);
   if (index > -1) {
@@ -30,6 +30,15 @@ const saveContact = async (jid, name) => {
     contacts.push({ jid, name });
   }
   await writeJSON('contact.json', contacts);
+};
+
+const getContacts = async () => {
+  try {
+    const contacts = await readJSON('contact.json');
+    return contacts;
+  } catch (error) {
+    return [];
+  }
 };
 
 const saveMessage = async (message) => {
@@ -194,6 +203,7 @@ const saveMessageV2 = (message) => {
 
 export {
   saveContact,
+  getContacts,
   loadMessage,
   getName,
   getChatSummary,

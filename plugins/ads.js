@@ -14,23 +14,18 @@ bot(
     if (!adMsg) {
       return message.send('_I need a Message to Advertise_');
     }
-
     const groups = await message.client.groupFetchAllParticipating();
     const groupIds = Object.values(groups).map((group) => group.id);
 
     await message.send(`\`\`\`Advertising to ${groupIds.length} groups.\`\`\``);
 
     const broadcastMessage = `\`\`\`ADVERTSIMENT\n\nINFO:\n\n${adMsg}\`\`\``;
-    const messageOptions = {
-      forwardingScore: 9999999,
-      isForwarded: true,
-    };
 
     for (const groupId of groupIds) {
       await delay(1500);
       await message.send(broadcastMessage, {
         jid: groupId,
-        contextInfo: messageOptions,
+        contextInfo: { forwardingScore: 9999999, isForwarded: true },
       });
     }
 
