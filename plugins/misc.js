@@ -1,7 +1,6 @@
-import { extractUrlFromString } from 'xstro-utils';
 import { bot } from '#lib';
 import { evaluate } from 'mathjs';
-import { readmore } from '#utils';
+import { extractUrl, readmore } from '#utils';
 
 bot(
   {
@@ -28,7 +27,7 @@ bot(
   async (message, match) => {
     if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
       return message.send('*Provide URL*');
-    const url = extractUrlFromString(match);
+    const url = extractUrl(match);
     return await message.client.sendMessage(message.jid, {
       video: { url: url },
       caption: '*HERE WE GO*',
@@ -46,7 +45,7 @@ bot(
   async (message, match) => {
     if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
       return message.send('*Provide URL*');
-    const url = extractUrlFromString(match);
+    const url = extractUrl(match);
     return await message.client.sendMessage(message.jid, {
       audio: { url: url },
       mimetype: 'audio/mpeg',

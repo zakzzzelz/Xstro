@@ -1,5 +1,13 @@
 import { bot } from '#lib';
-import { remini, uploadFile, XSTRO, removeBg, UploadFileUgu, createSticker } from '#utils';
+import {
+  remini,
+  uploadFile,
+  XSTRO,
+  removeBg,
+  UploadFileUgu,
+  createSticker,
+  extractUrl,
+} from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
@@ -231,7 +239,7 @@ bot(
     if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
       return message.send('*Please provide a valid URL*');
     const msg = await message.send('*Shortening URL...*');
-    const url = extractUrlFromString(match);
+    const url = extractUrl(match);
     const res = await XSTRO.short(url);
     if (!res) return await msg.edit('*Failed to shorten URL*');
     return await msg.edit(`*Shortened URL:* ${res}`);

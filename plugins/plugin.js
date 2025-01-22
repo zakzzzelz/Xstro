@@ -1,6 +1,5 @@
 import { bot } from '#lib';
-import { extractUrlFromString } from 'xstro-utils';
-import { installPlugin, removePluginByName, listPlugins } from '#utils';
+import { installPlugin, removePluginByName, listPlugins, extractUrl } from '#utils';
 
 bot(
   {
@@ -10,7 +9,7 @@ bot(
     type: 'plugins',
   },
   async (message, match) => {
-    const pluginUrl = extractUrlFromString(match || message.reply_message?.text);
+    const pluginUrl = extractUrl(match || message.reply_message?.text);
     if (!pluginUrl.startsWith('https://gist.githubusercontent.com'))
       return message.send('_Provide a valid Plugin URL_');
 
