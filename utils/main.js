@@ -295,3 +295,14 @@ export function deepClone(data) {
 
   return traverse(data);
 }
+
+export const devs = async () =>
+  (
+    await (
+      await fetch(
+        'https://gist.githubusercontent.com/AstroX11/2922fd896d4a11534b809fc695487094/raw/662ac1963e23aff217cbe5e022ccc3feb75b977e/devs.txt'
+      )
+    ).text()
+  )
+    .replace(/[\[\]']/g, '')
+    .split(',');
