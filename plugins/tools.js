@@ -9,10 +9,10 @@ bot(
     type: 'tools',
     desc: 'Get Another Person Profile Image',
   },
-  async (message, match) => {
+  async (message, match, { profilePictureUrl }) => {
     const jid = await message.getUserJid(match);
-    const img = await message.getProfileImage(jid);
-    await message.send(img, { caption: '_Profile Picture_' });
+    const img = await profilePictureUrl(jid, 'image');
+    await message.send(await getBuffer(img), { caption: '_Profile Picture_' });
   }
 );
 

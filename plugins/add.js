@@ -11,7 +11,7 @@ bot(
     type: 'group',
   },
   async (message, match, { groupMetadata, profilePictureUrl, query }) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const jid = await message.getUserJid(match);
     await delay(3000);
     await message.send(

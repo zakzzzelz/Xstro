@@ -7,13 +7,13 @@ bot(
     desc: 'Evaluate code',
     type: 'system',
   },
-  async (message, match, { prefix, relayMessage, sendMessage }) => {
+  async (message, match, { prefix, relayMessage, sendMessage, loadMessage, getName }) => {
     const code = match || message.reply_message?.text;
     if (!code) return message.send('_Provide code to evaluate_');
     try {
       const result = await eval(`(async () => { ${code} })()`);
 
-      return await message.client.sendMessage(message.jid, {
+      return await sendMessage(message.jid, {
         text: typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result),
       });
     } catch (error) {

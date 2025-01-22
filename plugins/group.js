@@ -12,7 +12,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (await isGroupEventEnabled(message.jid))
       return message.send(`_Group Events Already Enabled_`);
     await enableGroupEvents(message.jid);
@@ -29,7 +29,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!(await isGroupEventEnabled(message.jid)))
       return message.send(`_Group Events Already Disabled_`);
     await disableGroupEvents(message.jid);
@@ -46,7 +46,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!['on', 'off'].includes(match))
       return message.send('_Use on | off to configure how new members can join the group_');
     await message.client.groupJoinApprovalMode(message.jid, match);
@@ -63,7 +63,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!['on', 'off'].includes(match))
       return message.send('_Use on | off to configure who can add members to the group_');
     const mode = match === 'on' ? 'all_member_add' : 'admin_add';
@@ -81,7 +81,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const countryCode = match?.trim().replace('+', '');
     if (!countryCode || isNaN(countryCode))
       return message.send('_Please provide a valid country code._');
@@ -109,7 +109,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!match && message.reply_message?.text) return message.send('_Provide New Group Name_');
     await message.client.groupUpdateSubject(message.jid, match || message.reply_message?.text);
     return message.send('_Group Name Updated_');
@@ -125,7 +125,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!match && message.reply_message?.text)
       return message.send('_please add a new group description_');
     await message.client.groupUpdateDescription(message.jid, match || message.reply_message?.text);
@@ -142,7 +142,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const jid = await message.getUserJid(match);
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
@@ -162,7 +162,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const jid = await message.getUserJid(match);
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
@@ -184,7 +184,7 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const jid = await message.getUserJid(match);
     if (!jid) return;
     await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
@@ -201,7 +201,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const msg = await message.send('*wait*');
     const code = await message.client.groupInviteCode(message.jid);
     return msg.edit(`https://chat.whatsapp.com/${code}`);
@@ -257,7 +257,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const metadata = await message.client.groupMetadata(message.jid);
     if (metadata.announce)
       return message.send('_Group is already muted. Only admins can send messages._');
@@ -275,7 +275,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const metadata = await message.client.groupMetadata(message.jid);
     if (!metadata.announce)
       return message.send('_Group is already unmuted. All members can send messages._');
@@ -314,7 +314,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     await message.client.groupRevokeInvite(message.jid);
     return message.send('_Group Link Revoked!_');
   }
@@ -329,7 +329,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!message.reply_message?.image) return message.send('_Reply An Image!_');
     const img = await message.download();
     await message.client.updateProfilePicture(message.jid, img);
@@ -346,7 +346,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const meta = await message.client.groupMetadata(message.jid);
     if (meta.restrict) return message.send('_Group is already locked to Admins._');
     await message.client.groupSettingUpdate(message.jid, 'locked');
@@ -363,7 +363,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const meta = await message.client.groupMetadata(message.jid);
     if (!meta.restrict) return message.send('_Group is already unlocked for participants._');
     await message.client.groupSettingUpdate(message.jid, 'unlocked');
@@ -380,7 +380,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
     if (!joinRequests || !joinRequests[0]) return await message.send('_No Join Requests_');
     let requestList = '*_Group Join Requets List_*\n\n';
@@ -402,7 +402,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
 
     const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
     if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
@@ -426,7 +426,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
     if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
     let rejectedUsers = [];
@@ -449,7 +449,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     await message.client.removeProfilePicture(message.jid);
     return await message.send('_Group Profile Photo Removed!_');
   }

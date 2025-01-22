@@ -1,7 +1,7 @@
 import { config } from '#config';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
-import { delay, isJidGroup } from 'baileys';
+import { isJidGroup } from 'baileys';
 
 bot(
   {
@@ -24,7 +24,7 @@ bot(
     desc: 'Converts A Normal Media Message to ViewOnce',
     type: 'whatsapp',
   },
-  async (message) => {
+  async (message, _, { relayMessage }) => {
     if (
       !message.reply_message.video &&
       !message.reply_message.audio &&
@@ -32,7 +32,7 @@ bot(
     )
       return message.send('_Reply an Image | Video | Audio_');
     const viewonceMessage = await convertNormalMessageToViewOnce(message.data.quoted.message);
-    return message.client.relayMessage(message.jid, viewonceMessage, {});
+    return await relayMessage(message.jid, viewonceMessage, {});
   }
 );
 
@@ -43,9 +43,9 @@ bot(
     type: 'whatsapp',
     desc: 'Changes your WhatsApp Name',
   },
-  async (message, match) => {
+  async (message, match, { updateProfileName }) => {
     if (!match) return message.send('_Provide A New Name_');
-    await message.updateName(match.toString());
+    await updateProfileName(match);
     return message.send('_WhatsApp Name Updated!_');
   }
 );
@@ -57,10 +57,10 @@ bot(
     type: 'whatsapp',
     desc: 'Set Your Profile Picture',
   },
-  async (message) => {
+  async (message, _, { user, updateProfilePicture }) => {
     if (!message.reply_message?.image) return message.send('_Reply An Image_');
     const img = await message.download();
-    await message.updatePP(img);
+    await updateProfilePicture(user.id, img);
     return await message.send('_Profile Picture Updated_');
   }
 );
@@ -72,14 +72,14 @@ bot(
     type: 'whatsapp',
     desc: 'quoted message',
   },
-  async (message) => {
+  async (message, _, { jid, loadMessage }) => {
     if (!message.reply_message) return await message.send('```Reply A Message```');
     let key = message.reply_message.key.id;
-    let msg = await message.client.loadMessage(key);
+    let msg = await loadMessage(key);
     if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
     msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
     if (!msg.quoted) return await message.send('_No quoted message found_');
-    await message.forward(message.jid, msg.quoted, {
+    await message.forward(jid, msg.quoted, {
       quoted: msg.quoted,
     });
   }
@@ -105,8 +105,14 @@ bot(
     type: 'whatsapp',
     desc: 'archive whatsapp chat',
   },
-  async (message) => {
-    await message.archiveChat(true);
+  async (message, _, { jid, chatModify, key, timestamp }) => {
+    await chatModify(
+      {
+        archive: true,
+        lastMessages: [{ message: message, key: key, messageTimestamp: timestamp }],
+      },
+      jid
+    );
     await message.send('_Archived_');
   }
 );
@@ -118,8 +124,14 @@ bot(
     type: 'whatsapp',
     desc: 'unarchive whatsapp chat',
   },
-  async (message, _, { archiveChat }) => {
-    await archiveChat(false);
+  async (message, _, { jid, chatModify, key, timestamp }) => {
+    await chatModify(
+      {
+        archive: false,
+        lastMessages: [{ message: message, key: key, messageTimestamp: timestamp }],
+      },
+      jid
+    );
     await message.send('_Unarchived_');
   }
 );
@@ -154,10 +166,10 @@ bot(
     type: 'whatsapp',
     desc: 'Checks if users exist on WhatsApp',
   },
-  async (message, match) => {
+  async (message, match, { onWhatsApp }) => {
     if (!match) return message.send('_Provide their numbers, e.g. 121232343,131312424_');
     match = match.split(',').map((id) => toJid(id.trim()));
-    const res = await message.client.onWhatsApp(...match);
+    const res = await onWhatsApp(...match);
     if (!res.length) return message.send('_None of the numbers exist on WhatsApp._');
     const existingNumbers = res.filter((user) => user.exists).map((user) => user.jid.split('@')[0]);
     const nonExistingNumbers = match
@@ -198,9 +210,19 @@ bot(
     type: 'whatsapp',
     desc: 'delete whatsapp chat',
   },
-  async (message, _, { clearChat }) => {
-    await clearChat();
-    await delay(2000);
+  async (message, _, { jid, key, timestamp, chatModify }) => {
+    await chatModify(
+      {
+        delete: true,
+        lastMessages: [
+          {
+            key: key,
+            messageTimestamp: timestamp,
+          },
+        ],
+      },
+      jid
+    );
     await message.send('_Cleared_');
   }
 );
@@ -212,8 +234,8 @@ bot(
     type: 'whatsapp',
     desc: 'Removes Profile Picture',
   },
-  async (message) => {
-    await message.rPP();
+  async (message, _, { user, removeProfilePicture }) => {
+    await removeProfilePicture(user.id);
     return message.send('_Profile Picture Removed!_');
   }
 );
@@ -290,9 +312,9 @@ bot(
     type: 'whatsapp',
     desc: 'Blocks A Person',
   },
-  async (message, match) => {
+  async (message, match, { updateBlockStatus }) => {
     const jid = await message.getUserJid(match);
-    await message.Block(jid);
+    await updateBlockStatus(jid, 'block');
   }
 );
 
@@ -303,9 +325,9 @@ bot(
     type: 'whatsapp',
     desc: 'Unblocks A Person',
   },
-  async (message, match) => {
+  async (message, match, { updateBlockStatus }) => {
     const jid = await message.getUserJid(match);
-    await message.Unblock(jid);
+    await updateBlockStatus(jid, 'unblock');
   }
 );
 
@@ -373,11 +395,10 @@ bot(
     type: 'whatsapp',
     desc: 'Stars or Unstars a Message',
   },
-  async (message) => {
+  async (message, _, { star }) => {
     if (!message.reply_message) return message.send('_Reply to a message to star it_');
     const messages = [{ id: message.reply_message.id, fromMe: message.reply_message.fromMe }];
-    const star = true;
-    return await message.client.star(message.jid, messages, star);
+    return await star(message.jid, messages, true);
   }
 );
 
@@ -388,11 +409,9 @@ bot(
     type: 'whatsapp',
     desc: 'Stars or Unstars a Message',
   },
-  async (message, _, { star }) => {
-    const replyMessage = message.reply_message;
-    if (!replyMessage) return message.send('_Reply to a message to star it_');
-    const jid = message.jid;
-    const messages = [{ id: replyMessage.id, fromMe: replyMessage.fromMe }];
+  async (message, _, { star, jid, reply_message }) => {
+    if (!reply_message) return message.send('_Reply to a message to star it_');
+    const messages = [{ id: reply_message.id, fromMe: reply_message.fromMe }];
     await star(jid, messages, false);
   }
 );
@@ -404,8 +423,9 @@ bot(
     type: 'whatsapp',
     desc: 'Get Bot Owner',
   },
-  async (message, _, { getName }) => {
-    const name = await getName(message.user);
+  async (message, _, { jid, user, getName, sendMessage }) => {
+    const botOwner = toJid(user.id);
+    const name = await getName(botOwner);
     const vcard = `
 BEGIN:VCARD
 VERSION:3.0
@@ -415,7 +435,7 @@ TEL;type=CELL;type=VOICE;waid=${message.user.split('@')[0]}:${message.user.split
 END:VCARD
 `;
 
-    return await message.client.sendMessage(message.jid, {
+    return await sendMessage(jid, {
       contacts: {
         displayName: name,
         contacts: [{ vcard }],
@@ -423,6 +443,7 @@ END:VCARD
     });
   }
 );
+
 bot(
   {
     pattern: 'gjid',

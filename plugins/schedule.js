@@ -11,7 +11,7 @@ bot(
     type: 'schedule',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!match)
       return message.send(`*Please provide time in 12hr format*\n\n_Example: .automute 3:15pm_`);
 
@@ -39,7 +39,7 @@ bot(
     type: 'schedule',
   },
   async (message, match) => {
-    if (!(await message.isUserAdmin())) return;
+    if (!(await message.getAdmin())) return;
     if (!match)
       return message.send(`*Invalid time in 12hr format*\n\n_Example: .autounmute 2:00am_`);
 
@@ -91,9 +91,7 @@ bot(
     type: 'schedule',
   },
   async (message) => {
-    if (!message.isAdmin) return message.send('```You are not an Admin```');
-    if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-
+    if (!(await message.getAdmin())) return;
     const removed = await removeSchedule(message.jid);
     if (!removed) return message.send('_No Jobs Where Online_');
 
