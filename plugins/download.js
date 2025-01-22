@@ -45,10 +45,9 @@ bot(
     if (!url) return message.send('_No facebook link found!_');
     url = extractUrl(url);
     if (!isfacebook(url)) return message.send('_Provide facebook link!_');
-    const data = (await getJson(`${API}/downloader/facebook2?apikey=${KEY}&url=${url}`)).result;
-    return await message.sendFromUrl(data.videoUrl, true, {
-      caption: data.title,
-    });
+    const data = await getJson(`https://bk9.fun/download/AllinOne?url=${url}`);
+    const video = data.BK9.mediaUrls[1].url;
+    return await message.sendFromUrl(video);
   }
 );
 
@@ -143,8 +142,8 @@ bot(
     if (!url) return message.send('_No Tiktok link found!_');
     url = extractUrl(url);
     if (!isTikTok(url)) return message.send('_Provide Tiktok link!_');
-    const media = await XSTRO.tiktok(url);
-    return await message.sendFromUrl(media.url, { caption: media.title });
+    const media = await getJson(`https://bk9.fun/download/tiktok?url=${url}`);
+    return await message.sendFromUrl(media.BK9.BK9, { caption: media.BK9.BK9.desc });
   }
 );
 

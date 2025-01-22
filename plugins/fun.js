@@ -1,6 +1,6 @@
 import { bot } from '#lib';
-import { XSTRO, randomizeArray } from '#utils';
-import { getJson } from 'xstro-utils';
+import { XSTRO, createSticker, randomizeArray } from '#utils';
+import { getBuffer, getJson } from 'xstro-utils';
 import { delay } from 'baileys';
 import { font } from '#bot';
 
@@ -126,6 +126,20 @@ bot(
     return await message.send(
       (await getJson('https://evilinsult.com/generate_insult.php?lang=en&type=json')).insult
     );
+  }
+);
+
+bot(
+  {
+    pattern: 'meme',
+    public: true,
+    desc: 'Create a meme yourself',
+    type: 'fun',
+  },
+  async (message, match) => {
+    const meme = await getBuffer(`https://brat.caliphdev.com/api/brat?text=${match}`);
+    const sticker = await createSticker(meme);
+    return await message.send(sticker, { type: 'sticker' });
   }
 );
 
