@@ -940,12 +940,6 @@ function listall(text) {
   var finalText = [];
 
   finalText.push(tiny(text));
-  finalText.push(flip(text));
-  finalText.push(roundsquares(text));
-  finalText.push(squares(text));
-  finalText.push(mirror(text));
-  finalText.push(creepify(text));
-  finalText.push(bubbles(text));
   finalText.push(strikeThrough(text));
   finalText.push(tildeStrikeThrough(text));
   finalText.push(slashThrough(text));

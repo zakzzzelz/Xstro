@@ -2,6 +2,7 @@ import { bot } from '#lib';
 import { XSTRO, randomizeArray } from '#utils';
 import { getJson } from 'xstro-utils';
 import { delay } from 'baileys';
+import { font } from '#bot';
 
 bot(
   {
@@ -91,7 +92,26 @@ bot(
   },
   async (message, match) => {
     if (!match) return await message.send('Please provide a text');
-    return await message.send(await XSTRO.fancy(match));
+    return await message.send(await font.listall(match).join('\n'));
+  }
+);
+
+bot(
+  {
+    pattern: 'style',
+    public: true,
+    desc: 'Style text',
+    type: 'tools',
+  },
+  async (message, match, { prefix }) => {
+    if (!match)
+      return await message.send(
+        '_Usage :_ ' + prefix + 'style <number>,<text>\n> Example: ' + prefix + 'style 1,hello'
+      );
+    match = match.split(',');
+    if (match[0] > 54) return await message.send('_Provide a number between 1-54_');
+    const text = font.listall(match[1]);
+    return await message.send(text[Number(match[0])]);
   }
 );
 
