@@ -52,14 +52,14 @@ npm start
 * [Deploy Now](https://www.heroku.com/deploy?template=https://github.com/AstroX11/Xstro)
 * Once you tap the URL above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
 * Click on the `Deploy` button to install and deploy the bot to Heroku.
-* [Watch Video Tutorial]()
+* [Watch Video Tutorial](https://tinyurl.com/28ekfssb)
 
 ### Koyeb Deploy
 
 * [Deploy Now](https://app.koyeb.com/services/deploy?type=git&builder=dockerfile&repository=https://github.com/AstroX11/Xstro&branch=master&name=xstro&env%5BSESSION_ID%5D=null&env%5BSUDO%5D=null&env%5BBOT_INFO%5D=αѕтяσχ11;χѕтяσ%20м∂&env%5BSTICKER_PACK%5D=мα∂є%20бу;χѕтяσ%20мυℓтι%20∂єνι¢є%20вσт&env%5BWARN_COUNT%5D=3&env%5BTIME_ZONE%5D=Africa/Lagos)
 * Once you tap the URL above, fill in the `vars` such as `SESSION_ID`,`BOT_INFO`, `SUDO`, `STICKER_PACK`, `WARN_COUNT`, and `TIME_ZONE`.
 * If you are not an advanced koyeb user, just tap on the `deploy` button, after you have filled the variables and aviod any necessary options that "may" or "will" alter the pre and post deployment process.
-* [Watch Video Tutorial]()
+* [Watch Video Tutorial](https://tinyurl.com/28ekfssb)
 
 ### Render Deploy
 
@@ -70,7 +70,7 @@ npm start
 * If you do not have a `betterstack` account then [Create A Better Stack Account](https://betterstack.com/users/sign-up) or [Login if you already have one](https://betterstack.com/users/sign-in#magic).
 * Once you are in, tap on the `create monitor` button and scroll down to the box that say you should put `url to monitor` it could be different and paste the `URL` in the box and tap on `create monitor`.
 * This keeps the bot Alive by pinging it every 5mins.
-* [Watch Video Tutorial]()
+* [Watch Video Tutorial](https://tinyurl.com/28ekfssb)
 
 ### Panel Deploy
 
