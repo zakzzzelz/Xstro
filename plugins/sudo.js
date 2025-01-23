@@ -64,9 +64,13 @@ bot(
     if (!jid) return;
     if (!isSudo(jid)) return message.send('_User was not a sudo user_');
     if (delSudo(jid)) {
-      return message.send(`\`\`\`@${jid.split('@')[0]} removed from sudo users\`\`\``, { mentions: [jid] });
+      return message.send(`\`\`\`@${jid.split('@')[0]} removed from sudo users\`\`\``, {
+        mentions: [jid],
+      });
     } else {
-      return message.send(`\`\`\`@${jid.split('@')[0] } is not a sudo user\`\`\``, { mentions: [jid] });
+      return message.send(`\`\`\`@${jid.split('@')[0]} is not a sudo user\`\`\``, {
+        mentions: [jid],
+      });
     }
   }
 );

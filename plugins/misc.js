@@ -1,6 +1,7 @@
 import { bot } from '#lib';
 import { evaluate } from 'mathjs';
 import { extractUrl, readmore } from '#utils';
+import { delay } from 'baileys';
 
 bot(
   {
@@ -24,14 +25,11 @@ bot(
     desc: 'Get direct mp4 url from video message',
     type: 'misc',
   },
-  async (message, match) => {
+  async (message, match, { jid, sendMessage }) => {
     if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
       return message.send('*Provide URL*');
     const url = extractUrl(match);
-    return await message.client.sendMessage(message.jid, {
-      video: { url: url },
-      caption: '*HERE WE GO*',
-    });
+    return await sendMessage(jid, { video: { url: url } });
   }
 );
 
@@ -42,14 +40,11 @@ bot(
     desc: 'Get direct mp3 URL from an audio message',
     type: 'misc',
   },
-  async (message, match) => {
+  async (message, match, { jid, sendMessage }) => {
     if (!match || !/^https?:\/\/[^\s$.?#].[^\s]*$/.test(match))
       return message.send('*Provide URL*');
     const url = extractUrl(match);
-    return await message.client.sendMessage(message.jid, {
-      audio: { url: url },
-      mimetype: 'audio/mpeg',
-    });
+    return await sendMessage(jid, { audio: { url: url }, mimetype: 'audio/mpeg' });
   }
 );
 
@@ -79,13 +74,36 @@ bot(
     type: 'misc',
     desc: 'Get the WhatsApp Bio of a User',
   },
-  async (message, match) => {
+  async (message, match, { fetchStatus }) => {
     const jid = await message.ujid(match);
-    const { status, setAt } = await message.client.fetchStatus(jid);
+    const { status, setAt } = await fetchStatus(jid);
     if (status && setAt) {
-      await message.send(`\`\`\`Bio: ${status}\nSetAt: ${setAt}\`\`\``);
+      await message.send(`*Bio:* ${status}\n*SetAt:* ${setAt}\`\`\``);
     } else {
-      message.send(`_User's settings doesn't allow me to_`);
+      message.send(`*No Bio Found!*`);
     }
+  }
+);
+
+bot(
+  {
+    pattern: 'advertise',
+    public: false,
+    desc: 'Advertise a message to all groups',
+    type: 'misc',
+  },
+  async (message, match, { groupFetchAllParticipating }) => {
+    if (!match) return message.send('Provide a message to advertise');
+    const data = await groupFetchAllParticipating();
+    const groups = Object.values(data).map((group) => group.id);
+    await message.send(`Advertising to ${groups.length} groups.`);
+    for (const group of groups) {
+      await delay(1500);
+      await message.send(match, {
+        jid: group,
+        contextInfo: { forwardingScore: 999, isForwarded: true },
+      });
+    }
+    return message.send(`Shared to ${groups.length} groups.`);
   }
 );
