@@ -81,20 +81,6 @@ export const profile = async (name, fn, logger) => {
   return result;
 };
 
-const proxyFilePath = join('./utils/proxy.txt');
-export const proxy = async () => {
-  try {
-    const data = await fs.readFile(proxyFilePath, 'utf8');
-    const proxies = data.split('\n').filter((line) => line.trim() !== '');
-    if (proxies.length === 0) return null;
-    const randomIndex = Math.floor(Math.random() * proxies.length);
-    return proxies[randomIndex];
-  } catch (error) {
-    console.error('Error reading proxy file:', error);
-    return null;
-  }
-};
-
 export function isJSON(input) {
   if (typeof input !== 'string') return false;
 
