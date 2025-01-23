@@ -12,7 +12,7 @@ bot(
   },
   async (message, match, { groupMetadata, profilePictureUrl, query }) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     await delay(3000);
     await message.send(
       `\`\`\`⚠️ Warning: Using this command improperly can lead to your account being banned! Ensure the recipient has saved your contact before proceeding. Misuse of this feature is strictly prohibited by whatsapp\`\`\``

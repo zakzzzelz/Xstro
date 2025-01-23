@@ -80,19 +80,19 @@ bot(
     desc: 'Kick a certain country code from a group',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { groupMetadata, groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
     const countryCode = match?.trim().replace('+', '');
     if (!countryCode || isNaN(countryCode))
       return message.send('_Please provide a valid country code._');
-    const metadata = await message.client.groupMetadata(message.jid);
+    const metadata = await groupMetadata(message.jid);
     const participants = metadata.participants
       .filter((participant) => participant.id.startsWith(`${countryCode}`) && !participant.admin)
       .map((participant) => participant.id);
     if (!participants.length)
       return message.send(`_No members found with the country code ${countryCode}._`);
     for (const jid of participants) {
-      await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
+      await groupParticipantsUpdate(message.jid, [jid], 'remove');
       await message.send(`*_@${jid.split('@')[0]} kicked_*`, { mentions: [jid] });
       await delay(2000);
     }
@@ -143,7 +143,7 @@ bot(
   },
   async (message, match) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
     if (participant.admin)
@@ -163,7 +163,7 @@ bot(
   },
   async (message, match) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     const groupMetadata = await message.client.groupMetadata(message.jid);
     const participant = groupMetadata.participants.find((p) => p.id === jid);
     if (!participant.admin)
@@ -183,11 +183,11 @@ bot(
     desc: 'Kicks A Participant from Group',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     if (!jid) return;
-    await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
+    await groupParticipantsUpdate(message.jid, [jid], 'remove');
     return message.send(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });
   }
 );
@@ -200,10 +200,10 @@ bot(
     desc: 'Get Group Invite link',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupInviteCode }) => {
     if (!(await message.getAdmin())) return;
     const msg = await message.send('*wait*');
-    const code = await message.client.groupInviteCode(message.jid);
+    const code = await groupInviteCode(message.jid);
     return msg.edit(`https://chat.whatsapp.com/${code}`);
   }
 );
@@ -216,10 +216,10 @@ bot(
     desc: 'leave a group',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupParticipantsUpdate }) => {
     await message.send('_Left Group_');
     await delay(2000);
-    return message.client.groupParticipantsUpdate(message.jid, [message.user], 'remove');
+    return await groupParticipantsUpdate(message.jid, [message.user], 'remove');
   }
 );
 
@@ -231,14 +231,14 @@ bot(
     desc: 'Creates a poll in the group.',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, prefix, sendMessage }) => {
     let [pollName, pollOptions] = match.split(';');
     if (!pollOptions)
-      return await message.send(message.prefix + 'poll question;option1,option2,option3.....');
+      return await message.send(prefix + 'poll question;option1,option2,option3.....');
     let options = [];
     for (let option of pollOptions.split(','))
       if (option && option.trim() !== '') options.push(option.trim());
-    await message.client.sendMessage(message.jid, {
+    await sendMessage(jid, {
       poll: {
         name: pollName,
         values: options,
@@ -256,12 +256,12 @@ bot(
     desc: 'Mute a group (admins only)',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupSettingUpdate, groupMetadata }) => {
     if (!(await message.getAdmin())) return;
-    const metadata = await message.client.groupMetadata(message.jid);
+    const metadata = await groupMetadata(message.jid);
     if (metadata.announce)
       return message.send('_Group is already muted. Only admins can send messages._');
-    await message.client.groupSettingUpdate(message.jid, 'announcement');
+    await groupSettingUpdate(message.jid, 'announcement');
     await message.send('_Group has been muted. Only admins can send messages now._');
   }
 );
@@ -274,12 +274,12 @@ bot(
     desc: 'Unmute a group (admins only)',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupMetadata, groupSettingUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const metadata = await message.client.groupMetadata(message.jid);
+    const metadata = await groupMetadata(message.jid);
     if (!metadata.announce)
       return message.send('_Group is already unmuted. All members can send messages._');
-    await message.client.groupSettingUpdate(message.jid, 'not_announcement');
+    await groupSettingUpdate(message.jid, 'not_announcement');
     await message.send('_Group has been unmuted. All members can send messages now._');
   }
 );
@@ -292,9 +292,9 @@ bot(
     desc: 'Tags Admins of A Group',
     type: 'group',
   },
-  async (message) => {
-    const groupMetadata = await message.client.groupMetadata(message.jid);
-    const groupAdmins = groupMetadata.participants.filter((p) => p.admin !== null).map((p) => p.id);
+  async (message, _, { groupMetadata }) => {
+    const data = await groupMetadata(message.jid);
+    const groupAdmins = data.participants.filter((p) => p.admin !== null).map((p) => p.id);
     if (groupAdmins.length > 0) {
       const adminTags = groupAdmins.map((admin) => `@${admin.split('@')[0]}`);
       const replyText = `*_Group Admins:_*\n ${adminTags.join('\n')}`;
@@ -313,9 +313,9 @@ bot(
     desc: 'Revoke Invite link',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupRevokeInvite }) => {
     if (!(await message.getAdmin())) return;
-    await message.client.groupRevokeInvite(message.jid);
+    await groupRevokeInvite(message.jid);
     return message.send('_Group Link Revoked!_');
   }
 );
@@ -328,11 +328,11 @@ bot(
     desc: 'Changes Group Profile Picture',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, updateProfilePicture }) => {
     if (!(await message.getAdmin())) return;
     if (!message.reply_message?.image) return message.send('_Reply An Image!_');
     const img = await message.download();
-    await message.client.updateProfilePicture(message.jid, img);
+    await updateProfilePicture(jid, img);
     return await message.send('_Group Image Updated_');
   }
 );
@@ -345,11 +345,11 @@ bot(
     desc: 'Lock groups settings',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { groupSettingUpdate, groupMetadata }) => {
     if (!(await message.getAdmin())) return;
-    const meta = await message.client.groupMetadata(message.jid);
+    const meta = await groupMetadata(message.jid);
     if (meta.restrict) return message.send('_Group is already locked to Admins._');
-    await message.client.groupSettingUpdate(message.jid, 'locked');
+    await groupSettingUpdate(message.jid, 'locked');
     return message.send('_Group has been locked to Admins_');
   }
 );

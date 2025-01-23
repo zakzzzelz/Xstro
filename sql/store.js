@@ -70,61 +70,10 @@ const getName = async (jid) => {
   return contact ? contact.name : jid.split('@')[0].replace(/_/g, ' ');
 };
 
-const saveGroupMetadata = async (jid, client) => {
-  if (!isJidGroup(jid)) return;
-  const groupMetadata = await client.groupMetadata(jid);
-  const metadata = {
-    jid: groupMetadata.id,
-    subject: groupMetadata.subject,
-    subjectOwner: groupMetadata.subjectOwner,
-    subjectTime: groupMetadata.subjectTime
-      ? new Date(groupMetadata.subjectTime * 1000).toISOString()
-      : null,
-    size: groupMetadata.size,
-    creation: groupMetadata.creation ? new Date(groupMetadata.creation * 1000).toISOString() : null,
-    owner: groupMetadata.owner,
-    desc: groupMetadata.desc,
-    descId: groupMetadata.descId,
-    linkedParent: groupMetadata.linkedParent,
-    restrict: groupMetadata.restrict,
-    announce: groupMetadata.announce,
-    isCommunity: groupMetadata.isCommunity,
-    isCommunityAnnounce: groupMetadata.isCommunityAnnounce,
-    joinApprovalMode: groupMetadata.joinApprovalMode,
-    memberAddMode: groupMetadata.memberAddMode,
-    ephemeralDuration: groupMetadata.ephemeralDuration,
-  };
-
-  const metadataList = await readJSON('metadata.json');
-  const index = metadataList.findIndex((meta) => meta.jid === jid);
-  if (index > -1) {
-    metadataList[index] = metadata;
-  } else {
-    metadataList.push(metadata);
-  }
-  await writeJSON('metadata.json', metadataList);
-
-  const participants = groupMetadata.participants.map((participant) => ({
-    jid,
-    participantId: participant.id,
-    admin: participant.admin,
-  }));
-  await writeJSON(`${jid}_participants.json`, participants);
-};
-
-const getGroupMetadata = async (jid) => {
-  if (!isJidGroup(jid)) return null;
-  const metadataList = await readJSON('metadata.json');
-  const metadata = metadataList.find((meta) => meta.jid === jid);
-  if (!metadata) return null;
-
-  const participants = await readJSON(`${jid}_participants.json`);
-  return { ...metadata, participants };
-};
 const saveMessageCount = async (message) => {
   if (!message) return;
   const jid = message.key.remoteJid;
-  const sender = message.key.participant || message.sender;
+  const sender = message.sender;
   if (!jid || !sender || !isJidGroup(jid)) return;
 
   const messageCounts = await readJSON('message_count.json');
@@ -139,9 +88,9 @@ const saveMessageCount = async (message) => {
   await writeJSON('message_count.json', messageCounts);
 };
 
-const getInactiveGroupMembers = async (jid) => {
+const getInactiveGroupMembers = async (jid, client) => {
   if (!isJidGroup(jid)) return [];
-  const groupMetadata = await getGroupMetadata(jid);
+  const groupMetadata = await client.groupMetadata(jid);
   if (!groupMetadata) return [];
 
   const messageCounts = await readJSON('message_count.json');
@@ -207,8 +156,6 @@ export {
   loadMessage,
   getName,
   getChatSummary,
-  saveGroupMetadata,
-  getGroupMetadata,
   saveMessageCount,
   getInactiveGroupMembers,
   getGroupMembersMessageCount,

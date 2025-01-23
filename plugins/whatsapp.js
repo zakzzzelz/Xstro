@@ -313,7 +313,7 @@ bot(
     desc: 'Blocks A Person',
   },
   async (message, match, { updateBlockStatus }) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     await updateBlockStatus(jid, 'block');
   }
 );
@@ -326,7 +326,7 @@ bot(
     desc: 'Unblocks A Person',
   },
   async (message, match, { updateBlockStatus }) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     await updateBlockStatus(jid, 'unblock');
   }
 );
@@ -353,7 +353,7 @@ bot(
     desc: 'Get Jid of Current Chat',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     message.send(jid);
   }
 );

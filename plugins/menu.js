@@ -18,9 +18,10 @@ bot(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
     ).length;
-    let menuInfo = `╭─── ${config.BOT_INFO.split(';')[1]} ────
-│ Owner: ${config.BOT_INFO.split(';')[0]}		
+    let menuInfo = `\`\`\`
+╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Prefix: ${PREFIX}
+│ Owner: ${config.BOT_INFO.split(';')[0]}		
 │ Plugins: ${cmds}
 │ Mode: ${mode ? 'private' : 'public'}
 │ Uptime: ${runtime(process.uptime())}
@@ -32,7 +33,8 @@ bot(
       timeZone: config.TIME_ZONE,
     })}
 │ Version: ${config.VERSION}
-╰─────────────\n`;
+╰─────────────\n
+\`\`\``;
 
     const commandsByType = commands
       .filter((cmd) => cmd.pattern && !cmd.dontAddCommandList)
@@ -51,14 +53,14 @@ bot(
 
     sortedTypes.forEach((type) => {
       const sortedCommands = commandsByType[type].sort();
-      menuInfo += `╭──── *${type}* ────\n`;
+      menuInfo += font.tiny(`╭──── *${type}* ────\n`);
       sortedCommands.forEach((cmd) => {
-        menuInfo += `│${totalCommands}· ${cmd}\n`;
+        menuInfo += font.tiny(`│${totalCommands}· ${cmd}\n`);
         totalCommands++;
       });
-      menuInfo += `╰────────────\n`;
+      menuInfo += font.tiny(`╰────────────\n`);
     });
-    return await message.send(font.tiny(menuInfo));
+    return await message.send(menuInfo);
   }
 );
 

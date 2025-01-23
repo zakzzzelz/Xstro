@@ -1,10 +1,5 @@
 import { bot } from '#lib';
-import {
-  getChatSummary,
-  getGroupMembersMessageCount,
-  getGroupMetadata,
-  getInactiveGroupMembers,
-} from '#sql';
+import { getChatSummary, getGroupMembersMessageCount, getInactiveGroupMembers } from '#sql';
 
 bot(
   {
@@ -59,7 +54,7 @@ bot(
     const data = await Promise.all(
       groupChats.map(async (chat, index) => {
         try {
-          const groupMetadata = await getGroupMetadata(chat.jid);
+          const groupMetadata = await message.client.groupMetadata(chat.jid);
           return `GROUP: ${groupMetadata?.subject || 'Unknown Group'}
 Messages: ${chat.messageCount}
 Last Message: ${new Date(chat.lastMessageTimestamp).toLocaleString()}`;
@@ -105,7 +100,7 @@ bot(
     type: 'group',
   },
   async (message) => {
-    const groupData = await getInactiveGroupMembers(message.jid);
+    const groupData = await getInactiveGroupMembers(message.jid, message.client);
     if (groupData.length === 0)
       return await message.reply('*📊 Inactive Members:* No inactive members found.');
     let inactiveMembers = '📊 Inactive Members:\n\n';

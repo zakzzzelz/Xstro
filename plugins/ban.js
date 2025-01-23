@@ -9,7 +9,7 @@ bot(
     type: 'ban',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     if (isSudo(jid)) return message.send('_You cannot ban a sudo user_');
     const msg = await addBan(jid);
     return await message.send(msg, { mentions: [jid] });
@@ -24,7 +24,7 @@ bot(
     type: 'ban',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     const msg = await removeBan(jid);
     return await message.send(msg, { mentions: [jid] });
   }

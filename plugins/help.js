@@ -61,7 +61,7 @@ bot(
     type: 'help',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     if (!jid) return message.send('_Give me the number that needs pairing code_');
     const id = jid.split('@')[0];
     const msg = await message.send('*Getting Pairing Code*');

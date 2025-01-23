@@ -26,7 +26,7 @@ bot(
     type: 'sudo',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     if (!jid) return;
     if (isSudo(jid)) return message.send('_Already A Sudo User_');
     addSudo(jid);
@@ -60,7 +60,7 @@ bot(
     type: 'sudo',
   },
   async (message, match) => {
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
     if (!jid) return;
     if (!isSudo(jid)) return message.send('_User was not a sudo user_');
     if (delSudo(jid)) {

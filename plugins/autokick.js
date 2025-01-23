@@ -14,7 +14,7 @@ bot(
     if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
     const groupId = message.jid;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
 
     const added = await addAKick(groupId, jid);
     return message.send(
@@ -39,7 +39,7 @@ bot(
     if (!message.isBotAdmin) return message.send('```I am not an Admin```');
 
     const groupId = message.jid;
-    const jid = await message.getUserJid(match);
+    const jid = await message.ujid(match);
 
     const deleted = await delKick(groupId, jid);
     return message.send(
