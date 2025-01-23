@@ -61,8 +61,7 @@ bot(
   },
   async (message) => {
     const afkData = await getAfkMessage();
-    const sudo = await isSudo(message.sender, message.user);
-    if (!afkData || sudo) return;
+    if (!afkData || message.user) return;
     if (message.jid.endsWith('@g.us')) {
       if (message.mention && message.mention.includes(message.user)) {
         const lastSeen = afkData.timestamp ? formatDuration(Date.now() - afkData.timestamp) : 'N/A';
