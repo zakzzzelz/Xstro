@@ -9,15 +9,10 @@ bot(
     type: 'user',
   },
   async (message, match) => {
-    if (match !== 'on' && match !== 'off') {
-      return message.send('_Use "on" or "off" to configure antidelete._');
-    }
-    const status = getAntiDelete();
+    if (!['on', 'off'].includes(match)) return message.send('Use on | off');
     const newState = match === 'on';
-    if (status === newState) {
-      return message.send(`_Antidelete is already ${newState ? 'on' : 'off'}._`);
-    }
+    if (getAntiDelete() === newState) return message.send(`Antidelete is already ${match}.`);
     setAntiDelete(newState);
-    return message.send(`_Antidelete is now ${newState ? 'on' : 'off'}._`);
+    message.send(`Antidelete is now turned ${match}.`);
   }
 );

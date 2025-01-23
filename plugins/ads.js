@@ -6,29 +6,27 @@ bot(
     pattern: 'advertise',
     public: false,
     isGroup: true,
-    desc: 'Create and Share Advertisement Messages to all Your Groups',
+    desc: 'Share ad messages to all groups',
     type: 'group',
   },
-  async (message, match, { reply_message, groupFetchAllParticipating }) => {
-    const adMsg = match || reply_message.text;
-    if (!adMsg) {
-      return message.send('_I need a Message to Advertise_');
-    }
+  async (message, match, { groupFetchAllParticipating }) => {
+    if (!match) return message.send('_Provide a message to advertise_');
+
     const groups = await groupFetchAllParticipating();
     const groupIds = Object.values(groups).map((group) => group.id);
 
-    await message.send(`\`\`\`Advertising to ${groupIds.length} groups.\`\`\``);
+    await message.send(`Advertising to ${groupIds.length} groups.`);
 
-    const broadcastMessage = `\`\`\`ADVERTSIMENT\n\nINFO:\n\n${adMsg}\`\`\``;
+    const broadcastMessage = `ADVERTISMENT\n\nINFO:\n\n${adMsg}`;
 
     for (const groupId of groupIds) {
       await delay(1500);
       await message.send(broadcastMessage, {
         jid: groupId,
-        contextInfo: { forwardingScore: 9999999, isForwarded: true },
+        contextInfo: { forwardingScore: 999, isForwarded: true },
       });
     }
 
-    return await message.send('```Shared to ' + groupIds.length + ' Groups.```');
+    return message.send(`Shared to ${groupIds.length} groups.`);
   }
 );

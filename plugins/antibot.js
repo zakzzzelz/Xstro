@@ -9,36 +9,40 @@ bot(
     type: 'group',
   },
   async (message, match) => {
-    const settings = ['on', 'off'];
-    if (!settings.includes(match)) return message.send('_Use Antibot on | off_');
+    if (!['on', 'off'].includes(match)) return message.send('Use: antibot on | off');
+    const enabled = await getAntibot(message.jid);
+
     if (match === 'on') {
-      if (await getAntibot(message.jid)) return message.send('_Antibot Already Enabled_');
+      if (enabled) return message.send('Antibot is already enabled.');
       await setAntibot(message.jid, true);
-      return message.send('_Antibot Enabled for this Group_');
-    } else if (match === 'off') {
-      if (!(await getAntibot(message.jid))) return message.send('_Antibot already Disabled_');
-      await delAntibot(message.jid);
-      return message.send('_Antibot Disabled for this Group_');
+      return message.send('Antibot enabled for this group.');
     }
+
+    if (!enabled) return message.send('Antibot is already disabled.');
+    await delAntibot(message.jid);
+    return message.send('Antibot disabled for this group.');
   }
 );
 
 bot(
   {
-    on: 'group-chat',
+    on: 'anti-bot',
     dontAddCommandList: true,
   },
   async (message, { groupParticipantsUpdate }) => {
-    if (!message.isGroup) return;
-    if (!(await getAntibot(message.jid))) return;
-    if (message.isAdmin) return;
-    if (!message.isBotAdmin) return;
-    if (message.sender === message.user) return;
-    if (isSudo(message.sender)) return;
+    if (
+      !message.isGroup ||
+      !(await getAntibot(message.jid)) ||
+      message.isAdmin ||
+      !message.isBotAdmin ||
+      message.sender === message.user ||
+      isSudo(message.sender)
+    )
+      return;
 
     if (message.bot) {
-      return await Promise.all([
-        message.send(`_@${message.sender.split('@')[0]} has been kicked for using Bot_`, {
+      await Promise.all([
+        message.send(`@${message.sender.split('@')[0]} has been kicked for using a bot.`, {
           mentions: [message.sender],
         }),
         groupParticipantsUpdate(message.jid, [message.sender], 'remove'),
