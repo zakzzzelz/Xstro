@@ -15,6 +15,8 @@
 
 [![Get Session](https://img.shields.io/badge/Get_Session-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://bit.ly/41mQBbY)
 
+[![Join WhatsApp Group](https://img.shields.io/badge/Support-Group-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6)
+
 > [!Note]
 > Session ID created by XstroSession, encrypted with SessionMaker Crypto, and stored on Koyeb. Only Xstro can unlock it. Two repository links provided for creating your own session. Keep your session ID safe. I am not a cybersecurity expert.
 
@@ -25,25 +27,9 @@
 * Run `node -v` on your terminal.
 * Create a folder, and open your terminal on that folder and run the below.
 
-```bash
-npm i -g yarn
-```
+[![Get Session](https://img.shields.io/badge/Session-Source-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AstroX11/XstroSession)
 
-`XstroSession`
-
-```bash
-git clone https://github.com/AstroX11/XstroSession
-yarn install
-npm start
-```
-
-`Session Crypto`
-
-```bash
-git clone https://github.com/AstroX11/session-maker-crypto
-yarn install
-npm start
-```
+[![Session Crypto](https://img.shields.io/badge/Session-Crypto-black?style=for-the-badge&logo=crypto&logoColor=white)](https://github.com/AstroX11/session-maker-crypto)
 
 ## Deployments
 
@@ -188,7 +174,6 @@ npm start
 Want to help? Fork the repo, create a pull request, and ensure everything works.
 
 [![Contribute](https://img.shields.io/badge/CONTRIBUTE-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AstroX11/Xstro/blob/master/.github/contributing.md)  
-[![Join WhatsApp Group](https://img.shields.io/badge/Join_WhatsApp-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6)
 
 ### Disclaimer
 
