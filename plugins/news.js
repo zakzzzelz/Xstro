@@ -12,7 +12,7 @@ bot(
     const res = await XSTRO.news();
     let data = '';
     for (const items of res) {
-      data += `\`\`\`Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.url}\`\`\`\n\n`;
+      data += `Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.url}\n\n`;
     }
     return await message.send(data);
   }
@@ -29,7 +29,7 @@ bot(
     const res = await XSTRO.footballnews();
     let data = '';
     for (const items of res) {
-      data += `\`\`\`Title: ${items.title}\nlink: ${items.url}\`\`\`\n\n`;
+      data += `Title: ${items.title}\nlink: ${items.url}\n\n`;
     }
     return await message.send(data);
   }
@@ -46,7 +46,7 @@ bot(
     const res = await XSTRO.animenews();
     let data = '';
     for (const items of res) {
-      data += `\`\`\`Title: ${items.title}\nDescription: ${items.description}\nlink: ${items.link}\`\`\`\n\n`;
+      data += `Title: ${items.title}\nDescription: ${items.description}\nlink: ${items.link}\n\n`;
     }
     return await message.send(data);
   }

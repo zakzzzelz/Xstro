@@ -9,56 +9,49 @@ bot(
     desc: 'Setup Antilink for Groups',
     type: 'group',
   },
-  async (message, match, { prefix }) => {
-    const jid = message.jid;
+  async (message, match, { jid, prefix }) => {
+    if (!(await message.getAdmin())) return;
     if (!match)
       return message.send(
-        `\`\`\`ANTILINK SETUP\n\n${prefix}antilink on\n ${prefix}antilink set delete | kick | warn\n${prefix}antilink off\n\`\`\``
+        `ANTILINK SETUP\n\n${prefix}antilink on\n${prefix}antilink set delete | kick | warn\n${prefix}antilink off`
       );
-
-    if (!message.isAdmin) return message.send('```For Group Admins Only!```');
     const args = match.toLowerCase().trim().split(' ');
     const action = args[0];
-
     if (action === 'on') {
-      const existingConfig = await getAntilink(jid, 'on');
-      if (existingConfig) return message.send('*_Antilink is already on_*');
-      const result = await setAntilink(jid, 'on', '');
+      if (await getAntilink(jid, 'on')) return message.send('Antilink is already on');
       return message.send(
-        result ? '*_Antilink has been turned ON_*' : '*_Failed to turn on Antilink_*'
+        (await setAntilink(jid, 'on', ''))
+          ? 'Antilink has been turned ON'
+          : 'Failed to turn on Antilink'
       );
     }
-
     if (action === 'off') {
       await removeAntilink(jid, 'on');
       await removeAntilink(jid, 'action');
-      return message.send('*_Antilink has been turned OFF_*');
+      return message.send('Antilink has been turned OFF');
     }
     if (action === 'set') {
       if (args.length < 2)
-        return message.send(
-          `*_Please specify an action: ${prefix}antilink set delete | kick | warn_*`
-        );
+        return message.send(`Please specify an action: ${prefix}antilink set delete | kick | warn`);
       const setAction = args[1];
-      if (setAction !== 'delete' && setAction !== 'kick' && setAction !== 'warn')
-        return message.send('*_Invalid action. Choose delete, kick, or warn._*');
+      if (!['delete', 'kick', 'warn'].includes(setAction))
+        return message.send('Invalid action. Choose delete, kick, or warn.');
       const existingConfig = await getAntilink(jid, 'on');
       if (existingConfig && existingConfig.action === setAction)
-        return message.send(`*_Antilink action is already set to ${setAction}_*`);
-      const result = await setAntilink(jid, 'on', setAction);
+        return message.send(`Antilink action is already set to ${setAction}`);
       return message.send(
-        result ? `*_Antilink action set to ${setAction}_*` : '*_Failed to set Antilink action_*'
+        (await setAntilink(jid, 'on', setAction))
+          ? `Antilink action set to ${setAction}`
+          : 'Failed to set Antilink action'
       );
     }
     if (action === 'get') {
       const status = await getAntilink(jid, 'on');
       const actionConfig = await getAntilink(jid, 'on');
       return message.send(
-        `*_Antilink Configuration:_*\n` +
-          `Status: ${status ? 'ON' : 'OFF'}\n` +
-          `Action: ${actionConfig ? actionConfig.action : 'Not set'}`
+        `Antilink Configuration:\nStatus: ${status ? 'ON' : 'OFF'}\nAction: ${actionConfig ? actionConfig.action : 'Not set'}`
       );
     }
-    return message.send(`*_Use ${prefix}antilink for usage._*`);
+    message.send(`Use ${prefix}antilink for usage.`);
   }
 );

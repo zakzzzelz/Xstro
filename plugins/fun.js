@@ -30,7 +30,7 @@ bot(
     type: 'fun',
   },
   async (message) => {
-    return await message.send(`\`\`\`${await XSTRO.facts()}\`\`\``);
+    return await message.send(`${await XSTRO.facts()}`);
   }
 );
 
@@ -42,7 +42,7 @@ bot(
     type: 'fun',
   },
   async (message) => {
-    return await message.send(`\`\`\`${await XSTRO.quotes()}\`\`\``);
+    return await message.send(`${await XSTRO.quotes()}`);
   }
 );
 
@@ -54,7 +54,7 @@ bot(
     type: 'fun',
   },
   async (message) => {
-    return await message.send(`\`\`\`${await XSTRO.advice()}\`\`\``);
+    return await message.send(`${await XSTRO.advice()}`);
   }
 );
 
@@ -66,7 +66,7 @@ bot(
     type: 'fun',
   },
   async (message) => {
-    return await message.send(`\`\`\`${await XSTRO.rizz()}\`\`\``);
+    return await message.send(`${await XSTRO.rizz()}`);
   }
 );
 
@@ -79,7 +79,7 @@ bot(
   },
   async (message, match) => {
     if (!match) return await message.send('Please provide a verse:\n.john3:16');
-    return await message.send(`\`\`\`${await XSTRO.bible(match.trim())}\`\`\``);
+    return await message.send(`${await XSTRO.bible(match.trim())}`);
   }
 );
 

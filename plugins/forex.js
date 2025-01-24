@@ -13,7 +13,7 @@ bot(
     const res = await XSTRO.forex(match);
     if (!res) return message.send('_Invaild Forex Pair_');
     return message.send(
-      `\`\`\`${match}\n\nLastPrice: ${res.lastPrice}\nCurrency: ${res.currency}\nChangeValue: ${res.changeValue}\nLastUpdate: ${res.lastUpdate}\`\`\``
+      `${match}\n\nLastPrice: ${res.lastPrice}\nCurrency: ${res.currency}\nChangeValue: ${res.changeValue}\nLastUpdate: ${res.lastUpdate}`
     );
   }
 );
@@ -29,7 +29,7 @@ bot(
     const res = await XSTRO.forex('fxmajor');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -39,7 +39,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -57,7 +57,7 @@ bot(
     const res = await XSTRO.forex('fxminor');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -67,7 +67,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -85,7 +85,7 @@ bot(
     const res = await XSTRO.forex('fxexotic');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -95,7 +95,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -113,7 +113,7 @@ bot(
     const res = await XSTRO.forex('fxamericas');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -123,7 +123,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -141,7 +141,7 @@ bot(
     const res = await XSTRO.forex('fxeurope');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -151,7 +151,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -169,7 +169,7 @@ bot(
     const res = await XSTRO.forex('fxmajor');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -179,7 +179,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -197,7 +197,7 @@ bot(
     const res = await XSTRO.forex('fxmajor');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -207,7 +207,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -225,7 +225,7 @@ bot(
     const res = await XSTRO.forex('fxmiddle-east');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -235,7 +235,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);
@@ -253,7 +253,7 @@ bot(
     const res = await XSTRO.forex('fxafrica');
     const data = res
       .map((item) => {
-        return `\`\`\`
+        return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -263,7 +263,7 @@ Ask: ${item.Ask}
 High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
-\`\`\``.trim();
+`.trim();
       })
       .join('\n\n');
     await message.send(data);

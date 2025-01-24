@@ -162,14 +162,14 @@ bot(
     const res = await XSTRO.gitstalk(match);
     const { username, bio, profile_pic, email, company, created_at, followers, following } = res;
     return await message.send(
-      `\`\`\`${username} Details:
+      `${username} Details:
 
 Bio: ${bio || 'Not Set'}
 Email: ${email || 'Not Set'}
 Company: ${company || 'Not Set'}
 Created At: ${created_at || 'Not Available'}
 Followers: ${followers || 0}
-Following: ${following || 0}\`\`\``,
+Following: ${following || 0}`,
       { image: profile_pic }
     );
   }

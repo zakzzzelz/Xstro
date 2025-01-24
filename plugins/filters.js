@@ -20,7 +20,7 @@ ${message.prefix}delfilter gc hi (To delete a filter set for groups)
 
 ${message.prefix}delfilter dm hi (To delete a filter set for direct messages)
         `;
-    return await message.send(`\`\`\`${Msg.trim().trim()}\`\`\``);
+    return await message.send(`${Msg.trim().trim()}`);
   }
 );
 
@@ -39,7 +39,7 @@ bot(
     if (!text || !response) return await message.send('Both text and response are required.');
 
     const result = await addFilter('dm', text.trim(), response.trim());
-    return await message.send(`\`\`\`${result}\`\`\``);
+    return await message.send(`${result}`);
   }
 );
 
@@ -58,7 +58,7 @@ bot(
     if (!text || !response) return await message.send('Both text and response are required.');
 
     const result = await addFilter('gc', text.trim(), response.trim());
-    return await message.send(`\`\`\`${result}\`\`\``);
+    return await message.send(`${result}`);
   }
 );
 
@@ -79,7 +79,7 @@ bot(
     if (!text) return await message.send('Filter text is required.');
 
     const result = await removeFilter(type, text);
-    return await message.send(`\`\`\`${result}\`\`\``);
+    return await message.send(`${result}`);
   }
 );
 
@@ -104,7 +104,7 @@ bot(
       ? gcFilters.map((filter) => `• ${filter.word}: ${filter.response}`).join('\n')
       : 'None';
 
-    return await message.send(`\`\`\`${response}\`\`\``);
+    return await message.send(`${response}`);
   }
 );
 

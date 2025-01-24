@@ -50,7 +50,7 @@ bot(
     if (!['on', 'off'].includes(match))
       return message.send('_Use on | off to configure how new members can join the group_');
     await message.client.groupJoinApprovalMode(message.jid, match);
-    return message.send(`\`\`\`GroupJoinApprovalMode is now set to: ${match.toUpperCase()}\`\`\``);
+    return message.send(`GroupJoinApprovalMode is now set to: ${match.toUpperCase()}`);
   }
 );
 
@@ -68,7 +68,7 @@ bot(
       return message.send('_Use on | off to configure who can add members to the group_');
     const mode = match === 'on' ? 'all_member_add' : 'admin_add';
     await message.client.groupMemberAddMode(message.jid, mode);
-    return message.send(`\`\`\`GroupMemberAddMode is now set to: ${mode.toUpperCase()}\`\`\``);
+    return message.send(`GroupMemberAddMode is now set to: ${mode.toUpperCase()}`);
   }
 );
 

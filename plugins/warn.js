@@ -19,12 +19,12 @@ bot(
     const warningCount = parseInt(warnings);
     if (warningCount >= WARN_COUNT) {
       await message.send(
-        `\`\`\`User has been warned ${warningCount} times. Maximum limit reached. Taking action!\`\`\``
+        `User has been warned ${warningCount} times. Maximum limit reached. Taking action!`
       );
 
       if (message.isGroup && message.isBotAdmin) {
         await message.client.groupParticipantsUpdate(message.jid, [jid], 'remove');
-        await message.send(`\`\`\`@${jid.split('@')[0]} has been removed from the group\`\`\``, {
+        await message.send(`@${jid.split('@')[0]} has been removed from the group`, {
           mentions: [jid],
         });
       }
@@ -33,7 +33,7 @@ bot(
     } else {
       const remainingWarns = WARN_COUNT - warningCount;
       await message.send(
-        `\`\`\`@${jid.split('@')[0]} has been warned.\nWarnings: ${warningCount}\nRemaining warnings before action: ${remainingWarns}\`\`\``,
+        `@${jid.split('@')[0]} has been warned.\nWarnings: ${warningCount}\nRemaining warnings before action: ${remainingWarns}`,
         { mentions: [jid] }
       );
     }
@@ -50,7 +50,7 @@ bot(
   async (message, match) => {
     const jid = await message.ujid(match);
     const { warnings } = await getWarn(jid);
-    await message.send(`\`\`\`@${jid.split('@')[0]} has ${warnings} warnings.\`\`\``, {
+    await message.send(`@${jid.split('@')[0]} has ${warnings} warnings.`, {
       mentions: [jid],
     });
   }

@@ -16,7 +16,7 @@ bot(
     const { title, album, thumb, lyrics } = res.data;
     const image = await getBuffer(thumb);
     return await message.send(image, {
-      caption: `*${title}*\n\`\`\`${album}\n\n${lyrics}\`\`\``,
+      caption: `*${title}*\n${album}\n\n${lyrics}`,
     });
   }
 );
@@ -119,7 +119,7 @@ bot(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`
     );
     return res && res.length > 0
-      ? message.send(`\`\`\`${word}:\n${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}\`\`\``)
+      ? message.send(`${word}:\n${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}`)
       : message.send('```No definition found for this word.```');
   }
 );
@@ -170,7 +170,7 @@ bot(
   async (message, match) => {
     if (!match) return message.send('_Provide Search Query_');
     const res = await XSTRO.google(match);
-    return message.send(`\`\`\`${res}\`\`\``);
+    return message.send(`${res}`);
   }
 );
 
@@ -204,7 +204,7 @@ bot(
     if (!match) return message.send('_Search a term like elon musk_');
     const res = await XSTRO.wikipedia(match);
     const { title, extract } = res;
-    return await message.send(`\`\`\`${title}:\n\n${extract}\`\`\``);
+    return await message.send(`${title}:\n\n${extract}`);
   }
 );
 
@@ -316,14 +316,14 @@ ${day.day}:
       .join('\n');
 
     return message.send(
-      `\`\`\`
+      `
 ${airQualitySubtitle}
 - Current AQI: ${current.aqiValue} (${current.aqiStatus})
 - Main Pollutant: ${current.mainPollutant} (${current.mainPollutantValue})
 \n
 ${dailyForecastTitle}:
 ${forecastMessage}
-\`\`\``.trim()
+`.trim()
     );
   }
 );

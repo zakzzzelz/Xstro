@@ -14,7 +14,7 @@ export async function AntiWord(msg) {
       if (!msg.isBotAdmin) return;
       await msg.client.sendMessage(msg.from, { delete: msg?.key });
       await msg.send(
-        `\`\`\`@${msg.sender.split('@')[0]} your message has been deleted for using a prohibited word.\`\`\``,
+        `@${msg.sender.split('@')[0]} your message has been deleted for using a prohibited word.`,
         {
           mentions: [msg.sender],
         }

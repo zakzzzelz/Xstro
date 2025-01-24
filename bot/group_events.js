@@ -13,12 +13,12 @@ export async function GroupEvents(events, client) {
     if (pp !== null) {
       await client.sendMessage(events.Group, {
         image: await getBuffer(pp),
-        caption: `\`\`\`@${participant.split('@')[0]} congrats, you are now an admin, you have be assigned this Admin Role By @${promoter.split('@')[0]}\`\`\``,
+        caption: `@${participant.split('@')[0]} congrats, you are now an admin, you have be assigned this Admin Role By @${promoter.split('@')[0]}`,
         mentions: [participant, promoter],
       });
     } else {
       await client.sendMessage(events.Group, {
-        text: `\`\`\`@${participant.split('@')[0]} congrats, you are now an admin, you have be assigned this Admin Role By @${promoter.split('@')[0]}\`\`\``,
+        text: `@${participant.split('@')[0]} congrats, you are now an admin, you have be assigned this Admin Role By @${promoter.split('@')[0]}`,
         mentions: [participant, promoter],
       });
     }
@@ -29,12 +29,12 @@ export async function GroupEvents(events, client) {
     if (pp !== null) {
       await client.sendMessage(events.Group, {
         image: await getBuffer(pp),
-        caption: `\`\`\`@${participant.split('@')[0]} has been demoted from admin role by @${promoter.split('@')[0]}\`\`\``,
+        caption: `@${participant.split('@')[0]} has been demoted from admin role by @${promoter.split('@')[0]}`,
         mentions: [participant, promoter],
       });
     } else {
       await client.sendMessage(events.Group, {
-        text: `\`\`\`@${participant.split('@')[0]} has been demoted from admin role by @${promoter.split('@')[0]}\`\`\``,
+        text: `@${participant.split('@')[0]} has been demoted from admin role by @${promoter.split('@')[0]}`,
         mentions: [participant, promoter],
       });
     }
@@ -48,8 +48,8 @@ export async function GroupEventPartial(update, client) {
   if (update.subject) {
     if (!update.author) return;
     return await client.sendMessage(update.id, {
-      text: `\`\`\`GROUP NAME WAS UPDATED\n\nBY: @${update?.author ? update.author.split('@')[0] : 'Unknown'}
-\nNEW NAME: ${update.subject}\`\`\``,
+      text: `GROUP NAME WAS UPDATED\n\nBY: @${update?.author ? update.author.split('@')[0] : 'Unknown'}
+\nNEW NAME: ${update.subject}`,
       mentions: [update.author],
     });
   }
@@ -58,7 +58,7 @@ export async function GroupEventPartial(update, client) {
   if (update.desc) {
     if (!update.author) return; // Exit if no author is found
     return await client.sendMessage(update.id, {
-      text: `\`\`\`GROUP DESCRIPTION UPDATED\n\nBY: @${update.author.split('@')[0]}\nNEW DESC: ${update.desc}\`\`\``,
+      text: `GROUP DESCRIPTION UPDATED\n\nBY: @${update.author.split('@')[0]}\nNEW DESC: ${update.desc}`,
       mentions: [update.author],
     });
   }
@@ -67,8 +67,8 @@ export async function GroupEventPartial(update, client) {
   if (typeof update.restrict !== 'undefined') {
     return await client.sendMessage(update.id, {
       text: update.restrict
-        ? `\`\`\`@${update.author.split('@')[0]} has updated group settings to only allow admins to edit group info\`\`\``
-        : `\`\`\`@${update.author.split('@')[0]} has updated group settings to allow all participants to edit group info\`\`\``,
+        ? `@${update.author.split('@')[0]} has updated group settings to only allow admins to edit group info`
+        : `@${update.author.split('@')[0]} has updated group settings to allow all participants to edit group info`,
       mentions: [update.author],
     });
   }
@@ -78,7 +78,7 @@ export async function GroupEventPartial(update, client) {
     let duration = '';
     if (!update.ephemeralDuration) {
       return await client.sendMessage(update.id, {
-        text: `\`\`\`@${update?.author ? update.author.split('@')[0] : 'Unknown'} has disabled disappearing messages\`\`\``,
+        text: `@${update?.author ? update.author.split('@')[0] : 'Unknown'} has disabled disappearing messages`,
         mentions: [update.author],
       });
     }
@@ -88,7 +88,7 @@ export async function GroupEventPartial(update, client) {
     if (update.ephemeralDuration === 7776000) duration = '90 days';
 
     return await client.sendMessage(update.id, {
-      text: `\`\`\`@${update.author.split('@')[0]} has set disappearing messages to ${duration}\`\`\``,
+      text: `@${update.author.split('@')[0]} has set disappearing messages to ${duration}`,
       mentions: [update.author],
     });
   }
@@ -97,8 +97,8 @@ export async function GroupEventPartial(update, client) {
   if (typeof update.joinApprovalMode !== 'undefined') {
     return await client.sendMessage(update.id, {
       text: update.joinApprovalMode
-        ? `\`\`\`@${update.author.split('@')[0]} has updated the group settings for new participant must be approved by an admin before they can join the Group\`\`\``
-        : `\`\`\`@${update.author.split('@')[0]} has updated the group settings, participants can join without admin approval\`\`\``,
+        ? `@${update.author.split('@')[0]} has updated the group settings for new participant must be approved by an admin before they can join the Group`
+        : `@${update.author.split('@')[0]} has updated the group settings, participants can join without admin approval`,
       mentions: [update.author],
     });
   }
@@ -107,8 +107,8 @@ export async function GroupEventPartial(update, client) {
   if (typeof update.memberAddMode !== 'undefined') {
     return await client.sendMessage(update.id, {
       text: update.memberAddMode
-        ? `\`\`\`@${update.author.split('@')[0]} has updated the group settings for new participant must request to join the Group\`\`\``
-        : `\`\`\`@${update.author.split('@')[0]} has updated the group settings for new participants can be added without requesting\`\`\``,
+        ? `@${update.author.split('@')[0]} has updated the group settings for new participant must request to join the Group`
+        : `@${update.author.split('@')[0]} has updated the group settings for new participants can be added without requesting`,
       mentions: [update.author],
     });
   }

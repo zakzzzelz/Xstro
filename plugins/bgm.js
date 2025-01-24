@@ -8,7 +8,7 @@ bot(
     type: 'bgm',
   },
   async (message) => {
-    const menuText = `\`\`\`
+    const menuText = `
 BGM Menu
 		
 Commands:
@@ -19,7 +19,7 @@ ${message.prefix}delbgm <word> - Delete BGM
 ${message.prefix}listbgm - Show all BGMs
 
 Note: Bot plays matching BGMs automatically in chat
-\`\`\``.trim();
+`.trim();
     return message.send(menuText);
   }
 );
@@ -89,7 +89,7 @@ bot(
     const bgmList = await getBgmList();
     if (!bgmList.length) return message.send('_No BGMs found_');
     const formattedList = bgmList.map((bgm) => `${bgm.word}`).join('\n');
-    return message.send(`\`\`\`BGM List:\n\n${formattedList}\`\`\``);
+    return message.send(`BGM List:\n\n${formattedList}`);
   }
 );
 

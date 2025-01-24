@@ -130,7 +130,7 @@ bot(
   },
   async (message) => {
     let media;
-    if (!message.reply_message.video && !message.reply_message.audio)
+    if (!message.reply_message?.video && !message.reply_message?.audio)
       return message.send('_Reply Video or Audio_');
     media = await message.download();
     media = await convertToMp3(media);

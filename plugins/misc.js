@@ -78,7 +78,7 @@ bot(
     const jid = await message.ujid(match);
     const { status, setAt } = await fetchStatus(jid);
     if (status && setAt) {
-      await message.send(`*Bio:* ${status}\n*SetAt:* ${setAt}\`\`\``);
+      await message.send(`*Bio:* ${status}\n*SetAt:* ${setAt}`);
     } else {
       message.send(`*No Bio Found!*`);
     }

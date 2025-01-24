@@ -46,8 +46,8 @@ bot(
         const wordsList =
           antiwordStatus.words.length > 0 ? antiwordStatus.words.join(', ') : 'No antiwords set';
         return await message.send(
-          `\`\`\`Antiword status: ${antiwordStatus.status ? 'Enabled' : 'Disabled'}\n` +
-            `Blocked words: ${wordsList}\`\`\``
+          `Antiword status: ${antiwordStatus.status ? 'Enabled' : 'Disabled'}\n` +
+            `Blocked words: ${wordsList}`
         );
       }
     }

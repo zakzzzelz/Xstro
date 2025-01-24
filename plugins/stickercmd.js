@@ -67,6 +67,6 @@ bot(
     if (!cmds.length) {
       return await message.send('_No sticker commands found._');
     }
-    return await message.send(`\`\`\`${cmds.map((cmd) => cmd.cmd).join('\n')}\`\`\``);
+    return await message.send(`${cmds.map((cmd) => cmd.cmd).join('\n')}`);
   }
 );

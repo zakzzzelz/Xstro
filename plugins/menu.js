@@ -18,7 +18,7 @@ bot(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
     ).length;
-    let menuInfo = `\`\`\`
+    let menuInfo = `
 ╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Prefix: ${PREFIX}
 │ Owner: ${config.BOT_INFO.split(';')[0]}		
@@ -34,7 +34,7 @@ bot(
     })}
 │ Version: ${config.VERSION}
 ╰─────────────\n
-\`\`\``;
+`;
 
     const commandsByType = commands
       .filter((cmd) => cmd.pattern && !cmd.dontAddCommandList)

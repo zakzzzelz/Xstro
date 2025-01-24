@@ -16,7 +16,7 @@ bot(
 
     if (!targetLang)
       return await message.send(
-        `*Supported Languages*:\n\nUsage: ${message.prefix}trt en\n\n\n${languages.join('\n')}\`\`\``
+        `*Supported Languages*:\n\nUsage: ${message.prefix}trt en\n\n\n${languages.join('\n')}`
       );
 
     if (!message.reply_message?.text)

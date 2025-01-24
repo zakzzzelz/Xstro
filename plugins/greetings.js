@@ -17,22 +17,20 @@ bot(
       );
     }
     if (match === 'on'.toLowerCase()) {
-      if (await isWelcomeOn(message.jid))
-        return message.send(`\`\`\`Welcome Already Enabled\`\`\``);
+      if (await isWelcomeOn(message.jid)) return message.send(`Welcome Already Enabled`);
       await addWelcome(message.jid, true, null);
-      return message.send(`\`\`\`Welcome enabled, use ${prefix}welcome, to customize it\`\`\``);
+      return message.send(`Welcome enabled, use ${prefix}welcome, to customize it`);
     }
     if (match === 'off') {
-      if (!(await isWelcomeOn(message.jid)))
-        return message.send(`\`\`\`Welcome Already Disabled\`\`\``);
+      if (!(await isWelcomeOn(message.jid))) return message.send(`Welcome Already Disabled`);
       await delWelcome(message.jid);
-      return message.send(`\`\`\`Welcome Disabled\`\`\``);
+      return message.send(`Welcome Disabled`);
     }
     if (match !== 'off' && match !== 'on') {
       await addWelcome(message.jid, true, match);
-      return message.send(`\`\`\`Custome Welcome Message Set\`\`\``);
+      return message.send(`Custome Welcome Message Set`);
     }
-    return message.send(`\`\`\`Use ${prefix}welcome to see usage\`\`\``);
+    return message.send(`Use ${prefix}welcome to see usage`);
   }
 );
 
@@ -72,8 +70,6 @@ bot(
       await addGoodbye(message.jid, true, match);
       return message.send(`_Custom GoodBye Message Set_`);
     }
-    return message.send(
-      `\`\`\`${pushName} that's not right, use ${prefix}goodbye to see command usage\`\`\``
-    );
+    return message.send(`${pushName} that's not right, use ${prefix}goodbye to see command usage`);
   }
 );

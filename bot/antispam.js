@@ -29,11 +29,11 @@ export async function AntiSpammer(msg) {
       await msg.client.groupParticipantsUpdate(msg.from, [sender], 'remove');
     }
     await msg.send(
-      `\`\`\`@${sender.split('@')[0]} your messages have been deleted as they were detected as spam. Be careful, kid!\`\`\``,
+      `@${sender.split('@')[0]} your messages have been deleted as they were detected as spam. Be careful, kid!`,
       { mentions: [sender] }
     );
   } else if (!isGroup && mode === 'block') {
-    await msg.send(`\`\`\`@${sender.split('@')[0]} you have been blocked for spamming\`\`\``, {
+    await msg.send(`@${sender.split('@')[0]} you have been blocked for spamming`, {
       mentions: [sender],
     });
     return await msg.client.updateBlockStatus(sender, 'block');

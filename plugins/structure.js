@@ -45,6 +45,6 @@ bot(
 AstroX11/Xstro:
 ${getDirectoryStructure(projectRoot)}`.trim();
 
-    return await message.send(`\`\`\`${structureText}\`\`\``);
+    return await message.send(`${structureText}`);
   }
 );

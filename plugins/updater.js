@@ -21,12 +21,12 @@ bot(
         return await message.send('```No update available```');
       } else {
         let changes = '```UPDATE FOUND```\n\n';
-        changes += `*Changes:* \`\`\`${commits.total}\`\`\`\n`;
+        changes += `*Changes:* ${commits.total}\n`;
         changes += '*Updates:*\n';
         commits.all.forEach((commit, index) => {
-          changes += `\`\`\`${index + 1}. ${commit.message}\`\`\`\n`;
+          changes += `${index + 1}. ${commit.message}\n`;
         });
-        changes += `\n*To update, use* \`\`\`${prefix}update now\`\`\``;
+        changes += `\n*To update, use* ${prefix}update now`;
         await message.send(changes);
       }
     }

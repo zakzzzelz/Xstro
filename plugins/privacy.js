@@ -37,7 +37,7 @@ bot(
       .map(([key, value]) => `${key}: ${value}`)
       .join('\n');
 
-    return await message.send(`\`\`\`${name} WhatsApp Privacy Settings\n\n${privacyText}\`\`\``);
+    return await message.send(`${name} WhatsApp Privacy Settings\n\n${privacyText}`);
   }
 );
 
@@ -192,7 +192,7 @@ bot(
     const durationInSeconds = durations[input];
     await message.client.updateDefaultDisappearingMode(durationInSeconds);
     return await message.send(
-      `\`\`\`Default disappearing mode updated to: ${input.replace('hrs', ' hours').replace('days', ' days')}\`\`\``
+      `Default disappearing mode updated to: ${input.replace('hrs', ' hours').replace('days', ' days')}`
     );
   }
 );

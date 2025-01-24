@@ -14,10 +14,10 @@
   "DELETED": "ᴍᴇssᴀɢᴇs ʜᴀᴠᴇ ʙᴇᴇɴ ᴅᴇʟᴇᴛᴇᴅ",
   "KICKED": "ᴜsᴇʀ ʜᴀs ʙᴇᴇɴ ᴋɪᴄᴋᴇᴅ",
   "DISABLED_CMD": "ᴄᴏᴍᴍᴀɴᴅ ɪs ᴅɪsᴀʙʟᴇᴅ",
-  "START_BOOT": "ʙᴏᴏᴛɪɴɢ ᴜᴘ...",
+  "START_BOOT": "Connecting...",
   "CONNECTED": "xsᴛʀᴏ ᴍᴅ ᴄᴏɴɴᴇᴄᴛᴇᴅ",
-  "PLUGINS": "ᴘʟᴜɢɪɴs ʜᴀᴠᴇ ʙᴇᴇɴ ʟᴏᴀᴅᴇᴅ",
+  "PLUGINS": "Plugins Synced",
   "CMD_ERROR": "```COMMAND ERROR```",
-  "PROCESS_STARTED": "ᴘʀᴏᴄᴇss ʜᴀs ʙᴇᴇɴ sᴛᴀʀᴛᴇᴅ",
+  "PROCESS_STARTED": "Process Started",
   "CONNECTED_SESSION": "ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ sᴇssɪᴏɴ"
 }

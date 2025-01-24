@@ -17,6 +17,6 @@ bot(
       return message.send(`_The file "${fileName}" does not exist._`);
     }
     const fileContent = fs.readFileSync(filePath, 'utf-8');
-    return message.send(`*Content of the file "${fileName}":*\n\n\`\`\`${fileContent}\`\`\``);
+    return message.send(`*Content of the file "${fileName}":*\n\n${fileContent}`);
   }
 );

@@ -48,7 +48,7 @@ bot(
     match = match.map((id) => toJid(id));
     if (!Array.isArray(match)) match = Array.from(match);
     addSudo(match);
-    return message.send(`\`\`\`Added ${match.length} new Sudo Users\`\`\``);
+    return message.send(`Added ${match.length} new Sudo Users`);
   }
 );
 
@@ -64,11 +64,11 @@ bot(
     if (!jid) return;
     if (!isSudo(jid)) return message.send('_User was not a sudo user_');
     if (delSudo(jid)) {
-      return message.send(`\`\`\`@${jid.split('@')[0]} removed from sudo users\`\`\``, {
+      return message.send(`@${jid.split('@')[0]} removed from sudo users`, {
         mentions: [jid],
       });
     } else {
-      return message.send(`\`\`\`@${jid.split('@')[0]} is not a sudo user\`\`\``, {
+      return message.send(`@${jid.split('@')[0]} is not a sudo user`, {
         mentions: [jid],
       });
     }

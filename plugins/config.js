@@ -12,7 +12,7 @@ bot(
     const db_list = await getConfig();
     const { autoRead, autoStatusRead, cmdReact, mode, PREFIX } = db_list;
     return await message.send(
-      `\`\`\`DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'private' : 'public'}\nPrefix: ${PREFIX}\`\`\``
+      `DATABASE CONFIGURATIONS\nAutoRead: ${autoRead}\nAutoReadStatus: ${autoStatusRead}\nCmdReact: ${cmdReact}\nMode: ${mode ? 'private' : 'public'}\nPrefix: ${PREFIX}`
     );
   }
 );
@@ -206,7 +206,7 @@ bot(
 
     await updateConfig('disablegc', true);
     return await message.send(
-      `\`\`\`Group messaging is now disabled.\nThe bot will no longer function in group chats.\`\`\``
+      `Group messaging is now disabled.\nThe bot will no longer function in group chats.`
     );
   }
 );
@@ -226,7 +226,7 @@ bot(
 
     await updateConfig('disablegc', false);
     return await message.send(
-      `\`\`\`Group messaging is now enabled.\nThe bot will now function in group chats.\`\`\``
+      `Group messaging is now enabled.\nThe bot will now function in group chats.`
     );
   }
 );
@@ -245,7 +245,7 @@ bot(
     }
     await updateConfig('disabledm', true);
     return await message.send(
-      `\`\`\`Direct messaging is now disabled.\nThe bot will no longer function in personal chats, except yours.\`\`\``
+      `Direct messaging is now disabled.\nThe bot will no longer function in personal chats, except yours.`
     );
   }
 );
@@ -264,7 +264,7 @@ bot(
     }
     await updateConfig('disabledm', false);
     return await message.send(
-      `\`\`\`Direct messaging is now enabled.\nThe bot will function in personal chats.\`\`\``
+      `Direct messaging is now enabled.\nThe bot will function in personal chats.`
     );
   }
 );
