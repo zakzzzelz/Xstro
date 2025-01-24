@@ -6,7 +6,7 @@ import { mkdir } from 'fs/promises';
 
 config();
 
-if (cluster.isMaster) {
+if (cluster.isPrimary) {
   let isRestarting = false;
 
   const createWorker = () => {
