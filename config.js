@@ -9,15 +9,8 @@ const config = {
   STICKER_PACK: process.env.STICKER_PACK || 'мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт',
   WARN_COUNT: process.env.WARN_COUNT || 3,
   TIME_ZONE: process.env.TIME_ZONE || 'Africa/Lagos',
-  VERSION: '1.3.0',
+  VERSION: '1.3.2',
 };
 
-const getSessionId = async () =>
-  (await fetch(`https://xstrosession.koyeb.app/session?session=${config.SESSION_ID}`)
-    .then((res) => (res.ok ? res.json() : null))
-    .catch(() => null)) ?? null;
-
-const sessionData = await getSessionId();
-
-export { config, sessionData };
-export default { config, sessionData };
+export { config };
+export default { config };

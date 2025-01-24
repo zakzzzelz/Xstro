@@ -4,3 +4,4 @@ database.db
 test.js
 session
 store
+*.tgz
