@@ -1,19 +1,18 @@
 import { commands } from '#lib';
-import { isStickerCmd } from '#sql';
+import { getcmd } from '#sql';
 import Message from '../lib/class.js';
 
 export async function StickerCMD(msg) {
   if (msg.type === 'stickerMessage') {
-    const data = await isStickerCmd(
-      Buffer.from(msg.message.stickerMessage.fileSha256).toString('hex')
-    );
-    const inst = new Message(msg.client, msg);
-    if (!data.exists) return;
-
+    const stickerIdBase64 = Buffer.from(msg.message.stickerMessage.fileSha256);
+    const stickerIdHex = Buffer.from(stickerIdBase64, 'base64').toString('hex');
+    const stickerCmds = await getcmd();
+    const data = stickerCmds.find((cmd) => cmd.id === stickerIdHex);
+    if (!data) return;
     for (const command of commands) {
-      const commandName = command.pattern.toString().split(/\W+/)[2];
-      if (commandName === data.command.cmd) {
-        await command.function(inst, msg.body);
+      const cmdName = command.pattern.toString().split(/\W+/)[1];
+      if (cmdName === data.cmd) {
+        await command.function(new Message(msg.client, msg), msg.body, { ...msg, ...msg.client });
         break;
       }
     }
