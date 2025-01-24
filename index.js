@@ -2,7 +2,6 @@ import http from 'http';
 import { config } from 'dotenv';
 import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import cluster from 'cluster';
-import { sessionData } from '#config';
 import { mkdir } from 'fs/promises';
 
 config();
@@ -47,7 +46,7 @@ if (cluster.isMaster) {
     console.log('Starting...');
     await mkdir('store', { recursive: true });
     eventlogger();
-    initSession(sessionData);
+    initSession();
     await loadPlugins();
     await client();
 
