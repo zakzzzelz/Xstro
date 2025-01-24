@@ -46,7 +46,7 @@ if (cluster.isMaster) {
     console.log('Starting...');
     await mkdir('store', { recursive: true });
     eventlogger();
-    initSession();
+    await initSession();
     await loadPlugins();
     await client();
 
