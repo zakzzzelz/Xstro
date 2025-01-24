@@ -10,7 +10,8 @@
     "#bot": "./bot/index.js",
     "#sql": "./sql/index.js",
     "#utils": "./utils/index.js",
-    "#config": "./config.js"
+    "#config": "./config.js",
+    "#lang": "./lang/index.js"
   },
   "scripts": {
     "start": "node index",
