@@ -1,7 +1,6 @@
 import { bot } from '#lib';
 import { devs, toJid } from '#utils';
-import { getJson } from 'xstro-utils';
-import { config } from '#config';
+import { LANG } from '#lang';
 
 bot(
   {
@@ -11,19 +10,12 @@ bot(
     type: 'help',
   },
   async (message, match) => {
-    if (!match || match.split(' ').length < 5)
-      return message.send('Please provide a reason with at least 5 words to report a bug.');
+    if (!match || match.split(' ').length <= 3)
+      return message.send('Provide at least 3 words to report a bug.');
     const helpers = await devs();
-    const errorReport = `BUG REPORT
-FROM: @${message.sender.split('@')[0]}
-MESSAGE: \n${match}
-`;
-    for (const dev of helpers) {
-      await message.send(errorReport, {
-        jid: toJid(dev),
-        mentions: [message.sender],
-      });
-    }
+    const errorReport = `BUG REPORT\nFROM: @${message.sender.split('@')[0]}\nMESSAGE: \n${match}`;
+    for (const dev of helpers)
+      await message.send(errorReport, { jid: toJid(dev), mentions: [message.sender] });
   }
 );
 
@@ -35,17 +27,15 @@ bot(
     type: 'help',
   },
   async (message, _, { jid, sendMessage }) => {
-    const res = await getJson(`https://api.github.com/repos/AstroX11/Xstro`);
-    const helpMsg = `σρєи ѕσυя¢є ωнαтѕαρρ вσт\n\nмα∂є ву αѕтяσχ11\nfσякѕ: ${res.forks_count}\nѕтαяѕ: ${res.stargazers_count}`;
     return await sendMessage(jid, {
-      text: helpMsg,
+      text: LANG.ABOUT,
       contextInfo: {
         externalAdReply: {
-          title: 'xsᴛʀᴏ ᴍᴅ',
+          title: LANG.BOT_NAME,
           body: 'ᴛᴀᴘ ʜᴇʀᴇ sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ',
           mediaType: 1,
-          thumbnailUrl: `https://avatars.githubusercontent.com/u/188756392?v=4`,
-          sourceUrl: `https://github.com/AstroX11/Xstro`,
+          thumbnailUrl: LANG.THUMBNAIL,
+          sourceUrl: LANG.REPO_URL,
           showAdAttribution: true,
         },
       },
@@ -62,12 +52,12 @@ bot(
   },
   async (message, match) => {
     const jid = await message.ujid(match);
-    if (!jid) return message.send('_Give me the number that needs pairing code_');
-    const id = jid.split('@')[0];
-    const msg = await message.send('*Getting Pairing Code*');
-    const res = await getJson(`https://xstrosession.koyeb.app/pair?phone=${id}`);
-    if (!res.code) return message.send('*unable to get a pairing code, try again!*');
-    return await msg.edit(`*${res.code}*`);
+    if (!jid) return message.send('Provide A Number To Pair');
+    const msg = await message.send('Getting Pairing Code');
+    const { code } = await (
+      await fetch(`https://xstrosession.koyeb.app/pair?phone=${jid.split('@')[0]}`)
+    ).json();
+    await msg.edit(code ? code : '*unable to get a pairing code, try again!*');
   }
 );
 
@@ -75,23 +65,23 @@ bot(
   {
     pattern: 'support',
     public: true,
-    desc: 'Sends developer support information',
+    desc: 'Support Team',
     type: 'help',
   },
   async (message, _, { jid, sendMessage }) => {
-    const contacts = devs.map((dev) => {
+    const contacts = (await devs()).map((dev) => {
       return {
         vcard: `BEGIN:VCARD
 VERSION:3.0
-FN:Developer ${dev}
-ORG:${config.BOT_INFO.split(';')[0]}
+FN:xsᴛʀᴏ sᴜᴘᴘᴏʀᴛ ${dev}
+ORG:${LANG.BOT_NAME}
 TEL;type=CELL;type=VOICE;waid=${dev}:${dev}
 END:VCARD`,
       };
     });
     return await sendMessage(jid, {
       contacts: {
-        displayName: 'Developer Support',
+        displayName: 'ᴅᴇᴠ sᴜᴘᴘᴏʀᴛ',
         contacts: contacts,
       },
     });

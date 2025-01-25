@@ -137,6 +137,7 @@ bot(
     type: 'fun',
   },
   async (message, match) => {
+    if (!match) return await message.send('Please provide a text');
     const meme = await getBuffer(`https://brat.caliphdev.com/api/brat?text=${match}`);
     const sticker = await createSticker(meme);
     return await message.send(sticker, { type: 'sticker' });
