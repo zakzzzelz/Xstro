@@ -1,4 +1,5 @@
 {
+  "API": "https://xstro-api-4fb28ece11a9.herokuapp.com",
   "IMAGE": "ʀᴇᴘʟʏ ᴀɴ ɪᴍᴀɢᴇ",
   "VIDEO": "ʀᴇᴘʟʏ ᴀ ᴠɪᴅᴇᴏ",
   "AUDIO": "ʀᴇᴘʟʏ ᴀɴ ᴀᴜᴅɪᴏ",
@@ -23,5 +24,6 @@
   "ABOUT": "σρєи ѕσυя¢є ωнαтѕαρρ вσт\n\n\tмα∂є ву αѕтяσχ11",
   "BOT_NAME": "xsᴛʀᴏ ᴍᴅ",
   "THUMBNAIL": "https://avatars.githubusercontent.com/u/188756392?v=4",
-  "REPO_URL": "https://github.com/AstroX11/Xstro"
+  "REPO_URL": "https://github.com/AstroX11/Xstro",
+  "STICKER_META": "мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт"
 }

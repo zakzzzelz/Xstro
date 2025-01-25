@@ -21,13 +21,14 @@ bot(
     desc: 'Converts Images and Videos to Sticker',
     type: 'converter',
   },
-  async (message) => {
+  async (message, match) => {
+    match = match.split(',');
     let media;
     if (!message.reply_message.image && !message.reply_message.video) {
       return message.send('_Reply with an Image or Video_');
     }
     media = await message.download();
-    media = await createSticker(media);
+    media = await createSticker(media, match[0], match[1]);
     return message.send(media, { type: 'sticker' });
   }
 );
@@ -39,16 +40,17 @@ bot(
     desc: 'rebrands a sticker to bot',
     type: 'converter',
   },
-  async (message) => {
+  async (message, match) => {
+    match = match.split(',');
     let media;
     if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
     media = await message.download();
     if (await isAnimatedWebp(media)) {
       media = await convertWebPFile(media);
-      media = await createSticker(media);
+      media = await createSticker(media, match[0], match[1]);
       return message.send(media, { type: 'sticker' });
     } else {
-      media = await createSticker(media);
+      media = await createSticker(media, match[0], match[1]);
       return message.send(media, { type: 'sticker' });
     }
   }

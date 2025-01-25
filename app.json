@@ -25,11 +25,6 @@
       "value": "αѕтяσχ11;χѕтяσ м∂;https://avatars.githubusercontent.com/u/188756392?v=4",
       "required": false
     },
-    "STICKER_PACK": {
-      "description": "Exif Metadata for Sticker Pack",
-      "value": "мα∂є ву;χѕтяσ мυℓтι ∂єνι¢є вσт",
-      "required": false
-    },
     "TIME_ZONE": {
       "description": "Time Zone for Bot",
       "value": "Asia/Kolkata",
@@ -39,10 +34,6 @@
       "description": "Number of Warnings before Actions",
       "value": "3",
       "required": false
-    },
-    "DEBUG": {
-      "description": "Development Purposes",
-      "value": "false"
     }
   }
 }

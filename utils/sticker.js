@@ -5,9 +5,9 @@ import Crypto from 'crypto';
 import webp from 'node-webpmux';
 import { tmpdir } from 'os';
 import { getMimeType } from 'xstro-utils';
-import { config } from '#config';
 import { exec } from 'child_process';
 import { promisify } from 'util';
+import { LANG } from '#lang';
 
 const execAsync = promisify(exec);
 
@@ -190,12 +190,12 @@ async function writeExifVid(media, metadata = {}) {
   }
 }
 
-export const createSticker = async (buffer) => {
+export const createSticker = async (buffer, author, packname) => {
   const mime = await getMimeType(buffer);
   let res;
   const options = {
-    packname: config.STICKER_PACK.split(';')[0] || 'χѕтяσ м∂',
-    author: config.STICKER_PACK.split(';')[1] || 'αѕтяσχ11',
+    packname: packname || LANG.STICKER_META.split(';')[1],
+    author: author || LANG.STICKER_META.split(';')[0],
   };
 
   try {

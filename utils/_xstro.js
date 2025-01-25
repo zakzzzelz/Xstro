@@ -1,46 +1,9 @@
-import { config } from '#config';
+import { LANG } from '#lang';
 import { getBuffer } from 'xstro-utils';
 
-const { API_ID } = config;
+const API_ID = LANG.API;
 
 const XSTRO = {
-  youtube: async (url, type = {}) => {
-    try {
-      if (type.mp4) {
-        const res = await fetch(`${API_ID}/api/ytmp4?url=${url}`);
-        const data = await res.json();
-        return {
-          title: data.title,
-          thumb: data.thumbnail,
-          url: data.url,
-        };
-      } else if (type.mp3) {
-        const res = await fetch(`${API_ID}/api/ytmp3?url=${url}`);
-        const data = await res.json();
-        return {
-          title: data.title,
-          thumb: data.thumbnail,
-          url: data.link,
-        };
-      }
-    } catch {
-      return false;
-    }
-  },
-
-  tiktok: async (url) => {
-    try {
-      const res = await fetch(`${API_ID}/api/tiktok?url=${url}`);
-      const data = await res.json();
-      return {
-        title: data.title,
-        url: data.url,
-      };
-    } catch {
-      return false;
-    }
-  },
-
   facts: async () => {
     try {
       const res = await fetch(`${API_ID}/api/facts`);
