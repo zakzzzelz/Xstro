@@ -13,7 +13,7 @@
 
 [![Fork Repo](https://img.shields.io/badge/Fork_Repo-black?style=for-the-badge&logo=github&logoColor=white)](https://github.com/AstroX11/Xstro/fork)  
 
-[![Get Session](https://img.shields.io/badge/Get_Session-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://bit.ly/41mQBbY)
+[![Get Session](https://img.shields.io/badge/Get_Session-black?style=for-the-badge&logo=html&logoColor=white)](https://bit.ly/41mQBbY)
 
 [![Join WhatsApp Group](https://img.shields.io/badge/Support-Group-black?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6)
 
