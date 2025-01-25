@@ -1,6 +1,6 @@
 import { bot } from '#lib';
-import { config } from '#config';
 import { aliveMessage, setAliveMsg } from '#sql';
+import { LANG } from '#lang';
 
 bot(
   {
@@ -15,15 +15,19 @@ bot(
       return message.send('Alive Updated');
     }
     const msg = await aliveMessage(message);
-    const botInfo = config.BOT_INFO.split(';')[1];
     const mentionData = {
       mentions: [message.sender],
       contextInfo: { mentionedJid: [message.sender] },
+      externalAdReply: {
+        title: LANG.BOT_NAME,
+        body: 'ɪ ᴀᴍ ᴀʟɪᴠᴇ & ʀᴜɴɴɪɴɢ',
+        mediaType: 1,
+        thumbnailUrl: LANG.THUMBNAIL,
+        sourceUrl: LANG.REPO_URL,
+        showAdAttribution: true,
+      },
     };
 
-    return await message.send(
-      botInfo || msg,
-      botInfo ? { ...mentionData, caption: msg } : mentionData
-    );
+    return await message.send(msg, { ...mentionData });
   }
 );

@@ -33,8 +33,8 @@ const aliveMessage = async (message) => {
     .replace(/&owner/g, config.BOT_INFO.split(';')[0])
     .replace(/&botname/g, config.BOT_INFO.split(';')[1])
     .replace(/&facts/g, await XSTRO.facts())
-    .replace(/&facts/g, await XSTRO.quotes())
-    .replace(/&facts/g, await XSTRO.rizz());
+    .replace(/&quotes/g, await XSTRO.quotes())
+    .replace(/&rizz/g, await XSTRO.rizz());
 };
 
 export { getAliveMsg, setAliveMsg, aliveMessage };
