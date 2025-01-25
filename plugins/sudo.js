@@ -11,6 +11,7 @@ bot(
   },
   async (message, _, { prefix }) => {
     return message.send(`sᴜᴅᴏ sᴇᴛᴜᴘ\n
+_${prefix}addsudo 12345567,22445,356 or @user1,@user2,@user3_
 _${prefix}setsudo number | @user_
 _${prefix}getsudo_
 _${prefix}delsudo number | @user_

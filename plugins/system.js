@@ -3,8 +3,6 @@ import { bot } from '#lib';
 import { manageProcess, runtime } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
-import { font } from '#bot';
-import { delay } from 'baileys';
 
 bot(
   {
@@ -17,7 +15,7 @@ bot(
     const start = performance.now();
     const msg = await message.send('Testing Speed...');
     const end = performance.now();
-    await msg.edit(font.tiny(`Pong! ${(end - start).toFixed(1)} ms`));
+    await msg.edit(`\`\`\`Pong! ${(end - start).toFixed(1)} ms\`\`\``);
   }
 );
 
@@ -29,7 +27,7 @@ bot(
     type: 'system',
   },
   async (message) => {
-    return await message.send(font.tiny(`Uptime: ${runtime(process.uptime())}`));
+    return await message.send(`Uptime: ${runtime(process.uptime())}`);
   }
 );
 
@@ -68,7 +66,6 @@ bot(
   },
   async (message) => {
     await message.send('_logging out_');
-    await delay(3000);
     await message.client.logout();
   }
 );
