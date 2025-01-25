@@ -69,7 +69,7 @@ bot(
         );
     }
     await message.send(
-      '```Usage:\n' +
+      'Usage:\n' +
         '' +
         message.prefix +
         'antiword on - Enable antiword\n' +
@@ -81,7 +81,7 @@ bot(
         'antiword get - View current antiwords\n' +
         '' +
         message.prefix +
-        'antiword del word1,word2 - Delete specific words```'
+        'antiword del word1,word2 - Delete specific words'
     );
   }
 );

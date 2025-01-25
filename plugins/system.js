@@ -41,7 +41,7 @@ bot(
     type: 'system',
   },
   async (message) => {
-    await message.send('```Restarting bot```');
+    await message.send('Restarting bot');
     manageProcess('restart');
   }
 );
@@ -54,7 +54,7 @@ bot(
     type: 'system',
   },
   async (message) => {
-    await message.send('```Shutting down bot```');
+    await message.send('Shutting down bot');
     manageProcess('stop');
   }
 );
@@ -114,7 +114,7 @@ Architecture: ${os.arch()}
 Platform: ${os.platform()}
 Uptime: ${Math.floor(os.uptime() / 60)} minutes`;
 
-    await message.send('```' + response + '```');
+    await message.send('' + response + '');
   }
 );
 

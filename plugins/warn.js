@@ -14,7 +14,7 @@ bot(
   async (message, match) => {
     const jid = await message.ujid(match);
     const { success, warnings } = await addWarn(jid);
-    if (!success) return await message.send('```Failed to add warning```');
+    if (!success) return await message.send('Failed to add warning');
 
     const warningCount = parseInt(warnings);
     if (warningCount >= WARN_COUNT) {
@@ -67,7 +67,7 @@ bot(
     const jid = await message.ujid(match);
     const { success } = await resetWarn(jid);
     if (success) {
-      await message.send('```@' + jid.split('@')[0] + ' is free as a Cow```', {
+      await message.send('@' + jid.split('@')[0] + ' is free as a Cow', {
         mentions: [jid],
       });
     }

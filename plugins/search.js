@@ -113,14 +113,14 @@ bot(
     type: 'search',
   },
   async (message, match) => {
-    if (!match) return message.send('```Provide A Word to Define```');
+    if (!match) return message.send('Provide A Word to Define');
     const word = match.trim();
     const res = await getJson(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`
     );
     return res && res.length > 0
       ? message.send(`${word}:\n${res[0]?.meanings?.[0]?.definitions?.[0]?.definition}`)
-      : message.send('```No definition found for this word.```');
+      : message.send('No definition found for this word.');
   }
 );
 

@@ -41,7 +41,7 @@ export const schedules = async (msg) => {
             );
 
             await client.sendMessage(schedule.groupId, {
-              text: '```Group has been muted, due to AutoMute```',
+              text: 'Group has been muted, due to AutoMute',
             });
           } catch (error) {
             console.error(`Failed to mute group ${schedule.groupId}:`, error);
@@ -61,7 +61,7 @@ export const schedules = async (msg) => {
             );
 
             await client.sendMessage(schedule.groupId, {
-              text: '```Group is now unmuted, due to AutoUnMute```',
+              text: 'Group is now unmuted, due to AutoUnMute',
             });
           } catch (error) {
             console.error(`Failed to unmute group ${schedule.groupId}:`, error);

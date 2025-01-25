@@ -73,10 +73,10 @@ bot(
     desc: 'quoted message',
   },
   async (message, _, { jid, loadMessage }) => {
-    if (!message.reply_message) return await message.send('```Reply A Message```');
+    if (!message.reply_message) return await message.send('Reply A Message');
     let key = message.reply_message.key.id;
     let msg = await loadMessage(key);
-    if (!msg) return await message.send('```Xstro will not quoted Bot Message```');
+    if (!msg) return await message.send('Xstro will not quoted Bot Message');
     msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
     if (!msg.quoted) return await message.send('_No quoted message found_');
     await message.forward(jid, msg.quoted, {
@@ -340,7 +340,7 @@ bot(
   },
   async (message, match, { prefix }) => {
     if (!message.reply_message) return message.send('_Reply Your Own Message_');
-    if (!match) return await message.send('```' + prefix + 'edit hello```');
+    if (!match) return await message.send('' + prefix + 'edit hello');
     await message.edit(match);
   }
 );
@@ -368,7 +368,7 @@ bot(
   async (message, match, { prefix, updateProfileStatus }) => {
     if (!match) return message.send(`_Usage:_\n_${prefix}bio Hello World_`);
     await updateProfileStatus(match);
-    return await message.send('```WhatsApp bio Updated to "' + match + '"```');
+    return await message.send('WhatsApp bio Updated to "' + match + '"');
   }
 );
 
@@ -381,7 +381,7 @@ bot(
   },
   async (message, match, { sendMessage }) => {
     if (!message.reply_message) return message.send('_Reply Message_');
-    if (!match) return message.send('```react 😊```');
+    if (!match) return message.send('react 😊');
     return await sendMessage(message.jid, {
       react: { text: match, key: message.reply_message.key },
     });

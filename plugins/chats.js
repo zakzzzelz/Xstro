@@ -19,7 +19,7 @@ bot(
     );
 
     if (dmChats.length === 0) {
-      return message.send('```No direct messages found.```');
+      return message.send('No direct messages found.');
     }
 
     const mentionJids = dmChats.map((chat) => chat.jid);
@@ -48,7 +48,7 @@ bot(
     const groupChats = allChats.filter((chat) => chat.jid.endsWith('@g.us'));
 
     if (groupChats.length === 0) {
-      return message.send('```No group chats found.```');
+      return message.send('No group chats found.');
     }
 
     const data = await Promise.all(

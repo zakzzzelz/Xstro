@@ -18,9 +18,9 @@ bot(
     const commits = await git.log([`master..origin/master`]);
     if (!match) {
       if (commits.total === 0) {
-        return await message.send('```No update available```');
+        return await message.send('No update available');
       } else {
-        let changes = '```UPDATE FOUND```\n\n';
+        let changes = 'UPDATE FOUND\n\n';
         changes += `*Changes:* ${commits.total}\n`;
         changes += '*Updates:*\n';
         commits.all.forEach((commit, index) => {
@@ -32,12 +32,12 @@ bot(
     }
     if (match && match === 'now') {
       if (commits.total === 0) {
-        return await message.send('```No changes in the latest commit```');
+        return await message.send('No changes in the latest commit');
       }
       await message.send('*Updating...*');
       exec(`git stash && git pull origin master`, async (err, stdout, stderr) => {
         if (err) {
-          return await message.send('```' + stderr + '```');
+          return await message.send('' + stderr + '');
         }
         await message.send('*Restarting...*');
         const dependency = await updatedDependencies();
@@ -45,7 +45,7 @@ bot(
           await message.send('*Dependencies changed. Installing new dependencies...*');
           exec(`npm install`, async (err, stdout, stderr) => {
             if (err) {
-              return await message.send('```' + stderr + '```');
+              return await message.send('' + stderr + '');
             }
             process.exit(0);
           });

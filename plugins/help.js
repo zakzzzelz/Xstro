@@ -12,7 +12,7 @@ bot(
   },
   async (message, match) => {
     if (!match || match.split(' ').length < 5)
-      return message.send('```Please provide a reason with at least 5 words to report a bug.```');
+      return message.send('Please provide a reason with at least 5 words to report a bug.');
     const helpers = await devs();
     const errorReport = `BUG REPORT
 FROM: @${message.sender.split('@')[0]}

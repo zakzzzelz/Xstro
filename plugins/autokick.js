@@ -9,19 +9,16 @@ bot(
     desc: 'Adds a member to auto-kick list.',
     type: 'autokick',
   },
-  async (message, match) => {
-    if (!message.isAdmin) return message.send('```You are not an Admin```');
-    if (!message.isBotAdmin) return message.send('```I am not an Admin```');
+  async (message, match, { jid }) => {
+    if (!(await message.getAdmin())) return;
+    const user = await message.ujid(match);
 
-    const groupId = message.jid;
-    const jid = await message.ujid(match);
-
-    const added = await addAKick(groupId, jid);
+    const added = await addAKick(jid, user);
     return message.send(
       added
-        ? `_User added to auto-kick list._ @${jid.split('@')[0]}`
-        : `_User is already on the list._ @${jid.split('@')[0]}`,
-      { mentions: [jid] }
+        ? `_User added to auto-kick list._ @${user.split('@')[0]}`
+        : `_User is already on the list._ @${user.split('@')[0]}`,
+      { mentions: [user] }
     );
   }
 );
@@ -34,19 +31,16 @@ bot(
     desc: 'Removes a member from the auto-kick list.',
     type: 'autokick',
   },
-  async (message, match) => {
-    if (!message.isAdmin) return message.send('```You are not an Admin```');
-    if (!message.isBotAdmin) return message.send('```I am not an Admin```');
+  async (message, match, { jid }) => {
+    if (!(await message.getAdmin())) return;
+    const user = await message.ujid(match);
 
-    const groupId = message.jid;
-    const jid = await message.ujid(match);
-
-    const deleted = await delKick(groupId, jid);
+    const deleted = await delKick(jid, user);
     return message.send(
       deleted
-        ? `_User removed from auto-kick list._ @${jid.split('@')[0]}`
-        : `_User was not on the list._ @${jid.split('@')[0]}`,
-      { mentions: [jid] }
+        ? `_User removed from auto-kick list._ @${user.split('@')[0]}`
+        : `_User was not on the list._ @${user.split('@')[0]}`,
+      { mentions: [user] }
     );
   }
 );
@@ -59,12 +53,9 @@ bot(
     desc: 'Shows all members in the auto-kick list.',
     type: 'autokick',
   },
-  async (message) => {
-    if (!message.isAdmin) return message.send('```You are not an Admin```');
-    if (!message.isBotAdmin) return message.send('```I am not an Admin```');
-
-    const groupId = message.jid;
-    const kicks = await getKicks(groupId);
+  async (message, _, { jid }) => {
+    if (!(await message.getAdmin())) return;
+    const kicks = await getKicks(jid);
 
     if (kicks.length > 0) {
       return message.send(

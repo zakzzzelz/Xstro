@@ -17,7 +17,7 @@
   "START_BOOT": "Connecting...",
   "CONNECTED": "xsᴛʀᴏ ᴍᴅ ᴄᴏɴɴᴇᴄᴛᴇᴅ",
   "PLUGINS": "Plugins Synced",
-  "CMD_ERROR": "```COMMAND ERROR```",
+  "CMD_ERROR": "COMMAND ERROR",
   "PROCESS_STARTED": "Process Started",
   "CONNECTED_SESSION": "ᴄᴏɴɴᴇᴄᴛᴇᴅ ᴛᴏ sᴇssɪᴏɴ"
 }

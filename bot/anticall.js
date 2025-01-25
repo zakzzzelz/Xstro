@@ -14,12 +14,12 @@ export const AntiCall = async (calls, client) => {
     await client.rejectCall(id, from);
 
     if (antiCallConfig.action === 'block') {
-      await client.sendMessage(from, { text: '```You have been blocked for Calling```' });
+      await client.sendMessage(from, { text: 'You have been blocked for Calling' });
       await delay(3000);
       await client.updateBlockStatus(toJid(from), 'block');
     } else {
       await client.sendMessage(from, {
-        text: '```Your Call has been Automatically Declined, No Calls Allowed```',
+        text: 'Your Call has been Automatically Declined, No Calls Allowed',
       });
     }
   }
