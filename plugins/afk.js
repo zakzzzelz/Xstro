@@ -51,7 +51,7 @@ bot(
   },
   async (message) => {
     const afkData = await getAfkMessage();
-    if (!afkData || message.user) return;
+    if (!afkData) return;
 
     if (message.isGroup) {
       if (message.mention?.includes(message.user)) {

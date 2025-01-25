@@ -19,8 +19,9 @@ bot(
   },
   async (message, match, { profilePictureUrl }) => {
     const jid = await message.ujid(match);
-    const img = await profilePictureUrl(jid, 'image');
-    await message.send(await getBuffer(img), { caption: '_Profile Picture_' });
+    const pp = await profilePictureUrl(jid).catch(() => null);
+    const jpegThumbnail = pp ? Buffer.from(await (await fetch(pp)).arrayBuffer()) : Buffer.alloc(0);
+    await message.send(jpegThumbnail, { caption: '_Profile Picture_' });
   }
 );
 

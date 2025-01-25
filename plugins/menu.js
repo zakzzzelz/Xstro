@@ -29,9 +29,7 @@ bot(
 │ Memory: ${formatBytes(totalmem() - freemem())}
 │ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
 │ Date: ${new Date().toLocaleDateString('en-US')}
-│ Date: ${new Date().toLocaleTimeString('en-US', {
-      timeZone: config.TIME_ZONE,
-    })}
+│ Date: ${new Date().toLocaleTimeString('en-US', { timeZone: config.TIME_ZONE })}
 │ Version: ${config.VERSION}
 ╰─────────────\n
 `;
