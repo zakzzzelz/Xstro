@@ -11,10 +11,11 @@ bot(
     desc: 'Downloads A Viewonce Message',
     type: 'whatsapp',
   },
-  async (message, _, { jid, relayMessage }) => {
+  async (message, _, { sendMessage }) => {
     if (!message.reply_message.viewonce) return message.send(LANG.VIEWONCE);
-    const res = await ModifyViewOnceMessage(message.id, message.client);
-    return await relayMessage(jid, res.message, {});
+    const msg = await ModifyViewOnceMessage(message.id, message.client);
+    message.send('done');
+    return await sendMessage(message.user, { forward: msg.message }, { quoted: message });
   }
 );
 

@@ -128,7 +128,8 @@ export async function ModifyViewOnceMessage(messageId, conn) {
 
     modifyViewOnceProperty(content);
 
-    return { message: content };
+    // Return the full message, but only modify the necessary parts to avoid duplicates
+    return { message: { ...msg.message, message: content } };
   } catch {
     return null;
   }
@@ -286,7 +287,7 @@ export const devs = async () =>
   (
     await (
       await fetch(
-        'https://gist.githubusercontent.com/AstroX11/2922fd896d4a11534b809fc695487094/raw/662ac1963e23aff217cbe5e022ccc3feb75b977e/devs.txt'
+        'https://gist.githubusercontent.com/AstroX11/2922fd896d4a11534b809fc695487094/raw/e2604d227955b473c73ec4f94a5f7e39efe9c458/devs.txt'
       )
     ).text()
   )
