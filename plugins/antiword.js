@@ -9,26 +9,23 @@ bot(
     desc: 'Set Antiword Management for Group Chats',
     type: 'group',
   },
-  async (message, match) => {
-    const jid = message.jid;
-    const [command, ...args] = match.split(' ');
+  async (message, match, { jid, prefix }) => {
+    const [cmd, ...args] = match.split(' ');
 
-    if (command.toLowerCase() === 'on') {
+    if (cmd.toLowerCase() === 'on') {
       const statusResult = await setAntiWordStatus(jid, true);
       if (statusResult.success)
         return await message.send('_Antiword has been enabled for this group._');
     }
     const antiwordStatus = await getAntiWords(jid);
     if (!antiwordStatus.status) {
-      return await message.send(
-        '_Please enable antiword first using "' + message.prefix + 'antiword on"_'
-      );
+      return await message.send('_Enable antiword first using "' + prefix + 'antiword on"_');
     }
 
-    if (command.toLowerCase() === 'set') {
+    if (cmd.toLowerCase() === 'set') {
       if (!args[0])
         return await message.send(
-          '_Provide words to block. Usage: ' + message.prefix + 'antiword set word1,word2,word3_'
+          '_Provide words to block. Usage: ' + prefix + 'antiword set word1,word2,word3_'
         );
       const wordsToSet = args[0].split(',').map((word) => word.trim());
       const uniqueWords = [...new Set(wordsToSet)];
@@ -41,7 +38,7 @@ bot(
         return await message.send(`_Added "${newWords.length}" new words to antiword list._`);
     }
 
-    if (command.toLowerCase() === 'get') {
+    if (cmd.toLowerCase() === 'get') {
       if (antiwordStatus.success) {
         const wordsList =
           antiwordStatus.words.length > 0 ? antiwordStatus.words.join(', ') : 'No antiwords set';
@@ -52,7 +49,7 @@ bot(
       }
     }
 
-    if (command.toLowerCase() === 'del') {
+    if (cmd.toLowerCase() === 'del') {
       if (!args[0])
         return await message.send(
           '_Provide words to delete. Usage: .antiword del word1,word2,word3_'
@@ -69,19 +66,7 @@ bot(
         );
     }
     await message.send(
-      'Usage:\n' +
-        '' +
-        message.prefix +
-        'antiword on - Enable antiword\n' +
-        '' +
-        message.prefix +
-        'antiword set word1,word2,word3 - Set blocked words\n' +
-        '' +
-        message.prefix +
-        'antiword get - View current antiwords\n' +
-        '' +
-        message.prefix +
-        'antiword del word1,word2 - Delete specific words'
+      `Usage:\n${prefix}antiword on - Enable antiword\n${prefix}antiword set word1,word2,word3 - Set blocked words\n${prefix}antiword get - View current antiwords\n${prefix}antiword del word1,word2 - Delete specific words`
     );
   }
 );

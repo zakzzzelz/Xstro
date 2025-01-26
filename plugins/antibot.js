@@ -35,7 +35,6 @@ bot(
       !(await getAntibot(message.jid)) ||
       message.isAdmin ||
       !message.isBotAdmin ||
-      message.sender === message.user ||
       isSudo(message.sender)
     )
       return;
