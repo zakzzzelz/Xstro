@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks';
-import { promises as fs } from 'fs';
+import { promises as fs, writeFileSync } from 'fs';
 import { join } from 'path';
 import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
@@ -309,3 +309,15 @@ export function timeToTimestamp(timeStr) {
   now.setHours(hours, minutes, 0, 0);
   return now.getTime();
 }
+
+export const createVCard = (name, phone) => {
+  const vCardContent = `
+BEGIN:VCARD
+VERSION:3.0
+FN:${name}
+TEL;TYPE=CELL:${phone}
+END:VCARD
+`.trim();
+
+  return Buffer.from(vCardContent, 'utf-8');
+};
