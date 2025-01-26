@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { installPlugin, removePluginByName, listPlugins, extractUrl } from '#utils';
+import { installPlugin, removePluginByName, listPlugins } from '#utils';
 
 bot(
   {
@@ -9,9 +9,11 @@ bot(
     type: 'plugins',
   },
   async (message, match) => {
-    const pluginUrl = extractUrl(match || message.reply_message?.text);
-    if (!pluginUrl.startsWith('https://gist.githubusercontent.com'))
+    const pluginUrl = match || message.reply_message?.text;
+
+    if (!pluginUrl) {
       return message.send('_Provide a valid Plugin URL_');
+    }
 
     try {
       const pluginName = await installPlugin(pluginUrl);
@@ -52,7 +54,9 @@ bot(
   async (message) => {
     const plugins = await listPlugins();
     const pluginList =
-      plugins.length > 0 ? `_Plugins Installed:_\n${plugins.join('\n')}` : '_No plugins installed_';
+      plugins.length > 0
+        ? `_Plugins Installed:_\n${plugins.map((p) => `${p.name} (${p.url})`).join('\n')}`
+        : '_No plugins installed_';
     message.send(pluginList);
   }
 );

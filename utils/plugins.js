@@ -1,15 +1,35 @@
 import fs from 'fs';
+import path from 'path';
 import { join, basename, extname } from 'path';
 import axios from 'axios';
 import { addPlugin, getPlugins, removePlugin } from '#sql';
 
-/**
- * Install a plugin from a URL.
- * @param {string} pluginUrl - The URL of the plugin.
- * @returns {Promise<string>} - The name of the installed plugin.
- */
+function convertToRawGitHubUrl(url) {
+  const githubRegex = /^https:\/\/github\.com\/(.+)\/(.+)\/blob\/(.+)$/;
+  const match = url.match(githubRegex);
+
+  if (match) {
+    const [, user, repo, path] = match;
+    return `https://raw.githubusercontent.com/${user}/${repo}/${path}`;
+  }
+
+  return url;
+}
+
+export async function quickInstallPlugin(pluginUrl) {
+  const rawUrl = convertToRawGitHubUrl(pluginUrl);
+  const pluginName = `${basename(rawUrl, extname(rawUrl))}.js`;
+  const pluginPath = join('plugins', pluginName);
+
+  const response = await axios.get(rawUrl, { responseType: 'arraybuffer' });
+  fs.writeFileSync(pluginPath, response.data);
+
+  return pluginName;
+}
+
 export async function installPlugin(pluginUrl) {
-  const pluginName = `${basename(pluginUrl, extname(pluginUrl))}.js`;
+  const rawUrl = convertToRawGitHubUrl(pluginUrl);
+  const pluginName = `${basename(rawUrl, extname(rawUrl))}.js`;
   const existingPlugins = await getPlugins();
 
   if (existingPlugins.some((plugin) => plugin.name === pluginName)) {
@@ -17,18 +37,14 @@ export async function installPlugin(pluginUrl) {
   }
 
   const pluginPath = join('plugins', pluginName);
-  const response = await axios.get(pluginUrl, { responseType: 'arraybuffer' });
+  const response = await axios.get(rawUrl, { responseType: 'arraybuffer' });
   fs.writeFileSync(pluginPath, response.data);
-  await addPlugin(pluginName);
+
+  await addPlugin(pluginName, rawUrl);
 
   return pluginName;
 }
 
-/**
- * Remove an installed plugin by name.
- * @param {string} pluginName - The name of the plugin to remove.
- * @returns {Promise<boolean>} - True if the plugin was removed, false otherwise.
- */
 export async function removePluginByName(pluginName) {
   const deleted = await removePlugin(pluginName);
 
@@ -44,11 +60,47 @@ export async function removePluginByName(pluginName) {
   return true;
 }
 
-/**
- * Get a list of all installed plugins.
- * @returns {Promise<string[]>} - List of plugin names.
- */
 export async function listPlugins() {
   const plugins = await getPlugins();
-  return plugins.map((plugin) => plugin.name);
+  return plugins;
+}
+
+export async function fetchPlugins() {
+  const pluginsFolder = path.join('plugins');
+  const plugins = await getPlugins();
+
+  if (plugins.length === 0) {
+    console.log('No external plugins installed.');
+    return [];
+  }
+
+  const installedPlugins = [];
+
+  console.log('Starting plugin installation...');
+
+  for (const plugin of plugins) {
+    const pluginName = `${path.basename(plugin.url, path.extname(plugin.url))}.js`;
+    console.log(pluginName);
+    const pluginPath = path.join(pluginsFolder, pluginName);
+
+    if (!fs.existsSync(pluginPath)) {
+      try {
+        console.log(await quickInstallPlugin(plugin.url));
+        installedPlugins.push(pluginName);
+      } catch (error) {
+        console.error(`Failed to install plugin ${pluginName}: ${error.message}`);
+      }
+    }
+  }
+
+  if (installedPlugins.length > 0) {
+    console.log('Installed:');
+    installedPlugins.forEach((plugin) => {
+      console.log(plugin);
+    });
+  } else {
+    console.log('No new plugins were installed.');
+  }
+
+  return installedPlugins;
 }

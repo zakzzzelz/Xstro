@@ -12,15 +12,13 @@ bot(
   async (message) => {
     return message.send(
       `
-
 Mentions Setup
 
 ${message.prefix}mention to get mention menu
 ${message.prefix}setmention (your message here) or reply a message/video/audio or any kind of message
 ${message.prefix}delmention (this will delete mention for that particaular group)
 ${message.prefix}getmention (this will give you the mention message set for that group)
-
-            `
+`.trim()
     );
   }
 );

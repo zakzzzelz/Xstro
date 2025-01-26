@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { client, eventlogger, initSession, loadPlugins } from '#lib';
 import cluster from 'cluster';
 import { mkdir } from 'fs/promises';
+import { fetchPlugins } from '#utils';
 
 config();
 
@@ -47,6 +48,7 @@ if (cluster.isPrimary) {
     await mkdir('store', { recursive: true });
     eventlogger();
     await initSession();
+    await fetchPlugins();
     await loadPlugins();
     await client();
 

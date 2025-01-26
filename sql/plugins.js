@@ -13,11 +13,12 @@ const writePlugins = (plugins) => fs.writeFileSync(store, JSON.stringify(plugins
 /**
  * Adds a new plugin to the database.
  * @param {string} name - The name of the plugin.
+ * @param {string} url - The URL of the plugin.
  * @returns {Promise<Object>} - The added plugin.
  */
-export async function addPlugin(name) {
+export async function addPlugin(name, url) {
   const plugins = readPlugins();
-  const newPlugin = { name };
+  const newPlugin = { name, url };
 
   // Check if plugin already exists
   if (plugins.some((plugin) => plugin.name === name)) {
@@ -32,10 +33,10 @@ export async function addPlugin(name) {
 /**
  * Updates an existing plugin by its name.
  * @param {string} name - The name of the plugin to update.
- * @param {string} newName - The new name for the plugin.
+ * @param {Object} updates - The updates to apply to the plugin.
  * @returns {Promise<Object>} - The updated plugin.
  */
-export async function updatePlugin(name, newName) {
+export async function updatePlugin(name, updates) {
   const plugins = readPlugins();
   const pluginIndex = plugins.findIndex((plugin) => plugin.name === name);
 
@@ -43,7 +44,7 @@ export async function updatePlugin(name, newName) {
     throw new Error('Plugin not found');
   }
 
-  plugins[pluginIndex].name = newName;
+  plugins[pluginIndex] = { ...plugins[pluginIndex], ...updates };
   writePlugins(plugins);
   return plugins[pluginIndex];
 }

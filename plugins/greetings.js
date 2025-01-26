@@ -1,6 +1,5 @@
 import { bot } from '#lib';
 import { addWelcome, delWelcome, isWelcomeOn, addGoodbye, delGoodBye, isGoodByeOn } from '#sql';
-import { delay } from 'baileys';
 
 bot(
   {
@@ -10,27 +9,23 @@ bot(
     desc: 'SetUp Welcome Messages For Group',
     type: 'group',
   },
-  async (message, match, { prefix, pushName }) => {
-    if (!match) {
+  async (message, match, { jid, prefix }) => {
+    if (!match)
       return message.send(
-        `ᴡᴇʟᴄᴏᴍᴇ ᴍᴇssᴀɢᴇs sᴇᴛᴜᴘ\n\n_${prefix}welcome on_\nᴛᴜʀɴ ᴏɴ ᴡᴇʟᴄᴏᴍᴇ ᴍᴇssᴀɢᴇs\n\n_${prefix}welcome "your message here"_\nsᴇᴛᴜᴘ ᴄᴜsᴛᴏᴍ ᴡᴇʟᴄᴏᴍᴇ ᴍᴇssᴀɢᴇs\n\n_${prefix}welcome off_\nᴅɪsᴀʙʟᴇs ᴡᴇʟᴄᴏᴍᴇ ᴍᴇssᴀɢᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ\n\n*νιѕιт ωιкι тσ ℓєαяи нσω тσ ¢υѕтσмιzє уσυя ωєℓ¢σмє мєѕѕαgє:*\n\n_https://github.com/AstroX11/Xstro/wiki/Welcome-&&-Goodbye-Messages_`
+        `Welcome Messages Setup\n\n_${prefix}welcome on_\nEnable\n_${prefix}welcome "your message"_\nCustom\n_${prefix}welcome off_\nDisable\nVisit Wiki: https://github.com/AstroX11/Xstro/wiki/Welcome-&&-Goodbye-Messages`
       );
-    }
-    if (match === 'on'.toLowerCase()) {
-      if (await isWelcomeOn(message.jid)) return message.send(`Welcome Already Enabled`);
-      await addWelcome(message.jid, true, null);
-      return message.send(`Welcome enabled, use ${prefix}welcome, to customize it`);
+    if (match === 'on') {
+      if (await isWelcomeOn(jid)) return message.send('Welcome Already Enabled');
+      await addWelcome(jid, true, null);
+      return message.send(`Welcome enabled, use ${prefix}welcome to customize`);
     }
     if (match === 'off') {
-      if (!(await isWelcomeOn(message.jid))) return message.send(`Welcome Already Disabled`);
+      if (!(await isWelcomeOn(jid))) return message.send('Welcome Already Disabled');
       await delWelcome(message.jid);
-      return message.send(`Welcome Disabled`);
+      return message.send('Welcome Disabled');
     }
-    if (match !== 'off' && match !== 'on') {
-      await addWelcome(message.jid, true, match);
-      return message.send(`Custome Welcome Message Set`);
-    }
-    return message.send(`Use ${prefix}welcome to see usage`);
+    await addWelcome(jid, true, match);
+    return message.send('Custom Welcome Message Set');
   }
 );
 
@@ -42,34 +37,22 @@ bot(
     desc: 'SetUp Goodbye Messages For Group',
     type: 'group',
   },
-  async (message, match, { prefix, pushName }) => {
-    if (!match) {
+  async (message, match, { jid, prefix }) => {
+    if (!match)
       return message.send(
-        `ɢᴏᴏᴅʙʏᴇ ᴍᴇssᴀɢᴇs sᴇᴛᴜᴘ\n\n_${prefix}goodbye on_\nᴛᴜʀɴ ᴏɴ ɢᴏᴏᴅʙʏᴇ ᴍᴇssᴀɢᴇs\n\n_${prefix}goodbye "your message here"_\nsᴇᴛᴜᴘ ᴄᴜsᴛᴏᴍ ɢᴏᴏᴅʙʏᴇ ᴍᴇssᴀɢᴇs\n\n_${prefix}goodbye off_\nᴅɪsᴀʙʟᴇs ɢᴏᴏᴅʙʏᴇ ᴍᴇssᴀɢᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ\n\n*νιѕιт ωιкι тσ ℓєαяи нσω тσ ¢υѕтσмιzє уσυя gσσdʙүє мєѕѕαgє:*\n\n_https://github.com/AstroX11/Xstro/wiki/Welcome-&&-Goodbye-Messages_`
+        `Goodbye Messages Setup\n\n_${prefix}goodbye on_\nEnable\n_${prefix}goodbye "your message"_\nCustom\n_${prefix}goodbye off_\nDisable\nVisit Wiki: https://github.com/AstroX11/Xstro/wiki/Welcome-&&-Goodbye-Messages`
       );
-    }
     if (match === 'on') {
-      if (await isGoodByeOn(message.jid))
-        return message.send(`_Goodbye Already on for this Group_`);
-      await addGoodbye(message.jid, true, null);
-      return message.send(
-        '_Goodbye Messages Enabled, use ' + prefix + 'goodbye your message, to customize it_'
-      );
+      if (await isGoodByeOn(jid)) return message.send('Goodbye Already Enabled');
+      await addGoodbye(jid, true, null);
+      return message.send(`Goodbye enabled, use ${prefix}goodbye to customize`);
     }
     if (match === 'off') {
-      if (!(await isGoodByeOn(message.jid)))
-        return message.send(`_Goodbye Already Disabled for this Group_`);
-      await delGoodBye(message.jid);
-      return message.send(`_Goodbye Messages Disabled for this Group_`);
+      if (!(await isGoodByeOn(jid))) return message.send('Goodbye Already Disabled');
+      await delGoodBye(jid);
+      return message.send('Goodbye Disabled');
     }
-    if (match !== 'off' && match !== 'on') {
-      await message.send(
-        `NOTE: _If your text is very long, setup your long goodbye message, and reply it to set as custom goodbye message_`
-      );
-      await delay(2000);
-      await addGoodbye(message.jid, true, match);
-      return message.send(`_Custom GoodBye Message Set_`);
-    }
-    return message.send(`${pushName} that's not right, use ${prefix}goodbye to see command usage`);
+    await addGoodbye(jid, true, match);
+    return message.send('Custom Goodbye Message Set');
   }
 );

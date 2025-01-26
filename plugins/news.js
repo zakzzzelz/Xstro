@@ -11,9 +11,9 @@ bot(
   async (message) => {
     const res = await XSTRO.news();
     let data = '';
-    for (const items of res) {
+    for (const items of res)
       data += `Title: ${items.title}\n\nDescription: ${items.description}\n\nlink: ${items.url}\n\n`;
-    }
+
     return await message.send(data);
   }
 );
