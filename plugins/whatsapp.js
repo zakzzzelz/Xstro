@@ -10,10 +10,10 @@ bot(
     desc: 'Downloads A Viewonce Message',
     type: 'whatsapp',
   },
-  async (message) => {
+  async (message, _, { jid, relayMessage }) => {
     if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
     const res = await ModifyViewOnceMessage(message.id, message.client);
-    return message.client.relayMessage(message.jid, res.message, {});
+    return await relayMessage(jid, res.message, {});
   }
 );
 
@@ -24,7 +24,7 @@ bot(
     desc: 'Converts A Normal Media Message to ViewOnce',
     type: 'whatsapp',
   },
-  async (message, _, { relayMessage }) => {
+  async (message, _, { jid, relayMessage }) => {
     if (
       !message.reply_message.video &&
       !message.reply_message.audio &&
@@ -32,7 +32,7 @@ bot(
     )
       return message.send('_Reply an Image | Video | Audio_');
     const viewonceMessage = await convertNormalMessageToViewOnce(message.data.quoted.message);
-    return await relayMessage(message.jid, viewonceMessage, {});
+    return await relayMessage(jid, viewonceMessage, {});
   }
 );
 
@@ -79,9 +79,7 @@ bot(
     if (!msg) return await message.send('Xstro will not quoted Bot Message');
     msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
     if (!msg.quoted) return await message.send('_No quoted message found_');
-    await message.forward(jid, msg.quoted, {
-      quoted: msg.quoted,
-    });
+    await message.forward(jid, msg.quoted, { quoted: msg.quoted });
   }
 );
 
@@ -113,7 +111,7 @@ bot(
       },
       jid
     );
-    await message.send('_Archived_');
+    await message.send('Archived');
   }
 );
 
@@ -132,7 +130,7 @@ bot(
       },
       jid
     );
-    await message.send('_Unarchived_');
+    await message.send('Unarchived');
   }
 );
 
@@ -143,18 +141,18 @@ bot(
     type: 'whatsapp',
     desc: 'Deletes A chat',
   },
-  async (message, _, { chatModify }) => {
+  async (message, _, { jid, key, chatModify }) => {
     await chatModify(
       {
         delete: true,
         lastMessages: [
           {
-            key: message.key,
+            key: key,
             messageTimestamp: Date.now(),
           },
         ],
       },
-      message.jid
+      jid
     );
   }
 );
@@ -167,7 +165,7 @@ bot(
     desc: 'Checks if users exist on WhatsApp',
   },
   async (message, match, { onWhatsApp }) => {
-    if (!match) return message.send('_Provide their numbers, e.g. 121232343,131312424_');
+    if (!match) return message.send('Provide their numbers, e.g. 121232343,131312424');
     match = match.split(',').map((id) => toJid(id.trim()));
     const res = await onWhatsApp(...match);
     if (!res.length) return message.send('_None of the numbers exist on WhatsApp._');
@@ -193,12 +191,10 @@ bot(
     const blocklist = await fetchBlocklist();
     if (blocklist.length > 0) {
       const mentions = blocklist.map((number) => `${number}`);
-      const formattedList = blocklist.map((number) => `• @${number.split('@')[0]}`).join('\n');
-      await message.send(`*_Blocked contacts:_*\n\n${formattedList}`, {
-        mentions,
-      });
+      const blocked = blocklist.map((number) => `• @${number.split('@')[0]}`).join('\n');
+      await message.send(`*Blocked contacts:*\n\n${blocked}`, { mentions });
     } else {
-      await message.send('_No blocked Numbers!_');
+      await message.send('No blocked Numbers!');
     }
   }
 );
@@ -247,9 +243,9 @@ bot(
     type: 'whatsapp',
     desc: 'pin a chat',
   },
-  async (message, _, { chatModify }) => {
-    await chatModify({ pin: true }, message.jid);
-    return message.send('_Pined_');
+  async (message, _, { jid, chatModify }) => {
+    await chatModify({ pin: true }, jid);
+    return message.send('Pined');
   }
 );
 
@@ -260,9 +256,9 @@ bot(
     type: 'whatsapp',
     desc: 'unpin a msg',
   },
-  async (message, _, { chatModify }) => {
-    await chatModify({ pin: false }, message.jid);
-    return message.send('_Unpined_');
+  async (message, _, { jid, chatModify }) => {
+    await chatModify({ pin: false }, jid);
+    return message.send('Unpined');
   }
 );
 
@@ -382,10 +378,10 @@ bot(
     type: 'whatsapp',
     desc: 'React to A Message',
   },
-  async (message, match, { sendMessage }) => {
+  async (message, match, { jid, sendMessage }) => {
     if (!message.reply_message) return message.send('_Reply Message_');
     if (!match) return message.send('react 😊');
-    return await sendMessage(message.jid, {
+    return await sendMessage(jid, {
       react: { text: match, key: message.reply_message.key },
     });
   }
