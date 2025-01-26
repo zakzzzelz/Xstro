@@ -59,7 +59,7 @@ bot(
 
 bot(
   {
-    pattern: 'weather ?(.*)',
+    pattern: 'weather',
     public: true,
     desc: 'weather info',
     type: 'search',

@@ -3,6 +3,8 @@ import { bot } from '#lib';
 import { manageProcess, runtime } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
+import fs from 'fs';
+import path from 'path';
 
 bot(
   {
@@ -16,6 +18,25 @@ bot(
     const msg = await message.send('Testing Speed...');
     const end = performance.now();
     await msg.edit(`\`\`\`Pong! ${(end - start).toFixed(1)} ms\`\`\``);
+  }
+);
+
+bot(
+  {
+    pattern: 'file',
+    fromMe: true,
+    desc: 'Send the content of a specified file',
+    type: 'system',
+  },
+  async (message, match) => {
+    const fileName = match?.trim();
+    if (!fileName) return message.send('_Please specify the file name. Example: file `config.js`_');
+    const filePath = path.resolve(process.cwd(), fileName);
+    if (!fs.existsSync(filePath)) {
+      return message.send(`_The file "${fileName}" does not exist._`);
+    }
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    return message.send(`*Content of the file "${fileName}":*\n\n${fileContent}`);
   }
 );
 
@@ -117,7 +138,7 @@ Uptime: ${Math.floor(os.uptime() / 60)} minutes`;
 
 bot(
   {
-    pattern: 'eval ?(.*)',
+    pattern: 'eval',
     public: false,
     desc: 'Evaluate code',
     type: 'system',

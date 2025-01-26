@@ -18,7 +18,7 @@ bot(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
     ).length;
-    let menuInfo = `
+    let menuInfo = `\`\`\`
 ╭─── ${config.BOT_INFO.split(';')[1]} ────
 │ Prefix: ${PREFIX}
 │ Owner: ${config.BOT_INFO.split(';')[0]}		
@@ -31,7 +31,7 @@ bot(
 │ Date: ${new Date().toLocaleDateString('en-US')}
 │ Date: ${new Date().toLocaleTimeString('en-US', { timeZone: config.TIME_ZONE })}
 │ Version: ${config.VERSION}
-╰─────────────\n
+╰─────────────\`\`\`\n
 `;
 
     const commandsByType = commands
@@ -58,7 +58,7 @@ bot(
       });
       menuInfo += font.tiny(`╰────────────\n`);
     });
-    return await message.send(menuInfo);
+    return await message.send(menuInfo.trim());
   }
 );
 

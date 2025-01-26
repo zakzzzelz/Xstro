@@ -23,7 +23,7 @@ export async function setcmd(cmd, id) {
   if (existingCmd) {
     existingCmd.id = id;
   } else {
-    // Add new command
+    // Add new command if it doesn't exist
     cmds.push({ cmd, id });
   }
 
@@ -40,9 +40,7 @@ export async function delcmd(cmd) {
   const cmds = readStickerCmds();
   const index = cmds.findIndex((stickerCmd) => stickerCmd.cmd === cmd);
 
-  if (index === -1) {
-    return false;
-  }
+  if (index === -1) return false;
 
   cmds.splice(index, 1);
   writeStickerCmds(cmds);

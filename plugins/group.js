@@ -11,12 +11,11 @@ bot(
     desc: 'Act Various Events for Group Such as Demote/Promote/Modify',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid }) => {
     if (!(await message.getAdmin())) return;
-    if (await isGroupEventEnabled(message.jid))
-      return message.send(`_Group Events Already Enabled_`);
-    await enableGroupEvents(message.jid);
-    message.send(`_Group Events Activated_`);
+    if (await isGroupEventEnabled(jid)) return message.send(`Group Events Already Enabled`);
+    await enableGroupEvents(jid);
+    return message.send(`Group Events Activated`);
   }
 );
 
@@ -31,9 +30,9 @@ bot(
   async (message) => {
     if (!(await message.getAdmin())) return;
     if (!(await isGroupEventEnabled(message.jid)))
-      return message.send(`_Group Events Already Disabled_`);
+      return message.send(`Group Events Already Disabled`);
     await disableGroupEvents(message.jid);
-    message.send(`_Group Events Deactivated_`);
+    return message.send(`Group Events Deactivated`);
   }
 );
 
@@ -45,11 +44,11 @@ bot(
     desc: 'Set up groupJoinApprovalMode',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, groupJoinApprovalMode }) => {
     if (!(await message.getAdmin())) return;
     if (!['on', 'off'].includes(match))
       return message.send('_Use on | off to configure how new members can join the group_');
-    await message.client.groupJoinApprovalMode(message.jid, match);
+    await groupJoinApprovalMode(jid, match);
     return message.send(`GroupJoinApprovalMode is now set to: ${match.toUpperCase()}`);
   }
 );
@@ -62,12 +61,12 @@ bot(
     desc: 'Set who can add new members to the group',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, groupMemberAddMode }) => {
     if (!(await message.getAdmin())) return;
     if (!['on', 'off'].includes(match))
       return message.send('_Use on | off to configure who can add members to the group_');
     const mode = match === 'on' ? 'all_member_add' : 'admin_add';
-    await message.client.groupMemberAddMode(message.jid, mode);
+    await groupMemberAddMode(jid, mode);
     return message.send(`GroupMemberAddMode is now set to: ${mode.toUpperCase()}`);
   }
 );
@@ -80,23 +79,21 @@ bot(
     desc: 'Kick a certain country code from a group',
     type: 'group',
   },
-  async (message, match, { groupMetadata, groupParticipantsUpdate }) => {
+  async (message, match, { jid, groupMetadata, groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const countryCode = match?.trim().replace('+', '');
-    if (!countryCode || isNaN(countryCode))
-      return message.send('_Please provide a valid country code._');
-    const metadata = await groupMetadata(message.jid);
-    const participants = metadata.participants
-      .filter((participant) => participant.id.startsWith(`${countryCode}`) && !participant.admin)
+    const codes = match?.trim().replace('+', '');
+    if (!codes || isNaN(codes)) return message.send('Provide a valid country code.');
+    const { participants } = await groupMetadata(jid);
+    const members = participants
+      .filter((participant) => participant.id.startsWith(`${codes}`) && !participant.admin)
       .map((participant) => participant.id);
-    if (!participants.length)
-      return message.send(`_No members found with the country code ${countryCode}._`);
-    for (const jid of participants) {
-      await groupParticipantsUpdate(message.jid, [jid], 'remove');
-      await message.send(`*_@${jid.split('@')[0]} kicked_*`, { mentions: [jid] });
+    if (!members.length) return message.send(`No members found with the country code ${codes}.`);
+    for (const ids of members) {
+      await groupParticipantsUpdate(jid, [ids], 'remove');
+      await message.send(`*@${ids.split('@')[0]} kicked*`, { mentions: [ids] });
       await delay(2000);
     }
-    await message.send(`_Kicked All Memeber from ${countryCode}._`);
+    await message.send(`Kicked all memebers from ${codes}.`);
   }
 );
 
@@ -108,27 +105,27 @@ bot(
     desc: 'Change Group Name',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { groupUpdateSubject }) => {
     if (!(await message.getAdmin())) return;
     if (!match && message.reply_message?.text) return message.send('_Provide New Group Name_');
-    await message.client.groupUpdateSubject(message.jid, match || message.reply_message?.text);
+    await groupUpdateSubject(message.jid, match || message.reply_message?.text);
     return message.send('_Group Name Updated_');
   }
 );
 
 bot(
   {
-    pattern: 'gdesc ?(.*)',
+    pattern: 'gdesc',
     public: true,
     isGroup: true,
     desc: 'Changes Group Description',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { groupUpdateDescription }) => {
     if (!(await message.getAdmin())) return;
     if (!match && message.reply_message?.text)
       return message.send('_please add a new group description_');
-    await message.client.groupUpdateDescription(message.jid, match || message.reply_message?.text);
+    await groupUpdateDescription(message.jid, match || message.reply_message?.text);
     return message.send('_Group Description Updated_');
   }
 );
@@ -141,15 +138,16 @@ bot(
     desc: 'Promotes Someone to Admin',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, groupMetadata, groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.ujid(match);
-    const groupMetadata = await message.client.groupMetadata(message.jid);
-    const participant = groupMetadata.participants.find((p) => p.id === jid);
-    if (participant.admin)
-      return message.send(`_@${jid.split('@')[0]} is already an admin._`, { mentions: [jid] });
-    await message.client.groupParticipantsUpdate(message.jid, [jid], 'promote');
-    return message.send(`*@${jid.split('@')[0]} is now an admin*`, { mentions: [jid] });
+    const user = await message.getJid(match);
+    if (!user) return;
+    const { participants } = await groupMetadata(jid);
+    const memebers = participants.find((p) => p.id === user);
+    if (memebers.admin)
+      return message.send(`@${user.split('@')[0]} is already an admin.`, { mentions: [user] });
+    await groupParticipantsUpdate(jid, [user], 'promote');
+    return message.send(`@${user.split('@')[0]} is now an admin`, { mentions: [user] });
   }
 );
 
@@ -161,23 +159,22 @@ bot(
     desc: 'Demotes Someone from Admin',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, groupMetadata, groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.ujid(match);
-    const groupMetadata = await message.client.groupMetadata(message.jid);
-    const participant = groupMetadata.participants.find((p) => p.id === jid);
+    const user = await message.getJid(match);
+    if (!user) return;
+    const { participants } = await groupMetadata(jid);
+    const participant = participants.find((p) => p.id === user);
     if (!participant.admin)
-      return message.send(`_@${jid.split('@')[0]} is not an admin._`, {
-        mentions: [jid],
-      });
-    await message.client.groupParticipantsUpdate(message.jid, [jid], 'demote');
-    return message.send(`_@${jid.split('@')[0]} is no longer an admin_`, { mentions: [jid] });
+      return message.send(`@${user.split('@')[0]} is not an admin.`, { mentions: [user] });
+    await groupParticipantsUpdate(message.jid, [user], 'demote');
+    return message.send(`@${user.split('@')[0]} is no longer an admin.`, { mentions: [user] });
   }
 );
 
 bot(
   {
-    pattern: 'kick ?(.*)',
+    pattern: 'kick',
     public: false,
     isGroup: true,
     desc: 'Kicks A Participant from Group',
@@ -185,10 +182,10 @@ bot(
   },
   async (message, match, { groupParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const jid = await message.ujid(match);
+    const jid = await message.getJid(match);
     if (!jid) return;
     await groupParticipantsUpdate(message.jid, [jid], 'remove');
-    return message.send(`_@${jid.split('@')[0]} has been kicked!_`, { mentions: [jid] });
+    return message.send(`@${jid.split('@')[0]} removed from Group.`, { mentions: [jid] });
   }
 );
 
@@ -210,6 +207,21 @@ bot(
 
 bot(
   {
+    pattern: 'revoke',
+    public: true,
+    isGroup: true,
+    desc: 'Revoke Invite link',
+    type: 'group',
+  },
+  async (message, _, { groupRevokeInvite }) => {
+    if (!(await message.getAdmin())) return;
+    await groupRevokeInvite(message.jid);
+    return message.send('Group link revoked!');
+  }
+);
+
+bot(
+  {
     pattern: 'leave',
     public: false,
     isGroup: true,
@@ -217,8 +229,6 @@ bot(
     type: 'group',
   },
   async (message, _, { groupParticipantsUpdate }) => {
-    await message.send('_Left Group_');
-    await delay(2000);
     return await groupParticipantsUpdate(message.jid, [message.user], 'remove');
   }
 );
@@ -233,8 +243,7 @@ bot(
   },
   async (message, match, { jid, prefix, sendMessage }) => {
     let [pollName, pollOptions] = match.split(';');
-    if (!pollOptions)
-      return await message.send(prefix + 'poll question;option1,option2,option3.....');
+    if (!pollOptions) return await message.send(prefix + 'poll question;option1,option2,option3');
     let options = [];
     for (let option of pollOptions.split(','))
       if (option && option.trim() !== '') options.push(option.trim());
@@ -256,13 +265,12 @@ bot(
     desc: 'Mute a group (admins only)',
     type: 'group',
   },
-  async (message, _, { groupSettingUpdate, groupMetadata }) => {
+  async (message, _, { jid, groupSettingUpdate, groupMetadata }) => {
     if (!(await message.getAdmin())) return;
-    const metadata = await groupMetadata(message.jid);
-    if (metadata.announce)
-      return message.send('_Group is already muted. Only admins can send messages._');
-    await groupSettingUpdate(message.jid, 'announcement');
-    await message.send('_Group has been muted. Only admins can send messages now._');
+    const { announce } = await groupMetadata(jid);
+    if (announce) return message.send('Group is already muted.');
+    await groupSettingUpdate(jid, 'announcement');
+    await message.send('Group is now muted. Only admins can send messages now.');
   }
 );
 
@@ -276,11 +284,10 @@ bot(
   },
   async (message, _, { groupMetadata, groupSettingUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const metadata = await groupMetadata(message.jid);
-    if (!metadata.announce)
-      return message.send('_Group is already unmuted. All members can send messages._');
+    const { announce } = await groupMetadata(message.jid);
+    if (!announce) return message.send('Group is already unmuted.');
     await groupSettingUpdate(message.jid, 'not_announcement');
-    await message.send('_Group has been unmuted. All members can send messages now._');
+    await message.send('Group is now unmuted. All members can send messages now.');
   }
 );
 
@@ -295,28 +302,9 @@ bot(
   async (message, _, { groupMetadata }) => {
     const data = await groupMetadata(message.jid);
     const groupAdmins = data.participants.filter((p) => p.admin !== null).map((p) => p.id);
-    if (groupAdmins.length > 0) {
-      const adminTags = groupAdmins.map((admin) => `@${admin.split('@')[0]}`);
-      const replyText = `*_Group Admins:_*\n ${adminTags.join('\n')}`;
-      await message.send(replyText, { mentions: groupAdmins });
-    } else {
-      await message.send('_No admins found._');
-    }
-  }
-);
-
-bot(
-  {
-    pattern: 'revoke',
-    public: true,
-    isGroup: true,
-    desc: 'Revoke Invite link',
-    type: 'group',
-  },
-  async (message, _, { groupRevokeInvite }) => {
-    if (!(await message.getAdmin())) return;
-    await groupRevokeInvite(message.jid);
-    return message.send('_Group Link Revoked!_');
+    const adminTags = groupAdmins.map((admin) => `@${admin.split('@')[0]}`);
+    const info = `*Admin:*\n ${adminTags.join('\n')}`;
+    await message.send(info, { mentions: groupAdmins });
   }
 );
 
@@ -345,12 +333,12 @@ bot(
     desc: 'Lock groups settings',
     type: 'group',
   },
-  async (message, _, { groupSettingUpdate, groupMetadata }) => {
+  async (message, _, { jid, groupSettingUpdate, groupMetadata }) => {
     if (!(await message.getAdmin())) return;
-    const meta = await groupMetadata(message.jid);
-    if (meta.restrict) return message.send('_Group is already locked to Admins._');
-    await groupSettingUpdate(message.jid, 'locked');
-    return message.send('_Group has been locked to Admins_');
+    const { restrict } = await groupMetadata(jid);
+    if (restrict) return message.send('Group is already locked.');
+    await groupSettingUpdate(jid, 'locked');
+    return message.send('Group is now locked to Admins_');
   }
 );
 
@@ -362,12 +350,12 @@ bot(
     desc: 'Unlock groups settings',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, groupMetadata, groupSettingUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const meta = await message.client.groupMetadata(message.jid);
-    if (!meta.restrict) return message.send('_Group is already unlocked for participants._');
-    await message.client.groupSettingUpdate(message.jid, 'unlocked');
-    return message.send('_Group is now unlocked for participants._');
+    const { restrict } = await groupMetadata(message.jid);
+    if (!restrict) return message.send('_Group is already unlocked.');
+    await groupSettingUpdate(message.jid, 'unlocked');
+    return message.send('Group is now unlocked for members.');
   }
 );
 
@@ -379,11 +367,11 @@ bot(
     desc: 'Shows the pending requests of the group',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, groupRequestParticipantsList }) => {
     if (!(await message.getAdmin())) return;
-    const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
-    if (!joinRequests || !joinRequests[0]) return await message.send('_No Join Requests_');
-    let requestList = '*_Group Join Requets List_*\n\n';
+    const joinRequests = await groupRequestParticipantsList(jid);
+    if (!joinRequests || !joinRequests[0]) return await message.send('No Requests Found!');
+    let requestList = '*Join Requests:*\n\n';
     let requestJids = [];
     for (let request of joinRequests) {
       requestList += `@${request.jid.split('@')[0]}\n`;
@@ -401,15 +389,14 @@ bot(
     desc: 'Accept all join requests',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, groupRequestParticipantsList, groupRequestParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-
-    const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
+    const joinRequests = await groupRequestParticipantsList(jid);
     if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
     let acceptedUsers = [];
-    let acceptanceList = '*_Accepted Users_*\n\n';
+    let acceptanceList = '*Approved:*\n\n';
     for (let request of joinRequests) {
-      await message.client.groupRequestParticipantsUpdate(message.jid, [request.jid], 'approve');
+      await groupRequestParticipantsUpdate(jid, [request.jid], 'approve');
       acceptanceList += `@${request.jid.split('@')[0]}\n`;
       acceptedUsers.push(request.jid);
     }
@@ -425,14 +412,14 @@ bot(
     desc: 'Reject all join requests',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, groupRequestParticipantsList, groupRequestParticipantsUpdate }) => {
     if (!(await message.getAdmin())) return;
-    const joinRequests = await message.client.groupRequestParticipantsList(message.jid);
+    const joinRequests = await groupRequestParticipantsList(jid);
     if (!joinRequests || !joinRequests[0]) return await message.send('_No Requests Found!_');
     let rejectedUsers = [];
-    let rejectionList = '*_Rejected Users_*\n\n';
+    let rejectionList = '*Rejected:*\n\n';
     for (let request of joinRequests) {
-      await message.client.groupRequestParticipantsUpdate(message.jid, [request.jid], 'reject');
+      await groupRequestParticipantsUpdate(jid, [request.jid], 'reject');
       rejectionList += `@${request.jid.split('@')[0]}\n`;
       rejectedUsers.push(request.jid);
     }
@@ -448,10 +435,10 @@ bot(
     desc: 'Removes Group Profile Photo',
     type: 'group',
   },
-  async (message) => {
+  async (message, _, { jid, removeProfilePicture }) => {
     if (!(await message.getAdmin())) return;
-    await message.client.removeProfilePicture(message.jid);
-    return await message.send('_Group Profile Photo Removed!_');
+    await removeProfilePicture(jid);
+    return await message.send('Group Profile Photo Removed!');
   }
 );
 
@@ -480,7 +467,7 @@ bot(
     }
     members = [...new Set(members)];
     await message.client.groupCreate(groupName, members);
-    return await message.send(`_Group Created_`);
+    return await message.send(`Group Created`);
   }
 );
 
@@ -548,15 +535,14 @@ bot(
     desc: 'Tag Anyone with Any Kind of Message',
     type: 'group',
   },
-  async (message, match) => {
+  async (message, match, { jid, relayMessage }) => {
     if (!match && !message.reply_message)
       return message.send('_Reply any Message or Give Me Text_');
     const participants = await message.client.groupMetadata(message.jid);
     const participantJids = participants.participants.map((p) => p.id);
-    if (match && !message.reply_message) {
-      await message.send(match, { mentions: participantJids });
-      return;
-    }
+    if (match && !message.reply_message)
+      return await message.send(match, { mentions: participantJids });
+
     if (!match && message.reply_message) {
       const quotedMessage = message.data.quoted.message;
       const typeOfMessage = getContentType(quotedMessage);
@@ -575,9 +561,9 @@ bot(
         if (typeOfMessage === 'conversation' && typeof objectAction === 'string') {
           taggedMessage[typeOfMessage] = objectAction;
         }
-        await message.client.relayMessage(message.jid, taggedMessage, {});
+        await relayMessage(jid, taggedMessage, {});
       } else {
-        await message.client.relayMessage(message.jid, quotedMessage, {});
+        await relayMessage(jid, quotedMessage, {});
       }
     }
   }

@@ -3,7 +3,7 @@ import { installPlugin, removePluginByName, listPlugins, extractUrl } from '#uti
 
 bot(
   {
-    pattern: 'install ?(.*)',
+    pattern: 'install',
     public: false,
     desc: 'Installs a Plugin',
     type: 'plugins',
@@ -24,7 +24,7 @@ bot(
 
 bot(
   {
-    pattern: 'delplugin ?(.*)',
+    pattern: 'delplugin',
     public: false,
     desc: 'Deletes a Plugin',
     type: 'plugins',

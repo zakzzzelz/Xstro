@@ -18,7 +18,8 @@ bot(
     desc: 'Get Another Person Profile Image',
   },
   async (message, match, { profilePictureUrl }) => {
-    const jid = await message.ujid(match);
+    const jid = await message.getJid(match);
+    if (!jid) return;
     const pp = await profilePictureUrl(jid).catch(() => null);
     const jpegThumbnail = pp ? Buffer.from(await (await fetch(pp)).arrayBuffer()) : Buffer.alloc(0);
     await message.send(jpegThumbnail, { caption: '_Profile Picture_' });

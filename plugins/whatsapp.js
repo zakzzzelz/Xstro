@@ -205,7 +205,7 @@ bot(
 
 bot(
   {
-    pattern: 'clear ?(.*)',
+    pattern: 'clear',
     public: false,
     type: 'whatsapp',
     desc: 'delete whatsapp chat',
@@ -255,7 +255,7 @@ bot(
 
 bot(
   {
-    pattern: 'unpin ?(.*)',
+    pattern: 'unpin',
     public: false,
     type: 'whatsapp',
     desc: 'unpin a msg',
@@ -313,7 +313,8 @@ bot(
     desc: 'Blocks A Person',
   },
   async (message, match, { updateBlockStatus }) => {
-    const jid = await message.ujid(match);
+    const jid = await message.getJid(match);
+    if (!jid) return;
     await updateBlockStatus(jid, 'block');
   }
 );
@@ -326,7 +327,8 @@ bot(
     desc: 'Unblocks A Person',
   },
   async (message, match, { updateBlockStatus }) => {
-    const jid = await message.ujid(match);
+    const jid = await message.getJid(match);
+    if (!jid) return;
     await updateBlockStatus(jid, 'unblock');
   }
 );
@@ -353,7 +355,8 @@ bot(
     desc: 'Get Jid of Current Chat',
   },
   async (message, match) => {
-    const jid = await message.ujid(match);
+    const jid = await message.getJid(match);
+    if (!jid) return;
     message.send(jid);
   }
 );
