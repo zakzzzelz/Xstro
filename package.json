@@ -49,9 +49,7 @@
     "axios": "^1.7.9",
     "baileys": "github:AstroX11/Baileys",
     "dotenv": "^16.4.7",
-    "mathjs": "^14.0.1",
     "node-webpmux": "^3.2.0",
-    "qrcode-terminal": "^0.12.0",
     "sharp": "^0.33.5",
     "simple-git": "^3.27.0",
     "xstro-utils": "^1.0.5"

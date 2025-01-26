@@ -1,5 +1,4 @@
 import { bot } from '#lib';
-import { evaluate } from 'mathjs';
 import { extractUrl, readmore } from '#utils';
 import { delay } from 'baileys';
 
@@ -45,25 +44,6 @@ bot(
       return message.send('*Provide URL*');
     const url = extractUrl(match);
     return await sendMessage(jid, { audio: { url: url }, mimetype: 'audio/mpeg' });
-  }
-);
-
-bot(
-  {
-    pattern: 'math',
-    public: true,
-    desc: 'Solve a Maths Expression',
-    type: 'misc',
-  },
-  async (message, match) => {
-    if (!match) return await message.send('*Example: `.math 2 + 2`*');
-    const msg = await message.send('*Calculating...*');
-    try {
-      const result = evaluate(match);
-      return await msg.edit(`Result: ${result}`);
-    } catch {
-      return await msg.edit(`_Syntax Error_`);
-    }
   }
 );
 
