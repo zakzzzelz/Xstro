@@ -1,4 +1,5 @@
 import { config } from '#config';
+import { LANG } from '#lang';
 import { bot, serialize } from '#lib';
 import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
 import { isJidGroup } from 'baileys';
@@ -11,7 +12,7 @@ bot(
     type: 'whatsapp',
   },
   async (message, _, { jid, relayMessage }) => {
-    if (!message.reply_message.viewonce) return message.send('_Reply A Viewonce Message_');
+    if (!message.reply_message.viewonce) return message.send(LANG.VIEWONCE);
     const res = await ModifyViewOnceMessage(message.id, message.client);
     return await relayMessage(jid, res.message, {});
   }
@@ -30,7 +31,7 @@ bot(
       !message.reply_message.audio &&
       !message.reply_message.image
     )
-      return message.send('_Reply an Image | Video | Audio_');
+      return message.send(LANG.MEDIA);
     const viewonceMessage = await convertNormalMessageToViewOnce(message.data.quoted.message);
     return await relayMessage(jid, viewonceMessage, {});
   }
@@ -58,7 +59,7 @@ bot(
     desc: 'Set Your Profile Picture',
   },
   async (message, _, { user, updateProfilePicture }) => {
-    if (!message.reply_message?.image) return message.send('_Reply An Image_');
+    if (!message.reply_message?.image) return message.send(LANG.IMAGE);
     const img = await message.download();
     await updateProfilePicture(user.id, img);
     return await message.send('_Profile Picture Updated_');
@@ -73,7 +74,7 @@ bot(
     desc: 'quoted message',
   },
   async (message, _, { jid, loadMessage }) => {
-    if (!message.reply_message) return await message.send('Reply A Message');
+    if (!message.reply_message) return await message.send(LANG.MESSAGE);
     let key = message.reply_message.key.id;
     let msg = await loadMessage(key);
     if (!msg) return await message.send('Xstro will not quoted Bot Message');
@@ -91,7 +92,7 @@ bot(
     desc: 'Deletes Message',
   },
   async (message) => {
-    if (!message.reply_message) return message.send('_Reply A Message_');
+    if (!message.reply_message) return message.send(LANG.MESSAGE);
     return await message.delete();
   }
 );
@@ -173,7 +174,7 @@ bot(
     const nonExistingNumbers = match
       .filter((id) => !res.some((user) => user.jid === id && user.exists))
       .map((id) => id.split('@')[0]);
-    let info = '_Checked numbers:_\n\n';
+    let info = '*Checked numbers:*\n\n';
     if (existingNumbers.length) info += `*Exists:*\n @${existingNumbers.join('\n@')}\n`;
     if (nonExistingNumbers.length) info += `\n*Does not exist:*\n ${nonExistingNumbers.join('\n')}`;
     return message.send(info, { mentions: existingNumbers.map((num) => toJid(num)) });
