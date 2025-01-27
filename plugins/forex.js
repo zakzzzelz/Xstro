@@ -27,11 +27,12 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxmajor`)).json();
-    if (!res) return message.send('No data from market avaliable');
-    const data = res
-      .map((item) => {
-        return `
+    const res = await (await fetch(`${LANG.API}/api/fxmajor`)).json();
+    if (!res) return message.send('No data from market available');
+    await message.send(
+      res
+        .map((item) => {
+          return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -42,9 +43,9 @@ High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
 `.trim();
-      })
-      .join('\n\n');
-    await message.send(data);
+        })
+        .join('\n\n')
+    );
   }
 );
 
@@ -87,9 +88,10 @@ bot(
   async (message) => {
     const res = (await fetch(`${LANG.API}/api/fxexotic`)).json();
     if (!res) return message.send('No data from market avaliable');
-    const data = res
-      .map((item) => {
-        return `
+    await message.send(
+      res
+        .map((item) => {
+          return `
 Symbol: ${item.Symbol}
 Pair: ${item.Pair}
 Price: ${item.Price}
@@ -100,9 +102,9 @@ High: ${item.High}
 Low: ${item.Low}
 Rating: ${item.Rating}
 `.trim();
-      })
-      .join('\n\n');
-    await message.send(data);
+        })
+        .join('\n\n')
+    );
   }
 );
 

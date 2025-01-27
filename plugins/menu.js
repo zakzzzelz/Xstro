@@ -18,20 +18,20 @@ bot(
       (cmd) =>
         cmd.pattern && !cmd.dontAddCommandList && !cmd.pattern.toString().includes('undefined')
     ).length;
-    let menuInfo = `
+    let menuInfo = `\`\`\`
 ╭─── ${config.BOT_INFO.split(';')[1]} ────
-│ 𝙿𝚛𝚎𝚏𝚒𝚡: ${PREFIX}
-│ 𝙾𝚠𝚗𝚎𝚛: ${config.BOT_INFO.split(';')[0]}		
-│ 𝙿𝚕𝚞𝚐𝚒𝚗𝚜: ${cmds}
-│ 𝙼𝚘𝚍𝚎: ${mode ? 'Private' : 'Public'}
-│ 𝚄𝚙𝚝𝚒𝚖𝚎: ${runtime(process.uptime())}
-│ 𝙿𝚕𝚊𝚝𝚏𝚘𝚛𝚖: ${platform()}
-│ 𝙼𝚎𝚖𝚘𝚛𝚢: ${formatBytes(totalmem() - freemem())}
-│ 𝙳𝚊𝚢: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
-│ 𝙳𝚊𝚝𝚎: ${new Date().toLocaleDateString('en-US')}
-│ 𝚃𝚒𝚖𝚎: ${new Date().toLocaleTimeString('en-US', { timeZone: config.TIME_ZONE })}
-│ 𝚅𝚎𝚛𝚜𝚒𝚘𝚗: ${config.VERSION}
-╰─────────────\n`;
+│ Prefix: ${PREFIX}
+│ Owner: ${config.BOT_INFO.split(';')[0]}		
+│ Plugins: ${cmds}
+│ Mode: ${mode ? 'Private' : 'Public'}
+│ Uptime: ${runtime(process.uptime())}
+│ Platform: ${platform()}
+│ Ram: ${formatBytes(totalmem() - freemem())}
+│ Day: ${new Date().toLocaleDateString('en-US', { weekday: 'long' })}
+│ Date: ${new Date().toLocaleDateString('en-US')}
+│ Time: ${new Date().toLocaleTimeString('en-US', { timeZone: config.TIME_ZONE })}
+│ Version: ${config.VERSION}
+╰─────────────\`\`\`\n`;
 
     const commandsByType = commands
       .filter((cmd) => cmd.pattern && !cmd.dontAddCommandList)
