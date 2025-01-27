@@ -22,7 +22,7 @@
     },
     "BOT_INFO": {
       "description": "Bot Owner, Bot Name, URL LOGO",
-      "value": "αѕтяσχ11;χѕтяσ м∂;https://avatars.githubusercontent.com/u/188756392?v=4",
+      "value": "αѕтяσχ11;χѕтяσ м∂",
       "required": false
     },
     "TIME_ZONE": {
