@@ -1,3 +1,4 @@
+import { LANG } from '#lang';
 import { bot } from '#lib';
 import { XSTRO } from '#utils';
 
@@ -26,7 +27,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxmajor');
+    const res = (await fetch(`${LANG.API}/api/fxmajor`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -54,7 +56,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxminor');
+    const res = (await fetch(`${LANG.API}/api/fxminor`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -82,7 +85,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxexotic');
+    const res = (await fetch(`${LANG.API}/api/fxexotic`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -110,7 +114,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxamericas');
+    const res = (await fetch(`${LANG.API}/api/fxamericas`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -138,7 +143,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxeurope');
+    const res = (await fetch(`${LANG.API}/api/fxeurope`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -166,7 +172,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxmajor');
+    const res = (await fetch(`${LANG.API}/api/fxasia`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -194,7 +201,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxmajor');
+    const res = (await fetch(`${LANG.API}/api/fxpacific`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -222,7 +230,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxmiddle-east');
+    const res = (await fetch(`${LANG.API}/api/fxmiddle-east`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
@@ -250,7 +259,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = await XSTRO.forex('fxafrica');
+    const res = (await fetch(`${LANG.API}/api/fxafrica`)).json();
+    if (!res) return message.send('No data from market avaliable');
     const data = res
       .map((item) => {
         return `
