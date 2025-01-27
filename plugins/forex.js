@@ -57,8 +57,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxminor`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxminor`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -86,8 +86,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxexotic`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxexotic`)).json();
+    if (!res) return message.send('No data from market available');
     await message.send(
       res
         .map((item) => {
@@ -112,12 +112,12 @@ bot(
   {
     pattern: 'fxamericas',
     public: true,
-    desc: 'Get Current Market Details for Forex Americans',
+    desc: 'Get Current Market Details for Forex Americas',
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxamericas`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxamericas`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -145,8 +145,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxeurope`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxeurope`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -174,8 +174,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxasia`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxasia`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -203,8 +203,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxpacific`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxpacific`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -232,8 +232,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxmiddle-east`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxmiddle-east`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
@@ -261,8 +261,8 @@ bot(
     type: 'forex',
   },
   async (message) => {
-    const res = (await fetch(`${LANG.API}/api/fxafrica`)).json();
-    if (!res) return message.send('No data from market avaliable');
+    const res = await (await fetch(`${LANG.API}/api/fxafrica`)).json();
+    if (!res) return message.send('No data from market available');
     const data = res
       .map((item) => {
         return `
