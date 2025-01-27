@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks';
-import { promises as fs, writeFileSync } from 'fs';
+import { promises as fs, readdirSync, statSync } from 'fs';
 import { join } from 'path';
 import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
 import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
@@ -327,3 +327,33 @@ END:VCARD
 
   return Buffer.from(vCardContent, 'utf-8');
 };
+
+export function getDirectoryStructure(dir, prefix = '', isLast = true) {
+  const files = readdirSync(dir);
+  let structure = '';
+
+  files.forEach((file, index) => {
+    const isLastItem = index === files.length - 1;
+    const filePath = join(dir, file);
+    const stats = statSync(filePath);
+    const isDirectory = stats.isDirectory();
+
+    if (
+      file === 'node_modules' ||
+      file.startsWith('.git') ||
+      file === '.env' ||
+      file === '.npm' ||
+      file === 'session'
+    )
+      return;
+
+    structure += `${prefix}${isLast ? '└── ' : '├── '}${file}${isDirectory ? '/' : ''}\n`;
+
+    if (isDirectory) {
+      const newPrefix = prefix + (isLast ? '    ' : '│   ');
+      structure += getDirectoryStructure(filePath, newPrefix, isLastItem);
+    }
+  });
+
+  return structure;
+}

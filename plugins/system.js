@@ -1,6 +1,6 @@
 import { performance } from 'perf_hooks';
 import { bot } from '#lib';
-import { manageProcess, runtime } from '#utils';
+import { getDirectoryStructure, manageProcess, runtime } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';
 import fs from 'fs';
@@ -155,5 +155,21 @@ bot(
       const errorMessage = error.stack || error.message || String(error);
       await message.send(`*Error:*\n\n${errorMessage}`);
     }
+  }
+);
+
+bot(
+  {
+    pattern: 'structure',
+    public: true,
+    desc: 'Get the directory structure of the bot',
+    type: 'system',
+  },
+  async (message) => {
+    const projectRoot = process.cwd();
+    const structureText = `
+AstroX11/Xstro:
+${getDirectoryStructure(projectRoot)}`.trim();
+    return await message.send(`${structureText}`);
   }
 );
