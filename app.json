@@ -5,11 +5,6 @@
   "repository": "https://github.com/ASTRO-X10/xstro-md",
   "stack": "container",
   "success_url": "/",
-  "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    }
-  ],
   "env": {
     "SESSION_ID": {
       "description": "Session ID to Run Bot",
