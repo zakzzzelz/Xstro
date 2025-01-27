@@ -273,42 +273,46 @@ bot(
   }
 );
 
-
 //=========================== < BK9 > ===========================
-
 
 const BK9 = `https://bk9.fun/download/`;
 
-bot({
-  pattern: 'likee',
-  public: true,
-  desc: 'Downloads Likee videos',
-  type: 'download'
- }, async (message, match) => {
-  let url = match || message.reply_message.text;
-  if (!url) return message.send('_No Likee link found!_');
-  url = extractUrl(url);
-  if (!isLikee(url)) return message.send('_Provide valid Likee link!_');
- 
-  const data = await getJson(`${BK9}likee?url=${url}`);
-  if (!data.status || !data.BK9) return message.send('_Failed to fetch content_');
- 
-  await message.sendFromUrl(data.BK9.withoutwatermark);
- });
- 
- bot({
-  pattern: 'capcut',
-  public: true,
-  desc: 'Downloads CapCut videos',
-  type: 'download'
- }, async (message, match) => {
-  let url = match || message.reply_message.text;
-  if (!url) return message.send('_No CapCut link found!_');
-  url = extractUrl(url);
-  if (!isCapcut(url)) return message.send('_Provide valid CapCut link!_');
- 
-  const data = await getJson(`${BK9}capcut?url=${url}`);
-  if (!data.status || !data.BK9) return message.send('_Failed to fetch content_');
- 
-  await message.sendFromUrl(data.BK9.video);
- });
+bot(
+  {
+    pattern: 'likee',
+    public: true,
+    desc: 'Downloads Likee videos',
+    type: 'download',
+  },
+  async (message, match) => {
+    let url = match || message.reply_message.text;
+    if (!url) return message.send('_No Likee link found!_');
+    url = extractUrl(url);
+    if (!isLikee(url)) return message.send('_Provide valid Likee link!_');
+
+    const data = await getJson(`${BK9}likee?url=${url}`);
+    if (!data.status || !data.BK9) return message.send('_Failed to fetch content_');
+
+    await message.sendFromUrl(data.BK9.withoutwatermark);
+  }
+);
+
+bot(
+  {
+    pattern: 'capcut',
+    public: true,
+    desc: 'Downloads CapCut videos',
+    type: 'download',
+  },
+  async (message, match) => {
+    let url = match || message.reply_message.text;
+    if (!url) return message.send('_No CapCut link found!_');
+    url = extractUrl(url);
+    if (!isCapcut(url)) return message.send('_Provide valid CapCut link!_');
+
+    const data = await getJson(`${BK9}capcut?url=${url}`);
+    if (!data.status || !data.BK9) return message.send('_Failed to fetch content_');
+
+    await message.sendFromUrl(data.BK9.video);
+  }
+);

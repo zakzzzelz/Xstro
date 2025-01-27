@@ -189,7 +189,8 @@ export const extractUrl = (str) => {
 
 export const isfacebook = (url) =>
   /^(https?:\/\/)?(www\.)?facebook\.com\/[A-Za-z0-9._-]+/.test(url);
-export const isYoutube = (url) => /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/.test(url);
+export const isYoutube = (url) =>
+  /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/[^\s]+/.test(url);
 export const isCapcut = (url) => /^https?:\/\/(www\.)?capcut\.com\/[^\s]*$/.test(url);
 export const isLikee = (url) => /^https?:\/\/(l\.)?likee\.video\/[^\s]*$/.test(url);
 export const isPinterest = (url) => /^https?:\/\/(www\.)?pin\.it\/[^\s]*$/.test(url);
