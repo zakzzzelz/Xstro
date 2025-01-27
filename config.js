@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-dotenv.config();
+dotenv.config({ path: 'config.env' });
 
 const config = {
   SESSION_ID: process.env.SESSION_ID || '',
