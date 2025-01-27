@@ -52,7 +52,7 @@ bot(
       const sortedCommands = commandsByType[type].sort();
       menuInfo += font.tiny(`╭──── *${type}* ────\n`);
       sortedCommands.forEach((cmd) => {
-        menuInfo += font.tiny(`│${totalCommands}· _${cmd}_\n`);
+        menuInfo += font.tiny(`│${totalCommands}· ${cmd}\n`);
         totalCommands++;
       });
       menuInfo += font.tiny(`╰────────────\n`);

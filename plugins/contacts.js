@@ -25,8 +25,8 @@ bot(
     type: 'contacts',
   },
   async (message, match, { jid, prefix, onWhatsApp, sendMessage }) => {
-    match = match.split('|');
     if (!match) return message.send(prefix + 'savecontact Astro|12345678901 To Save a contact');
+    match = match.split('|');
     if (!(await onWhatsApp(toJid(match[1]))))
       return message.send('That Number does npt exist on WhatsApp');
     const contact = createVCard(match[0], [match[1]]);
