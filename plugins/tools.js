@@ -198,7 +198,7 @@ bot(
 
       try {
         const buffer = await getBuffer(zipUrl);
-        await message.sendMessage(buffer, {
+        await message.send(buffer, {
           type: 'document',
           mimetype: 'application/zip',
           fileName: `${repoName.split('/')[1]}-${branch}.zip`,

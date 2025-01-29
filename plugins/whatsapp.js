@@ -87,6 +87,23 @@ bot(
 
 bot(
   {
+    pattern: 'save',
+    public: false,
+    type: 'whatsapp',
+    desc: 'Saves Status',
+  },
+  async (message) => {
+    if (!message.reply_message.isStatus) return message.send('_Reply A Status_');
+    return await message.forward(message.user, message.data.quoted, {
+      isForwarded: false,
+      forwardingscore: 0,
+      quoted: message.data.quoted,
+    });
+  }
+);
+
+bot(
+  {
     pattern: 'dlt',
     public: false,
     type: 'whatsapp',
@@ -261,19 +278,6 @@ bot(
   async (message, _, { jid, chatModify }) => {
     await chatModify({ pin: false }, jid);
     return message.send('Unpined');
-  }
-);
-
-bot(
-  {
-    pattern: 'save',
-    public: false,
-    type: 'whatsapp',
-    desc: 'Saves Status',
-  },
-  async (message) => {
-    if (!message.isStatus) return message.send('_Reply A Status_');
-    await message.forward(message.data.quoted.message, { jid: message.user });
   }
 );
 

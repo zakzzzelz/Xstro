@@ -39,6 +39,12 @@ export const getBanned = async () => {
   return readDB();
 };
 
+/**
+ * Checks if a given JID (Jabber ID) is banned
+ * @async
+ * @param {string} jid - The Jabber ID to check. If not provided, defaults to empty string
+ * @returns {Promise<boolean>} - Returns true if the JID is banned, false otherwise
+ */
 export const isBanned = async (jid) => {
   if (!jid) jid = '';
   const bannedUsers = await getBanned();
