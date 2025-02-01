@@ -1,3 +1,4 @@
+import { LANG } from '#lang';
 import { bot } from '#lib';
 import {
   audioToBlackVideo,
@@ -21,11 +22,11 @@ bot(
     desc: 'Converts Images and Videos to Sticker',
     type: 'converter',
   },
-  async (message, match) => {
+  async (message, match, { reply_message }) => {
     match = match.split(',');
     let media;
-    if (!message.reply_message.image && !message.reply_message.video) {
-      return message.send('_Reply with an Image or Video_');
+    if (!reply_message || (!reply_message.image && !reply_message.video)) {
+      return message.reply('Reply Image or Video');
     }
     media = await message.download();
     media = await createSticker(media, match[0], match[1]);
@@ -43,7 +44,7 @@ bot(
   async (message, match) => {
     match = match.split(',');
     let media;
-    if (!message.reply_message.sticker) return message.send('_Reply a sticker only!_');
+    if (!message.reply_message.sticker) return message.reply(LANG.STICKER);
     media = await message.download();
     if (await isAnimatedWebp(media)) {
       media = await convertWebPFile(media);
@@ -63,10 +64,10 @@ bot(
     desc: 'Flip media left/right/vertical/horizontal',
     type: 'converter',
   },
-  async (message, match, { prefix }) => {
+  async (message, match, { prefix, reply_message }) => {
     let media;
-    if (!message.reply_message?.image && !message.reply_message?.video)
-      return message.send('_Reply to an Image or Video_');
+    if (!reply_message || (!reply_message?.image && !reply_message?.video))
+      return message.reply('Reply Image or Video');
     if (!['left', 'right', 'vertical', 'horizontal'].includes(match)) {
       return message.send(`_Usage: ${prefix}flip <${validDirections.join('/')}>`);
     }
@@ -83,9 +84,9 @@ bot(
     desc: 'Converts Audio to Black Video',
     type: 'converter',
   },
-  async (message) => {
+  async (message, _, { reply_message }) => {
     let media;
-    if (!message.reply_message.audio) return message.send('_Reply Audio_');
+    if (!reply_message || !reply_message.audio) return message.send(LANG.AUDIO);
     media = await message.download();
     media = await audioToBlackVideo(media);
     return await message.send(media);
@@ -114,9 +115,9 @@ bot(
     desc: 'Convert Sticker to Photo',
     type: 'converter',
   },
-  async (message) => {
+  async (message, _, { reply_message }) => {
     let media;
-    if (!message.reply_message.sticker) return message.send('_Reply Sticker_');
+    if (!reply_message || !reply_message.sticker) return message.send(LANG.STICKER);
     media = await message.download();
     media = await webpToImage(media);
     return message.send(media);
@@ -130,10 +131,10 @@ bot(
     desc: 'Convert Video to Audio',
     type: 'converter',
   },
-  async (message) => {
+  async (message, _, { reply_message }) => {
     let media;
-    if (!message.reply_message?.video && !message.reply_message?.audio)
-      return message.send('_Reply Video or Audio_');
+    if (!reply_message || (!reply_message?.video && !reply_message?.audio))
+      return message.reply('Reply Video or Audio');
     media = await message.download();
     media = await convertToMp3(media);
     return await message.send(media, {
@@ -150,13 +151,13 @@ bot(
     desc: 'Convert Video to WhatsApp Opus',
     type: 'converter',
   },
-  async (message) => {
+  async (message, { jid, reply_message, sendMessage }) => {
     let media;
-    if (!message.reply_message.video && !message.reply_message.audio)
+    if (!reply_message || (!reply_message.video && !reply_message.audio))
       return message.send('_Reply Video or Audio_');
     media = await message.download();
     media = await toPTT(media);
-    return await message.client.sendMessage(message.jid, {
+    return await sendMessage(jid, {
       audio: media,
       mimetype: 'audio/ogg; codecs=opus',
       ptt: true,
@@ -191,10 +192,10 @@ bot(
     desc: 'Converts Image or Sticker to Cropped Sticker',
     type: 'converter',
   },
-  async (message) => {
+  async (message, _, { reply_message }) => {
     let media;
-    if (!message.reply_message.image && !message.reply_message.sticker)
-      return message.send('_Reply Sticker/Image_');
+    if (!reply_message || (!reply_message.image && !reply_message.sticker))
+      return message.reply('Reply Image or Sticker');
     media = await message.download();
     media = await cropToCircle(media);
     return await message.send(media, { type: 'sticker' });
@@ -208,11 +209,11 @@ bot(
     desc: 'Resizes an Image',
     type: 'converter',
   },
-  async (message, match, { prefix }) => {
+  async (message, match, { prefix, reply_message }) => {
     let media;
-    if (!message.reply_message.image) return message.send('_Reply An Image to Resize_');
+    if (!reply_message || !reply_message.image) return message.reply(LANG.IMAGE);
     if (!match)
-      return message.send(
+      return message.reply(
         '_Give me dimensions to resize the Image to, ' + prefix + 'resize 800x600_'
       );
     match = match.split('x');
