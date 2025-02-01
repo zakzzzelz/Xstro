@@ -1,21 +1,21 @@
 import { config } from '#config';
 import { LANG } from '#lang';
 import { bot, serialize } from '#lib';
-import { convertNormalMessageToViewOnce, ModifyViewOnceMessage, toJid } from '#utils';
+import { editMessageProptery, toJid } from '#utils';
 import { isJidGroup } from 'baileys';
 
 bot(
   {
     pattern: 'vv',
     public: false,
-    desc: 'Downloads A Viewonce Message',
+    desc: 'Forwards A Viewonce Message',
     type: 'whatsapp',
   },
-  async (message, _, { sendMessage }) => {
-    if (!message.reply_message.viewonce) return message.send(LANG.VIEWONCE);
-    const msg = await ModifyViewOnceMessage(message.id, message.client);
-    message.send('done');
-    return await sendMessage(message.user, { forward: msg.message }, { quoted: message });
+  async (message, _, { user, quoted, reply_message }) => {
+    if (!reply_message || !reply_message.viewonce) return message.send(LANG.VIEWONCE);
+    const value = `message.${quoted.type}.viewOnce`;
+    const media = editMessageProptery(quoted, value, false);
+    return await message.forward(user.id, media);
   }
 );
 
@@ -23,18 +23,15 @@ bot(
   {
     pattern: 'tovv',
     public: true,
-    desc: 'Converts A Normal Media Message to ViewOnce',
+    desc: 'Make A Message To Viewonce',
     type: 'whatsapp',
   },
-  async (message, _, { jid, relayMessage }) => {
-    if (
-      !message.reply_message.video &&
-      !message.reply_message.audio &&
-      !message.reply_message.image
-    )
+  async (message, _, { jid, quoted, reply_message }) => {
+    if (!reply_message || (!reply_message.video && !reply_message.audio && !reply_message.image))
       return message.send(LANG.MEDIA);
-    const viewonceMessage = await convertNormalMessageToViewOnce(message.data.quoted.message);
-    return await relayMessage(jid, viewonceMessage, {});
+    const value = `message.${quoted.type}.viewOnce`;
+    const viewonce = editMessageProptery(quoted, value, true);
+    return await message.forward(jid, viewonce);
   }
 );
 
@@ -74,11 +71,10 @@ bot(
     type: 'whatsapp',
     desc: 'quoted message',
   },
-  async (message, _, { jid, loadMessage }) => {
+  async (message, _, { jid, loadMessage, reply_message }) => {
     if (!message.reply_message) return await message.send(LANG.MESSAGE);
-    let key = message.reply_message.key.id;
-    let msg = await loadMessage(key);
-    if (!msg) return await message.send('Xstro will not quoted Bot Message');
+    let msg = await loadMessage(reply_message.key.id);
+    if (!msg) return await message.send('No message found');
     msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
     if (!msg.quoted) return await message.send('_No quoted message found_');
     await message.forward(jid, msg.quoted, { quoted: msg.quoted });
@@ -92,13 +88,9 @@ bot(
     type: 'whatsapp',
     desc: 'Saves Status',
   },
-  async (message) => {
-    if (!message.reply_message.isStatus) return message.send('_Reply A Status_');
-    return await message.forward(message.user, message.data.quoted, {
-      isForwarded: false,
-      forwardingscore: 0,
-      quoted: message.data.quoted,
-    });
+  async (message, _, { user, reply_message, quoted }) => {
+    if (!reply_message || !reply_message.status) return message.send(LANG.STATUS);
+    return await message.forward(user.id, quoted, { quoted: quoted });
   }
 );
 
@@ -109,8 +101,8 @@ bot(
     type: 'whatsapp',
     desc: 'Deletes Message',
   },
-  async (message) => {
-    if (!message.reply_message) return message.send(LANG.MESSAGE);
+  async (message, _, { reply_message }) => {
+    if (!reply_message) return message.send(LANG.MESSAGE);
     return await message.delete();
   }
 );
@@ -288,22 +280,12 @@ bot(
     type: 'whatsapp',
     desc: 'Forwards A Replied Message',
   },
-  async (message, match) => {
-    if (!message.reply_message) return message.send('_Reply A Message!_');
-    let jid;
-    if (message.mention && message.mention[0]) {
-      jid = message.mention[0];
-    } else if (isJidGroup(match)) {
-      return message.send('_Use Gforward command to forward to groups_');
-    } else if (!isJidGroup(match)) {
-      jid = toJid(match);
-    }
-    if (!jid) return message.send('_You have to provide a number/tag someone_');
-    const msg = message.data?.quoted;
-    await message.forward(jid, msg, { quoted: msg });
-    return await message.send(`_Message forward to @${jid.split('@')[0]}_`, {
-      mentions: [jid],
-    });
+  async (message, match, { reply_message, quoted }) => {
+    if (!reply_message) return message.send('_Reply A Message!_');
+    const jid = await message.getJid(match);
+    if (!jid) return message.send('Reply someone or mention or provide a number');
+    await message.forward(jid, quoted, { quoted: quoted });
+    return await message.send(`Forwarded to @${jid.split('@')[0]}`, { mentions: [jid] });
   }
 );
 
@@ -342,9 +324,10 @@ bot(
     type: 'whatsapp',
     desc: 'Edits A Sent Message',
   },
-  async (message, match, { prefix }) => {
-    if (!message.reply_message) return message.send('_Reply Your Own Message_');
-    if (!match) return await message.send('' + prefix + 'edit hello');
+  async (message, match, { prefix, reply_message, quoted }) => {
+    if (!reply_message) return message.send('Reply your message to edit');
+    if (!match) return await message.send(`Usage: ${prefix}edit <new message>`);
+    if (!quoted.key.fromMe) return message.send('Cannot edit messages sent by others');
     await message.edit(match);
   }
 );
@@ -356,10 +339,18 @@ bot(
     type: 'whatsapp',
     desc: 'Get Jid of Current Chat',
   },
-  async (message, match) => {
-    const jid = await message.getJid(match);
-    if (!jid) return;
-    message.send(jid);
+  async (message, match, { jid, reply_message }) => {
+    let id;
+    if (reply_message) {
+      id = reply_message.sender;
+    } else if (message.mention && message.mention.length > 0) {
+      id = message.mention[0];
+    } else if (match) {
+      id = toJid(match);
+    } else {
+      id = jid;
+    }
+    return await message.send(id);
   }
 );
 
@@ -384,11 +375,11 @@ bot(
     type: 'whatsapp',
     desc: 'React to A Message',
   },
-  async (message, match, { jid, sendMessage }) => {
-    if (!message.reply_message) return message.send('_Reply Message_');
+  async (message, match, { jid, sendMessage, reply_message }) => {
+    if (!reply_message) return message.send('_Reply Message_');
     if (!match) return message.send('react 😊');
     return await sendMessage(jid, {
-      react: { text: match, key: message.reply_message.key },
+      react: { text: match, key: reply_message.key },
     });
   }
 );
@@ -401,7 +392,7 @@ bot(
     desc: 'Stars or Unstars a Message',
   },
   async (message, _, { star }) => {
-    if (!message.reply_message) return message.send('_Reply to a message to star it_');
+    if (!message.reply_message) return message.send(LANG.MESSAGE);
     const messages = [{ id: message.reply_message.id, fromMe: message.reply_message.fromMe }];
     return await star(message.jid, messages, true);
   }
@@ -415,7 +406,7 @@ bot(
     desc: 'Stars or Unstars a Message',
   },
   async (message, _, { star, jid, reply_message }) => {
-    if (!reply_message) return message.send('_Reply to a message to star it_');
+    if (!reply_message) return message.send(LANG.MESSAGE);
     const messages = [{ id: reply_message.id, fromMe: reply_message.fromMe }];
     await star(jid, messages, false);
   }
@@ -451,35 +442,21 @@ END:VCARD
 
 bot(
   {
-    pattern: 'gjid',
-    public: true,
-    type: 'whatsapp',
-    isGroup: true,
-    desc: 'Get JID of the Current Group',
-  },
-  async (message) => {
-    message.send(`Group JID: ${message.jid}`);
-  }
-);
-
-bot(
-  {
     pattern: 'gforward',
     public: false,
     type: 'whatsapp',
     desc: 'Forwards a replied message to multiple groups',
   },
-  async (message, match) => {
-    if (!message.reply_message) return message.send('_Reply to a message to forward it!_');
-    if (!match) return message.send('_Provide a comma-separated list of group JIDs._');
+  async (message, match, { quoted }) => {
+    if (!message.reply_message) return message.send('Reply A Message to forward to Groups');
+    if (!match) return message.send('Provide a comma-separated list of group JIDs');
     const groupJids = match
       .split(',')
       .map((jid) => jid.trim())
       .filter(isJidGroup);
 
-    const msg = message.data?.quoted;
-    await Promise.all(groupJids.map((jid) => message.forward(jid, msg, { quoted: msg })));
-    return message.send(`_Message forwarded to ${groupJids.length} group(s)._`);
+    await Promise.all(groupJids.map((jid) => message.forward(jid, quoted, { quoted: quoted })));
+    return message.send(`Forwarded to ${groupJids.length} group(s).`);
   }
 );
 
@@ -490,9 +467,9 @@ bot(
     desc: 'Convert video to pvt video note',
     type: 'whatsapp',
   },
-  async (message) => {
+  async (message, _, { reply_message }) => {
     let media;
-    if (!message.reply_message.video) return message.send('_Reply A Video_');
+    if (!reply_message || !reply_message.video) return message.send(LANG.VIDEO);
     media = await message.download();
     return await message.send(media, { ptv: true });
   }
