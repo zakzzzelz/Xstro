@@ -1,13 +1,5 @@
 import { bot } from '#lib';
-import {
-  remini,
-  uploadFile,
-  XSTRO,
-  removeBg,
-  UploadFileUgu,
-  createSticker,
-  extractUrl,
-} from '#utils';
+import { remini, XSTRO, removeBg, UploadFileUgu, createSticker, extractUrl } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 
 bot(
@@ -17,12 +9,14 @@ bot(
     type: 'tools',
     desc: 'Get Another Person Profile Image',
   },
-  async (message, match, { profilePictureUrl }) => {
+  async (message, match, { profilePictureUrl, getName }) => {
     const jid = await message.getJid(match);
-    if (!jid) return;
-    const pp = await profilePictureUrl(jid).catch(() => null);
+    if (!jid) return message.send('Reply to a someone, or mention or provide a number');
+    const pp = await profilePictureUrl(jid, 'image').catch(() => null);
     const jpegThumbnail = pp ? Buffer.from(await (await fetch(pp)).arrayBuffer()) : Buffer.alloc(0);
-    await message.send(jpegThumbnail, { caption: '_Profile Picture_' });
+    await message.send(jpegThumbnail, {
+      caption: `_${(await getName(jid)) || ''} Profile Picture_`,
+    });
   }
 );
 
@@ -68,29 +62,6 @@ bot(
     const img = await message.download();
     const dehazedImg = await remini(img, 'dehaze');
     await message.send(dehazedImg);
-  }
-);
-
-bot(
-  {
-    pattern: 'upload',
-    public: true,
-    type: 'tools',
-    desc: 'Uploads A File',
-  },
-  async (message) => {
-    if (
-      !message.reply_message.image &&
-      !message.reply_message.video &&
-      !message.reply_message.audio &&
-      !message.reply_message.sticker &&
-      !message.reply_message.document
-    ) {
-      return message.send('_Reply A File_');
-    }
-    const data = await message.download();
-    const url = await uploadFile(data);
-    await message.send(`*${url}*`);
   }
 );
 
@@ -212,7 +183,7 @@ bot(
 
 bot(
   {
-    pattern: 'upload2',
+    pattern: 'upload',
     public: true,
     desc: 'Uploads Any File to Ugg',
     type: 'tools',
@@ -223,7 +194,7 @@ bot(
       !message.reply_message.video &&
       !message.reply_message.document
     )
-      return message.send('_Reply Image/Video/Document_');
+      return message.send('Reply to an Image or Video or Document');
     const media = await message.download(true);
     const res = await UploadFileUgu(media);
     return message.send(`*${res.url}*`);

@@ -1,5 +1,5 @@
 import { bot } from '#lib';
-import { extractUrl, readmore } from '#utils';
+import { extractUrl } from '#utils';
 import { delay } from 'baileys';
 
 bot(
@@ -12,6 +12,11 @@ bot(
   async (message, match) => {
     if (!match) return await message.send('*Give me text!*');
     const result = readmore(match);
+    const readmore = (text) => {
+      const [text1, text2] = text.split('|');
+      if (!text2) return null;
+      return text1 + String.fromCharCode(8206).repeat(4001) + `\n${text2}`;
+    };
     if (!result) return await message.send('*Format: text1|text2*');
     return await message.send(result);
   }

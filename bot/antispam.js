@@ -1,10 +1,10 @@
-import { getAntiSpamMode, isSudo } from '#sql';
+import { getAntiSpamMode } from '#sql';
 import { isJidGroup } from 'baileys';
 const messageStore = new Map();
 const deleteCount = new Map();
 
 export async function AntiSpammer(msg) {
-  if (!msg.from || msg.isStatus || (await isSudo(msg.sender, msg.user))) return;
+  if (!msg.from || msg.status || msg.sudo) return;
   const isGroup = isJidGroup(msg.from);
   const sender = msg.sender;
   const mode = await getAntiSpamMode(isGroup ? msg.from : 'global');

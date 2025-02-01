@@ -159,5 +159,5 @@ export {
   saveMessageCount,
   getInactiveGroupMembers,
   getGroupMembersMessageCount,
-  saveMessageV2 as saveMessage,
+  saveMessageV2 as saveMessages,
 };

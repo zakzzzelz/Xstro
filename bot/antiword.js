@@ -1,10 +1,10 @@
 import { isJidGroup } from 'baileys';
-import { isSudo, getAntiWords, isAntiWordEnabled } from '#sql';
+import { getAntiWords, isAntiWordEnabled } from '#sql';
 
 export async function AntiWord(msg) {
   if (!isJidGroup(msg.from)) return;
   if (!msg.body || !msg.sender) return;
-  if (msg.sender === msg.user || (await isSudo(msg.sender)) || msg.isAdmin) return;
+  if (msg.sender === msg.user || msg.sudo || msg.isAdmin) return;
   if (await isAntiWordEnabled(msg.from)) {
     const badwords = await getAntiWords(msg.from);
     if (!badwords) return;

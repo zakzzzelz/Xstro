@@ -3,6 +3,7 @@ import { XSTRO, createSticker, randomizeArray } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import { delay } from 'baileys';
 import { font } from '#bot';
+import { LANG } from '#lang';
 
 bot(
   {
@@ -79,7 +80,7 @@ bot(
   },
   async (message, match) => {
     if (!match) return await message.send('Please provide a verse:\n.john3:16');
-    return await message.send(`${await XSTRO.bible(match.trim())}`);
+    return await message.send(await getJson(`${LANG.API}/api/bible?verse=${match}`));
   }
 );
 
@@ -126,6 +127,19 @@ bot(
     return await message.send(
       (await getJson('https://evilinsult.com/generate_insult.php?lang=en&type=json')).insult
     );
+  }
+);
+
+bot(
+  {
+    pattern: 'math',
+    public: true,
+    desc: 'Solve math',
+    type: 'tools',
+  },
+  async (message, match) => {
+    if (!match) return await message.send('Please provide a math equation');
+    return await message.send(await getJson(`${LANG.API}/api/solveMath?expression=${match}`));
   }
 );
 

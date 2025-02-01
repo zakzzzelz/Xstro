@@ -1,8 +1,7 @@
-import { performance } from 'perf_hooks';
 import { promises as fs, readdirSync, statSync } from 'fs';
 import { join } from 'path';
-import { getContentType, jidNormalizedUser, normalizeMessageContent } from 'baileys';
-import { FileTypeFromBuffer, getBuffer } from 'xstro-utils';
+import { jidNormalizedUser } from 'baileys';
+import { getBuffer } from 'xstro-utils';
 
 export function manageProcess(type) {
   if (type === 'restart') {
@@ -50,122 +49,6 @@ export const toJid = (num) => {
   num = num.replace(/\D/g, '');
   return jidNormalizedUser(`${num}@s.whatsapp.net`);
 };
-
-export const bufferToJSON = (obj) => {
-  if (Buffer.isBuffer(obj)) return { type: 'Buffer', data: Array.from(obj) };
-  if (Array.isArray(obj)) return obj.map(bufferToJSON);
-  if (obj && typeof obj === 'object') {
-    return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [key, bufferToJSON(value)])
-    );
-  }
-  return obj;
-};
-
-export const jsonToBuffer = (obj) => {
-  if (obj?.type === 'Buffer' && Array.isArray(obj.data)) return Buffer.from(obj.data);
-  if (Array.isArray(obj)) return obj.map(jsonToBuffer);
-  if (obj && typeof obj === 'object') {
-    return Object.fromEntries(
-      Object.entries(obj).map(([key, value]) => [key, jsonToBuffer(value)])
-    );
-  }
-  return obj;
-};
-
-export const profile = async (name, fn, logger) => {
-  const start = performance.now();
-  const result = await fn();
-  const end = performance.now();
-  logger.debug(`${name} took ${(end - start).toFixed(2)} ms`);
-  return result;
-};
-
-export function isJSON(input) {
-  if (typeof input !== 'string') return false;
-
-  try {
-    const parsed = JSON.parse(input);
-    return parsed !== null && typeof parsed === 'object' && !Array.isArray(parsed);
-  } catch (error) {
-    return false;
-  }
-}
-
-export function isObject(value) {
-  return value !== null && typeof value === 'object';
-}
-
-export function isArray(value) {
-  return Array.isArray(value);
-}
-
-export function cleanString(inputText) {
-  const ambiguousCharacters = /[^\w\s.,!?'"()\-]/g;
-  const cleanedText = inputText.replace(ambiguousCharacters, '').replace(/\s+/g, ' ').trim();
-  return cleanedText;
-}
-
-export async function ModifyViewOnceMessage(messageId, conn) {
-  try {
-    const msg = await conn.loadMessage(messageId);
-    const type = getContentType(msg.message.message);
-    const content = normalizeMessageContent(
-      msg.message.message?.[type]?.contextInfo?.quotedMessage
-    );
-
-    function modifyViewOnceProperty(obj) {
-      if (typeof obj !== 'object' || obj === null) return;
-
-      for (const key in obj) {
-        if (key === 'viewOnce' && typeof obj[key] === 'boolean') {
-          obj[key] = false;
-        } else if (typeof obj[key] === 'object') {
-          modifyViewOnceProperty(obj[key]);
-        }
-      }
-    }
-
-    modifyViewOnceProperty(content);
-
-    // Return the full message, but only modify the necessary parts to avoid duplicates
-    return { message: { ...msg.message, message: content } };
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Saves a buffer to a file in the current working directory and returns the file path.
- *
- * @param {Buffer} buffer - The buffer to save.
- * @returns {Promise<string>} - The full path of the saved file.
- */
-export const bufferFile = async (buffer) => {
-  const ext = await FileTypeFromBuffer(buffer);
-  const fileName = `${Date.now()}.${ext}`;
-  const filePath = join(process.cwd(), fileName);
-  await fs.writeFile(filePath, buffer);
-  return filePath;
-};
-
-export async function convertNormalMessageToViewOnce(message = {}) {
-  const typeOfMessage = getContentType(message);
-  const objectAction = message?.[typeOfMessage];
-
-  if (objectAction) {
-    const newMessage = {
-      [typeOfMessage]: {
-        ...objectAction,
-        viewOnce: true,
-      },
-    };
-    if (message.messageContextInfo) newMessage.messageContextInfo = message.messageContextInfo;
-    return newMessage;
-  }
-
-  return message;
-}
 
 export async function getFileAndSave(url) {
   let attempts = 0;
@@ -238,18 +121,6 @@ export const convertTo12Hour = (timeStr) => {
   }
   if (hour === 0) hour = 12;
   return `${hour}:${minutes}${period}`;
-};
-
-export const isMediaMessage = (message) => {
-  const typeOfMessage = getContentType(message);
-  const mediaTypes = [
-    'imageMessage',
-    'videoMessage',
-    'audioMessage',
-    'documentMessage',
-    'stickerMessage',
-  ];
-  return mediaTypes.includes(typeOfMessage);
 };
 
 export const formatTime = (timestamp) => {

@@ -40,35 +40,6 @@ export const remini = async (image, filterType) => {
 };
 
 /**
- * Uploads a file to Catbox hosting service.
- * @async
- * @param {Buffer} mediaBuffer - The buffer containing the file data to upload
- * @returns {Promise<string>} The URL of the uploaded file
- * @throws {Error} If the file type cannot be determined or if the upload fails
- */
-export const uploadFile = async (mediaBuffer) => {
-  const fileType = await FileTypeFromBuffer(mediaBuffer);
-  if (!fileType) throw new Error('Unable to determine the file type of the media.');
-  const filename = `file.${fileType}`;
-  const tempPath = path.join(process.cwd(), filename);
-  writeFileSync(tempPath, mediaBuffer);
-
-  const form = new FormData();
-  form.append('fileToUpload', createReadStream(tempPath), {
-    filename,
-    contentType: fileType,
-  });
-  form.append('reqtype', 'fileupload');
-
-  const response = await axios.post('https://catbox.moe/user/api.php', form, {
-    headers: form.getHeaders(),
-  });
-  const url = response.data.trim();
-  unlinkSync(tempPath);
-  return url;
-};
-
-/**
  * Removes the background from an image using the remove.bg API
  * @param {Buffer} buffer - The input image buffer
  * @returns {Promise<Buffer>} A buffer containing the image with removed background
