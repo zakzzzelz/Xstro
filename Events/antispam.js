@@ -1,4 +1,4 @@
-import { getAntiSpamMode } from '../Sqll';
+import { getAntiSpamMode } from '../Sql';
 import { isJidGroup } from 'baileys';
 const messageStore = new Map();
 const deleteCount = new Map();

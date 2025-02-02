@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from '#config';
-import { runtime, XSTRO } from '../Utilss';
+import { runtime, XSTRO } from '../Utils';
 
 const store = path.join('store', 'alive.json');
 

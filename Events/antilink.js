@@ -1,6 +1,6 @@
 import { config } from '#config';
 import { isJidGroup } from 'baileys';
-import { getAntilink, incrementWarningCount, resetWarningCount, isSudo } from '../Sqll';
+import { getAntilink, incrementWarningCount, resetWarningCount, isSudo } from '../Sql';
 
 const { WARN_COUNT } = config;
 

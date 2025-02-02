@@ -1,5 +1,5 @@
-import { getAntiDelete } from '../Sqll';
-import { isMediaMessage, formatTime } from '../Utilss';
+import { getAntiDelete } from '../Sql';
+import { isMediaMessage, formatTime } from '../Utils';
 
 export async function AntiDelete(msg) {
   if (

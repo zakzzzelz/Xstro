@@ -1,5 +1,5 @@
 import { config } from '#config';
-import { getAllSchedules, addOrUpdateSchedule } from '../Sqll';
+import { getAllSchedules, addOrUpdateSchedule } from '../Sql';
 
 const getCurrentTime = () => {
   const timezone = config.TIME_ZONE;

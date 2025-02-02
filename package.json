@@ -6,9 +6,8 @@
   "type": "module",
   "imports": {
     "#lib": "./lib/index.js",
-    "#database": "./lib/database.js",
-    "#bot": "./bot/index.js",
-    "#sql": "./sql/index.js",
+    "#bot": "./Events/index.js",
+    "#sql": "./Sql/index.js",
     "#utils": "./Utils/index.js",
     "#config": "./config.js",
     "#lang": "./lang/index.js"
