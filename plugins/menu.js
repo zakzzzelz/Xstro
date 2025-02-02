@@ -79,10 +79,10 @@ bot(
     });
     cmdList.sort((a, b) => a.cmd.localeCompare(b.cmd));
     cmdList.forEach(({ cmd, desc }, num) => {
-      cmdsList += `${(num += 1)} ${cmd.toUpperCase()}\n`;
+      cmdsList += `${(num += 1)} ${cmd}\n`;
       if (desc) cmdsList += `${desc}\n\n`;
     });
 
-    return await message.send(font.tiny(cmdsList));
+    return await message.reply(cmdsList);
   }
 );
