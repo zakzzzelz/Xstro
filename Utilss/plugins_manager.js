@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { join, basename, extname } from 'path';
 import axios from 'axios';
-import { addPlugin, getPlugins, removePlugin } from '#sql';
+import { addPlugin, getPlugins, removePlugin } from '../Sqll';
 
 function convertToRawGitHubUrl(url) {
   const githubRegex = /^https:\/\/github\.com\/(.+)\/(.+)\/blob\/(.+)$/;

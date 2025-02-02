@@ -1,5 +1,5 @@
-import { getGoodbye, getWelcome } from '#sql';
-import { XSTRO } from '#utils';
+import { getGoodbye, getWelcome } from '../Sqll';
+import { XSTRO } from '../Utilss';
 import { getBuffer } from 'xstro-utils';
 
 export async function Greetings(update = {}, client) {

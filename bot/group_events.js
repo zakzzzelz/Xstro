@@ -1,4 +1,4 @@
-import { isGroupEventEnabled } from '#sql';
+import { isGroupEventEnabled } from '../Sqll';
 import { getBuffer } from 'xstro-utils';
 
 export async function GroupEvents(events, client) {

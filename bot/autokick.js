@@ -1,4 +1,4 @@
-import { getKicks } from '#sql';
+import { getKicks } from '../Sqll';
 import { isJidGroup } from 'baileys';
 
 const monitoredGroups = new Set();
