@@ -9,12 +9,12 @@ bot(
     desc: 'Set system var',
   },
   async (message, match) => {
-    if (!match) return message.send('_Use: .setvar KEY:VALUE_');
+    if (!match) return message.send('Use: .setvar KEY:VALUE');
     const input = match.split(':');
-    if (input.length !== 2) return message.send('_Use: .setvar KEY:VALUE_');
+    if (input.length !== 2) return message.send('Use: .setvar KEY:VALUE');
     const [key, value] = input.map((item) => item.trim());
     await manageVar({ command: 'set', key, value });
-    return message.send(`*✓ Variable set: ${key}=${value}*`);
+    return message.reply(`✓ Variable set: ${key}=${value}`);
   }
 );
 
@@ -26,10 +26,10 @@ bot(
     desc: 'Delete system var',
   },
   async (message, match) => {
-    if (!match) return message.send('_Provide variable name to delete_');
+    if (!match) return message.reply('Provide variable name to delete');
     const key = match.trim();
     await manageVar({ command: 'del', key });
-    return message.send(`*✓ Deleted ${key} from env*`);
+    return message.reply(`✓ Deleted ${key} from env`);
   }
 );
 
@@ -42,6 +42,6 @@ bot(
   },
   async (message) => {
     const vars = await manageVar({ command: 'get' });
-    return message.send(vars || '_No Vars Found_');
+    return message.reply(vars || 'No vars found');
   }
 );

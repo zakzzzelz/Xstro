@@ -1,6 +1,6 @@
 {
   "API": "https://xstro-apis-b2352bdac957.herokuapp.com",
-  "SESSSION_URI": "https://xstrosession.koyeb.app/session?session=",
+  "SESSION_URI": "https://xstrosession.koyeb.app/session?session=",
   "IMAGE": "ʀᴇᴘʟʏ ᴀɴ ɪᴍᴀɢᴇ",
   "VIDEO": "ʀᴇᴘʟʏ ᴀ ᴠɪᴅᴇᴏ",
   "AUDIO": "ʀᴇᴘʟʏ ᴀɴ ᴀᴜᴅɪᴏ",

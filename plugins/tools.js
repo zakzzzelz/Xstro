@@ -1,3 +1,4 @@
+import { LANG } from '#lang';
 import { bot } from '#lib';
 import { remini, XSTRO, removeBg, UploadFileUgu, createSticker, extractUrl } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
@@ -11,7 +12,7 @@ bot(
   },
   async (message, match, { profilePictureUrl, getName }) => {
     const jid = await message.getJid(match);
-    if (!jid) return message.send('Reply to a someone, or mention or provide a number');
+    if (!jid) return message.reply('Reply to a someone, or mention or provide a number');
     const pp = await profilePictureUrl(jid, 'image').catch(() => null);
     const jpegThumbnail = pp ? Buffer.from(await (await fetch(pp)).arrayBuffer()) : Buffer.alloc(0);
     await message.send(jpegThumbnail, {
@@ -27,8 +28,8 @@ bot(
     type: 'tools',
     desc: 'Enahnces An Image',
   },
-  async (message) => {
-    if (!message.reply_message?.image) return message.send('_Reply An Image_');
+  async (message, _, { reply_message }) => {
+    if (!reply_message || !reply_message?.image) return message.reply(LANG.IMAGE);
     const img = await message.download();
     const enhancedImg = await remini(img, 'enhance');
     await message.send(enhancedImg);
@@ -42,8 +43,8 @@ bot(
     type: 'tools',
     desc: 'Recolors An Image',
   },
-  async (message) => {
-    if (!message.reply_message?.image) return message.send('_Reply An Image_');
+  async (message, _, { reply_message }) => {
+    if (!reply_message || !reply_message?.image) return message.reply(LANG.IMAGE);
     const img = await message.download();
     const recoloredImg = await remini(img, 'recolor');
     await message.send(recoloredImg);
@@ -57,8 +58,8 @@ bot(
     type: 'tools',
     desc: 'Dehazes An Image',
   },
-  async (message) => {
-    if (!message.reply_message?.image) return message.send('_Reply An Image_');
+  async (message, _, { reply_message }) => {
+    if (!reply_message || !reply_message?.image) return message.send(LANG.IMAGE);
     const img = await message.download();
     const dehazedImg = await remini(img, 'dehaze');
     await message.send(dehazedImg);
@@ -103,7 +104,8 @@ bot(
     type: 'tools',
     desc: 'Generate Pdf Documents From text',
   },
-  async (message, match) => {
+  async (message, match, { reply_message }) => {
+    if (!match && (!reply_message || !reply_message.text)) return message.send('_Provide A Text_');
     const pdfDoc = await XSTRO.generatePdf(match || message.reply_message?.text);
     return await message.send(pdfDoc, { fileName: 'Converted Document' });
   }
@@ -116,8 +118,8 @@ bot(
     type: 'tools',
     desc: 'Removes background Image from photo',
   },
-  async (message) => {
-    if (!message.reply_message?.image) return message.send('_Reply an image_');
+  async (message, _, { reply_message }) => {
+    if (!reply_message || !reply_message?.image) return message.send(LANG.IMAGE);
     const buff = await removeBg(await message.download());
     return await message.send(buff);
   }

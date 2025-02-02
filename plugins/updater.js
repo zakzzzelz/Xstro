@@ -25,11 +25,11 @@ bot(
 
       if (!match) {
         if (commits.length === 0) {
-          return await message.send('No update available');
+          return await message.reply('No update available');
         } else {
           let changes = 'Update Available\n\n';
-          changes += `*Changes:* ${commits.length}\n`;
-          changes += '*Updates:*\n';
+          changes += `Changes: ${commits.length}\n`;
+          changes += 'Updates:\n';
 
           const { stdout: messageOutput } = await execAsync(
             'git log master..origin/master --pretty=format:%s'
@@ -40,14 +40,14 @@ bot(
             changes += `${index + 1}. ${msg}\n`;
           });
 
-          changes += `\n*To update, use* ${prefix}update now`;
-          await message.send(changes);
+          changes += `\nTo update, use ${prefix}update now`;
+          await message.reply(changes);
         }
       }
 
       if (match && match === 'now') {
         if (commits.length === 0) {
-          return await message.send('No changes in the latest commit');
+          return await message.reply('No changes in the latest commit');
         }
 
         await message.send('*Updating...*');

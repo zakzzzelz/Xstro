@@ -8,19 +8,19 @@ bot(
     type: 'tools',
     desc: 'Translate a text from one language to another with ease',
   },
-  async (message, match) => {
+  async (message, match, { reply_message }) => {
     const langCode = match.trim();
     const targetLang = languages.find((lang) =>
       lang.toLowerCase().endsWith(`- ${langCode.toLowerCase()}`)
     );
 
     if (!targetLang)
-      return await message.send(
-        `*Supported Languages*:\n\nUsage: ${message.prefix}trt en\n\n\n${languages.join('\n')}`
+      return await message.reply(
+        `Supported Languages:\n\nUsage: ${message.prefix}trt en\n\n\n${languages.join('\n')}`
       );
 
-    if (!message.reply_message?.text)
-      return message.send('_Reply to a text message to translate it._');
+    if (!reply_message || !reply_message?.text)
+      return message.reply('Reply to a text message to translate it.');
 
     const textToTranslate = message.reply_message.text;
     const targetLangCode = targetLang.split(' - ')[1];

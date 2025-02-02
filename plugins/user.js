@@ -4,8 +4,6 @@ import {
   setAntiDelete,
   setAntiCall,
   getAntiCall,
-  setViewOnce,
-  isViewOnceEnabled,
   aliveMessage,
   setAliveMsg,
 } from '#sql';
@@ -22,7 +20,7 @@ bot(
   async (message, match) => {
     if (match) {
       await setAliveMsg(match);
-      return message.send('Alive Updated');
+      return message.reply('Alive Updated');
     }
     const msg = await aliveMessage(message);
     const mentionData = {
@@ -50,11 +48,12 @@ bot(
     type: 'user',
   },
   async (message, match) => {
-    if (!['on', 'off'].includes(match)) return message.send('Use on | off');
+    if (!['on', 'off'].includes(match)) return message.reply('Use on | off');
     const newState = match === 'on';
-    if (getAntiDelete() === newState) return message.send(`Antidelete is already ${match}.`);
+    if (getAntiDelete() === newState)
+      return message.reply(`Antidelete is already ${match.toLowerCase()}.`);
     setAntiDelete(newState);
-    message.send(`Antidelete is now turned ${match}.`);
+    message.reply(`Antidelete is now turned ${match.toLowerCase()}.`);
   }
 );
 
@@ -68,8 +67,8 @@ bot(
   async (message, match, { prefix }) => {
     if (!match) {
       const config = await getAntiCall();
-      return message.send(
-        `AntiCall status: ${config.status}, Action: ${config.action}\n${prefix}anticall [on/off/set]`
+      return message.reply(
+        `AntiCall status: ${config.status},\nAction: ${config.action}\n${prefix}anticall [on/off/set]`
       );
     }
 
@@ -78,42 +77,21 @@ bot(
     switch (command) {
       case 'on':
         await setAntiCall('on');
-        return message.send('AntiCall enabled');
+        return message.reply('AntiCall enabled');
 
       case 'off':
         await setAntiCall('off');
-        return message.send('AntiCall disabled');
+        return message.reply('AntiCall disabled');
 
       case 'set':
         if (!['block', 'reject'].includes(param))
-          return message.send('Invalid action. Use "block" or "reject"');
+          return message.reply('Invalid action. Use "block" or "reject"');
 
         await setAntiCall(null, param);
-        return message.send(`AntiCall action set to ${param}`);
+        return message.reply(`AntiCall action set to ${param}`);
 
       default:
-        return message.send('Invalid command');
+        return message.reply('Wrong Usage');
     }
-  }
-);
-
-bot(
-  {
-    pattern: 'antivv',
-    public: false,
-    desc: 'Toggle Anti ViewOnce',
-    type: 'settings',
-  },
-  async (message, match, { prefix }) => {
-    const cmd = match.trim().toLowerCase();
-    if (!['on', 'off'].includes(cmd)) return await message.send(`_Use ${prefix}antivv on | off_`);
-
-    const currentStatus = isViewOnceEnabled();
-    const newStatus = cmd === 'on';
-    if (currentStatus === newStatus)
-      return await message.send(`_AntiViewOnce is already ${cmd.toLowerCase()}_`);
-
-    setViewOnce(newStatus);
-    return await message.send(`_AntiViewOnce turned ${cmd.toLowerCase()}_`);
   }
 );
