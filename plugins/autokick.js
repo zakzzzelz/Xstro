@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addAKick, delKick, getKicks } from '#sql';
 
 bot(

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { setAntiWordStatus, getAntiWords, addAntiWords, removeAntiWords } from '#sql';
 
 bot(

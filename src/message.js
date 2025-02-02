@@ -1,6 +1,6 @@
 import { detectType, getBuffer, getMimeType } from 'xstro-utils';
 import { downloadMessage, isUrl, toJid } from '#utils';
-import { LANG } from '#lang';
+import { LANG } from '#theme';
 
 class Message {
   constructor(client, data) {

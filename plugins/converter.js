@@ -1,5 +1,5 @@
-import { LANG } from '#lang';
-import { bot } from '#lib';
+import { LANG } from '#theme';
+import { bot } from '#src';
 import {
   audioToBlackVideo,
   convertToMp3,

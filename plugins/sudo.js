@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { getSudo, delSudo, addSudo, isSudo } from '#sql';
 import { toJid } from '#utils';
 

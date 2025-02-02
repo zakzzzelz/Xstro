@@ -1,4 +1,4 @@
-import { bot, commands } from '#lib';
+import { bot, commands } from '#src';
 import { addDisabledCmd, getConfig, isCmdDisabled, removeDisabledCmd, updateConfig } from '#sql';
 
 bot(

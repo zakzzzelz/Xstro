@@ -1,5 +1,5 @@
 import { performance } from 'perf_hooks';
-import { bot } from '#lib';
+import { bot } from '#src';
 import { getDirectoryStructure, manageProcess, runtime } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 import os from 'os';

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addOrUpdateSchedule, getSchedule, removeSchedule } from '#sql';
 import { convertTo12Hour, convertTo24Hour } from '#utils';
 

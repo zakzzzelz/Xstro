@@ -5,12 +5,12 @@
   "main": "index.js",
   "type": "module",
   "imports": {
+    "#src": "./src/index.js",
     "#lib": "./lib/index.js",
-    "#bot": "./Events/index.js",
-    "#sql": "./Sql/index.js",
+    "#sql": "./sqll/index.js",
     "#utils": "./Utils/index.js",
     "#config": "./config.js",
-    "#lang": "./lang/index.js"
+    "#theme": "./Theme/index.js"
   },
   "scripts": {
     "start": "node index",

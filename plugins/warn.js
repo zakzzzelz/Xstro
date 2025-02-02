@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addWarn, getWarn, resetWarn } from '#sql';
 import { config } from '#config';
 

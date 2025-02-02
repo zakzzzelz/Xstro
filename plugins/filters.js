@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addFilter, removeFilter, getFilters } from '#sql';
 
 bot(

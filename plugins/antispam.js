@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { setAntiSpam, getAntiSpamMode } from '#sql';
 import { isJidGroup } from 'baileys';
 

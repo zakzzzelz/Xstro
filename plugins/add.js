@@ -1,6 +1,6 @@
 import baileys from 'baileys';
 const { generateWAMessageFromContent, getBinaryNodeChild, proto } = baileys;
-import { bot } from '#lib';
+import { bot } from '#src';
 
 bot(
   {

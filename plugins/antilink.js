@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { setAntilink, getAntilink, removeAntilink } from '#sql';
 
 bot(

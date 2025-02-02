@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { extractUrl } from '#utils';
 import { delay } from 'baileys';
 

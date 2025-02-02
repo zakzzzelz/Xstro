@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { getRandom } from '#utils';
 import { setAutoReactStatus, getAutoReactStatus } from '#sql';
 

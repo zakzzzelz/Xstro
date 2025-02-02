@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import {
   getAntiDelete,
   setAntiDelete,
@@ -8,7 +8,7 @@ import {
   setAliveMsg,
 } from '#sql';
 
-import { LANG } from '#lang';
+import { LANG } from '#theme';
 
 bot(
   {

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { delAntibot, getAntibot, isSudo, setAntibot } from '#sql';
 
 bot(

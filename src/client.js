@@ -18,13 +18,13 @@ import {
   AutoKick,
   schedules,
   AntiDelete,
-} from '#bot';
+} from '#lib';
 import Message from './message.js';
 import { EventEmitter } from 'events';
 import { manageProcess, deepClone, toJid, devs } from '#utils';
-import { loadMessage, saveMessages, getName, getConfig, addSudo } from '#sql';
-import { Plugins, logger, serialize, listenersPlugins, commands } from '#lib';
-import { LANG } from '#lang';
+import { loadMessage, saveMessages, getName, getConfig, addSudo } from '../sqll/index.js';
+import { Plugins, logger, serialize, listenersPlugins, commands } from '#src';
+import { LANG } from '#theme';
 import { config } from '#config';
 import NodeCache from 'node-cache';
 

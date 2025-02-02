@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { installPlugin, removePluginByName, listPlugins } from '#utils';
 
 bot(

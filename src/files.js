@@ -1,7 +1,7 @@
 import { pathToFileURL } from 'url';
 import { join, extname } from 'path';
 import { readdir } from 'fs/promises';
-import { LANG } from '#lang';
+import { LANG } from '#theme';
 
 export async function loadPlugins() {
   const pluginsDir = join('plugins');

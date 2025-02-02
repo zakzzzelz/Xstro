@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addNote, removeNote, updateNote, getNotes } from '#sql';
 
 bot(

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { setMention, delMention, isMention, getMention } from '#sql';
 
 bot(

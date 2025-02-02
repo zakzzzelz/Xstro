@@ -1,6 +1,6 @@
-import { font } from '#bot';
+import { font } from '#lib';
 import { config } from '#config';
-import { bot, commands } from '#lib';
+import { bot, commands } from '#src';
 import { getConfig } from '#sql';
 import { formatBytes, runtime } from '#utils';
 import { platform, totalmem, freemem } from 'os';

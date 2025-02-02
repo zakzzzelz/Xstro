@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { delay } from 'baileys';
 import { timeToTimestamp, toJid } from '#utils';
 import { disableGroupEvents, enableGroupEvents, isGroupEventEnabled } from '#sql';

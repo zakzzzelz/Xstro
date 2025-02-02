@@ -7,7 +7,7 @@ import { promisify } from 'util';
 import { FileTypeFromBuffer, getMimeType } from 'xstro-utils';
 import Crypto from 'crypto';
 import webp from 'node-webpmux';
-import { LANG } from '#lang';
+import { LANG } from '#theme';
 
 const execAsync = promisify(exec);
 const { writeFileSync, existsSync, readFileSync, mkdirSync } = fs;

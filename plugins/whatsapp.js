@@ -1,6 +1,6 @@
 import { config } from '#config';
-import { LANG } from '#lang';
-import { bot, serialize } from '#lib';
+import { LANG } from '#theme';
+import { bot, serialize } from '#src';
 import { editMessageProptery, toJid } from '#utils';
 import { isJidGroup } from 'baileys';
 

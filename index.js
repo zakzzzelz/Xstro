@@ -1,6 +1,6 @@
 import http from 'http';
 import { config } from 'dotenv';
-import { client, eventlogger, initSession, loadPlugins } from '#lib';
+import { client, eventlogger, initSession, loadPlugins } from '#src';
 import cluster from 'cluster';
 import { mkdir } from 'fs/promises';
 import { fetchPlugins } from '#utils';

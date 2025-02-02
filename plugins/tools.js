@@ -1,5 +1,5 @@
-import { LANG } from '#lang';
-import { bot } from '#lib';
+import { LANG } from '#theme';
+import { bot } from '#src';
 import { remini, XSTRO, removeBg, UploadFileUgu, createSticker, extractUrl } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 

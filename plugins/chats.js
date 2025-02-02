@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { getChatSummary, getGroupMembersMessageCount, getInactiveGroupMembers } from '#sql';
 
 bot(

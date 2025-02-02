@@ -8,8 +8,8 @@ import {
   WAProto,
 } from 'baileys';
 import { toJid } from '#utils';
-import { getConfig, isBanned, isSudo } from '#sql';
-import { LANG } from '#lang';
+import { getConfig, isBanned, isSudo } from '../sqll';
+import { LANG } from '#theme';
 
 export async function serialize(messages, client) {
   /** Configurations from the database */

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { pinterest, XSTRO } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 

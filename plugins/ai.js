@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { upload } from '#utils';
 import { getBuffer, getJson } from 'xstro-utils';
 

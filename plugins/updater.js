@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 

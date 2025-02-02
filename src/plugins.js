@@ -1,5 +1,5 @@
-import { LANG } from '#lang';
-import { getConfig } from '#sql';
+import { LANG } from '#theme';
+import { getConfig } from '../sqll';
 
 const commands = [];
 

@@ -1,4 +1,4 @@
-import { bot } from '#lib';
+import { bot } from '#src';
 import { addBan, getBanned, removeBan, isSudo } from '#sql';
 
 bot(
