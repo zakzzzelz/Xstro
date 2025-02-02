@@ -1,32 +1,37 @@
-// eslint.config.js
 import prettier from 'eslint-plugin-prettier';
 
 const eslintConfig = {
   languageOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    globals: {
-      // Define global variables here if needed
-    },
+    globals: {}
   },
   plugins: {
-    prettier: prettier,
+    prettier: prettier
   },
   rules: {
     'prettier/prettier': [
       'error',
       {
-        endOfLine: 'auto',
+        printWidth: 100,
+        useTabs: false,
+        tabWidth: 2,
         singleQuote: true,
         semi: true,
-        tabWidth: 2,
+        quoteProps: 'as-needed',
         trailingComma: 'es5',
+        bracketSpacing: true,
+        bracketSameLine: false,
         arrowParens: 'always',
-      },
-    ],
+        endOfLine: 'auto',
+        proseWrap: 'preserve',
+        embeddedLanguageFormatting: 'auto',
+        vueIndentScriptAndStyle: false
+      }
+    ]
   },
   files: ['**/*.js'],
-  ignores: ['node_modules/**', 'dist/**'],
+  ignores: ['node_modules/**', 'dist/**']
 };
 
 export default eslintConfig;

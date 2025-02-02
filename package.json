@@ -15,8 +15,7 @@
   "scripts": {
     "start": "node index",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "lint:fix": "eslint . --fix"
   },
   "files": [
     "lib",
@@ -41,8 +40,7 @@
   "devDependencies": {
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.2",
-    "prettier": "^3.4.2"
+    "eslint-plugin-prettier": "^5.2.2"
   },
   "dependencies": {
     "axios": "^1.7.9",
