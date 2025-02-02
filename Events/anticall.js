@@ -1,5 +1,5 @@
-import { getAntiCall, isSudo } from '../Sql';
-import { toJid } from '../Utils';
+import { getAntiCall, isSudo } from '#sql';
+import { toJid } from '#utils';
 import { delay } from 'baileys';
 
 export const AntiCall = async (calls, client) => {
