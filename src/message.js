@@ -1,5 +1,5 @@
 import { detectType, getBuffer, getMimeType } from 'xstro-utils';
-import { downloadMessage, isUrl, toJid } from '#utils';
+import { downloadMessage, isUrl, toJid } from '../utilss';
 import { LANG } from '#theme';
 
 class Message {

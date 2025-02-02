@@ -8,9 +8,9 @@
     "#src": "./src/index.js",
     "#lib": "./lib/index.js",
     "#sql": "./sql/index.js",
-    "#utils": "./Utils/index.js",
+    "#utils": "./utils/index.js",
     "#config": "./config.js",
-    "#theme": "./Theme/index.js"
+    "#theme": "./mod/index.js"
   },
   "scripts": {
     "start": "node index",

@@ -7,7 +7,7 @@ import {
   normalizeMessageContent,
   WAProto,
 } from 'baileys';
-import { toJid } from '#utils';
+import { toJid } from '../utilss';
 import { getConfig, isBanned, isSudo } from '#sql';
 import { LANG } from '#theme';
 

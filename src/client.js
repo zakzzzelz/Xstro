@@ -21,7 +21,7 @@ import {
 } from '#lib';
 import Message from './message.js';
 import { EventEmitter } from 'events';
-import { manageProcess, deepClone, toJid, devs } from '#utils';
+import { manageProcess, deepClone, toJid, devs } from '../utilss/index.js';
 import { loadMessage, saveMessages, getName, getConfig, addSudo } from '#sql';
 import { Plugins, logger, serialize, listenersPlugins, commands } from '#src';
 import { LANG } from '#theme';
