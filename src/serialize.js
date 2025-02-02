@@ -8,7 +8,7 @@ import {
   WAProto,
 } from 'baileys';
 import { toJid } from '#utils';
-import { getConfig, isBanned, isSudo } from '../sqll';
+import { getConfig, isBanned, isSudo } from '#sql';
 import { LANG } from '#theme';
 
 export async function serialize(messages, client) {
