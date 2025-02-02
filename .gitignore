@@ -5,4 +5,5 @@ test.js
 session
 store
 *.tgz
-XSTRO_82_06_23
+config.env
+XSTRO_23_40_60
