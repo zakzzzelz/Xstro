@@ -535,7 +535,7 @@ bot(
     desc: 'Tag Anyone with Any Kind of Message',
     type: 'group',
   },
-  async (message, match, { jid, relayMessage }) => {
+  async (message, match, { jid, quoted, relayMessage }) => {
     if (!match && !message.reply_message)
       return message.send('_Reply any Message or Give Me Text_');
     const participants = await message.client.groupMetadata(message.jid);
@@ -544,8 +544,8 @@ bot(
       return await message.send(match, { mentions: participantJids });
 
     if (!match && message.reply_message) {
-      const quotedMessage = message.data.quoted.message;
-      const typeOfMessage = message.data.quoted.type
+      const quotedMessage = quoted.message;
+      const typeOfMessage = quoted.type;
       const objectAction = quotedMessage?.[typeOfMessage];
 
       if (objectAction) {

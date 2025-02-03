@@ -5,7 +5,7 @@ const commands = [];
 
 const bot = function (cmd, func) {
   cmd.function = func;
-  cmd.pattern = new RegExp(`^(${cmd.pattern})(?:\\s+([\\s\\S]+))?$`, 'i');
+  cmd.pattern = new RegExp(`^\\s*(${cmd.pattern})(?:\\s+([\\s\\S]+))?$`, 'i');
   cmd.public = cmd.public || false;
   cmd.isGroup = cmd.isGroup || false;
   cmd.dontAddCommandList = cmd.dontAddCommandList || false;
