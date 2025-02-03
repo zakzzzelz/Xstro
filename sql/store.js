@@ -61,7 +61,8 @@ const saveMessage = async (message) => {
 const loadMessage = async (id) => {
   if (!id) return null;
   const messages = await readJSON('message.json');
-  return messages.find((msg) => msg.id === id) || null;
+  const message = messages.find((msg) => msg.id === id);
+  return message ? message.message : null;
 };
 
 const getName = async (jid) => {

@@ -76,8 +76,8 @@ bot(
     let msg = await loadMessage(reply_message.key.id);
     if (!msg) return await message.send('No message found');
     msg = await serialize(JSON.parse(JSON.stringify(msg.message)), message.client);
-    if (!msg.quoted) return await message.send('_No quoted message found_');
-    await message.forward(jid, msg.quoted, { quoted: msg.quoted });
+    if (!msg) return await message.send('_No quoted message found_');
+    await message.forward(jid, msg, { quoted: msg.quoted });
   }
 );
 

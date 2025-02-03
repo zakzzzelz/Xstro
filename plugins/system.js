@@ -143,7 +143,11 @@ bot(
     desc: 'Evaluate code',
     type: 'system',
   },
-  async (message, match, { jid, prefix, relayMessage, sendMessage, loadMessage, getName }) => {
+  async (
+    message,
+    match,
+    { jid, prefix, relayMessage, sendMessage, loadMessage, getName, quoted }
+  ) => {
     const code = match || message.reply_message?.text;
     if (!code) return message.send('_Provide code to evaluate_');
     try {

@@ -57,7 +57,7 @@ bot(
     if (!match) return msg.reply(`Example: ${prefix}getbgm hello`);
     const msgId = await getBgmResponse(match.trim().toLowerCase());
     if (!msgId) return msg.reply(`No BGM found for ${match}`);
-    const { message } = await loadMessage(msgId);
+    const message = await loadMessage(msgId);
     if (!message) return msg.reply('Message not found');
     return await msg.forward(message.jid, message, { quoted: message });
   }
@@ -104,7 +104,7 @@ bot(
     if (msg.sender === msg.user) return;
     const messageId = await getBgmResponse(msg.text.trim().toLowerCase());
     if (!messageId) return;
-    const { message } = await loadMessage(messageId);
+    const message = await loadMessage(messageId);
     if (!message) return;
     return await msg.forward(msg.jid, message, { quoted: message });
   }
