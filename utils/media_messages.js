@@ -10,7 +10,7 @@ import { FileTypeFromBuffer } from 'xstro-utils';
 export function isMediaMessage(message) {
   const messageType = getContentType(message.message);
   console.log(messageType);
-  const media = ['imageMessage', 'documentMessage', 'audioMessage', 'videoMessage'];
+  const media = ['imageMessage', 'documentMessage', 'audioMessage', 'videoMessage', 'stickerMessage'];
   if (media.includes(messageType)) {
     return true;
   } else {
