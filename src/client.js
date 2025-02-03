@@ -34,7 +34,7 @@ process.setMaxListeners(10000);
 const groupCache = new NodeCache({ stdTTL: 5 * 60, useClones: false });
 
 export const client = async () => {
-  const session = await useMultiFileAuthState(config.SESSION_ID);
+  const session = await useMultiFileAuthState('session');
   const { state, saveCreds } = session;
   const { version } = await fetchLatestBaileysVersion();
 
