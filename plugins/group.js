@@ -545,7 +545,7 @@ bot(
 
     if (!match && message.reply_message) {
       const quotedMessage = message.data.quoted.message;
-      const typeOfMessage = getContentType(quotedMessage);
+      const typeOfMessage = message.data.quoted.type
       const objectAction = quotedMessage?.[typeOfMessage];
 
       if (objectAction) {
