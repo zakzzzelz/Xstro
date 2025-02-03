@@ -9,9 +9,9 @@ xstro-md is an open-source WhatsApp bot developed by [AstroX11](https://github.c
 [![Forks](https://img.shields.io/github/forks/AstroX11/Xstro?style=for-the-badge)](https://github.com/AstroX11/Xstro/network/members)  
 [![Stars](https://img.shields.io/github/stars/AstroX11/Xstro?style=for-the-badge)](https://github.com/AstroX11/Xstro/stargazers)
 
-- [Fork Repository](https://github.com/AstroX11/Xstro/fork)
-- [Get Session](https://bit.ly/41mQBbY)
-- [Join WhatsApp Support Group](https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6)
+[![Fork Repository](https://img.shields.io/badge/Fork_Repo-blue?style=for-the-badge&logo=github)](https://github.com/AstroX11/Xstro/fork)
+[![Get Session](https://img.shields.io/badge/Get_Session-black?style=for-the-badge&logo=react)](https://bit.ly/41mQBbY)
+[![Join WhatsApp Support Group](https://img.shields.io/badge/Support_Group-black?style=for-the-badge&logo=whatsapp)](https://chat.whatsapp.com/HIvICIvQ8hL4PmqBu7a2C6)
 
 ## Table of Contents
 
