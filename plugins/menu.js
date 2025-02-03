@@ -40,7 +40,7 @@ bot(
         if (!acc[type]) {
           acc[type] = [];
         }
-        acc[type].push(cmd.pattern.toString().toLowerCase().split(/\W+/)[1]);
+        acc[type].push(cmd.pattern.toString().toLowerCase().split(/\W+/)[2]);
         return acc;
       }, {});
 
