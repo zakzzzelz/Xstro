@@ -73,7 +73,7 @@ bot(
     let cmdList = [];
     let cmd, desc;
     commands.map((command) => {
-      if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[1];
+      if (command.pattern) cmd = command.pattern.toString().split(/\W+/)[2];
       desc = command.desc || false;
       if (!command.dontAddCommandList && cmd !== undefined) cmdList.push({ cmd, desc });
     });
