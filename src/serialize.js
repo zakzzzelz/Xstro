@@ -189,7 +189,7 @@ export async function serialize(messages, client) {
      */
     error: async (cmd, error) => {
       msg.send(LANG.COMMAND_ERROR_MSG);
-      const name = cmd.pattern.toString().toLowerCase().split(/\W+/)[1];
+      const name = cmd.pattern.toString().toLowerCase().split(/\W+/)[2];
       const { stack, message } = error;
       const errorMessage = `─━❲ ERROR REPORT ❳━─\nCMD: ${name}\nINFO: ${message}`;
       const data = msg.send('```' + errorMessage + '```', {
